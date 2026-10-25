@@ -17,14 +17,8 @@ jobs:
           UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
           al() { curl -sSL -m 60 -A "$UA" -o "tuik-gecici/$1" "$2" -w "$1 %{http_code} %{size_download}\n" >> tuik-gecici/durum.txt || echo "$1 HATA" >> tuik-gecici/durum.txt; }
           rm -f tuik-gecici/*
-          al nip.html "https://nip.tuik.gov.tr/"
-          al nip-adnks.html "https://nip.tuik.gov.tr/Home/Adnks"
-          al medas.html "https://biruni.tuik.gov.tr/medas/?kn=95&locale=tr"
-          for f in nip.html nip-adnks.html; do grep -oE '(src|href)="[^"]*\.js[^"]*"|url: *"[^"]*"|"/[A-Za-z]+/[A-Za-z]+[^"]{0,60}"' tuik-gecici/$f | sort -u >> tuik-gecici/nip-uclar.txt || true; done
-          for js in $(grep -oE 'src="[^"]*\.js[^"]*"' tuik-gecici/nip-adnks.html | sed 's/src="//;s/"$//' | grep -v -E 'jquery|bootstrap|googletag|plausible' | head -8); do
-            case "$js" in http*) u="$js";; /*) u="https://nip.tuik.gov.tr$js";; *) u="https://nip.tuik.gov.tr/$js";; esac
-            curl -sSL -m 30 -A "$UA" "$u" | grep -oE '.{60}(url|ajax|fetch|Get[A-Z][A-Za-z]+)[^;]{0,140}' | head -40 >> tuik-gecici/nip-js.txt || true
-          done
+          al main.js "https://nip.tuik.gov.tr/js/main.js"
+          al site.js "https://nip.tuik.gov.tr/js/site.js"
           cat tuik-gecici/durum.txt
       - name: Dala yukle
         run: |
