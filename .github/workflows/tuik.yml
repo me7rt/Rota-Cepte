@@ -16,13 +16,15 @@ jobs:
           mkdir -p tuik-gecici
           UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
           al() { curl -sSL -m 60 -A "$UA" -o "tuik-gecici/$1" "$2" -w "$1 %{http_code} %{size_download}\n" >> tuik-gecici/durum.txt || echo "$1 HATA" >> tuik-gecici/durum.txt; }
-          al adnks-2025.pdf "https://www.tuik.gov.tr/media/announcements/ADNKS_2025TR.pdf"
-          al arama.html "https://data.tuik.gov.tr/Search/Search?text=Adrese%20Dayal%C4%B1%20N%C3%BCfus%20Kay%C4%B1t%20Sistemi%20Sonu%C3%A7lar%C4%B1%202025"
-          al kategori.html "https://data.tuik.gov.tr/Kategori/GetKategori?p=nufus-ve-demografi-109&dil=1"
-          al index.js "https://data.tuik.gov.tr/assets/index-DHVaePSb.js"
-          grep -oE '"(https?:)?//[a-zA-Z0-9.-]*tuik[a-zA-Z0-9./_-]*"|"/api[a-zA-Z0-9/_-]*"|"/[A-Za-z]+/[A-Za-z]+(\?[^"]*)?"' tuik-gecici/index.js | sort -u > tuik-gecici/uclar.txt || true
-          grep -oE '.{80}(Bulten|bulten|GetBulten|Search)[^;]{0,160}' tuik-gecici/index.js | head -60 > tuik-gecici/bulten-kod.txt || true
-          rm -f tuik-gecici/index.js
+          rm -f tuik-gecici/*
+          al nip.html "https://nip.tuik.gov.tr/"
+          al nip-adnks.html "https://nip.tuik.gov.tr/Home/Adnks"
+          al medas.html "https://biruni.tuik.gov.tr/medas/?kn=95&locale=tr"
+          for f in nip.html nip-adnks.html; do grep -oE '(src|href)="[^"]*\.js[^"]*"|url: *"[^"]*"|"/[A-Za-z]+/[A-Za-z]+[^"]{0,60}"' tuik-gecici/$f | sort -u >> tuik-gecici/nip-uclar.txt || true; done
+          for js in $(grep -oE 'src="[^"]*\.js[^"]*"' tuik-gecici/nip-adnks.html | sed 's/src="//;s/"$//' | grep -v -E 'jquery|bootstrap|googletag|plausible' | head -8); do
+            case "$js" in http*) u="$js";; /*) u="https://nip.tuik.gov.tr$js";; *) u="https://nip.tuik.gov.tr/$js";; esac
+            curl -sSL -m 30 -A "$UA" "$u" | grep -oE '.{60}(url|ajax|fetch|Get[A-Z][A-Za-z]+)[^;]{0,140}' | head -40 >> tuik-gecici/nip-js.txt || true
+          done
           cat tuik-gecici/durum.txt
       - name: Dala yukle
         run: |
