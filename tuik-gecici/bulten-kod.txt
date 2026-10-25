@@ -1,0 +1,6 @@
+"].join(" "));for(const o of["fetch","XMLHttpRequest","WebSocket","Headers","URLSearchParams","String","Object","Promise","Array","RegExp","TextEncoder","Uint8Array","Uint32Array","Response","Reflect","JSON","encodeURIComponent","decodeURICompone
+.body=="string"){y=m(c.body),c.body!==y&&(f=!0);break e}if(c.body instanceof URLSearchParams){let b=!1
+n;if(typeof n=="string"){const f=m(n);f!==n&&(u=!0),d=f}else if(n instanceof URLSearchParams){let f=!1
+"].join(" "));for(const t of["fetch","XMLHttpRequest","WebSocket","Headers","URLSearchParams","EventSource","ServiceWorkerContainer","ServiceWorkerRegistration","ServiceWorker","FormData","URL","Request","WeakMap","Blob","String","Object","Promis
+O}function xe(){const s=new URL(window.location.href),t=(()=>{e:{const e=new URLSearchParams(s.hash.replace(/^#/,"")).get("state")
+{const e={state:""},n=(()=>{switch(t.responseMode){case"fragment":return new URLSearchParams(s.hash.replace(/^#/,""))
