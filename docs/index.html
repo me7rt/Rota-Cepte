@@ -100,7 +100,7 @@ html.yas .sp-aura,html.yas .sp-isik{filter:grayscale(1)}
     </svg>
     <div class="sp-marka"><img class="sp-ikon" src="icon-192.png" alt="" width="58" height="58"><p class="sp-app"><span style="animation-delay:2.45s,3.20s">R</span><span style="animation-delay:2.51s,3.20s">o</span><span style="animation-delay:2.57s,3.20s">t</span><span style="animation-delay:2.63s,3.20s">a</span><span style="animation-delay:2.69s,3.20s">&nbsp;</span><span style="animation-delay:2.75s,3.20s">C</span><span style="animation-delay:2.81s,3.20s">e</span><span style="animation-delay:2.87s,3.20s">p</span><span style="animation-delay:2.93s,3.20s">t</span><span style="animation-delay:2.99s,3.20s">e</span></p></div>
     <p class="sp-tag"><b>Yol senin, rotan cepte!</b></p>
-    <p class="sp-tag sp-tag2"><span class="sp-say"><b data-n="81">81</b><em>il</em></span><span class="sp-say"><b data-n="973">973</b><em>ilçe</em></span><span class="sp-say"><b data-n="3000">3.000+</b><em>yer</em></span></p>
+    <p class="sp-tag sp-tag2"><span class="sp-say"><b data-n="81">81</b><em>il</em></span><span class="sp-say"><b data-n="973">973</b><em>ilçe</em></span><span class="sp-say"><b data-n="2900">2.900+</b><em>yer</em></span></p>
   </div>
   <div class="sp-by">
     <span class="sp-yukle"><i></i></span>
@@ -261,7 +261,7 @@ html.yas .sp-aura,html.yas .sp-isik{filter:grayscale(1)}
   function kapat() { if (bitti) return; bitti = true; s.classList.add("out"); setTimeout(function () { s.remove(); }, 500); }
   // Gizlilik / lisanslar / koşullar sayfasından dönülüyorsa açılış ekranını tekrar gösterme
   try { if (sessionStorage.getItem("gezi-acilis-atla")) { sessionStorage.removeItem("gezi-acilis-atla"); bitti = true; s.remove(); } } catch (e) {}
-  // Sayaçlar: 81 il · 973 ilçe · 3.000+ yer, sıfırdan yukarı sayar
+  // Sayaçlar: 81 il · 973 ilçe · 2.900+ yer (veri değişince güncelle; gerçek sayının altında yuvarlanmış), sıfırdan yukarı sayar
   var t2 = s.querySelector(".sp-tag2");
   if (!bitti && t2) {
     var en = window.DIL === "en", bs = t2.querySelectorAll("b[data-n]");

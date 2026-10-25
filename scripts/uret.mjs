@@ -24,11 +24,12 @@ const KAPAK = okuJSON("data/il-kapak.json", {});
 const IPUCU = okuJSON("data/ipuclari.json", {});
 // İçerik düzeltmeleri (elle, güvenilir kaynaklardan doğrulanmış):
 //   ad: Wikidata no -> doğru Türkçe ad | tr: Wikidata no -> İngilizce Vikipedi özetinin Türkçe çevirisi
+//   en: Wikidata no -> Türkçe Vikipedi özetinin İngilizce çevirisi (İngilizce maddesi olmayan yerler)
 //   ip_en: ipucunun İngilizcesi (ipuclari.json ile aynı anahtar) | il: Wikidata no -> doğru il (slug)
 //   elle: Wikidata no -> {tr, en} kaynak metin yanlış yere aitse elle yazılmış kısa metin (Vikipedi bağlantısı kaldırılır)
 const ICERIK = okuJSON("data/icerik-duzelt.json", {});
 const INGILIZCE_ACK = /^(?!.*[çğıöşüÇĞİÖŞÜ]).*\b(in|of|the|and|ancient|city|located|building|mosque|church|museum|lake|mountain|island|national|village|neighbou?rhood|quarter|street|bridge|castle|cave|valley|canyon|monastery|temple|statue|tree|point|bay|gulf|cape|beach|resort|square|district|range|zoo|garden|lagoon|tower|tomb|ruins|church|Turkey)\b(?!['’])/i;
-const AD_DUZ = ICERIK.ad || {}, TR_CEVIRI = ICERIK.tr || {}, IPUCU_EN = ICERIK.ip_en || {}, IL_DUZ = ICERIK.il || {}, ELLE_METIN = ICERIK.elle || {};
+const AD_DUZ = ICERIK.ad || {}, TR_CEVIRI = ICERIK.tr || {}, EN_CEVIRI = ICERIK.en || {}, IPUCU_EN = ICERIK.ip_en || {}, IL_DUZ = ICERIK.il || {}, ELLE_METIN = ICERIK.elle || {};
 
 // ---------- Sınıflar ----------
 // c: çarşı, t: tarihi, m: müze, d: doğa, s: şehir. Puan yüksek olan kategori kazanır.
@@ -351,6 +352,17 @@ async function nufusDoldur(nesneler) {
 }
 await nufusDoldur([...iller.values()]);
 await nufusDoldur([...ilceler.values()]);
+// İl nüfusları resmî kaynaktan: TÜİK Adrese Dayalı Nüfus Kayıt Sistemi (data/tuik-nufus.json, her yıl Şubat'ta yenilenir).
+// Wikidata'daki il nüfusları eski ya da hatalı olabiliyor, bu yüzden TÜİK değeri her zaman öne geçer.
+const TUIK = okuJSON("data/tuik-nufus.json", { il: {} });
+let tuikSay = 0;
+for (const il of iller.values()) {
+  const t = TUIK.il[il.s];
+  if (!t) continue;
+  const yil = Object.keys(t).sort().pop();
+  il.nufus = t[yil]; il.nufusYil = yil; tuikSay++;
+}
+rapor("TÜİK il nüfusu:", tuikSay, "/", iller.size);
 
 // ---------- 3. Yerler: Türkiye geneli, sınıf grupları halinde ----------
 const YER_VERI = `?p wdt:P625 ?coord ; wikibase:sitelinks ?sl .
@@ -613,11 +625,17 @@ for (const x of ucuncu) {
 rapor("seçkin kabul:", seckinSira, "/", seckinListe.length);
 
 // ---------- 5. Ön eleme ve ilçeye bağlama ----------
+// Sıradan tren istasyonları gezilecek yer değil. Yalnızca tarihî ya da turistik garlar kalır:
+// Haydarpaşa, Sirkeci, Ankara, Alsancak (Türkiye'nin en eski garı), Basmane, Karaağaç (Edirne, Lozan Anıtı)
+const GAR_KALSIN = new Set(["Q800973", "Q800974", "Q800389", "Q8080254", "Q2887254", "Q6086223"]);
+const GAR = /(Tren İstasyonu|İstasyonu|Garı)(\s*\(.*\))?$/;
+let garAtilan = 0;
 for (const il of iller.values()) {
   const liste = [];
   for (const o of il.ham.values()) {
     if (CIKAR.has(o.q) || !o.koor) continue;
     if (!o.ad || /^Q\d+$/.test(o.ad)) continue;
+    if (GAR.test(o.ad) && !GAR_KALSIN.has(o.q)) { garAtilan++; continue; }
     o.k ||= kategori(o.siniflar);
     if (!o.k) continue;
     if (!o.one) {
@@ -647,6 +665,7 @@ for (const il of iller.values()) {
   }
   il.adaylar = kalan;
 }
+rapor("sıradan tren istasyonu çıkarıldı:", garAtilan);
 
 // ---------- 6. Fotoğraf bilgileri (boyut, lisans, yazar) ----------
 rapor("== Fotoğraflar");
@@ -979,7 +998,10 @@ for (const il of ilSirali) {
   for (const o of il.yerler) {
     const el = ELLE_METIN[o.q];
     if (el) en.y[o.q] = [el.ad_en || (o.enA ? o.enA.replace(/ \(.*\)$/, "") : ""), el.en || "", ""];
-    else if (o.enA) en.y[o.q] = [o.enA.replace(/ \(.*\)$/, ""), enM.get(o.enA) || "", o.enA];
+    else if (o.enA && enM.get(o.enA)) en.y[o.q] = [o.enA.replace(/ \(.*\)$/, ""), enM.get(o.enA), o.enA];
+    // İngilizce Vikipedi metni yoksa Türkçe Vikipedi özetinin elle yapılmış çevirisi: [ad, metin, tr maddesi, 1 = çeviri]
+    else if (EN_CEVIRI[o.q] && o.trA) en.y[o.q] = [o.enA ? o.enA.replace(/ \(.*\)$/, "") : "", EN_CEVIRI[o.q], o.trA, 1];
+    else if (o.enA) en.y[o.q] = [o.enA.replace(/ \(.*\)$/, ""), "", o.enA];
   }
   fs.writeFileSync(`${OUT}/en/${il.s}.json`, JSON.stringify(en));
   index.iller.push({ ad: il.ad, s: il.s, q: il.q, lat: dosya.lat, lng: dosya.lng, plaka: dosya.plaka, f: dosya.f, n: yerler.length, ilceler: ilceCikti.map((d) => [d.ad, d.lat, d.lng, d.n]) });

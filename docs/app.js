@@ -74,10 +74,10 @@
     return 2 * R * Math.asin(Math.sqrt(h));
   }
   const fmt = (d) => (d < 1 ? Math.round(d * 100) * 10 + " m" : d < 100 ? (DIL === "en" ? d.toFixed(1) : d.toFixed(1).replace(".", ",")) + " km" : nf(Math.round(d)) + " km");
-  function toast(msg) {
+  function toast(msg, ms = 3500) {
     const t = document.createElement("div");
     t.className = "toast"; t.setAttribute("role", "status"); t.textContent = msg; document.body.appendChild(t);
-    setTimeout(() => t.remove(), 3500);
+    setTimeout(() => t.remove(), ms);
   }
 
   // ---------- fotoğraf ve bağlantılar ----------
@@ -128,7 +128,7 @@
   // Vikipedi metinleri CC BY-SA 4.0: lisans adı + bağlantı + değişiklik notu
   function metinLisans(el, var_, ceviri) {
     el.hidden = !var_;
-    el.innerHTML = var_ ? (ceviri ? "Metin: İngilizce Vikipedi'den çevrilmiştir" : TL("Metin: Vikipedi", "Text: Wikipedia")) + ` · <a href="https://creativecommons.org/licenses/by-sa/4.0/${DIL === "en" ? "" : "deed.tr"}" target="_blank" rel="noopener">CC BY-SA 4.0</a> · ` + TL("kısaltılmıştır", "shortened") : "";
+    el.innerHTML = var_ ? (ceviri ? TL("Metin: İngilizce Vikipedi'den çevrilmiştir", "Text: translated from Turkish Wikipedia") : TL("Metin: Vikipedi", "Text: Wikipedia")) + ` · <a href="https://creativecommons.org/licenses/by-sa/4.0/${DIL === "en" ? "" : "deed.tr"}" target="_blank" rel="noopener">CC BY-SA 4.0</a> · ` + TL("kısaltılmıştır", "shortened") : "";
   }
   // Fotoğraf yüklenemezse altındaki kategori simgesi görünür kalır.
   function thumb(f, k, W, cls) {
@@ -171,7 +171,8 @@
         // Okunuş parantezlerini at; Vikipedi özeti bazen kapanmayan parantez bırakır: "Cyzicus ( SIZ-ik-əs; ...; was an ..."
         const sade = (t) => (t || "").replace(/\s*\([^()]*\)/g, "").replace(/\s*\((?![^()]*\))[^()]*?;\s+(?=[a-z])/, " ").replace(/\s+([,.])/g, "$1");
         d.me = sade(en.m); d.we = en.w;
-        d.yerler.forEach((y) => { const e = en.y && en.y[y.q]; if (e) { if (e[0]) y.ae = e[0]; y.me = sade(e[1]); y.we = e[2] ? "en:" + e[2] : ""; } });
+        // e[3] = 1: Türkçe Vikipedi metninin İngilizce çevirisi (bağlantı Türkçe maddeye gider)
+        d.yerler.forEach((y) => { const e = en.y && en.y[y.q]; if (e) { if (e[0]) y.ae = e[0]; y.me = e[3] ? e[1] : sade(e[1]); y.we = e[2] ? (e[3] ? "tr:" : "en:") + e[2] : ""; if (e[3]) y.cve = 1; } });
       }
     }
     IL.set(s, d);
@@ -522,17 +523,29 @@
     } catch (e) {}
   }
   // ---------- dinle (sesli okuma) ----------
-  const sesVar = "speechSynthesis" in window && typeof SpeechSynthesisUtterance !== "undefined";
-  function dinleDurdur() { if (sesVar) speechSynthesis.cancel(); dinleYaz(false); }
-  function dinleYaz(on) { const b = $("dDinle"); b.classList.toggle("on", on); b.innerHTML = ik(on ? "square" : "volume-2", 22) + `<span>${on ? T("Durdur") : T("Dinle")}</span>`; }
-  // Telefondaki en doğal Türkçe sesi seç (geliştirilmiş / doğal / Google sesleri öne, robotik olanlar sona)
+  // Android uygulamasında telefonun kendi ses motoru (Google, Samsung...) eklentiyle kullanılır; tarayıcıda Web Speech.
+  const NTTS = window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() !== "web" && window.Capacitor.Plugins && window.Capacitor.Plugins.TextToSpeech;
+  const webSes = "speechSynthesis" in window && typeof SpeechSynthesisUtterance !== "undefined";
+  const sesVar = !!NTTS || webSes;
+  const IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const HIZ = 0.95; // biraz sakin, anlatıcı gibi
+  let dinleNo = 0, konusuyor = false; // dinleNo: durdurulan okumanın geç gelen "bitti" haberini yok saymak için
+  function dinleDurdur() { dinleNo++; if (NTTS) NTTS.stop().catch(() => {}); else if (webSes) speechSynthesis.cancel(); dinleYaz(false); }
+  function dinleYaz(on) { konusuyor = on; const b = $("dDinle"); b.classList.toggle("on", on); b.innerHTML = ik(on ? "square" : "volume-2", 22) + `<span>${on ? T("Durdur") : T("Dinle")}</span>`; }
+  // Telefondaki en doğal sesi seç: Premium / geliştirilmiş / doğal sesler öne, robotik ve şaka sesleri (iPhone'daki Albert, Zarvox...) sona
+  const ROBOT = /compact|espeak|robot|\b(albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|jester|organ|superstar|trinoids|whisper|wobble|zarvox|junior|ralph|fred|kathy|princess|eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley)\b/;
+  const IYI = /premium|enhanced|geliştirilmiş|gelişmiş|neural|natural|doğal|wavenet|online/;
   function enIyiSes() {
-    const v = speechSynthesis.getVoices().filter((x) => (DIL === "en" ? /^en/i : /^tr/i).test(x.lang));
-    const puan = (x) => { const n = x.name.toLowerCase(); let p = 0;
-      if (/premium|enhanced|geliştirilmiş|neural|natural|doğal|wavenet|online/.test(n)) p += 5;
+    const dil = DIL === "en" ? /^en/i : /^tr/i;
+    const v = speechSynthesis.getVoices().filter((x) => dil.test(x.lang));
+    const puan = (x) => { const n = (x.name + " " + (x.voiceURI || "")).toLowerCase(); let p = 0;
+      if (/premium/.test(n)) p += 3;
+      if (IYI.test(n)) p += 6;
       if (/google/.test(n)) p += 3;
+      if (DIL === "en" && /^en[-_]gb/i.test(x.lang)) p += 2;
+      if (DIL === "en" && /\b(daniel|samantha|karen|serena|kate|arthur|martha|moira|tessa)\b/.test(n)) p += 2;
       if (!x.localService) p += 1;
-      if (/compact|espeak|robot/.test(n)) p -= 5;
+      if (ROBOT.test(n)) p -= 10;
       return p; };
     return v.sort((x, y) => puan(y) - puan(x))[0] || null;
   }
@@ -543,23 +556,53 @@
       .replace(/(\d)\s*km\b/g, "$1 kilometre").replace(/(\d)\s*m\b/g, "$1 metre")
       .replace(/\byy\.?/g, "yüzyıl").replace(/\bvb\.?/g, "ve benzeri").replace(/\s{2,}/g, " ").trim();
   }
-  function dinle() {
-    if (!sesVar || !open) return;
-    if (speechSynthesis.speaking) return dinleDurdur();
-    const ses = enIyiSes();
-    // Cümle cümle oku: doğal duraklar olur, uzun metinde ses kesilmez
-    const cumleler = (adi(open) + ". " + (DIL === "en" ? $("dText").textContent.replace(/\s*\([^)]*\)/g, "") : okunur($("dText").textContent))).split(/(?<=[.!?])\s+(?=[A-ZÇĞİÖŞÜ])/).filter((c) => c.trim());
+  // iPhone'da yalnızca basit (robotik) ses varsa, daha doğal sesi nasıl indireceğini bir kez söyle
+  function sesIpucu(ses) {
+    if (!IOS || (ses && IYI.test((ses.name + " " + (ses.voiceURI || "")).toLowerCase()))) return;
+    try { if (localStorage.getItem("gezi-ses-ipucu")) return; localStorage.setItem("gezi-ses-ipucu", "1"); } catch (e) {}
+    setTimeout(() => toast(TL("Daha doğal bir ses için: Ayarlar › Erişilebilirlik › Seslendirilen İçerik › Sesler › Türkçe bölümünden geliştirilmiş sesi indir.", "For a more natural voice: Settings › Accessibility › Spoken Content › Voices › English, then download an Enhanced or Premium voice."), 9000), 1500);
+  }
+  function webOku(cumleler, no) {
+    const hepsi = speechSynthesis.getVoices(), ses = enIyiSes();
+    // Cihazda bu dilde hiç ses yoksa yabancı sesle okumak kötü durur: okumayız
+    if (hepsi.length && !ses) { toast(TL("Bu cihazda Türkçe ses yüklü değil. Telefonunun ayarlarından Türkçe sesi indirebilirsin.", "No English voice is installed on this device.")); return dinleYaz(false); }
     speechSynthesis.cancel();
     cumleler.forEach((c, i) => {
-      const u = new SpeechSynthesisUtterance(c.trim());
-      u.lang = DIL === "en" ? "en-GB" : "tr-TR"; u.rate = 1; u.pitch = 1; if (ses) u.voice = ses;
-      if (i === cumleler.length - 1) u.onend = () => dinleYaz(false);
-      u.onerror = (e) => { if (e.error !== "interrupted" && e.error !== "canceled") dinleDurdur(); };
+      const u = new SpeechSynthesisUtterance(c);
+      u.lang = ses ? ses.lang : DIL === "en" ? "en-GB" : "tr-TR"; u.rate = HIZ; u.pitch = 1; if (ses) u.voice = ses;
+      if (i === cumleler.length - 1) u.onend = () => { if (no === dinleNo) dinleYaz(false); };
+      u.onerror = (e) => { if (e.error !== "interrupted" && e.error !== "canceled" && no === dinleNo) dinleDurdur(); };
       speechSynthesis.speak(u);
     });
-    dinleYaz(true);
+    sesIpucu(ses);
   }
-  if (sesVar) speechSynthesis.getVoices();
+  async function yerelOku(cumleler, no) {
+    const lang = DIL === "en" ? "en-GB" : "tr-TR";
+    try {
+      const r = await NTTS.isLanguageSupported({ lang });
+      if (r && r.supported === false) {
+        toast(TL("Telefonunda Türkçe ses paketi yok. Açılan ekrandan Türkçe sesi indirebilirsin.", "Your phone has no English voice data. You can download it from the screen that opens."), 6000);
+        NTTS.openInstall().catch(() => {});
+        return dinleYaz(false);
+      }
+    } catch (e) {}
+    // Cümle cümle, sırayla: her cümleden sonra doğal bir durak olur
+    for (const c of cumleler) {
+      if (no !== dinleNo) return;
+      try { await NTTS.speak({ text: c, lang, rate: HIZ, pitch: 1, volume: 1, category: "playback" }); } catch (e) { break; }
+    }
+    if (no === dinleNo) dinleYaz(false);
+  }
+  function dinle() {
+    if (!sesVar || !open) return;
+    if (konusuyor) return dinleDurdur();
+    const metin = DIL === "en" ? $("dText").textContent.replace(/\s*\([^)]*\)/g, "") : okunur($("dText").textContent);
+    const cumleler = (adi(open) + ". " + metin).split(/(?<=[.!?])\s+(?=[A-ZÇĞİÖŞÜ])/).map((c) => c.trim()).filter(Boolean);
+    const no = ++dinleNo;
+    dinleYaz(true);
+    if (NTTS) yerelOku(cumleler, no); else webOku(cumleler, no);
+  }
+  if (webSes && !NTTS) speechSynthesis.getVoices();
   // ---------- keşfet: tema listeleri (Türkiye geneli) ----------
   const TEMA = {
     selale: { ad: T("Şelaleler"), e: "droplets", k: ["selale"] },
@@ -1261,8 +1304,8 @@
     const wk = DIL === "en" ? p.we || p.w : p.w;
     $("dWiki").hidden = !wk;
     $("dWiki").href = wikiUrl(wk);
-    $("dWiki").textContent = wk && wk.startsWith("en:") ? T("Vikipedi'de (İngilizce) oku") : T("Vikipedi'de devamını oku");
-    metinLisans($("dLis"), !!(DIL === "en" ? p.me && p.we : p.m && p.w), DIL !== "en" && p.cv);
+    $("dWiki").textContent = wk && wk.startsWith("en:") ? T("Vikipedi'de (İngilizce) oku") : DIL === "en" && wk ? "Read more on Wikipedia (Turkish)" : T("Vikipedi'de devamını oku");
+    metinLisans($("dLis"), !!(DIL === "en" ? p.me && p.we : p.m && p.w), DIL === "en" ? p.cve : p.cv);
     $("sheet").querySelector(".card").scrollTop = 0;
     if ($("sheet").hidden) { history.pushState({ sheet: 1 }, "", location.href); sheetPushed = true; acan = document.activeElement; }
     $("sheet").hidden = false; arkaPlan(true);
