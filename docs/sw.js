@@ -1,10 +1,10 @@
 /* Rota Cepte · © 2026 Mert Turanlıoğlu · Çevrimdışı açılış (önce internet, yavaşsa ya da yoksa kayıtlı kopya) */
-const C = "gezi-6.1";
+const C = "gezi-6.2";
 const IND = "gezi-indir"; // "İnternetsiz kullan" ile indirilen il verisi ve fotoğraflar (sürüm değişse de silinmez)
 // Uygulamanın iskeleti: ilk kurulumda kaydedilir, böylece ilk ziyaretten sonra internetsiz de açılır
-const ISKELET = ["./", "index.html", "style.css?v=6.1", "app.js?v=6.1", "i18n.js?v=6.1", "vendor/lucide.js?v=6.1", "vendor/leaflet.js", "vendor/leaflet.css",
+const ISKELET = ["./", "index.html", "style.css?v=6.2", "app.js?v=6.2", "i18n.js?v=6.2", "vendor/lucide.js?v=6.2", "vendor/leaflet.js", "vendor/leaflet.css",
   "vendor/font/manrope-latin-wght-normal.woff2", "vendor/font/manrope-latin-ext-wght-normal.woff2", "icon-192.png", "manifest.webmanifest",
-  "gizlilik.html", "lisanslar.html", "kosullar.html", "belge.css?v=6.1"];
+  "gizlilik.html", "lisanslar.html", "kosullar.html", "belge.css?v=6.2"];
 self.addEventListener("install", (e) => e.waitUntil(
   caches.open(C).then((c) => c.addAll(ISKELET)).catch((err) => console.warn("iskelet kaydedilemedi", err)).then(() => self.skipWaiting())));
 self.addEventListener("activate", (e) => e.waitUntil(
