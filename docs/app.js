@@ -3,7 +3,7 @@
    Veri docs/data altında; GitHub Actions'ta Wikidata, Vikipedi ve Commons'tan hazırlanır (scripts/uret.mjs). */
 (function () {
   "use strict";
-  const SURUM = "6.0";
+  const SURUM = "6.1";
   if (window.ikDoldur) ikDoldur();
   // MapTiler harita anahtarı (boşsa OpenStreetMap kullanılır)
   const HARITA_ANAHTAR = "pI5pMuHAI4gLw3aqy35G";
@@ -55,6 +55,23 @@
     if (!w) return "";
     const i = w.indexOf(":");
     return `https://${w.slice(0, i)}.wikipedia.org/wiki/${encodeURIComponent(w.slice(i + 1).replace(/ /g, "_"))}`;
+  }
+  // Fotoğraf atfı: yazar · lisans · Wikimedia Commons. Dokununca dosyanın Commons sayfası açılır
+  // (CC lisansları lisansa ya da kaynak sayfaya bağlantı ister; tam lisans orada yazar).
+  function comSayfa(f) {
+    let ad = f.p.split("?")[0].split("/").pop();
+    try { ad = decodeURIComponent(ad); } catch (e) {}
+    return "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(ad);
+  }
+  function fotoAtif(f, on) {
+    if (!f || !f.p) return "";
+    const yazi = T("Fotoğraf:") + " " + (f.a ? f.a + " · " : "") + "Wikimedia Commons";
+    return (on ? esc(on) + " · " : "") + `<a href="${comSayfa(f)}" target="_blank" rel="noopener">${esc(yazi)}</a>`;
+  }
+  // Vikipedi metinleri CC BY-SA 4.0: lisans adı + bağlantı + değişiklik notu
+  function metinLisans(el, var_) {
+    el.hidden = !var_;
+    el.innerHTML = var_ ? TL("Metin: Vikipedi", "Text: Wikipedia") + ` · <a href="https://creativecommons.org/licenses/by-sa/4.0/${DIL === "en" ? "" : "deed.tr"}" target="_blank" rel="noopener">CC BY-SA 4.0</a> · ` + TL("kısaltılmıştır", "shortened") : "";
   }
   // Fotoğraf yüklenemezse altındaki kategori simgesi görünür kalır.
   function thumb(f, k, W, cls) {
@@ -411,7 +428,7 @@
         const [hik, ad] = HAVA[d.weathercode[i]] || ["thermometer", ""];
         const g = gunler[i] || new Date(t + "T12:00").toLocaleDateString(DIL === "en" ? "en-GB" : "tr-TR", { weekday: "long" });
         return `<span><em>${g}</em><i>${ik(hik, 28)}</i><b>${Math.round(d.temperature_2m_max[i])}° <small>${Math.round(d.temperature_2m_min[i])}°</small></b><small>${ad}</small></span>`;
-      }).join("") + "</div>";
+      }).join("") + `</div><a class="hkaynak" href="https://open-meteo.com/" target="_blank" rel="noopener">${TL("Hava durumu verisi: Open-Meteo.com", "Weather data by Open-Meteo.com")}</a>`;
       kutu.hidden = false;
     } catch (e) {}
   }
@@ -938,7 +955,7 @@
     const src = foto(h.f, 960);
     $("heroImg").style.setProperty("--c", BOLGE_RENK);
     $("heroImg").innerHTML = icon("y", 40) + (src ? `<img src="${src}" alt="" onerror="fotoHata(this)">` : "");
-    $("heroCredit").textContent = h.f && h.f.a ? (h.kapak ? h.kapak + " · " : "") + T("Fotoğraf:") + " " + h.f.a + " · Wikimedia Commons" : "";
+    $("heroCredit").innerHTML = fotoAtif(h.f, h.kapak);
     $("heroFacts").innerHTML = h.facts.filter(Boolean).map(([k, v]) => `<span>${esc(k)} <strong>${esc(v)}</strong></span>`).join("");
     $("heroText").textContent = h.m || "";
     $("heroText").classList.add("clamp");
@@ -947,6 +964,7 @@
     $("heroWiki").hidden = !h.w;
     $("heroWiki").href = wikiUrl(h.w);
     $("heroWiki").textContent = h.w && h.w.startsWith("en:") ? T("Vikipedi (İngilizce)") : T("Vikipedi'de oku");
+    metinLisans($("heroLis"), !!(h.m && h.w));
   }
   const nufusBilgi = (o) => (o.nuf ? [T("Nüfus") + (o.nufY ? ` (${o.nufY})` : ""), nf(o.nuf)] : null);
   const alanBilgi = (o) => (o.alan ? [T("Yüzölçümü"), nf(o.alan) + " km²"] : null);
@@ -1077,11 +1095,14 @@
   function ensureMap() {
     if (map) { setTimeout(() => map.invalidateSize(), 60); return; }
     map = L.map("map", { zoomControl: true, attributionControl: true }).setView([39, 35], 6);
-    const osm = () => L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" });
+    // Atıflar zorunlu: OSM (ODbL) ve MapTiler kullanım şartları; bağlantılar dış tarayıcıda açılır
+    const OSM_ATIF = `<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap ${TL("katkıcıları", "contributors")}</a>`;
+    map.attributionControl.setPrefix(`<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>`);
+    const osm = () => L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: OSM_ATIF });
     if (HARITA_ANAHTAR) {
       // MapTiler çalışmazsa (kota, anahtar hatası) OpenStreetMap'e geç
       let hata = 0;
-      const mt = L.tileLayer(`https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=${HARITA_ANAHTAR}`, { maxZoom: 19, attribution: "© MapTiler © OpenStreetMap" });
+      const mt = L.tileLayer(`https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=${HARITA_ANAHTAR}`, { maxZoom: 19, attribution: `<a href="https://www.maptiler.com/copyright/" target="_blank" rel="noopener">© MapTiler</a> ${OSM_ATIF}` });
       mt.on("tileload", () => { hata = 0; });
       mt.on("tileerror", () => { if (++hata === 6 && map.hasLayer(mt)) { map.removeLayer(mt); osm().addTo(map); } });
       mt.addTo(map);
@@ -1137,7 +1158,7 @@
     $("dIcon").innerHTML = icon(p.k, 54);
     const src = foto(p.f, 960);
     $("dImg").innerHTML = src ? `<img src="${src}" alt="${esc(p.ad)}" onerror="fotoHata(this)">` : "";
-    $("dCredit").textContent = p.f && p.f.a ? T("Fotoğraf:") + " " + p.f.a + " · Wikimedia Commons" : "";
+    $("dCredit").innerHTML = fotoAtif(p.f);
     // Galeri: öne çıkan yerlerde ek fotoğraflar (dokununca büyük fotoğraf değişir)
     const gal = p.f && p.g && p.g.length ? [p.f, ...p.g] : [];
     $("dGaleri").hidden = !gal.length;
@@ -1171,6 +1192,7 @@
     $("dWiki").hidden = !wk;
     $("dWiki").href = wikiUrl(wk);
     $("dWiki").textContent = wk && wk.startsWith("en:") ? T("Vikipedi'de (İngilizce) oku") : T("Vikipedi'de devamını oku");
+    metinLisans($("dLis"), !!(DIL === "en" ? p.me && p.we : p.m && p.w));
     $("sheet").querySelector(".card").scrollTop = 0;
     if ($("sheet").hidden) { history.pushState({ sheet: 1 }, "", location.href); sheetPushed = true; acan = document.activeElement; }
     $("sheet").hidden = false; arkaPlan(true);
@@ -1274,7 +1296,7 @@
     const b = e.target.closest(".gk"); if (!b || !open) return;
     const gal = [open.f, ...(open.g || [])]; const f = gal[+b.dataset.i]; if (!f) return;
     $("dImg").innerHTML = `<img src="${foto(f, 960)}" alt="${esc(adi(open))}" onerror="fotoHata(this)">`;
-    $("dCredit").textContent = f.a ? T("Fotoğraf:") + " " + f.a + " · Wikimedia Commons" : "";
+    $("dCredit").innerHTML = fotoAtif(f);
     for (const x of $("dGaleri").children) x.classList.toggle("on", x === b);
   });
   $("dCevre").addEventListener("click", (e) => {
