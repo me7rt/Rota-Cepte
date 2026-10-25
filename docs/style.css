@@ -63,6 +63,45 @@
   --sh-1:0 1px 2px rgba(0,0,0,.4); --sh-2:0 8px 24px rgba(0,0,0,.45);
   color-scheme:dark}}
 
+/* Kullanıcının seçebildiği diğer temalar (Ayarlar > Tema). Varsayılan "Gün Batımı" yukarıda.
+   Karanlık kurallar aynı seçiciyle tekrar yazılır ki açık temanın değerleri karanlıkta kalmasın. */
+/* B · Ege: Radix cyan + blue + tomato (mercan) */
+:root[data-tema="ege"]{
+  --bg:#def7f9; --surface:#fafdfe; --surface2:#caf1f6; --line:#b5e9f0;  /* cyan 3,1,4,5 */
+  --fg:#0d3c48; --muted:#5f6563;                                         /* cyan-12, sage-11 */
+  --pri:#107d98; --pri-ink:#0f7088; --pri-soft:#caf1f6;                  /* cyan-11, cyan-11+%20 12, cyan-4 */
+  --k-t:#0d74ce; --k-y:#107d98;
+  --rk1a:#107d98; --rk1b:#0d3c48; --rk2a:#d13415; --rk2b:#5c271f; --rk3a:#0d74ce; --rk3b:#113264;
+  --gunun-a:#107d98; --gunun-b:#0d3c48; --ilk-a:#3db9cf; --ilk-b:#0d3c48;
+  --hbos:#b5e9f0; --harita-zemin:#caf1f6;
+  --sh-1:0 1px 2px rgba(13,60,72,.08),0 1px 3px rgba(13,60,72,.08);
+  --sh-2:0 2px 6px rgba(13,60,72,.08),0 10px 24px rgba(13,60,72,.10);
+}
+/* C · Karadeniz: Radix grass + olive + orange */
+:root[data-tema="karadeniz"]{
+  --bg:#e9f6e9; --surface:#fbfefb; --surface2:#daf1db; --line:#c9e8ca;  /* grass 3,1,4,5 */
+  --fg:#203c25; --muted:#60655f;                                         /* grass-12, olive-11 */
+  --pri:#2a7e3b; --pri-ink:#287137; --pri-soft:#daf1db;                  /* grass-11, grass-11+%20 12, grass-4 */
+  --k-y:#2a7e3b;
+  --rk1a:#2a7e3b; --rk1b:#203c25; --rk2a:#cc4e00; --rk2b:#582d1d; --rk3a:#008573; --rk3b:#0d3d38;
+  --gunun-a:#2a7e3b; --gunun-b:#203c25; --ilk-a:#65ba74; --ilk-b:#203c25;
+  --hbos:#c9e8ca; --harita-zemin:#daf1db; --gez-tam:#cc4e00; --gez-yari:#ec9455;  /* orange-11, orange-8 */
+  --sh-1:0 1px 2px rgba(32,60,37,.08),0 1px 3px rgba(32,60,37,.08);
+  --sh-2:0 2px 6px rgba(32,60,37,.08),0 10px 24px rgba(32,60,37,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root[data-tema="ege"]{
+    --bg:#0b161a; --surface:#101b20; --surface2:#082c36; --line:#004558;  /* cyan-dark 1,2,3,5 */
+    --fg:#b6ecf7; --muted:#adb5b2; --pri-ink:#4ccce6; --pri-soft:#003848;
+    --hbos:#003848; --harita-zemin:#082c36;
+    --sh-1:0 1px 2px rgba(0,0,0,.4); --sh-2:0 8px 24px rgba(0,0,0,.45)}
+  :root[data-tema="karadeniz"]{
+    --bg:#0e1511; --surface:#141a15; --surface2:#1b2a1e; --line:#25482d;  /* grass-dark 1,2,3,5 */
+    --fg:#c2f0c2; --muted:#afb5ad; --pri-ink:#71d083; --pri-soft:#1d3a24;
+    --hbos:#25482d; --harita-zemin:#1b2a1e;
+    --sh-1:0 1px 2px rgba(0,0,0,.4); --sh-2:0 8px 24px rgba(0,0,0,.45)}
+}
+
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 html,body{margin:0}
@@ -367,6 +406,20 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 @keyframes spPop{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:none}}
 .karnek{padding:14px 14px 12px}
 .karnek img{display:block;width:100%;max-height:66vh;object-fit:contain;border-radius:14px}
+/* tema seçimi */
+.temalar{display:flex;flex-direction:column;gap:10px;margin-top:18px;text-align:left}
+.tsec{display:flex;align-items:center;gap:14px;width:100%;min-height:68px;padding:10px 14px;border:2px solid var(--line);border-radius:var(--r-m);background:var(--surface);color:var(--fg);text-align:left;transition:border-color .15s,background-color .15s,transform .15s}
+.tsec:active{transform:scale(.98)}
+.tsec[aria-checked="true"]{border-color:var(--pri);background:var(--pri-soft)}
+.tornek{flex:none;display:grid;grid-template-columns:1fr 1fr;width:48px;height:48px;border-radius:14px;overflow:hidden;outline:1px solid color-mix(in srgb,var(--fg) 12%,transparent);outline-offset:-1px}
+.tornek i{display:block}
+.tornek .tz{grid-row:span 2;background:var(--sw-a)}
+@media (prefers-color-scheme:dark){.tornek .tz{background:var(--sw-k)}}
+.tad{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.tad b{font-size:15.5px}
+.tad small{color:var(--muted);font-size:12.5px;line-height:1.35}
+.tsec .tisaret{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;border:2px solid var(--line);color:transparent}
+.tsec[aria-checked="true"] .tisaret{background:var(--pri);border-color:var(--pri);color:var(--on-pri)}
 
 /* ---------- tema, rota sayfaları ---------- */
 #tema{display:flex;flex-direction:column;gap:12px}

@@ -1210,6 +1210,46 @@
   $("nearBtn").addEventListener("click", () => git("#/yakin"));
   $("dilYazi").textContent = TL("Language: English", "Dil: Türkçe");
   $("dilBtn").addEventListener("click", () => dilDegistir(TL("en", "tr")));
+  // ---------- tema (renk paleti): varsayılan Gün Batımı, Ayarlar'dan değişir ----------
+  const TEMALAR = [
+    { k: "gunbatimi", ad: TL("Gün Batımı", "Sunset"), not: TL("Kum, gün batımı turuncusu, dağ laciverdi", "Sand, sunset orange, mountain navy"), r: ["#f6eee7", "#d13415", "#1f2d5c"], koyu: "#11131f" },
+    { k: "ege", ad: TL("Ege", "Aegean"), not: TL("Turkuaz deniz, beyaz kıyı, mercan", "Turquoise sea, white shore, coral"), r: ["#def7f9", "#107d98", "#d13415"], koyu: "#0b161a" },
+    { k: "karadeniz", ad: TL("Karadeniz", "Black Sea"), not: TL("Yeşil yayla, orman, turuncu ikindi", "Green highlands, forest, warm orange"), r: ["#e9f6e9", "#2a7e3b", "#cc4e00"], koyu: "#0e1511" }
+  ];
+  let tema = "gunbatimi";
+  try { const t = localStorage.getItem("gezi-tema"); if (TEMALAR.some((x) => x.k === t)) tema = t; } catch (e) {}
+  function temaUygula(k) {
+    const t = TEMALAR.find((x) => x.k === k) || TEMALAR[0];
+    tema = t.k;
+    if (t.k === "gunbatimi") document.documentElement.removeAttribute("data-tema");
+    else document.documentElement.setAttribute("data-tema", t.k);
+    const m = document.querySelectorAll('meta[name="theme-color"]');
+    if (m[0]) m[0].content = t.r[0];
+    if (m[1]) m[1].content = t.koyu;
+    $("temaYazi").innerHTML = `${TL("Tema", "Theme")}: <b>${esc(t.ad)}</b>`;
+  }
+  function temaSec() {
+    const d = document.createElement("div"); d.className = "tanit";
+    const secenek = (t) => `<button class="tsec" role="radio" aria-checked="${t.k === tema}" data-tema="${t.k}"><span class="tornek" aria-hidden="true"><i class="tz" style="--sw-a:${t.r[0]};--sw-k:${t.koyu}"></i><i style="background:${t.r[1]}"></i><i style="background:${t.r[2]}"></i></span><span class="tad"><b>${esc(t.ad)}</b><small>${esc(t.not)}</small></span><i class="tisaret" aria-hidden="true">${ik("check", 16)}</i></button>`;
+    d.innerHTML = `<div class="tkart"><div class="temo">${ik("palette", 36)}</div><h2>${TL("Tema", "Theme")}</h2><p>${TL("Uygulamanın renklerini seç. Karanlık mod telefonunun ayarına göre açılır.", "Pick the app colours. Dark mode follows your phone's setting.")}</p>
+      <div class="temalar" role="radiogroup" aria-label="${TL("Tema", "Theme")}">${TEMALAR.map(secenek).join("")}</div>
+      <div class="tbtn" style="justify-content:center"><button class="btn primary" data-k="kapat">${TL("Tamam", "Done")}</button></div></div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); $("temaBtn").focus(); };
+    d.addEventListener("click", (e) => {
+      const b = e.target.closest(".tsec");
+      if (b) {
+        temaUygula(b.dataset.tema);
+        try { localStorage.setItem("gezi-tema", tema); } catch (er) {}
+        d.querySelectorAll(".tsec").forEach((x) => x.setAttribute("aria-checked", String(x === b)));
+        return;
+      }
+      if (e.target === d || e.target.closest("[data-k=kapat]")) kapat();
+    });
+    document.body.appendChild(d);
+    setTimeout(() => { const s = d.querySelector('[aria-checked="true"]'); if (s) s.focus(); }, 50);
+  }
+  temaUygula(tema);
+  $("temaBtn").addEventListener("click", temaSec);
   $("locBtn").addEventListener("click", () => { if (watchId !== null) stopLocation(); else startLocation(); });
   $("temaLoc").addEventListener("click", () => startLocation());
   $("back").addEventListener("click", () => {
