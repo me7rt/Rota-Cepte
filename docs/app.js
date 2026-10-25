@@ -13,13 +13,13 @@
   const icon = (k, size = 18) => ik(KIK[k] || k || "map-pin", size);
   const OKIK = ik("chevron-right", 18, "okik");
   const CATS = {
-    t: { ad: T("Tarihi"), renk: "#1f4fa3" },
-    d: { ad: T("Doğa & Manzara"), renk: "#2f7d5b" },
-    m: { ad: T("Müze"), renk: "#13707a" },
-    c: { ad: T("Çarşı & Lezzet"), renk: "#c2462e" },
-    s: { ad: T("Şehir & Semt"), renk: "#7a3f8c" }
+    t: { ad: T("Tarihi"), renk: "var(--k-t)" },
+    d: { ad: T("Doğa & Manzara"), renk: "var(--k-d)" },
+    m: { ad: T("Müze"), renk: "var(--k-m)" },
+    c: { ad: T("Çarşı & Lezzet"), renk: "var(--k-c)" },
+    s: { ad: T("Şehir & Semt"), renk: "var(--k-s)" }
   };
-  const BOLGE_RENK = "#5b6f77";
+  const BOLGE_RENK = "var(--k-y)";
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const sade = (s) => String(s).toLocaleLowerCase("tr").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i");
@@ -816,11 +816,11 @@
       const yollar = Object.entries(HARITA).map(([s, d]) => {
         const il = IDX.ilBy.get(s); if (!il) return "";
         const o = oran.get(il.s) || 0; if (o >= 1) tam++;
-        const renk = o >= 1 ? "#1f9d55" : o > 0 ? `color-mix(in srgb,#2fb36a ${Math.round(25 + o * 60)}%,var(--hbos))` : "var(--hbos)";
+        const renk = o >= 1 ? "var(--gez-tam)" : o > 0 ? `color-mix(in srgb,var(--gez-yari) ${Math.round(25 + o * 60)}%,var(--hbos))` : "var(--hbos)";
         return `<path d="${d}" style="fill:${renk}" data-go="#/il/${il.s}"><title>${esc(il.ad)}${o ? " · %" + Math.round(o * 100) : ""}</title></path>`;
       }).join("");
       kutu.innerHTML = `<svg viewBox="80 0 1050 585" class="trh" role="img" aria-label="${T("Gezi haritan")}">${yollar}</svg>
-        <div class="hleg"><span><i style="background:var(--hbos)"></i>${T("Gitmedin")}</span><span><i style="background:color-mix(in srgb,#2fb36a 45%,var(--hbos))"></i>${T("Başladın")}</span><span><i style="background:#1f9d55"></i>${T("Tüm ilçeler")}</span></div>
+        <div class="hleg"><span><i style="background:var(--hbos)"></i>${T("Gitmedin")}</span><span><i style="background:color-mix(in srgb,var(--gez-yari) 45%,var(--hbos))"></i>${T("Başladın")}</span><span><i style="background:var(--gez-tam)"></i>${T("Tüm ilçeler")}</span></div>
         <p class="hnot">${a.length ? TL(`${ilBy.size} ile gittin${tam ? `, ${tam} ilin tüm ilçelerini gezdin` : ""}. Bir ilin ilçelerini gezdikçe rengi koyulaşır.`, `You've been to ${ilBy.size} provinces${tam ? `, all districts of ${tam}` : ""}. A province gets darker as you visit its districts.`) : TL(`Bir yere "Buraya gittim" dediğinde o il haritada yeşile boyanmaya başlar. İlçelerini gezdikçe rengi koyulaşır.`, `Tap "I've been here" on a place and its province turns green on the map. It gets darker as you visit its districts.`)}</p>`;
       try { const sv = kutu.querySelector("svg"), b = sv.getBBox(); if (b.width) { sv.setAttribute("viewBox", `${b.x - 4} ${b.y - 4} ${b.width + 8} ${b.height + 8}`); HARITA_KUTU = [b.x, b.y, b.width, b.height]; } } catch (e) {}
     } catch (e) {}
