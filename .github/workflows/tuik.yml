@@ -19,6 +19,10 @@ jobs:
           al adnks-2025.pdf "https://www.tuik.gov.tr/media/announcements/ADNKS_2025TR.pdf"
           al arama.html "https://data.tuik.gov.tr/Search/Search?text=Adrese%20Dayal%C4%B1%20N%C3%BCfus%20Kay%C4%B1t%20Sistemi%20Sonu%C3%A7lar%C4%B1%202025"
           al kategori.html "https://data.tuik.gov.tr/Kategori/GetKategori?p=nufus-ve-demografi-109&dil=1"
+          al index.js "https://data.tuik.gov.tr/assets/index-DHVaePSb.js"
+          grep -oE '"(https?:)?//[a-zA-Z0-9.-]*tuik[a-zA-Z0-9./_-]*"|"/api[a-zA-Z0-9/_-]*"|"/[A-Za-z]+/[A-Za-z]+(\?[^"]*)?"' tuik-gecici/index.js | sort -u > tuik-gecici/uclar.txt || true
+          grep -oE '.{80}(Bulten|bulten|GetBulten|Search)[^;]{0,160}' tuik-gecici/index.js | head -60 > tuik-gecici/bulten-kod.txt || true
+          rm -f tuik-gecici/index.js
           cat tuik-gecici/durum.txt
       - name: Dala yukle
         run: |
