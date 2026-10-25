@@ -21,7 +21,9 @@
     "Hazırlayan": "Made by", "Hazırlayan:": "Made by:",
     "© 2026 · Tüm hakları saklıdır": "© 2026 · All rights reserved",
     "© 2026 Mert Turanlıoğlu · Tüm hakları saklıdır ·": "© 2026 Mert Turanlıoğlu · All rights reserved ·",
-    "Gizlilik": "Privacy",
+    "Gizlilik": "Privacy", "Kaynaklar ve lisanslar": "Sources and licenses", "Kullanım koşulları": "Terms of use",
+    "© 2026 Mert Turanlıoğlu · Tüm hakları saklıdır": "© 2026 Mert Turanlıoğlu · All rights reserved",
+    "Fotoğraflar ve Vikipedi metinleri kendi lisanslarıyla kullanılır.": "Photos and Wikipedia texts are used under their own licenses.",
     "Geri": "Back", "Nereye gidiyorsun?": "Where are you going?",
     "Konumumu kullan": "Use my location", "Konum kapalı": "Location off", "Konum açık": "Location on", "Konum aranıyor…": "Finding location…",
     // ana sayfa
@@ -48,8 +50,8 @@
     "Gezilecek yerler": "Places to visit", "İlçeler": "Districts", "Kategori": "Category",
     "Bu ilde yer ara… (ör. kale, şelale)": "Search in this province… (e.g. castle, waterfall)",
     "Daha fazla göster": "Show more",
-    "Bilgiler: Vikipedi (CC BY-SA). Fotoğraflar: Wikimedia Commons, yazar ve lisansı fotoğrafın altında. Harita: © OpenStreetMap katkıcıları.":
-      "Info: Wikipedia (CC BY-SA). Photos: Wikimedia Commons, author and license under each photo. Map: © OpenStreetMap contributors.",
+    "Bilgiler: Vikipedi (CC BY-SA 4.0) ve Wikidata. Fotoğraflar: Wikimedia Commons, yazar ve lisansı fotoğrafın altında. Harita: © MapTiler, © OpenStreetMap katkıcıları.":
+      "Info: Wikipedia (CC BY-SA 4.0) and Wikidata. Photos: Wikimedia Commons, author and license under each photo. Map: © MapTiler, © OpenStreetMap contributors.",
     // yer kartı
     "Gideceğim yerlere ekle": "Add to my wish list", "Listemden çıkar": "Remove from my list", "Kapat": "Close",
     "Haritada aç": "Open in Maps", "Yol tarifi": "Directions", "Buraya gittim": "I've been here", "✓ Gittim": "✓ Been here",

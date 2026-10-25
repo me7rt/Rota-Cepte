@@ -634,12 +634,14 @@ function fotoKaydi(a, ii) {
   const lis = em.LicenseShortName ? em.LicenseShortName.value.replace(/<[^>]+>/g, "").trim() : "";
   const m = /\/wikipedia\/commons\/([^?#]+)/.exec(ii.url || "");
   const tarih = /(?:19|20)\d\d/.exec(((em.DateTimeOriginal || em.DateTime || {}).value || "").replace(/<[^>]+>/g, " "));
-  return { ad: a, w: ii.width, h: ii.height, mime: ii.mime, p: m ? m[1] : "", a: [yazar, lis].filter(Boolean).join(" · "), y: tarih ? +tarih[0] : 0 };
+  return { ad: a, w: ii.width, h: ii.height, mime: ii.mime, p: m ? m[1] : "", a: [yazar, lis].filter(Boolean).join(" · "), lis, y: tarih ? +tarih[0] : 0 };
 }
 function fotoUygun(a) {
   const f = FOTO.get(a);
   if (!f || !f.p || YASAK.has(a)) return false;
   if (f.mime !== "image/jpeg") return false;
+  // Yalnızca GFDL lisanslı fotoğraflar: lisansın tam metnini her kopyayla vermek gerekir, mobil uygulamada pratik değil
+  if (/^GFDL/i.test(f.lis || "")) return false;
   if (f.w < 500 || f.h < 300) return false;
   const r = f.w / f.h; if (r < 0.5 || r > 3.2) return false;
   return !dosyaKotu(a);

@@ -140,7 +140,7 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 #homeMain{display:flex;flex-direction:column;gap:14px}
 .sec{font-size:18px;font-weight:800;letter-spacing:-.01em;margin:10px 0 0;color:var(--fg)}
 .credit{font-size:12px;color:var(--muted);text-align:center;margin:2px 0 0;line-height:1.5}
-.credit a{color:var(--pri-ink)}
+.credit a{color:var(--pri-ink);display:inline-block;padding:6px 0;font-weight:700}
 
 /* ---------- alt menü ---------- */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:1600;display:grid;grid-template-columns:repeat(4,1fr);
@@ -263,6 +263,12 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 .heroimg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 60%,rgba(0,0,0,.3));pointer-events:none}
 .pcredit{display:block;font-size:11px;color:var(--muted);line-height:1.35;margin-top:-4px}
 .pcredit:empty{display:none}
+/* Atıf bağlantıları: küçük yazı, ama dokunma alanı en az 24px */
+.pcredit a,.lisans a,.hkaynak{color:inherit;text-decoration:underline;text-decoration-color:color-mix(in srgb,currentColor 45%,transparent);text-underline-offset:2px}
+.pcredit a{padding:5px 0}
+.lisans{display:block;font-size:12px;color:var(--muted);line-height:1.4;margin-top:-8px}
+.lisans a{padding:5px 0}
+.lisans[hidden]{display:none}
 .facts{display:flex;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
 .hero .facts span,.body .facts span{display:inline-flex;gap:5px;align-items:baseline;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 11px}
 .facts strong{color:var(--fg);font-variant-numeric:tabular-nums}
@@ -448,6 +454,7 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 /* ---------- hava, yemek, plan ---------- */
 .hava{border:1px solid var(--line);background:var(--surface);border-radius:var(--r-l);padding:12px 14px}
 .hava>small{color:var(--muted);font-size:13px;font-weight:800}
+.hkaynak{display:inline-block;margin-top:6px;padding:4px 0;font-size:11px;color:var(--muted)}
 .hgun{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;text-align:center}
 .hgun span{display:flex;flex-direction:column;align-items:center;gap:3px}
 .hgun em{font-style:normal;font-size:12.5px;font-weight:800;color:var(--muted)}

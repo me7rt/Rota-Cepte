@@ -1,5 +1,6 @@
 {
   "appId": "io.github.me7rt.rotacepte",
   "appName": "Rota Cepte",
-  "webDir": "docs"
+  "webDir": "docs",
+  "appendUserAgent": "RotaCepte (+https://me7rt.github.io/Rota-Cepte/)"
 }
