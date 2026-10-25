@@ -1,3 +1,2 @@
-nip.html 200 16465
-nip-adnks.html 200 18445
-medas.html 200 85157
+main.js 200 3338
+site.js 200 226
