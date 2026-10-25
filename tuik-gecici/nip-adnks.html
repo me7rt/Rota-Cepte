@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="tr-TR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Nüfus İstatistikleri Portalı, Türkiye İstatistik Kurumuna (TÜİK) ait bir uygulamadır.">
+    <meta name="keywords" content="nip, Nüfus İstatistikleri Portalı, tüik, Türkiye İstatistik Kurumu">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z7NR4ZCFZ5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-Z7NR4ZCFZ5');
+    </script>
+
+        <title>N&#xFC;fus &#x130;statistikleri Portal&#x131;</title>
+    <link rel="shortcut icon" href="/images/nipLogo1.png" />
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="/a11y/assets/css/style.css?v=1naV0Y6Kipg866ApJroWvpHKpHrRGnqo2GS2zKysPZ8" />
+
+    <link href="/lib/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="/css/main.css" rel="stylesheet" />
+    <link href="/lib/jqueryui/themes/base/jquery-ui.css" rel="stylesheet" />
+    <link href="/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="/lib/noUiSlider/nouislider.min.css" rel="stylesheet" />
+
+    <script src="/js/main.js"></script>
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="/lib/jqueryui/jquery-ui.js"></script>
+    <script src="/lib/datatables/js/jquery.dataTables.js"></script>
+    <script src="/lib/Chart.js/chart.min.js"></script>
+    <script src="/lib/noUiSlider/nouislider.js"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script src="/js/formatted-numbers.js"></script>
+    <script src="/js/dataTableTurkish.js"></script>
+
+    <link href="/css/fontFamily.css" rel="stylesheet" />
+
+    <script src="/js/jspdf.min.js"></script>
+
+
+    <script defer data-domain="nip.tuik.gov.tr" src="https://analytics.tuik.gov.tr/js/script.file-downloads.hash.outbound-links.pageview-props.revenue.tagged-events.js"></script>
+    <script>window.plausible = window.plausible || function () { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+
+
+</head>
+<body>
+    <div id="nip-loader">
+        <img class="nip-logo" src="/images/nipLogo1.png" alt="nip">
+        <p class="nip-message">Nüfus İstatistikleri Portalı</p>
+        <div class="se-pre-con"></div>
+    </div>
+    <!--Start::Header Section-->
+    <header class="header-section">
+    <div class="row">
+        <div class="col-4">
+            <a id="logo1Anchor" href="/?value=CinsiyeteGoreNufus">
+                <img class="logo1" src="/images/nip_logo-01.png" alt="Nüfus İstatistik Portalı Logosu" />
+            </a>
+        </div>
+        <div class="col-5" style="display: flex; justify-content: center; align-items: center;">
+            <div class="search">
+                <form action="#" class="input-group">
+                    <input id="idNipAramaHeaderSection" type="text" placeholder="">
+                    <button onclick="arama(true)" type="button"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+        <div class="col-3">
+            <img class="logo3" src="/images/ataBayrak.png" alt="Atatürk-Bayrak Logosu" />
+        </div>
+    </div>
+<script>NS_CSM_td=273885794;NS_CSM_pd=275116665;NS_CSM_u="/clm10";NS_CSM_col="AAAAAAUqypYWidsfQPTseto1czxeGh1QLE2S6ho0d0J7ZznMJdq4NuybF54n0ZffQjvWiETNBwjyuDsoCzTeufXDd9lY";</script><script type="text/javascript">function sendTimingInfoInit(){setTimeout(sendTimingInfo,0)}function sendTimingInfo(){var wp=window.performance;if(wp){var c1,c2,t;c1=wp.timing;if(c1){var cm={};cm.ns=c1.navigationStart;if((t=c1.unloadEventStart)>0)cm.us=t;if((t=c1.unloadEventEnd)>0)cm.ue=t;if((t=c1.redirectStart)>0)cm.rs=t;if((t=c1.redirectEnd)>0)cm.re=t;cm.fs=c1.fetchStart;cm.dls=c1.domainLookupStart;cm.dle=c1.domainLookupEnd;cm.cs=c1.connectStart;cm.ce=c1.connectEnd;if((t=c1.secureConnectionStart)>0)cm.scs=t;cm.rqs=c1.requestStart;cm.rss=c1.responseStart;cm.rse=c1.responseEnd;cm.dl=c1.domLoading;cm.di=c1.domInteractive;cm.dcls=c1.domContentLoadedEventStart;cm.dcle=c1.domContentLoadedEventEnd;cm.dc=c1.domComplete;if((t=c1.loadEventStart)>0)cm.ls=t;if((t=c1.loadEventEnd)>0)cm.le=t;cm.tid=NS_CSM_td;cm.pid=NS_CSM_pd;cm.ac=NS_CSM_col;var xhttp=new XMLHttpRequest();if(xhttp){var JSON=JSON||{};JSON.stringify=JSON.stringify||function(ob){var t=typeof(ob);if(t!="object"||ob===null){if(t=="string")ob='"'+ob+'"';return String(ob);}else{var n,v,json=[],arr=(ob&&ob.constructor==Array);for(n in ob){v=ob[n];t=typeof(v);if(t=="string")v='"'+v+'"';else if(t=="object"&&v!==null)v=JSON.stringify(v);json.push((arr?"":'"'+n+'":')+String(v));}return(arr?"[":"{")+String(json)+(arr?"]":"}");}};xhttp.open("POST",NS_CSM_u,true);xhttp.send(JSON.stringify(cm));}}}}if(window.addEventListener)window.addEventListener("load",sendTimingInfoInit,false);else if(window.attachEvent)window.attachEvent("onload",sendTimingInfoInit);else window.onload=sendTimingInfoInit;</script></header>
+<nav id="mainMenuMenu">
+    <div>
+        <ul>
+            <li>
+                <a class="mainMenuMenuwithArrow" href="/Home/VeriKaynaklari">
+                    Veri Kaynakları
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="/Home/NufusKonutSayimlari">Nüfus ve Konut Sayımları</a></li>
+                    <li><a href="/Home/GelenekselNufusSayimlari">Geleneksel Nüfus Sayımları</a></li>
+                    <li><a href="/Home/Uavt">Ulusal Adres Veritabanı (UAVT)</a></li>
+                    <li><a href="/Home/Adnks">Adrese Dayalı Nüfus Kayıt Sistemi (ADNKS)</a></li>
+                    <li><a href="/Home/NufusKonutSayimi2011">2011 Nüfus ve Konut Araştırması</a></li>
+                    <li><a href="/Home/NufusKonutSayimi2021">2021 Nüfus ve Konut Sayımı</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault();">Bina ve Konut</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/?value=BinaIstatistikleri">Bina İstatistikleri</a></li>
+                    <li><a href="/?value=KonutIstatistikleri">Konut İstatistikleri</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault();">Doğum Yeri</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/?value=DogumYerineNufus">Doğum Yerine Göre Nüfus</a></li>
+                    <li><a href="/?value=YurtdisiDogumluNufus">Yurtdışı Doğumlu Nüfus</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault();">Eğitim</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/?value=EgitimDurumu">Eğitim Durumu</a></li>
+                    <li><a href="/?value=OkumaYazmaDurumu">Okuma Yazma Durumu</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault();">Göç</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/?value=UlkeIciGoc">Ülke İçi Göç</a></li>
+                    <li><a href="/?value=IllerArasiGoc">İller Arası Göç</a></li>
+                    <li><a href="/?value=GocEtmeNedenleri">Göç Etme Nedenleri</a></li>
+                    <li><a href="/?value=UluslararasiGoc">Uluslararası Göç</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault();">Hanehalkı Nitelikleri</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/?value=HanehalkiSayisi">Hanehalkı Sayısı</a></li>
+                    <li><a href="/?value=HanehalkiBuyukluguneGoreHs">Hanehalkı Büyüklüğüne Göre Hanehalkı Sayısı</a></li>
+                    <li><a href="/?value=HanehalkiTipi">Hanehalkı Tipi</a></li>
+                    <li><a href="/?value=OrtalamaHanehalkiBuyuklugu">Ortalama Hanehalkı Büyüklüğü</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault();">Hayati İstatistikler</a>
+                <ul class="dropdown-menu">
+                    <li style="min-width:120px !important;"><a href="/?value=Bosanma">Boşanma</a></li>
+                    <li><a href="/?value=Dogum">Doğum</a></li>
+                    <li><a href="/?value=Evlenme">Evlenme</a></li>
+                    <li><a href="/?value=Olum">Ölüm</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault();">İsim Ve Soyisim İstatistikler</a>
+                <ul class="dropdown-menu">
+                    <li style="min-width:120px !important;"><a href="/?value=YeniDoganIsimleri">En Çok Verilen Bebek İsimleri</a></li>
+                    <li><a href="/?value=EnCokKullanilanIsimler">En Çok Kullanılan İsimler</a></li>
+                    <li><a href="/?value=EnCokKullanilanSoyIsimler">En Çok Kullanılan Soyisimler</a></li>
+                    <li>
+                        <a target="_blank" href="https://tuikcocuk.tuik.gov.tr/">
+                            Yıllara Göre İsim Grafiği  
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="/?value=MedeniDurum">Medeni Durum</a>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault();">Nüfus Büyüklüğü</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/?value=CinsiyeteGoreNufus">Cinsiyete Göre Nüfus</a></li>
+                    <li><a href="/?value=NufusArtisHizi">Nüfus Artış Hızı</a></li>
+                    <li><a href="/?value=NufusYogunlugu">Nüfus Yoğunluğu</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault();">Yabancı Nüfus</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/?value=YabanciNufusBuyuklugu">Yabancı Nüfus Büyüklüğü</a></li>
+                    <li><a href="/?value=TabiiyetYabanciNufus">Tabiiyete Göre Yabancı Nüfus</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault();">Yaş ve Cinsiyet Yapısı</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/?value=OrtancaYas">Ortanca Yaş</a></li>
+                    <li><a href="/?value=YasGrubunaGoreNufus">Yaş Grubuna Göre Nüfus</a></li>
+                    <li><a href="/?value=YasBagimlilikOrani">Geniş Yaş Grupları ve Yaş Bağımlılık Oranı</a></li>
+                </ul>
+            </li>
+            <li style="border-right:none;">
+                <a href="/?value=IlGostergeKartlari">İl Gösterge Kartları</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+    <!--End::Header Section -->
+    <div class="container-fluid pr-0 pl-0" style="flex:1;">
+        <main role="main" class="m-0">
+            
+<div class="adnks">
+    <h3>Veri Kaynakları</h3>
+    <h4>Adrese Dayalı Nüfus Kayıt Sistemi</h4>
+    <div class="adnks-dis">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <p>
+ 					5490 sayılı Nüfus Hizmetleri Kanunu gereğince, ülke sınırları içerisinde ikamet eden tüm fertlerin ikamet adresleri tespit edilmiş; Türkiye Cumhuriyeti vatandaşları için T.C. kimlik numarası kullanılarak Merkezi Nüfus İdaresi Sistemi (MERNİS) veri tabanındaki nüfus kütükleri ile eşleştirilmiş; yabancı uyruklu fertlere ilişkin bilgiler de pasaport numarası ile sisteme entegre edilerek ADNKS kurulmuştur. ADNKS ile ilgili ilk sonuçlar 31 Aralık 2007 itibariyle 21 Ocak 2008 tarihinde kamuoyuna açıklanmıştır. Daha sonraki yıllarda ise ADNKS sonuçları, yılsonu (31 Aralık) itibarıyla yılın ilk aylarında haber bülteni ile kamuoyuna açıklanmaktadır. Nüfus istatistikleri her yıl bu sisteme dayalı olarak üretilmektedir.
+                </p>
+                <p>
+                    <strong>Adrese Dayalı Nüfus Kayıt Sistemi Üzerinden Üretilen İstatistikler</strong>
+                </p>
+                <ul style="color:#696A87;font-family:Mulish-Regular;">
+                    <li>Yerleşim yerlerine (il, ilçe, belediye, köy ve mahalle) göre nüfus büyüklüğü</li>
+                    <li>Yaş-cinsiyet yapısı</li>
+                    <li>Nüfusa kayıtlı olunan yer</li>
+                    <li>Yabancı nüfus</li>
+                    <li>Okuryazarlık ve eğitim düzeyi</li>
+                    <li>Yasal medeni durum</li>
+                    <li>Ortalama hanehalkı büyüklüğü</li>
+                    <li>İç göç (2008 yılından itibaren)</li>
+                    <li>Vatandaşlık ülkesi (2012 yılından itibaren)</li>
+                    <li>Doğum yeri (2014 yılından itibaren)</li>
+                    <li>Hanehalkı tipi (2014 yılından itibaren)</li>
+                    <li>Yurt dışından gelen/yurt dışına giden göç (2016 yılından itibaren)</li>
+                </ul>
+                <p>
+                    ADNKS, hayat tabloları ve nüfus projeksiyonları çalışmaları için altlık olarak kullanılmaktadır. Aynı zamanda hanehalkı örneklem araştırmaları için de ADNKS çerçeve görevi görmektedir.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+        </main>
+    </div>
+
+    <!-- Start::Footer Section -->
+    <footer class="footer-section">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6" style="display:flex;">
+                <a href="https://www.tuik.gov.tr/" target="_self" id="logo2Anchor">
+                    <img class="logo2" src="/images/tüik_logo2-01.png" alt="TÜİK Logosu" />
+                </a>
+                <div class="verticalLine1"></div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                <h5 class="footer-section-headline">Erişim</h5>
+                <ul class="footer-links">
+                    <li><a href="https://www.tuik.gov.tr/" target="_blank" rel="noopener noreferrer">TÜİK Ana Sayfası</a></li>
+                    <li><a href="https://biruni.tuik.gov.tr/medas/?kn=95&locale=tr" target="_blank" rel="noopener noreferrer nofollow">Adrese Dayalı Nüfus Kayıt Sistemi (ADNKS)</a></li>
+                    <li><a href="https://ec.europa.eu/eurostat" target="_blank" rel="noopener noreferrer nofollow">EUROSTAT</a></li>
+                    <li><a href="https://data.tuik.gov.tr/Kategori/GetKategori?p=nufus-ve-demografi-109&dil=1" target="_blank" rel="noopener noreferrer nofollow">İstatistik Veri Portalı</a></li>
+                </ul>
+                <div class="verticalLine2"></div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                <h5 class="footer-section-headline">İletişim</h5>
+                <ul class="footer-communication">
+                    <li>
+                        <i class="fas fa-location-dot"></i>
+                        <span>Devlet Mah. Necatibey Cad. No:114 06420 Çankaya/ANKARA</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-phone"></i>
+                        <span>ALO 124</span>
+                    </li>
+                    <li>
+                        <a href="https://ty.tuik.gov.tr/" target="_blank" rel="nofollow noreferrer">
+                            <i class="fa-solid fa-envelope"></i>
+                            <span>Bilgi Talebi</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="w-100">
+            <p style="text-align:center;margin:5px auto;color:white;font-family: 'Poppins-Light'">Türkiye İstatistik Kurumu © 2022 Tüm hakları saklıdır.</p>
+        </div>
+    </footer>
+    <button id="idBtnScrollToTop" onclick="runidBtnScrollToTop()">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+    <!-- End::Footer Section -->
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js?v=BxFAw9RUJ1E4NycpKEjCNDeoSvr4RPHixdBq5wDnkeY"></script>
+    
+
+    <script>
+        $(document).ready(function () {
+            $('#idNipAramaHeaderSection').keypress(function (e) {
+                if (e.keyCode == 13) {
+                    e.preventDefault(); //stops default action: submitting form
+                    arama(true);
+                }
+            });
+            $('#idNipAramaHeaderSection2').keypress(function (e) {
+                if (e.keyCode == 13) {
+                    e.preventDefault(); //stops default action: submitting form
+                    arama(false);
+                }
+            });
+            nipLoaderClose();
+
+            const scrollToTopButton = document.querySelector('#idBtnScrollToTop');
+            window.addEventListener('scroll', () => {
+                // Show the button if the user has scrolled down the page
+                if (window.pageYOffset > 300) {
+                    scrollToTopButton.style.display = 'block';
+                } else {
+                    scrollToTopButton.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    <script type="module">
+        import A11y from '/a11y/js/A11y.js';
+        new A11y({
+            language: 'tr'
+        })
+    </script>
+
+
+</body>
+</html>

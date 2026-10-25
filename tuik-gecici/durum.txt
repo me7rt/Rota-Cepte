@@ -1,7 +1,3 @@
-adnks-2025.pdf 200 364604
-arama.html 200 3692
-kategori.html 200 3692
-adnks-2025.pdf 200 364604
-arama.html 200 3692
-kategori.html 200 3692
-index.js 200 31036
+nip.html 200 16465
+nip-adnks.html 200 18445
+medas.html 200 85157
