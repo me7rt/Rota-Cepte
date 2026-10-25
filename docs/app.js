@@ -553,8 +553,12 @@
     try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
     try {
       const c = await caches.open(INDC);
-      for (const u of [`data/il/${s}.json?v=${IDX.surum}`, `data/en/${s}.json?v=${IDX.surum}`, `data/index.json?v=${SURUM}`, `data/ara.json?v=${IDX.surum}-2`, `yemek.json?v=${SURUM}`]) {
-        try { const r = await fetch(u); if (r.ok) await c.put(u, r); } catch (e) {}
+      // İl verisi ve dizin şart: inmezse "hazır" denmez, hata gösterilir
+      for (const u of [`data/il/${s}.json?v=${IDX.surum}`, `data/index.json?v=${SURUM}`]) {
+        const r = await fetch(u); if (!r.ok) throw new Error("HTTP " + r.status + " " + u); await c.put(u, r);
+      }
+      for (const u of [`data/en/${s}.json?v=${IDX.surum}`, `data/ara.json?v=${IDX.surum}-2`, `yemek.json?v=${SURUM}`]) {
+        try { const r = await fetch(u); if (r.ok) await c.put(u, r); } catch (e) { console.warn("indirilemedi", u, e); }
       }
       const set = new Set();
       const ekle = (f, W) => { const u = foto(f, W); if (u) set.add(u); };
@@ -1317,6 +1321,8 @@
       if (g.bayram) b.onclick = () => { const r = $("rotaSec"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); };
     } catch (e) {}
   }
+  // Sayfa başlığı ekrana göre değişsin (sekme, geçmiş, ekran okuyucu)
+  new MutationObserver(() => { const t = $("title").textContent; document.title = t && view.mode !== "home" ? `${t} · Rota Cepte` : TL("Rota Cepte · Türkiye Gezi Rehberi", "Rota Cepte · Türkiye Travel Guide"); }).observe($("title"), { childList: true, characterData: true, subtree: true });
   ozelGun();
   temaChips();
   rotaKartlar();
