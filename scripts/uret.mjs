@@ -22,6 +22,13 @@ const PLAKA = okuJSON("data/plaka.json", {});
 // İl kapak fotoğrafı için elle seçim: { "il-slug": "Yer adı" }
 const KAPAK = okuJSON("data/il-kapak.json", {});
 const IPUCU = okuJSON("data/ipuclari.json", {});
+// İçerik düzeltmeleri (elle, güvenilir kaynaklardan doğrulanmış):
+//   ad: Wikidata no -> doğru Türkçe ad | tr: Wikidata no -> İngilizce Vikipedi özetinin Türkçe çevirisi
+//   ip_en: ipucunun İngilizcesi (ipuclari.json ile aynı anahtar) | il: Wikidata no -> doğru il (slug)
+//   elle: Wikidata no -> {tr, en} kaynak metin yanlış yere aitse elle yazılmış kısa metin (Vikipedi bağlantısı kaldırılır)
+const ICERIK = okuJSON("data/icerik-duzelt.json", {});
+const INGILIZCE_ACK = /^(?!.*[çğıöşüÇĞİÖŞÜ]).*\b(in|of|the|and|ancient|city|located|building|mosque|church|museum|lake|mountain|island|national|village|neighbou?rhood|quarter|street|bridge|castle|cave|valley|canyon|monastery|temple|statue|tree|point|bay|gulf|cape|beach|resort|square|district|range|zoo|garden|lagoon|tower|tomb|ruins|church|Turkey)\b(?!['’])/i;
+const AD_DUZ = ICERIK.ad || {}, TR_CEVIRI = ICERIK.tr || {}, IPUCU_EN = ICERIK.ip_en || {}, IL_DUZ = ICERIK.il || {}, ELLE_METIN = ICERIK.elle || {};
 
 // ---------- Sınıflar ----------
 // c: çarşı, t: tarihi, m: müze, d: doğa, s: şehir. Puan yüksek olan kategori kazanır.
@@ -124,7 +131,13 @@ const dosyaAdi = (u) => (u ? decodeURIComponent(u.split("/Special:FilePath/")[1]
 const makale = (iri) => (iri ? decodeURIComponent(iri.split("/wiki/")[1] || "").replace(/_/g, " ") : "");
 const slug = (s) => s.toLocaleLowerCase("tr").replace(/ç/g, "c").replace(/ğ/g, "g").replace(/ı/g, "i").replace(/ö/g, "o").replace(/ş/g, "s").replace(/ü/g, "u").replace(/[âà]/g, "a").replace(/[îì]/g, "i").replace(/[ûù]/g, "u").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const nrm = (s) => slug(s).replace(/-/g, "");
-const temizAd = (s) => s.replace(/\s*\([^)]*\)\s*$/, "").replace(/\s+(ili|İli|ilçesi|İlçesi)$/u, "").trim();
+// Özel adlarda her kelime büyük harfle başlar: Wikidata'da "İnsuyu mağarası" gibi küçük yazılan genel kelimeleri düzelt
+const GENEL_KELIME = new Set("adası adaları anıtı antik barajı batığı bendi burnu çarşısı çeşmesi çukuru dağı dağları deresi düdeni feneri gölü göleti hamamı hanı höyüğü kalesi kanyonu kaplıcası kervansarayı kilisesi koyu köprüsü köşkü kulesi külliyesi mağarası mağaraları manastırı medresesi mescidi millî milli müzesi obruğu ören yeri parkı plajı sarayı şelalesi şelaleleri şehri tabiat tapınağı tepesi tiyatrosu türbesi vadisi yaylası yeri zindanları camii cami".split(" "));
+const buyukBas = (k) => k.charAt(0).toLocaleUpperCase("tr") + k.slice(1);
+const temizAd = (s) => {
+  const t = s.replace(/\s*\([^)]*\)\s*$/, "").replace(/\s+(ili|İli|ilçesi|İlçesi)$/u, "").trim();
+  return buyukBas(t.split(" ").map((k, i) => (i && GENEL_KELIME.has(k) ? buyukBas(k) : k)).join(" "));
+};
 function mesafe(a, b, c, d) { const R = 6371, r = Math.PI / 180; const x = Math.sin(((c - a) * r) / 2) ** 2 + Math.cos(a * r) * Math.cos(c * r) * Math.sin(((d - b) * r) / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(x)); }
 function tarih(v, p) {
   const m = /^(-?)0*(\d+)-/.exec(v || ""); if (!m) return "";
@@ -442,11 +455,31 @@ function ilIlceAta(o, atalar) {
 const ATA = await ataBul([...HAM.keys()]);
 for (const il of iller.values()) il.ham = new Map();
 let ilsiz = 0;
+// Koordinatı atanan ilin çok dışında kalan kayıtlar (Wikidata'da yanlış il bilgisi): en yakın ilçenin iline taşınır,
+// hiçbir ilçeye yakın değilse atılır. Elle düzeltme (icerik-duzelt.json "il") her zaman önce gelir.
+function ilUzaklik(koor, ilq) {
+  let d = 1e9;
+  for (const z of ilceler.values()) if (z.il === ilq && z.koor) d = Math.min(d, mesafe(koor[0], koor[1], z.koor[0], z.koor[1]));
+  return d;
+}
+const ilSlug = new Map([...iller.values()].map((i) => [i.s, i.q]));
+let ilTasinan = 0;
 for (const o of HAM.values()) {
-  const ilq = ilIlceAta(o, ATA.get(o.q));
+  let ilq = ilIlceAta(o, ATA.get(o.q));
+  if (IL_DUZ[o.q] && ilSlug.has(IL_DUZ[o.q])) {
+    ilq = ilSlug.get(IL_DUZ[o.q]);
+    const z = o.koor && enYakinIlce(o.koor, ilq, 60); o.ilceler = new Set(z ? [z.q] : []);
+  } else if (ilq && o.koor && ilUzaklik(o.koor, ilq) > 100) {
+    const z = enYakinIlce(o.koor, null, 30);
+    rapor(`  il düzeltildi: ${o.ad} (${o.q}) ${iller.get(ilq).ad} -> ${z ? iller.get(z.il).ad : "çıkarıldı (koordinat hiçbir ilçeye yakın değil)"}`);
+    ilTasinan++;
+    if (!z) { ilsiz++; continue; }
+    ilq = z.il; o.ilceler = new Set([z.q]);
+  }
   if (!ilq) { ilsiz++; continue; }
   iller.get(ilq).ham.set(o.q, o);
 }
+rapor("başka ile taşınan ya da çıkarılan yer:", ilTasinan);
 rapor("ili bulunamayan yer:", ilsiz);
 for (const il of iller.values()) console.log(`  ${il.ad}: ${il.ham.size} aday`);
 
@@ -510,6 +543,7 @@ function seckinDene(il, w, k, s, qZorla, siki) {
   const o = v;
   o.one = 1; o.k = k; if (s && !qZorla) o.trA ||= s.title; o.trSayfaFoto = s && s.pageimage ? s.pageimage.replace(/_/g, " ") : "";
   if (IPUCU[w]) o.ip = IPUCU[w];
+  if (IPUCU_EN[w]) o.ipe = IPUCU_EN[w];
   if (!o.ad || /^Q\d+$/.test(o.ad)) o.ad = temizAd(baslik);
   o.seckinSira = seckinSira++;
   il.ham.set(q, o);
@@ -902,26 +936,34 @@ for (const il of ilSirali) {
   const ilceSira = il.ilceler.filter((d) => d.koor).sort((a, b) => a.ad.localeCompare(b.ad, "tr"));
   const ilceNo = new Map(ilceSira.map((d, i) => [d.q, i]));
   const yerler = il.yerler.map((o) => {
-    const trMetin = o.trA && trM.get(o.trA);
+    const trMetin = (o.trA && trM.get(o.trA)) || TR_CEVIRI[o.q];
     const metin = trMetin || enM.get(o.enA);
-    const y = { ad: temizAd(o.ad), q: o.q, lat: o.koor[0], lng: o.koor[1], k: o.k, i: ilceNo.has(o.ilce) ? ilceNo.get(o.ilce) : -1, f: fotoCikti(o.foto) };
+    const y = { ad: AD_DUZ[o.q] || temizAd(o.ad), q: o.q, lat: o.koor[0], lng: o.koor[1], k: o.k, i: ilceNo.has(o.ilce) ? ilceNo.get(o.ilce) : -1, f: fotoCikti(o.foto) };
     if (o.one) y.one = 1;
     if (o.galeri) y.g = o.galeri.map(fotoCikti);
     if (o.ip) y.ip = o.ip;
-    if (metin) y.m = metin; if (!trMetin && metin) y.en = 1;
-    if (o.aciklama) y.ac = o.aciklama;
+    if (o.ipe) y.ipe = o.ipe;
+    if (metin) y.m = metin; if (!trMetin && metin) { y.en = 1; rapor(`  Türkçe metni yok (çevirisi data/icerik-duzelt.json "tr" içine eklenmeli): ${il.ad} / ${o.ad} (${o.q})`); }
+    // Türkçe Vikipedi maddesi yoksa İngilizce maddenin elle yapılmış çevirisi kullanılır (lisans satırında belirtilir)
+    const ceviri = !(o.trA && trM.get(o.trA)) && TR_CEVIRI[o.q];
+    // Wikidata kısa açıklaması Türkçe yoksa İngilizcesi geliyor: Türkçe modda İngilizce cümle göstermemek için at
+    if (o.aciklama && !INGILIZCE_ACK.test(o.aciklama)) y.ac = o.aciklama;
     y.w = o.trA ? "tr:" + o.trA : o.enA ? "en:" + o.enA : "";
+    if (ceviri) { y.cv = 1; if (o.enA) y.w = "en:" + o.enA; }
+    if (ELLE_METIN[o.q]) { y.m = ELLE_METIN[o.q].tr; y.w = ""; delete y.en; delete y.cv; }
     if (o.yil) y.yil = o.yil; if (o.rakim && o.k === "d") y.rak = o.rakim; if (o.unesco) y.un = 1;
     y.sl = o.sl || 0;
     return y;
   });
   const ilceAdlari = ilceSira.map((d) => d.ad.replace(/ \(.*\)$/, ""));
+  const elleEn = {};
   (ELLE[il.s] || []).slice().reverse().forEach((e) => {
     const i = ilceAdlari.indexOf(e.ilce);
     // Vikipedi/Wikidata'dan gelen aynı yer varsa elle kaydı ekleme
     if (yerler.some((y) => mesafe(y.lat, y.lng, e.lat, e.lng) < (e.osm ? 0.5 : 3) && benzer(y.ad, e.ad))) { rapor(`  elle kayıt atlandı (zaten var): ${il.ad} / ${e.ad}`); return; }
     const y = { ad: e.ad, q: "e-" + ascii(e.ad).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""), lat: e.lat, lng: e.lng, k: e.k, i, f: fotoCikti(e.foto), one: 1, w: "", sl: 0, gq: e.gq };
     if (e.m) y.m = e.m;
+    if (e.m_en) elleEn[y.q] = ["", e.m_en, ""];
     yerler.unshift(y);
   });
   const ilceCikti = ilceSira.map((d) => ({ ad: d.ad, q: d.q, lat: d.koor[0], lng: d.koor[1], f: fotoCikti(d.foto), m: trM.get(d.trA) || "", w: d.trA ? "tr:" + d.trA : "", nuf: d.nufus || 0, nufY: d.nufusYil || "", alan: d.alan ? Math.round(d.alan) : 0, n: yerler.filter((y) => y.i === ilceNo.get(d.q)).length }));
@@ -933,11 +975,17 @@ for (const il of ilSirali) {
   fs.writeFileSync(`${OUT}/il/${il.s}.json`, JSON.stringify(dosya));
   // İngilizce: İngilizce Vikipedi'deki ad ve özet (yoksa uygulama Türkçe adı ve kısa bir İngilizce cümle gösterir)
   const en = { m: enM.get(il.enA) || "", w: il.enA ? "en:" + il.enA : "", y: {} };
-  for (const o of il.yerler) if (o.enA) en.y[o.q] = [o.enA.replace(/ \(.*\)$/, ""), enM.get(o.enA) || "", o.enA];
+  Object.assign(en.y, elleEn);
+  for (const o of il.yerler) {
+    const el = ELLE_METIN[o.q];
+    if (el) en.y[o.q] = [el.ad_en || (o.enA ? o.enA.replace(/ \(.*\)$/, "") : ""), el.en || "", ""];
+    else if (o.enA) en.y[o.q] = [o.enA.replace(/ \(.*\)$/, ""), enM.get(o.enA) || "", o.enA];
+  }
   fs.writeFileSync(`${OUT}/en/${il.s}.json`, JSON.stringify(en));
   index.iller.push({ ad: il.ad, s: il.s, q: il.q, lat: dosya.lat, lng: dosya.lng, plaka: dosya.plaka, f: dosya.f, n: yerler.length, ilceler: ilceCikti.map((d) => [d.ad, d.lat, d.lng, d.n]) });
-  // Arama/tema listesi: [ad, il, sıra, enlem, boylam, kategori, fotoğraf var mı, fotoğraf yolu (varsa; tema listesinde küçük resim)]
-  yerler.forEach((y, j) => { const r = [y.ad, il.s, j, Math.round(y.lat * 1e3) / 1e3, Math.round(y.lng * 1e3) / 1e3, y.k, y.f ? 1 : 0]; if (y.f) r.push(y.f.p); ara.push(r); });
+  // Arama/tema listesi: [ad, il, sıra, enlem, boylam, kategori, fotoğraf var mı, fotoğraf yolu (varsa; tema listesinde küçük resim), İngilizce ad (varsa)]
+  // 9. alan (varsa): İngilizce Vikipedi adı (İngilizce modda arama ve listeler için; fotoğraf yoksa 8. alan 0)
+  yerler.forEach((y, j) => { const r = [y.ad, il.s, j, Math.round(y.lat * 1e3) / 1e3, Math.round(y.lng * 1e3) / 1e3, y.k, y.f ? 1 : 0]; if (y.f) r.push(y.f.p); const ae = en.y[y.q] && en.y[y.q][0]; if (ae) { if (!y.f) r.push(0); r.push(ae); } ara.push(r); });
   // Kontrol listesi: il kapağı, ilçe kapakları, seçkin yerler ve her ilin en ünlü 8 yeri
   const kk = (tur, ad, a, kaynak) => a && kontrol.push({ tur, il: il.ad, ad, dosya: a, p: FOTO.get(a).p, w: FOTO.get(a).w, kaynak });
   kk("il", il.ad, il.foto, il.fotoKaynak);

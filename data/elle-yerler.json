@@ -1,10 +1,13 @@
 {
 "balikesir": [
   { "ad": "Sütüven Şelalesi", "k": "d", "ilce": "Edremit", "lat": 39.655, "lng": 26.985, "gq": "Sütüven Şelalesi, Edremit, Balıkesir",
-    "m": "Kaz Dağları'nın eteğinde, Zeytinli yakınında, çam ve çınar ağaçları arasından dökülen serin bir şelale. Kısa bir yürüyüşle ulaşılır; yazın sıcağından kaçmak için bölgenin en sevilen duraklarından biridir." },
+    "m": "Kaz Dağları'nın eteğinde, Zeytinli yakınında, ağaçlar arasından dökülen serin bir şelale. Yazın sıcağından kaçmak için bölgenin sevilen duraklarından biridir.",
+    "m_en": "A cool waterfall tumbling through the trees at the foot of the Kaz Mountains (Mount Ida), near Zeytinli. A popular stop in the area to escape the summer heat." },
   { "ad": "Hasanboğuldu", "k": "d", "ilce": "Edremit", "lat": 39.63, "lng": 26.93, "gq": "Hasanboğuldu Tabiat Parkı, Edremit, Balıkesir",
-    "m": "Güre yakınındaki Kaz Dağları vadisinde, buz gibi suyuyla ünlü bir gölet ve şelale. Hasan ile Emine'nin efsanesiyle anılır; yürüyüş yolu, piknik alanları ve dere boyu manzarasıyla görülmeye değer." },
+    "m": "Güre yakınında, Kaz Dağları'nın bir vadisinde, buz gibi suyuyla bilinen bir gölet ve şelale. Adını Kaz Dağları'nın \"Hasan boğuldu\" efsanesinden alır. Dere boyunca yürüyüş yolu vardır.",
+    "m_en": "A pool and waterfall known for its ice-cold water, in a valley of the Kaz Mountains near Güre. It takes its name from the Kaz Mountains legend \"Hasan boğuldu\" (Hasan drowned). A walking path follows the stream." },
   { "ad": "Kızılkeçili", "k": "d", "ilce": "Edremit", "lat": 39.64, "lng": 26.905, "gq": "Kızılkeçili, Edremit, Balıkesir",
-    "m": "Kaz Dağları'nın yamacında, Güre'nin hemen üstünde, eski taş evleri ve dar sokaklarıyla sakin bir dağ köyü. Körfez manzarası, temiz havası ve köy kahvaltısıyla bilinir." }
+    "m": "Kaz Dağları'nın yamacında, Güre'nin hemen üstünde, eski taş evleri ve dar sokaklarıyla sakin bir dağ köyü. Edremit Körfezi'ne bakar.",
+    "m_en": "A quiet mountain village on the slopes of the Kaz Mountains, just above Güre, with old stone houses and narrow streets. It looks out over the Gulf of Edremit." }
 ]
 }

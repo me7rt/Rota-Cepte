@@ -1,0 +1,29 @@
+name: TUIK nufus verisi (gecici)
+on:
+  push:
+    branches: [claude/project-thread-tpajlk]
+    paths: [".github/workflows/tuik.yml"]
+permissions:
+  contents: write
+jobs:
+  indir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: TUIK dosyalarini indir
+        run: |
+          mkdir -p tuik-gecici
+          UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+          al() { curl -sSL -m 60 -A "$UA" -o "tuik-gecici/$1" "$2" -w "$1 %{http_code} %{size_download}\n" >> tuik-gecici/durum.txt || echo "$1 HATA" >> tuik-gecici/durum.txt; }
+          rm -f tuik-gecici/*
+          al main.js "https://nip.tuik.gov.tr/js/main.js"
+          al site.js "https://nip.tuik.gov.tr/js/site.js"
+          cat tuik-gecici/durum.txt
+      - name: Dala yukle
+        run: |
+          git config user.name "Mert Turanlıoğlu"
+          git config user.email "me7rtt@gmail.com"
+          git add tuik-gecici
+          git commit -m "TÜİK nüfus dosyaları (geçici)" || exit 0
+          git push origin HEAD:${{ github.ref_name }}

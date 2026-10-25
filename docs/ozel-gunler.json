@@ -11,7 +11,7 @@
     "11-10": { "e": "🖤", "tr": "Cumhuriyetimizin kurucusu Gazi Mustafa Kemal Atatürk'ü saygı, sevgi ve özlemle anıyoruz.", "en": "Remembering Mustafa Kemal Atatürk, founder of the Republic, with respect and longing.", "yas": 1 }
   },
   "degisken": [
-    { "bas": "2027-03-09", "bit": "2027-03-12", "e": "🌙", "tr": "Ramazan Bayramınız mübarek olsun!", "en": "Happy Eid al-Fitr!", "bayram": 1 },
-    { "bas": "2027-05-15", "bit": "2027-05-19", "e": "🐑", "tr": "Kurban Bayramınız mübarek olsun!", "en": "Happy Eid al-Adha!", "bayram": 1 }
+    { "bas": "2027-03-09", "bit": "2027-03-11", "e": "🌙", "tr": "Ramazan Bayramınız mübarek olsun!", "en": "Happy Eid al-Fitr!", "bayram": 1 },
+    { "bas": "2027-05-16", "bit": "2027-05-19", "e": "🐑", "tr": "Kurban Bayramınız mübarek olsun!", "en": "Happy Eid al-Adha!", "bayram": 1 }
   ]
 }

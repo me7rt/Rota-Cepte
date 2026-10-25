@@ -3,7 +3,7 @@
    Veri docs/data altında; GitHub Actions'ta Wikidata, Vikipedi ve Commons'tan hazırlanır (scripts/uret.mjs). */
 (function () {
   "use strict";
-  const SURUM = "6.2";
+  const SURUM = "6.3";
   if (window.ikDoldur) ikDoldur();
   // MapTiler harita anahtarı (boşsa OpenStreetMap kullanılır)
   const HARITA_ANAHTAR = "pI5pMuHAI4gLw3aqy35G";
@@ -24,7 +24,49 @@
   const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const sade = (s) => String(s).toLocaleLowerCase("tr").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i");
   const nf = (n) => Number(n).toLocaleString(DIL === "en" ? "en-US" : "tr-TR");
-  const adi = (p) => (DIL === "en" && p.ae) || p.ad;
+  // İngilizce modda İngilizce Vikipedi adı yoksa Türkçe adın genel kelimesini çevir: "Erzurum Kalesi" -> "Erzurum Castle"
+  const AD_EN = [
+    [/^(.+) Ulu Camii?$/, "$1 Grand Mosque"], [/^Ulu Camii?$/, "Grand Mosque"], [/ Camii?$/, " Mosque"], [/ Mescidi$/, " Masjid"],
+    [/ Arkeoloji ve Etnografya Müzesi$/, " Archaeology and Ethnography Museum"], [/ Arkeoloji Müzesi$/, " Archaeology Museum"],
+    [/ Etnografya Müzesi$/, " Ethnography Museum"], [/ (Kent|Şehir) (Tarih[iî]? )?Müzesi$/, " City Museum"], [/ Evi Müzesi$/, " House Museum"], [/ Müzesi$/, " Museum"],
+    [/ Kilisesi$/, " Church"], [/ Su Kemeri$/, " Aqueduct"], [/ Köprüsü$/, " Bridge"], [/ Saat Kulesi$/, " Clock Tower"], [/ Kulesi$/, " Tower"],
+    [/ Tabiat Parkı$/, " Nature Park"], [/ Tarih[iî] Mill[iî] Parkı$/, " Historical National Park"], [/ Mill[iî] Parkı$/, " National Park"], [/ Parkı$/, " Park"],
+    [/ (Türbesi|Kümbeti)$/, " Tomb"], [/ Hamamı$/, " Hamam"], [/ Çeşmesi$/, " Fountain"],
+    [/ Tren İstasyonu$/, " Railway Station"], [/ Garı$/, " Station"], [/ Gölü$/, " Lake"],
+    [/ Şelaleleri$/, " Waterfalls"], [/ Şelalesi$/, " Waterfall"], [/ Mağaraları$/, " Caves"], [/ Mağarası$/, " Cave"],
+    [/ Kanyonu$/, " Canyon"], [/ Vadisi$/, " Valley"], [/ Yaylası$/, " Plateau"], [/ (Kervansarayı|Hanı)$/, " Caravanserai"],
+    [/ Medresesi$/, " Madrasa"], [/ Manastırı$/, " Monastery"], [/ Külliyesi$/, " Complex"], [/ Höyüğü$/, " Mound"],
+    [/ Yeraltı Şehri$/, " Underground City"], [/ Antik Kenti$/, " Ancient City"], [/ Antik Tiyatrosu$/, " Ancient Theatre"],
+    [/ Tiyatrosu$/, " Theatre"], [/ Ören Yeri$/, " Archaeological Site"], [/ Kaya Mezarları$/, " Rock Tombs"], [/ Kaya Kabartması$/, " Rock Relief"],
+    [/ Sarayı$/, " Palace"], [/ Köşkü$/, " Pavilion"], [/ Konağı$/, " Mansion"], [/ Evi$/, " House"], [/ Adaları$/, " Islands"], [/ Adası$/, " Island"],
+    [/ Koyu$/, " Bay"], [/ Plajı$/, " Beach"], [/ (Deniz )?Feneri$/, " Lighthouse"], [/ Tepesi$/, " Hill"], [/ Anıtı$/, " Monument"],
+    [/ Heykeli$/, " Statue"], [/ (Barajı|Bendi)$/, " Dam"], [/ Kaplıcaları?$/, " Hot Springs"], [/ Çarşısı$/, " Bazaar"], [/ Tapınağı$/, " Temple"],
+    [/ Sarnıcı$/, " Cistern"], [/ Mezarlığı$/, " Cemetery"], [/ Şehitliği$/, " Martyrs' Cemetery"], [/ Kalıntıları$/, " Ruins"],
+    [/ Ormanı$/, " Forest"], [/ Lagünü$/, " Lagoon"], [/ (Obruğu|Düdeni)$/, " Sinkhole"], [/ Kalesi$/, " Castle"],
+    [/^(.+) Dağı$/, "Mount $1"], [/^(.+) Burnu$/, "Cape $1"]
+  ];
+  // Geri kalan kısımda Türkçe tanım kelimesi varsa yarım çeviri yapma ("Atatürk ve Çocuk Museum" olmasın), Türkçe adı bırak
+  const AD_TR_KELIME = /(^| )(ve|ile|Müze|Müzesi|Evi|Açık|Hava|Tarihi|Kültür|Sanat|Sanatları|Devlet|Resim|Heykel|Galerisi|Kahramanlık|Panoraması|Savunması|Geleneksel|El|Oyun|Oyuncak|Doğa|Hayvan|Sanayi|Teknoloji|Üniversitesi|Fakültesi|Ziraat|Deprem|Anma|Kurtuluş|Savaşı|Mezarı|Eserleri|Cephesi|Karargahı|Çocuk|Mücadele|Vapuru|Kaya|Yaşayan|Bilim|Merkezi|Arkeoloji|Etnografya|Kent|Şehir|Tarih|Tarihî|Camii|Kalesi|Köprüsü|Kilisesi|Parkı|Vadisi|Şelalesi|Mağarası|Mağaraları|Dağı|Dağları|Gölü|Adası|Sarayı|Kulesi|Hanı|Medresesi|Türbesi|Çeşmesi|Hamamı|Millî|Milli|Tabiat|Antik|Kenti|Yeri|Ören)( |$)/;
+  function adEn(ad) {
+    const m = /^(.+?)(, [^,]+)?$/.exec(ad), bas = m[1], son = m[2] || "";
+    for (const [r, y] of AD_EN) if (r.test(bas)) {
+      const kalan = bas.replace(r, "");
+      return AD_TR_KELIME.test(kalan) ? ad : bas.replace(r, y) + son;
+    }
+    return ad;
+  }
+  const adi = (p) => (DIL === "en" ? p.ae || adEn(p.ad) : p.ad);
+  // Yapım/kuruluş tarihi Wikidata'dan Türkçe biçimde gelir ("15. yüzyıl", "MÖ 330"): İngilizce modda çevir
+  function yilYaz(y) {
+    if (DIL !== "en" || !y) return y;
+    const sira = (n) => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th");
+    const m = /^(MÖ )?(\d+)(\. yüzyıl|\. binyıl|'ler)?$/.exec(y); if (!m) return y;
+    const n = +m[2], mo = m[1] ? " BC" : "";
+    if (m[3] === ". yüzyıl") return sira(n) + " century" + mo;
+    if (m[3] === ". binyıl") return sira(n) + " millennium" + mo;
+    if (m[3] === "'ler") return n + "s" + mo;
+    return n + mo;
+  }
   function km(a, b) {
     const R = 6371, r = (x) => (x * Math.PI) / 180;
     const dLa = r(b.lat - a.lat), dLo = r(b.lng - a.lng);
@@ -63,15 +105,30 @@
     try { ad = decodeURIComponent(ad); } catch (e) {}
     return "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(ad);
   }
+  // Commons'tan gelen yazar/lisans metnindeki İngilizce kalıpları sadeleştir (Türkçe modda Türkçeye çevir)
+  const VIKI_DIL = { Turkish: "Türkçe", English: "İngilizce", German: "Almanca", French: "Fransızca", Kurdish: "Kürtçe", Russian: "Rusça", Italian: "İtalyanca", Polish: "Lehçe", Dutch: "Felemenkçe", Spanish: "İspanyolca", Armenian: "Ermenice", Greek: "Yunanca", Persian: "Farsça", Arabic: "Arapça", tr: "Türkçe", en: "İngilizce", de: "Almanca", fr: "Fransızca" };
+  const LIS_TR = { "Public domain": "Kamu malı", "No restrictions": "Kısıtlama yok", "Copyrighted free use": "Serbest kullanım", Attribution: "Atıf" };
+  function atifYaz(a) {
+    const en = DIL === "en";
+    return a.replace(/&amp;/g, "&").split(" · ").map((k, i) => {
+      if (i) return en ? k : LIS_TR[k] || k;
+      k = k.replace(/^[^:]*\.(jpe?g|png|gif|tiff?|svg)\s*:\s*/i, "").replace(/^No machine-readable author provided\. (.+?) assumed.*$/, "$1").replace(/\bUser:/g, "").replace(/ from [^·]+$/, "");
+      if (/^(Unknown author)+$/i.test(k)) return en ? "Unknown author" : "Bilinmeyen yazar";
+      if (k === "Public domain") return en ? k : "Kamu malı";
+      const m = /^(?:The )?[Oo]riginal uploader was (.+?) at (\w+)(?:[ .]wikipedia)?\.?$/i.exec(k) || /^(.+?) at (\w+) Wikipedia\.?$/.exec(k);
+      if (m) { const d = VIKI_DIL[m[2]]; return en ? `${m[1]} (${d ? m[2] + (m[2].length === 2 ? ".wikipedia" : " Wikipedia") : "Wikipedia"})` : `${m[1]} (${d ? d + " " : ""}Vikipedi)`; }
+      return k.replace(/ at (?:https?:\/\/)?(?:www\.)?([\w.-]+\.\w+)\/?$/, " ($1)");
+    }).join(" · ");
+  }
   function fotoAtif(f, on) {
     if (!f || !f.p) return "";
-    const yazi = T("Fotoğraf:") + " " + (f.a ? f.a + " · " : "") + "Wikimedia Commons";
+    const yazi = T("Fotoğraf:") + " " + (f.a ? atifYaz(f.a) + " · " : "") + "Wikimedia Commons";
     return (on ? esc(on) + " · " : "") + `<a href="${comSayfa(f)}" target="_blank" rel="noopener">${esc(yazi)}</a>`;
   }
   // Vikipedi metinleri CC BY-SA 4.0: lisans adı + bağlantı + değişiklik notu
-  function metinLisans(el, var_) {
+  function metinLisans(el, var_, ceviri) {
     el.hidden = !var_;
-    el.innerHTML = var_ ? TL("Metin: Vikipedi", "Text: Wikipedia") + ` · <a href="https://creativecommons.org/licenses/by-sa/4.0/${DIL === "en" ? "" : "deed.tr"}" target="_blank" rel="noopener">CC BY-SA 4.0</a> · ` + TL("kısaltılmıştır", "shortened") : "";
+    el.innerHTML = var_ ? (ceviri ? "Metin: İngilizce Vikipedi'den çevrilmiştir" : TL("Metin: Vikipedi", "Text: Wikipedia")) + ` · <a href="https://creativecommons.org/licenses/by-sa/4.0/${DIL === "en" ? "" : "deed.tr"}" target="_blank" rel="noopener">CC BY-SA 4.0</a> · ` + TL("kısaltılmıştır", "shortened") : "";
   }
   // Fotoğraf yüklenemezse altındaki kategori simgesi görünür kalır.
   function thumb(f, k, W, cls) {
@@ -114,18 +171,26 @@
         // Okunuş parantezlerini at; Vikipedi özeti bazen kapanmayan parantez bırakır: "Cyzicus ( SIZ-ik-əs; ...; was an ..."
         const sade = (t) => (t || "").replace(/\s*\([^()]*\)/g, "").replace(/\s*\((?![^()]*\))[^()]*?;\s+(?=[a-z])/, " ").replace(/\s+([,.])/g, "$1");
         d.me = sade(en.m); d.we = en.w;
-        d.yerler.forEach((y) => { const e = en.y && en.y[y.q]; if (e) { y.ae = e[0]; y.me = sade(e[1]); y.we = "en:" + e[2]; } });
+        d.yerler.forEach((y) => { const e = en.y && en.y[y.q]; if (e) { if (e[0]) y.ae = e[0]; y.me = sade(e[1]); y.we = e[2] ? "en:" + e[2] : ""; } });
       }
     }
     IL.set(s, d);
     return d;
   }
   let araSoz = null;
+  // Arama listesindeki yerin gösterilecek adı (İngilizce modda İngilizce adı)
+  const araAd = (x) => (DIL === "en" ? x[9] : x[1]);
+  // Kaydedilmiş listelerdeki (Türkçe) adın İngilizce modda gösterilecek hali
+  function kayitAd(x) {
+    if (DIL !== "en") return x.ad;
+    const r = ARA && ARA.find((y) => y[2] === x.s && y[1] === x.ad);
+    return r ? r[9] : adEn(x.ad);
+  }
   function loadAra() {
     if (ARA) return Promise.resolve();
     if (araSoz) return araSoz;
     araSoz = getJSON(`data/ara.json?v=${IDX.surum}-2`).then((a) => {
-      ARA = a.map(([ad, s, j, lat, lng, k, f, p]) => [sade(ad), ad, s, j, lat, lng, k, f, p]);
+      ARA = a.map(([ad, s, j, lat, lng, k, f, p, ae]) => { const en = ae || adEn(ad); return [sade(ad), ad, s, j, lat, lng, k, f, p || 0, en, sade(en)]; });
       if (view && view.mode === "tema") renderTema();
       if (view && view.mode === "rota") renderRota();
       if (!$("listem").hidden) renderFav();
@@ -306,7 +371,7 @@
     const nok = a.map(kon).filter(Boolean);
     $("favList").innerHTML = a.map((x) => {
       const n = kon(x);
-      return `<li><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${thumb(x.f, x.k)}<span class="rt"><b>${esc(x.ad)}</b><small>${esc(x.il)}</small></span><span class="km">${me && n ? fmt(km(me, n)) : OKIK}</span></button></li>`;
+      return `<li><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${thumb(x.f, x.k)}<span class="rt"><b>${esc(kayitAd(x))}</b><small>${esc(x.il)}</small></span><span class="km">${me && n ? fmt(km(me, n)) : OKIK}</span></button></li>`;
     }).join("");
     // Kendi rotan: en yakından başlayıp hep bir sonraki en yakın yere giden sıra (en fazla 10 durak)
     const b = $("favRota");
@@ -356,7 +421,7 @@
     $("gezAlt").textContent = TL(`${a.length} yere gittin · listeyi gör`, `${a.length} places visited · see the list`);
     $("gezBar").style.width = Math.max(3, Math.round((iller / 81) * 100)) + "%";
     $("gezList").innerHTML = a.map((x) =>
-      `<li><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${thumb(x.f, x.k)}<span class="rt"><b>${esc(x.ad)}</b><small>${esc(x.il)}${x.t ? " · " + new Date(x.t).toLocaleDateString(DIL === "en" ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" }) : ""}</small></span><span class="km ok">${ik("circle-check", 20)}</span></button></li>`).join("");
+      `<li><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${thumb(x.f, x.k)}<span class="rt"><b>${esc(kayitAd(x))}</b><small>${esc(x.il)}${x.t ? " · " + new Date(x.t).toLocaleDateString(DIL === "en" ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" }) : ""}</small></span><span class="km ok">${ik("circle-check", 20)}</span></button></li>`).join("");
   }
   // ---------- rozetler ----------
   const BOLGE = {
@@ -439,6 +504,8 @@
     return "'" + (sert ? "t" : "d") + (ince ? "e" : "a");
   }
   let YEMEK = null, yemekSoz = null;
+  // yemek.json: il -> Türkçe yemek adları; "_en": Türkçe ad -> İngilizce karşılığı
+  const yemekAd = (y) => (DIL === "en" && YEMEK && YEMEK._en && YEMEK._en[y]) || y;
   function yemekYukle() {
     if (!yemekSoz) yemekSoz = getJSON(`yemek.json?v=${SURUM}`).then((y) => (YEMEK = y)).catch((e) => { yemekSoz = null; throw e; });
     return yemekSoz;
@@ -450,7 +517,7 @@
       const liste = Y[d.s]; if (!liste || !liste.length) return;
       if (!view || !view.d || view.d.s !== d.s) return;
       kutu.innerHTML = `<h3>${TL(esc(d.ad) + ekDe(d.ad) + " ne yenir?", "What to eat in " + esc(d.ad))}</h3><div class="ychips">` + liste.map((y) =>
-        `<a class="ychip" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(y + " " + d.ad)}"><span>${ik("utensils", 18)} ${esc(y)}</span><small>${T("En iyi yerleri bul")} ${ik("chevron-right", 14)}</small></a>`).join("") + "</div>";
+        `<a class="ychip" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(y + " " + d.ad)}"><span>${ik("utensils", 18)} ${esc(yemekAd(y))}</span><small>${T("En iyi yerleri bul")} ${ik("chevron-right", 14)}</small></a>`).join("") + "</div>";
       kutu.hidden = false;
     } catch (e) {}
   }
@@ -541,7 +608,7 @@
     $("temaSay").textContent = TL(`${r.length} yer` + (me ? " · sana en yakından uzağa" : " · konumunu açarsan yakından uzağa sıralarız"), `${r.length} places` + (me ? " · nearest first" : " · turn on location to sort by distance"));
     $("temaList").innerHTML = r.length ? r.map((x) => {
       const c = CATS[x[6]] || CATS.t, il = (IDX.ilBy.get(x[2]) || {}).ad || "";
-      return `<li><button class="row res" data-yer="${x[2]}|${x[3]}">${x[8] ? thumb({ p: x[8], w: 1e5 }, x[6] || "t") : `<span class="thumb" style="--c:${c.renk}">${icon(x[6] || "t", 20)}</span>`}<span class="rt"><b>${esc(x[1])}</b><small>${esc(il)}</small></span><span class="km">${me ? fmt(km(me, { lat: x[4], lng: x[5] })) : OKIK}</span></button></li>`;
+      return `<li><button class="row res" data-yer="${x[2]}|${x[3]}">${x[8] ? thumb({ p: x[8], w: 1e5 }, x[6] || "t") : `<span class="thumb" style="--c:${c.renk}">${icon(x[6] || "t", 20)}</span>`}<span class="rt"><b>${esc(araAd(x))}</b><small>${esc(il)}</small></span><span class="km">${me ? fmt(km(me, { lat: x[4], lng: x[5] })) : OKIK}</span></button></li>`;
     }).join("") : `<li class="empty">${T("Bu türde yer bulunamadı.")}</li>`;
   }
   // ---------- internetsiz kullanım: ilin verisini ve fotoğraflarını telefona indir ----------
@@ -655,7 +722,7 @@
     const nk = (x) => x.lat + "," + x.lng, son = s[s.length - 1], ara = s.slice(0, -1).map(nk).join("|");
     kutu.innerHTML = `<div class="plust"><h3>${ik("calendar-days", 20)} ${TL(esc(d.ad) + ekDe(d.ad) + " 1 günlük plan", "A day in " + esc(d.ad))}</h3><button class="linkbtn" id="planYeni">${ik("shuffle", 16)} ${TL("Başka plan", "Another plan")}</button></div>
       <small class="plalt">${TL(`${s.length} durak · aralarda toplam ~${fmt(top * 1.3)} yol`, `${s.length} stops · ~${fmt(top * 1.3)} of driving in between`)}</small>
-      <ol class="plist">${s.map((p, i) => `${i === 2 ? `<li class="plyemek"><time>13:00</time><span>${ik("utensils", 16)} ${TL("Öğle arası", "Lunch break")}${yemek ? `: <b>${esc(yemek)}</b> ${TL("dene", "")}` : ""}</span></li>` : ""}<li><button class="row" data-s="${p.ilS}" data-j="${p.j}"><time>${saat[i]}</time>${thumb(p.f, p.k)}<span class="rt"><b>${esc(adi(p))}</b><small>${i ? fmt(km(s[i - 1], p) * 1.3) + TL(" yol", " drive") : esc(p.ilce || d.ad)}</small></span></button></li>`).join("")}</ol>
+      <ol class="plist">${s.map((p, i) => `${i === 2 ? `<li class="plyemek"><time>13:00</time><span>${ik("utensils", 16)} ${TL("Öğle arası", "Lunch break")}${yemek ? `: <b>${esc(yemekAd(yemek))}</b>${TL(" dene", "")}` : ""}</span></li>` : ""}<li><button class="row" data-s="${p.ilS}" data-j="${p.j}"><time>${saat[i]}</time>${thumb(p.f, p.k)}<span class="rt"><b>${esc(adi(p))}</b><small>${i ? fmt(km(s[i - 1], p) * 1.3) + TL(" yol", " drive") : esc(p.ilce || d.ad)}</small></span></button></li>`).join("")}</ol>
       <a class="btn primary rotaac" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${nk(son)}&waypoints=${encodeURIComponent(ara)}&travelmode=driving">${ik("navigation", 18)} ${TL("Planı Google Maps'te aç", "Open plan in Google Maps")}</a>`;
     kutu.hidden = false;
   }
@@ -701,7 +768,7 @@
           d.innerHTML = `<div class="tkart"><div class="temo">${ik("message-circle-heart", 36)}</div><h2>${TL("Neyi düzeltelim?", "What should we improve?")}</h2><p>${TL("Eksik ya da hoşuna gitmeyen ne varsa yaz, ilk güncellemede bakayım.", "Tell me what's missing or annoying and I'll look at it in the next update.")}</p><div class="tbtn"><button class="linkbtn" data-k="kapat">${T("Kapat")}</button><button class="btn primary" data-k="yaz">${ik("mail", 18)} ${TL("Görüş yaz", "Send feedback")}</button></div></div>`;
         } else if (v === "yildiz") { disAc(PLAY); kapat(); }
         else if (v === "paylas") { uygulamaPaylas(); kapat(); }
-        else if (v === "yaz") { location.href = `mailto:${ILETISIM}?subject=${encodeURIComponent("Rota Cepte görüş")}&body=${encodeURIComponent("\n\n(Sürüm " + SURUM + ")")}`; kapat(); }
+        else if (v === "yaz") { location.href = `mailto:${ILETISIM}?subject=${encodeURIComponent(TL("Rota Cepte görüş", "Rota Cepte feedback"))}&body=${encodeURIComponent("\n\n(" + TL("Sürüm", "Version") + " " + SURUM + ")")}`; kapat(); }
       });
       document.body.appendChild(d);
     }, 25000);
@@ -741,7 +808,7 @@
     $("rotaList").innerHTML = ds.map((x, i) => {
       const il = (IDX.ilBy.get(x[2]) || {}).ad || "", ok = g.some((y) => y.s === x[2] && y.ad === x[1]);
       const ara = i ? `<span class="rara">${ik("arrow-down", 14)} ~${fmt(km({ lat: ds[i - 1][4], lng: ds[i - 1][5] }, { lat: x[4], lng: x[5] }) * 1.3)}</span>` : "";
-      return `<li>${ara}<button class="row res" data-yer="${x[2]}|${x[3]}"><span class="rno${ok ? " on" : ""}">${ok ? ik("check", 18) : i + 1}</span><span class="rt"><b>${esc(x[1])}</b><small>${esc(il)}</small></span><span class="km">${me ? fmt(km(me, { lat: x[4], lng: x[5] })) : OKIK}</span></button></li>`;
+      return `<li>${ara}<button class="row res" data-yer="${x[2]}|${x[3]}"><span class="rno${ok ? " on" : ""}">${ok ? ik("check", 18) : i + 1}</span><span class="rt"><b>${esc(araAd(x))}</b><small>${esc(il)}</small></span><span class="km">${me ? fmt(km(me, { lat: x[4], lng: x[5] })) : OKIK}</span></button></li>`;
     }).join("");
     const nk = (x) => x[4] + "," + x[5];
     const son = ds[ds.length - 1], ara = ds.slice(0, -1).map(nk).join("|");
@@ -763,8 +830,8 @@
     d.querySelector("form").addEventListener("submit", (e) => {
       e.preventDefault();
       const f = new FormData(e.target);
-      const govde = `Yer: ${f.get("ad")}\nİl/ilçe: ${f.get("il")}\nNot: ${f.get("not")}\n\n(Rota Cepte uygulamasından gönderildi)`;
-      location.href = `mailto:${ILETISIM}?subject=${encodeURIComponent("Yer önerisi: " + f.get("ad"))}&body=${encodeURIComponent(govde)}`;
+      const govde = TL(`Yer: ${f.get("ad")}\nİl/ilçe: ${f.get("il")}\nNot: ${f.get("not")}\n\n(Rota Cepte uygulamasından gönderildi)`, `Place: ${f.get("ad")}\nProvince/district: ${f.get("il")}\nNote: ${f.get("not")}\n\n(Sent from the Rota Cepte app)`);
+      location.href = `mailto:${ILETISIM}?subject=${encodeURIComponent(TL("Yer önerisi: ", "Place suggestion: ") + f.get("ad"))}&body=${encodeURIComponent(govde)}`;
       kapat(); toast(T("Teşekkürler! E-posta uygulaman açılıyor."));
     });
     document.body.appendChild(d);
@@ -939,7 +1006,7 @@
       });
     }
     if (ARA) {
-      for (const [b, ad, ils, j, , , k, , fp] of ARA) if (b.includes(s)) res.push({ p: b.startsWith(s) ? 2 : 5, yer: `${ils}|${j}`, k: CATS[k] ? k : "t", fp, ad, alt: [(IDX.ilBy.get(ils) || {}).ad, CATS[k] && CATS[k].ad].filter(Boolean).join(" · ") });
+      for (const [b, ad, ils, j, , , k, , fp, en, be] of ARA) if (b.includes(s) || (DIL === "en" && be.includes(s))) res.push({ p: b.startsWith(s) || (DIL === "en" && be.startsWith(s)) ? 2 : 5, yer: `${ils}|${j}`, k: CATS[k] ? k : "t", fp, ad: DIL === "en" ? en : ad, alt: [(IDX.ilBy.get(ils) || {}).ad, CATS[k] && CATS[k].ad].filter(Boolean).join(" · ") });
     } else loadAra();
     res.sort((a, b) => a.p - b.p || a.ad.localeCompare(b.ad, "tr"));
     $("homeMain").hidden = true; $("results").hidden = false;
@@ -974,7 +1041,8 @@
     show("city");
     $("eyebrow").textContent = d.plaka ? `${d.plaka} · ${T("İl")}` : T("İl");
     $("title").textContent = d.ad;
-    renderHero({ f: d.f, kapak: d.kapak, m: DIL === "en" ? d.me : d.m, w: DIL === "en" ? d.we : d.w, facts: [nufusBilgi(d), alanBilgi(d), [TL("İlçe", "Districts"), d.ilceler.length], [T("Gezilecek yer"), d.yerler.length]] });
+    const kapakYer = DIL === "en" && d.kapak && d.yerler.find((y) => y.ad === d.kapak);
+    renderHero({ f: d.f, kapak: kapakYer ? adi(kapakYer) : d.kapak, m: DIL === "en" ? d.me : d.m, w: DIL === "en" ? d.we : d.w, facts: [nufusBilgi(d), alanBilgi(d), [TL("İlçe", "Districts"), d.ilceler.length], [T("Gezilecek yer"), d.yerler.length]] });
     $("tabs").hidden = false;
     $("tabBtnIlce").textContent = `${T("İlçeler")} (${d.ilceler.length})`;
     $("tabBtnYer").textContent = `${T("Gezilecek yerler")} (${d.yerler.length})`;
@@ -1094,7 +1162,8 @@
   // ---------- harita ----------
   function ensureMap() {
     if (map) { setTimeout(() => map.invalidateSize(), 60); return; }
-    map = L.map("map", { zoomControl: true, attributionControl: true }).setView([39, 35], 6);
+    map = L.map("map", { zoomControl: false, attributionControl: true }).setView([39, 35], 6);
+    L.control.zoom({ zoomInTitle: TL("Yakınlaştır", "Zoom in"), zoomOutTitle: TL("Uzaklaştır", "Zoom out") }).addTo(map);
     // Atıflar zorunlu: OSM (ODbL) ve MapTiler kullanım şartları; bağlantılar dış tarayıcıda açılır
     const OSM_ATIF = `<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap ${TL("katkıcıları", "contributors")}</a>`;
     map.attributionControl.setPrefix(`<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>`);
@@ -1118,7 +1187,7 @@
       const big = !!p.one, s = big ? 34 : 26;
       L.marker([p.lat, p.lng], {
         icon: L.divIcon({ className: "", html: `<div class="pin${big ? " big" : ""}" style="background:${CATS[p.k].renk}">${icon(p.k, big ? 16 : 13)}</div>`, iconSize: [s, s], iconAnchor: [s / 2, s / 2] }),
-        title: p.ad, alt: p.ad, keyboard: false, zIndexOffset: big ? 500 : 0
+        title: adi(p), alt: adi(p), keyboard: false, zIndexOffset: big ? 500 : 0
       }).on("click", () => openDetail(p)).addTo(layer);
       pts.push([p.lat, p.lng]);
     }
@@ -1144,7 +1213,7 @@
   function renderFacts(p) {
     const parts = [me ? `<span>${T("Uzaklık")} <strong>${fmt(km(me, p))}</strong></span>` : `<span>${T("Mesafe için konumu aç")}</span>`];
     parts.push(`<span>${esc([...new Set([p.ilce, p.il].filter(Boolean))].join(", "))}</span>`);
-    if (p.yil) parts.push(`<span>${p.k === "d" ? T("Kuruluş") : T("Yapım")} <strong>${esc(p.yil)}</strong></span>`);
+    if (p.yil) parts.push(`<span>${p.k === "d" ? T("Kuruluş") : T("Yapım")} <strong>${esc(yilYaz(p.yil))}</strong></span>`);
     if (p.rak) parts.push(`<span>${T("Rakım")} <strong>${nf(p.rak)} m</strong></span>`);
     if (p.un) parts.push(`<span class="badge">${T("UNESCO Dünya Mirası")}</span>`);
     $("dFacts").innerHTML = parts.join("");
@@ -1166,14 +1235,15 @@
     renderFacts(p);
     favBtn(p); gitBtn(p); $("dFav").hidden = $("dShare").hidden = $("dGit").hidden = !p.q;
     dinleDurdur(); $("dDinle").hidden = !sesVar;
-    const ipVar = p.ip && DIL !== "en";
-    $("dTip").hidden = !ipVar; $("dTip").innerHTML = ipVar ? "<b>İpucu:</b> " + esc(p.ip) : "";
+    const ip = DIL === "en" ? p.ipe : p.ip;
+    $("dTip").hidden = !ip; $("dTip").innerHTML = ip ? `<b>${TL("İpucu:", "Tip:")}</b> ` + esc(ip) : "";
+    const ilce = p.ilce && p.ilce !== p.il ? p.ilce : "";
     let txt;
-    if (DIL === "en") txt = p.me || `${adi(p)} is one of the places worth seeing in ${p.ilce ? p.ilce + ", " : ""}${p.il}, Türkiye.`;
+    if (DIL === "en") txt = p.me || `${adi(p)} is one of the places worth seeing in ${ilce ? ilce + ", " : ""}${p.il} Province, Türkiye.`;
     else {
       txt = p.m ? (p.en ? "(İngilizce kaynaktan) " : "") + p.m : "";
       if (!txt && p.ac) txt = `${p.ad}: ${p.ac}.`;
-      if (!txt) txt = `${p.ad}, ${p.ilce ? p.ilce + " / " : ""}${p.il} içinde görülmeye değer yerlerden biri.`;
+      if (!txt) txt = `${p.ad}, ${p.il} ilinin ${ilce ? ilce + " ilçesinde" : "sınırları içinde"} görülmeye değer yerlerden biridir.`;
     }
     $("dText").textContent = txt;
     const q = `${p.lat},${p.lng}`;
@@ -1192,7 +1262,7 @@
     $("dWiki").hidden = !wk;
     $("dWiki").href = wikiUrl(wk);
     $("dWiki").textContent = wk && wk.startsWith("en:") ? T("Vikipedi'de (İngilizce) oku") : T("Vikipedi'de devamını oku");
-    metinLisans($("dLis"), !!(DIL === "en" ? p.me && p.we : p.m && p.w));
+    metinLisans($("dLis"), !!(DIL === "en" ? p.me && p.we : p.m && p.w), DIL !== "en" && p.cv);
     $("sheet").querySelector(".card").scrollTop = 0;
     if ($("sheet").hidden) { history.pushState({ sheet: 1 }, "", location.href); sheetPushed = true; acan = document.activeElement; }
     $("sheet").hidden = false; arkaPlan(true);
