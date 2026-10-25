@@ -47,7 +47,7 @@ jobs:
           git add docs/data data/son-rapor.txt
           if git diff --cached --quiet; then echo "degisiklik yok"; exit 0; fi
           git commit -m "Veri guncellendi (otomatik)"
-          for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && break; sleep 5; done
+          ok=0; for i in 1 2 3; do if git pull --rebase origin main && git push origin HEAD:main; then ok=1; break; fi; sleep 5; done; [ "$ok" = 1 ] || { echo "Veri main dalina gonderilemedi"; exit 1; }
       - name: Fotograf kontrol sayfalari
         continue-on-error: true
         timeout-minutes: 30

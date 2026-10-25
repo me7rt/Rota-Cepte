@@ -6,6 +6,15 @@
   try { dil = localStorage.getItem("gezi-dil") || ""; } catch (e) {}
   if (dil !== "tr" && dil !== "en") dil = /^tr/i.test(navigator.language || "tr") ? "tr" : "en";
   const EN = {
+    // v6.0 yeni tasarım
+    "Gezilerim": "My trips", "Listem": "My list", "Yakınımda": "Nearby", "Gezi haritan ve rozetler": "Travel map & badges",
+    "Listen henüz boş": "Your list is empty", "Yerleri keşfet": "Explore places", "Rozetler": "Badges",
+    "Bir yerin sayfasında kalbe dokun, gitmek istediğin yerler burada toplansın. 2 yer ekleyince senin için rota da çizeriz.": "Tap the heart on a place to save it here. Add 2 places and we'll plan a route for you.",
+    "Gittim": "Been here", "Dinle": "Listen", "Durdur": "Stop", "Öne çıkanlar": "Highlights",
+    "Burada olmayan bir yer mi biliyorsun?": "Know a place that's missing?", "Bu ilde eksik bir yer mi var?": "Is a place missing in this province?",
+    "Rota Cepte'yi arkadaşlarına öner": "Recommend Rota Cepte to friends", "Gezi karnemi paylaş": "Share my travel card",
+    "Yakından uzağa sırala": "Sort nearest first", "Rotayı Google Haritalar'da başlat": "Start the route in Google Maps",
+    "Ana menü": "Main menu", "Ara": "Search", "Bu ilde yer ara": "Search in this province",
     // açılış ve üst kısım
     "Yol senin, rotan cepte!": "The road is yours, the route is in your pocket!",
     "81 il · 973 ilçe · 3.000+ yer": "81 provinces · 973 districts · 3,000+ places",
@@ -73,7 +82,7 @@
     "Sisli": "Foggy", "Çisenti": "Drizzle", "Dondurucu çisenti": "Freezing drizzle", "Hafif yağmur": "Light rain", "Yağmurlu": "Rain",
     "Kuvvetli yağmur": "Heavy rain", "Dondurucu yağmur": "Freezing rain", "Hafif kar": "Light snow", "Karlı": "Snow", "Yoğun kar": "Heavy snow",
     "Kar": "Snow", "Sağanak": "Showers", "Kuvvetli sağanak": "Heavy showers", "Kar sağanağı": "Snow showers", "Gök gürültülü": "Thunderstorm", "Dolu": "Hail",
-    "En iyi yerleri bul ›": "Find the best spots ›",
+    "En iyi yerleri bul": "Find the best spots",
     // tanıtım ve öneri formu
     "81 ili keşfet": "Explore 81 provinces",
     "Her ilde ve ilçede gezilecek yerler, fotoğraflar ve kısa bilgiler seni bekliyor.": "Places to visit in every province and district, with photos and short info.",

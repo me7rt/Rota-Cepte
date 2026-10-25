@@ -26,8 +26,8 @@ await p.goto(BASE); await bekle(3200); await p.screenshot({ path: `${OUT}/0-acil
 await bekle(4500);
 await cek("1-ana");
 await p.evaluate(() => document.getElementById("rotaSec").scrollIntoView({ block: "start" })); await p.evaluate(() => scrollBy(0, -70)); await cek("2-rotalar");
-await p.evaluate(() => document.getElementById("gezSec").scrollIntoView({ block: "start" })); await p.evaluate(() => scrollBy(0, -70)); await cek("3-harita");
-await p.evaluate(() => { location.hash = "#/rozetler"; }); await bekle(1500); await cek("4-rozetler");
+await p.evaluate(() => { location.hash = "#/rozetler"; }); await bekle(2500); await cek("3-harita");
+await p.evaluate(() => document.getElementById("rozetList").scrollIntoView({ block: "start" })); await p.evaluate(() => scrollBy(0, -130)); await cek("4-rozetler");
 await p.evaluate(() => { location.hash = "#/il/nevsehir"; }); await bekle(3000); await cek("5-il");
 await p.evaluate(() => { location.hash = "#/il/istanbul"; }); await bekle(3000);
 await p.click("#list .row"); await bekle(3500); await cek("6-yer");

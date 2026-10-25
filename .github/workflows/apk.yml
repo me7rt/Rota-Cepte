@@ -23,19 +23,19 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 21 }
       - name: Capacitor kur
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: Android projesi olustur
         run: |
           npx cap add android
           # Konum izni (canlı mesafe için)
           sed -i 's#<uses-permission android:name="android.permission.INTERNET" />#<uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />\n    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />#' android/app/src/main/AndroidManifest.xml
-          grep -n "permission" android/app/src/main/AndroidManifest.xml
+          grep -q "ACCESS_FINE_LOCATION" android/app/src/main/AndroidManifest.xml || { echo "Konum izni eklenemedi"; exit 1; }
           npx @capacitor/assets generate --android --iconBackgroundColor '#1f4fa3' --splashBackgroundColor '#1f4fa3' || echo "simge uretilemedi, varsayilan kullanilacak"
           npx cap sync android
           # Google Play: en az Android 7 (SDK 24), hedef SDK 36
           sed -i 's/minSdkVersion = [0-9]*/minSdkVersion = 24/; s/compileSdkVersion = [0-9]*/compileSdkVersion = 36/; s/targetSdkVersion = [0-9]*/targetSdkVersion = 36/' android/variables.gradle
           printf '\nandroid.suppressUnsupportedCompileSdk=36\n' >> android/gradle.properties
-          grep -n 'SdkVersion' android/variables.gradle
+          grep -q 'targetSdkVersion = 36' android/variables.gradle && grep -q 'minSdkVersion = 24' android/variables.gradle || { echo "SDK ayarlanamadi"; exit 1; }
       - name: APK derle (imza anahtarı varsa Play paketi de)
         env:
           KS: ${{ secrets.KEYSTORE_B64 }}
@@ -45,6 +45,7 @@ jobs:
           chmod +x gradlew
           # Her derlemede sürüm numarası artar (Play bunu ister)
           sed -i "s/versionCode [0-9]*/versionCode ${{ github.run_number }}/; s/versionName \"[^\"]*\"/versionName \"$(node -p "require('../package.json').version")\"/" app/build.gradle
+          grep -q "versionCode ${{ github.run_number }}" app/build.gradle || { echo "Surum numarasi ayarlanamadi"; exit 1; }
           if [ -n "$KS" ]; then
             echo "$KS" | base64 -d > ../ks.jks
             ./gradlew assembleRelease bundleRelease --no-daemon
@@ -52,13 +53,17 @@ jobs:
             $BT/zipalign -f 4 app/build/outputs/apk/release/app-release-unsigned.apk ../hizali.apk
             $BT/apksigner sign --ks ../ks.jks --ks-key-alias upload --ks-pass env:KP --key-pass env:KP --out ../RotaCepte.apk ../hizali.apk
             cp app/build/outputs/bundle/release/app-release.aab ../RotaCepte.aab
-            jarsigner -keystore ../ks.jks -storepass "$KP" -keypass "$KP" ../RotaCepte.aab upload
-            rm -f ../ks.jks ../hizali.apk
+            jarsigner -keystore ../ks.jks -storepass:env KP -keypass:env KP ../RotaCepte.aab upload
           else
+            # İmza anahtarı yoksa yayınlama yapma (farklı imzalı APK eskisinin üstüne kurulamaz)
+            echo "IMZASIZ=1" >> $GITHUB_ENV
             ./gradlew assembleDebug --no-daemon
             cp app/build/outputs/apk/debug/app-debug.apk ../RotaCepte.apk
           fi
           ls -la ../RotaCepte.*
+      - name: Anahtar dosyasını temizle
+        if: always()
+        run: rm -f ks.jks hizali.apk
       - name: Play paketini sakla
         uses: actions/upload-artifact@v4
         with:
@@ -66,6 +71,7 @@ jobs:
           path: RotaCepte.aab
           if-no-files-found: ignore
       - name: Indirme linkine yukle
+        if: env.IMZASIZ != '1'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
