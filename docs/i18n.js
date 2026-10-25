@@ -17,7 +17,7 @@
     "Ana menü": "Main menu", "Ara": "Search", "Bu ilde yer ara": "Search in this province",
     // açılış ve üst kısım
     "Yol senin, rotan cepte!": "The road is yours, the route is in your pocket!",
-    "81 il · 973 ilçe · 3.000+ yer": "81 provinces · 973 districts · 3,000+ places",
+    "81 il · 973 ilçe · 2.900+ yer": "81 provinces · 973 districts · 2,900+ places",
     "Hazırlayan": "Made by", "Hazırlayan:": "Made by:",
     "© 2026 · Tüm hakları saklıdır": "© 2026 · All rights reserved",
     "© 2026 Mert Turanlıoğlu · Tüm hakları saklıdır ·": "© 2026 Mert Turanlıoğlu · All rights reserved ·",
