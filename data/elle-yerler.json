@@ -35,22 +35,23 @@
   {
    "ad": "Ravanda Kalesi",
    "k": "t",
-   "ilce": "Merkez",
-   "lat": 36.843,
-   "lng": 36.911,
+   "ilce": "",
+   "lat": 36.87307,
+   "lng": 37.05386,
    "gq": "Ravanda Kalesi, Kilis",
-   "m": "Kilis'in kuzeybatısında, Ravanda köyü yakınında bir tepenin üzerinde yükselen Orta Çağ kalesi. Haçlı Seferleri döneminde de kullanılan kaleden çevredeki ovanın geniş manzarası görülür.",
-   "m_en": "A medieval castle on a hilltop near Ravanda village, northwest of Kilis. Also used during the Crusades, it offers a wide view over the surrounding plain."
+   "m": "Kilis'in kuzeyinde, Belenözü (eski adıyla Ravanda) köyü yakınında bir tepenin üzerinde yükselen Orta Çağ kalesi. Haçlı Seferleri döneminde de kullanılan kaleden çevredeki ovanın geniş manzarası görülür.",
+   "m_en": "A medieval castle on a hilltop near Belenözü (formerly Ravanda) village, north of Kilis. Also used during the Crusades, it offers a wide view over the surrounding plain."
   },
   {
    "ad": "Kilis Mevlevihanesi",
    "k": "t",
    "ilce": "Merkez",
-   "lat": 36.717,
-   "lng": 37.115,
+   "lat": 36.71558,
+   "lng": 37.1144,
    "gq": "Mevlevihane, Kilis",
    "m": "Kilis şehir merkezinde, Osmanlı döneminden kalma mevlevihane. Restore edilen yapı, şehrin tarihi dokusunun en bilinen parçalarındandır.",
-   "m_en": "An Ottoman-era Mevlevi lodge in the center of Kilis. The restored building is one of the best-known parts of the city's historic fabric."
+   "m_en": "An Ottoman-era Mevlevi lodge in the center of Kilis. The restored building is one of the best-known parts of the city's historic fabric.",
+   "foto": "Exterior of 16th-Century Tekke Mosque - Kilis - Turkey (5772594464).jpg"
   }
  ],
  "bingol": [
@@ -58,11 +59,11 @@
    "ad": "Kös Kaplıcaları",
    "k": "d",
    "ilce": "Merkez",
-   "lat": 39.02,
-   "lng": 40.6,
+   "lat": 38.98113,
+   "lng": 40.67733,
    "gq": "Kös Kaplıcası, Bingöl",
-   "m": "Bingöl'ün kuzeyinde, dağlar arasında yer alan termal kaplıca. Sıcak suyu ve doğal çevresiyle bölgenin sevilen dinlenme yerlerindendir.",
-   "m_en": "A thermal spring among the mountains north of Bingöl, popular for its hot water and natural setting."
+   "m": "Bingöl'ün kuzeydoğusunda, dağlar arasında yer alan termal kaplıca. Sıcak suyu ve doğal çevresiyle bölgenin sevilen dinlenme yerlerindendir.",
+   "m_en": "A thermal spring among the mountains northeast of Bingöl, popular for its hot water and natural setting."
   }
  ],
  "hakkari": [
@@ -70,30 +71,32 @@
    "ad": "Berçelan Yaylası",
    "k": "d",
    "ilce": "Merkez",
-   "lat": 37.62,
-   "lng": 43.66,
+   "lat": 37.6303,
+   "lng": 43.7496,
    "gq": "Berçelan Yaylası, Hakkari",
    "m": "Hakkari'ye yakın, yüksek dağların arasında uzanan geniş yayla. Yaz aylarında yeşil çayırları ve serin havasıyla ziyaretçi çeker.",
-   "m_en": "A wide highland pasture among high mountains near Hakkari. In summer it draws visitors with its green meadows and cool air."
+   "m_en": "A wide highland pasture among high mountains near Hakkari. In summer it draws visitors with its green meadows and cool air.",
+   "foto": "Berçelan Festıvals 01.06.2009 - panoramio.jpg"
   },
   {
    "ad": "Sat Gölleri",
    "k": "d",
    "ilce": "Yüksekova",
-   "lat": 37.37,
-   "lng": 44.1,
+   "lat": 37.353,
+   "lng": 44.186,
    "gq": "Sat Gölleri, Yüksekova, Hakkari",
    "m": "Yüksekova yakınlarında, Sat Dağları'nın yükseklerindeki buzul gölleri. Karlı zirvelerle çevrili gölleri görmek için yürüyüş ve kamp yapılır.",
-   "m_en": "Glacial lakes high in the Sat Mountains near Yüksekova. Hikers and campers come to see the lakes surrounded by snowy peaks."
+   "m_en": "Glacial lakes high in the Sat Mountains near Yüksekova. Hikers and campers come to see the lakes surrounded by snowy peaks.",
+   "foto": "Sat Lakes and reflection, July 2023.jpg"
   }
  ],
  "igdir": [
   {
    "ad": "Aras Kuş Cenneti",
    "k": "d",
-   "ilce": "Merkez",
-   "lat": 39.95,
-   "lng": 43.93,
+   "ilce": "Tuzluca",
+   "lat": 40.11926,
+   "lng": 43.58061,
    "gq": "Aras Kuş Cenneti, Iğdır",
    "m": "Iğdır'da Aras Nehri kıyısındaki sulak alan. Pek çok kuş türünün görüldüğü alanda kuş gözlemi yapılır, bir kuş araştırma istasyonu da bulunur.",
    "m_en": "A wetland on the Aras River in Iğdır. Many bird species can be seen here, and there is also a bird research station."
@@ -102,8 +105,8 @@
    "ad": "Tuzluca Tuz Mağarası",
    "k": "d",
    "ilce": "Tuzluca",
-   "lat": 40.05,
-   "lng": 43.6,
+   "lat": 40.04926,
+   "lng": 43.66878,
    "gq": "Tuz Mağarası, Tuzluca, Iğdır",
    "m": "Tuzluca'da, kaya tuzu çıkarılan eski galerilerden oluşan tuz mağarası. Tuz kaplı duvarları ve serin havasıyla bölgenin ilginç duraklarındandır.",
    "m_en": "A salt cave in Tuzluca made of old galleries where rock salt was mined. Its salt-covered walls and cool air make it one of the area's most unusual stops."
@@ -114,8 +117,8 @@
    "ad": "Munzur Gözeleri",
    "k": "d",
    "ilce": "Ovacık",
-   "lat": 39.42,
-   "lng": 39.22,
+   "lat": 39.3314,
+   "lng": 39.0575,
    "gq": "Munzur Gözeleri, Ovacık, Tunceli",
    "m": "Ovacık yakınlarında, Munzur Çayı'nın dağın eteğinden kaynayarak çıktığı soğuk su kaynakları. Ağaçlar arasındaki gözeler, Munzur Vadisi'nin en çok ziyaret edilen yerlerindendir.",
    "m_en": "Cold springs near Ovacık where the Munzur River bubbles out at the foot of the mountain. Set among trees, they are among the most visited spots of the Munzur Valley."
@@ -124,11 +127,12 @@
    "ad": "Pülümür Vadisi",
    "k": "d",
    "ilce": "Pülümür",
-   "lat": 39.4,
-   "lng": 39.85,
+   "lat": 39.3636,
+   "lng": 39.7854,
    "gq": "Pülümür Vadisi, Tunceli",
    "m": "Tunceli ile Erzincan arasında, Pülümür Çayı boyunca uzanan dar ve yeşil vadi. Yol boyunca kayalık yamaçlar ve dere manzarası eşlik eder.",
-   "m_en": "A narrow green valley along the Pülümür stream between Tunceli and Erzincan, with rocky slopes and river views along the road."
+   "m_en": "A narrow green valley along the Pülümür stream between Tunceli and Erzincan, with rocky slopes and river views along the road.",
+   "foto": "62700 Akdik-Pülümür-Tunceli, Turkey - panoramio.jpg"
   }
  ],
  "sirnak": [
@@ -136,21 +140,22 @@
    "ad": "Mem û Zin Türbesi",
    "k": "t",
    "ilce": "Cizre",
-   "lat": 37.327,
-   "lng": 42.195,
+   "lat": 37.32193,
+   "lng": 42.1865,
    "gq": "Mem û Zin Türbesi, Cizre, Şırnak",
    "m": "Cizre'de, Ahmed-i Hani'nin ünlü aşk destanı Mem û Zin'in kahramanlarına ait olduğuna inanılan türbe. Cizre'nin en çok ziyaret edilen yerlerindendir.",
-   "m_en": "A tomb in Cizre believed to belong to the lovers of Mem and Zin, the famous epic by Ahmad Khani. It is one of the most visited places in Cizre."
+   "m_en": "A tomb in Cizre believed to belong to the lovers of Mem and Zin, the famous epic by Ahmad Khani. It is one of the most visited places in Cizre.",
+   "foto": "Mem u Zin türbesi.jpg"
   }
  ],
  "bayburt": [
   {
-   "ad": "Sirakayalar Şelalesi",
+   "ad": "Sırakayalar Şelalesi",
    "k": "d",
-   "ilce": "",
-   "lat": 40.31,
-   "lng": 40.38,
-   "gq": "Sirakayalar Şelalesi, Bayburt",
+   "ilce": "Merkez",
+   "lat": 40.09765,
+   "lng": 40.23343,
+   "gq": "Sırakayalar Şelalesi, Bayburt",
    "m": "Bayburt'ta, kayalık bir yamaçtan dökülen şelale. Çevresindeki yeşil alanla yaz aylarında piknik ve fotoğraf için tercih edilir.",
    "m_en": "A waterfall pouring down a rocky slope in Bayburt. With the green area around it, it is a favorite summer spot for picnics and photos."
   }
@@ -160,8 +165,8 @@
    "ad": "Ergan Dağı Kayak Merkezi",
    "k": "d",
    "ilce": "Merkez",
-   "lat": 39.68,
-   "lng": 39.6,
+   "lat": 39.6116,
+   "lng": 39.4972,
    "gq": "Ergan Dağı Kayak Merkezi, Erzincan",
    "m": "Erzincan şehir merkezine yakın, Ergan Dağı'nda kurulu kayak merkezi. Kışın kayak, yazın ise ova manzarası için gidilir.",
    "m_en": "A ski resort on Mount Ergan, close to the center of Erzincan. People come for skiing in winter and for views over the plain in summer."
@@ -170,11 +175,12 @@
    "ad": "Terzi Baba Türbesi",
    "k": "t",
    "ilce": "Merkez",
-   "lat": 39.745,
-   "lng": 39.49,
+   "lat": 39.71702,
+   "lng": 39.49928,
    "gq": "Terzi Baba Türbesi, Erzincan",
-   "m": "Erzincan şehir merkezinde, halk arasında Terzi Baba diye anılan bir mutasavvıfın türbesi. Şehrin en çok ziyaret edilen manevi mekânlarındandır.",
-   "m_en": "The tomb of a Sufi known locally as Terzi Baba, in the center of Erzincan. It is one of the city's most visited spiritual sites."
+   "m": "Erzincan'da, halk arasında Terzi Baba diye anılan bir mutasavvıfın türbesi. Yanındaki camiyle birlikte şehrin en çok ziyaret edilen manevi mekânlarındandır.",
+   "m_en": "The tomb of a Sufi known locally as Terzi Baba, in Erzincan. Together with the mosque next to it, it is one of the city's most visited spiritual sites.",
+   "foto": "Terzibaba Camii ve Külliyesi 2693.jpg"
   }
  ],
  "gumushane": [
@@ -182,8 +188,8 @@
    "ad": "Santa Harabeleri",
    "k": "t",
    "ilce": "",
-   "lat": 40.53,
-   "lng": 39.88,
+   "lat": 40.671,
+   "lng": 39.7982,
    "gq": "Santa Harabeleri, Gümüşhane",
    "m": "Gümüşhane'de, Dumanlı köyü çevresindeki ormanların içinde eski bir Rum yerleşimine ait taş ev, kilise ve okul kalıntıları. Yaylası ve doğasıyla da ziyaret edilir.",
    "m_en": "Ruins of stone houses, churches and a school from an old Greek settlement in the forests around Dumanlı village, Gümüşhane. The highland and nature around it also draw visitors."
@@ -192,23 +198,11 @@
    "ad": "Artabel Gölleri Tabiat Parkı",
    "k": "d",
    "ilce": "",
-   "lat": 40.3,
-   "lng": 39.4,
+   "lat": 40.4015,
+   "lng": 39.0681,
    "gq": "Artabel Gölleri Tabiat Parkı, Gümüşhane",
    "m": "Gümüşhane'de, yüksek dağların arasında irili ufaklı buzul göllerinden oluşan tabiat parkı. Yaz aylarında doğa yürüyüşü ve kamp için gidilir.",
    "m_en": "A nature park in Gümüşhane made up of glacial lakes of different sizes among high mountains. People come for hiking and camping in summer."
-  }
- ],
- "siirt": [
-  {
-   "ad": "İbrahim Hakkı Hazretleri Türbesi",
-   "k": "t",
-   "ilce": "Tillo",
-   "lat": 37.946,
-   "lng": 42.014,
-   "gq": "İbrahim Hakkı Hazretleri Türbesi, Tillo, Siirt",
-   "m": "Siirt'in Tillo ilçesinde, Marifetname'nin yazarı İbrahim Hakkı Erzurumi'nin türbesi. Tillo, onun ve hocası İsmail Fakirullah'ın türbeleriyle bilinir.",
-   "m_en": "The tomb of İbrahim Hakkı of Erzurum, author of the Marifetname, in Tillo, Siirt. Tillo is known for his tomb and that of his teacher İsmail Fakirullah."
   }
  ]
 }

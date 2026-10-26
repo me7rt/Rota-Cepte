@@ -911,9 +911,16 @@ for (const il of iller.values()) {
   const liste = ELLE[il.s] || [];
   for (const e of liste) {
     if (!e.ilce || !il.ilceler.some((d) => d.ad === e.ilce)) e.ilce = yakinIlceAdi(il, e.lat, e.lng);
-    let a = (await commonsAra(e.ad, ""))[0] || (await commonsAra(e.ad, il.ad))[0];
-    if (a && KULLANILAN.has(a)) a = null;
-    if (a) { e.foto = a; KULLANILAN.add(a); elleFoto++; }
+    // Elle seçilmiş fotoğraf (Commons dosya adı) varsa önce o kullanılır
+    let a = null;
+    if (e.foto) {
+      await fotoBilgi([e.foto]);
+      a = FOTO.get(e.foto) && !KULLANILAN.has(e.foto) ? e.foto : null;
+      if (!a) rapor(`  UYARI elle seçilen fotoğraf kullanılamadı: ${il.ad} / ${e.ad} (${e.foto})`);
+    }
+    if (!a) { a = (await commonsAra(e.ad, ""))[0] || (await commonsAra(e.ad, il.ad))[0]; if (a && KULLANILAN.has(a)) a = null; }
+    e.foto = a || undefined;
+    if (a) { KULLANILAN.add(a); elleFoto++; }
   }
   // OSM'den gelip fotoğrafı ve metni olmayanlar eklenmez
   ELLE[il.s] = liste.filter((e) => !e.osm || e.foto);
