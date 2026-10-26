@@ -3,7 +3,7 @@
    Veri docs/data altında; GitHub Actions'ta Wikidata, Vikipedi ve Commons'tan hazırlanır (scripts/uret.mjs). */
 (function () {
   "use strict";
-  const SURUM = "6.3";
+  const SURUM = "6.4";
   if (window.ikDoldur) ikDoldur();
   // MapTiler harita anahtarı (boşsa OpenStreetMap kullanılır)
   const HARITA_ANAHTAR = "pI5pMuHAI4gLw3aqy35G";
@@ -350,10 +350,11 @@
   const ayni = (x, p) => x.q === p.q && x.s === p.ilS;
   const favMi = (p) => favs().some((x) => ayni(x, p));
   function favDegis(p) {
-    let a = favs();
+    let a = favs(), eklendi = false;
     if (favMi(p)) a = a.filter((x) => !ayni(x, p));
-    else a.unshift({ q: p.q, s: p.ilS, ad: p.ad, il: [...new Set([p.ilce, p.il].filter(Boolean))].join(", "), k: p.k, f: p.f, lat: p.lat, lng: p.lng });
+    else { a.unshift({ q: p.q, s: p.ilS, ad: p.ad, il: [...new Set([p.ilce, p.il].filter(Boolean))].join(", "), k: p.k, f: p.f, lat: p.lat, lng: p.lng }); eklendi = true; }
     favYaz(a); favBtn(p); renderFav();
+    if (eklendi) setTimeout(bildirimTeklif, 700);
   }
   function favBtn(p) {
     const on = favMi(p), b = $("dFav");
@@ -385,9 +386,19 @@
       if (cur && (sira.length || me)) top += km(cur, x);
       sira.push(x); cur = x;
     }
+    // 2-opt: sırada birbirini kesen yolları açarak toplam yolu kısalt (en fazla 10 durak, anında biter)
+    const yolUz = (r) => r.reduce((t, x, i) => t + (i ? km(r[i - 1], x) : me ? km(me, x) : 0), 0);
+    for (let iyi = true, tur = 0; iyi && tur < 50; tur++) {
+      iyi = false;
+      for (let i = 0; i < sira.length - 1; i++) for (let j = i + 1; j < sira.length; j++) {
+        const yeni = sira.slice(0, i).concat(sira.slice(i, j + 1).reverse(), sira.slice(j + 1));
+        if (yolUz(yeni) < yolUz(sira) - 1e-6) { sira = yeni; iyi = true; }
+      }
+    }
+    top = yolUz(sira);
     const nk = (x) => x.lat + "," + x.lng, son = sira[sira.length - 1], ara = sira.slice(0, -1).map(nk).join("|");
     b.href = `https://www.google.com/maps/dir/?api=1&destination=${nk(son)}${ara ? "&waypoints=" + encodeURIComponent(ara) : ""}&travelmode=driving`;
-    b.innerHTML = TL(`<span>${ik("route", 18)} Listemden rota yap</span><small>${sira.length} durak · ~${fmt(top * 1.3)} · en yakından başlar</small>`, `<span>${ik("route", 18)} Make a route from my list</span><small>${sira.length} stops · ~${fmt(top * 1.3)} · nearest first</small>`);
+    b.innerHTML = TL(`<span>${ik("route", 18)} Listemden rota yap</span><small>${sira.length} durak · ~${fmt(top * 1.3)} · en kısa sırayla</small>`, `<span>${ik("route", 18)} Make a route from my list</span><small>${sira.length} stops · ~${fmt(top * 1.3)} · shortest order</small>`);
     b.hidden = false;
   }
   // ---------- gittiğim yerler ----------
@@ -396,7 +407,7 @@
   const gittimMi = (p) => gittiklerim().some((x) => ayni(x, p));
   function gitDegis(p) {
     let a = gittiklerim();
-    const vardi = gittimMi(p), onceki = new Set(rozetler().filter((r) => r.tamam).map((r) => r.ad));
+    const vardi = gittimMi(p), onceki = new Set(rozetler().filter((r) => r.tamam).map((r) => r.ad)), oncekiIl = buYil(a).il;
     if (vardi) a = a.filter((x) => !ayni(x, p));
     else a.unshift({ q: p.q, s: p.ilS, ad: p.ad, il: [...new Set([p.ilce, p.il].filter(Boolean))].join(", "), k: p.k, f: p.f, t: Date.now() });
     try { localStorage.setItem(GIT, JSON.stringify(a)); } catch (e) {}
@@ -404,7 +415,8 @@
     if (!vardi) {
       const iller = new Set(a.map((x) => x.s)).size;
       const yeni = rozetler().find((r) => r.tamam && !onceki.has(r.ad));
-      if (yeni) rozetKutla(yeni);
+      if (hedefKontrol(oncekiIl)) { /* yıllık hedef kutlandı */ }
+      else if (yeni) rozetKutla(yeni);
       else toast(TL(`Harika! Gezdiğin il: ${iller}/81 · Gittiğin yer: ${a.length}`, `Great! Provinces visited: ${iller}/81 · Places: ${a.length}`));
     }
   }
@@ -414,7 +426,7 @@
   }
   function renderGez() {
     const a = gittiklerim();
-    $("gezSec").hidden = false; renderHarita(); renderRozet();
+    $("gezSec").hidden = false; renderHarita(); renderRozet(); renderHedef();
     $("gezBtn").hidden = $("karneBtn").hidden = !a.length;
     if (!a.length) { $("gezList").hidden = true; return; }
     const iller = new Set(a.map((x) => x.s)).size;
@@ -450,13 +462,52 @@
       ["🏰", "castle", T("Kale fatihi"), T("5 kaleye git"), temaSay(a, ["kale"]), 5],
       ["🌊", "waves-horizontal", T("Göl sevdalısı"), T("3 göle git"), temaSay(a, ["golu", "gol "], "d"), 3],
       ["🌲", "trees", T("Doğa dostu"), T("3 milli park ya da tabiat parkına git"), temaSay(a, ["milli park", "tabiat park"]), 3],
-      ["🏛️", "landmark", T("Müze kurdu"), T("5 müzeye git"), a.filter((x) => x.k === "m" || sade(x.ad).includes("muze")).length, 5]
+      ["🏛️", "landmark", T("Müze kurdu"), T("5 müzeye git"), a.filter((x) => x.k === "m" || sade(x.ad).includes("muze")).length, 5],
+      ["🔥", "flame", T("Seri gezgin"), T("3 ay üst üste en az bir yere git"), seri(a), 3]
     ];
     for (const [b, iller] of Object.entries(BOLGE)) {
       const l = iller.split(" ");
       R.push(["🏅", "medal", TL(b + " fatihi", T(b) + " conqueror"), TL(`${b} bölgesinin ${l.length} ilinin hepsine git`, `Visit all ${l.length} provinces of the ${T(b)} region`), l.filter((s) => il.has(s)).length, l.length]);
     }
     return R.map(([e, ikon, ad, acik, n, hedef]) => ({ e, ikon, ad, acik, n: Math.min(n, hedef), hedef, tamam: n >= hedef }));
+  }
+  // ---------- yıllık gezi hedefi ve seri ----------
+  const HEDEF = "gezi-hedef";
+  function hedefOku() { try { const h = JSON.parse(localStorage.getItem(HEDEF)); return h && h.y === new Date().getFullYear() && h.n > 0 ? h : null; } catch (e) { return null; } }
+  // Seri: bu aydan (bu ay henüz gidilmediyse geçen aydan) geriye, her ay en az bir yere gidilen ay sayısı
+  function seri(a) {
+    const ay = new Set(a.filter((x) => x.t).map((x) => { const d = new Date(x.t); return d.getFullYear() * 12 + d.getMonth(); }));
+    const n = new Date(); let m = n.getFullYear() * 12 + n.getMonth(), say = 0;
+    if (!ay.has(m)) m--;
+    while (ay.has(m)) { say++; m--; }
+    return say;
+  }
+  function buYil(a) {
+    const y = new Date().getFullYear(), l = a.filter((x) => x.t && new Date(x.t).getFullYear() === y);
+    return { il: new Set(l.map((x) => x.s)).size, yer: l.length };
+  }
+  function renderHedef() {
+    const kutu = $("hedefSec"); if (!kutu) return;
+    const a = gittiklerim(), yil = new Date().getFullYear(), h = hedefOku(), b = buYil(a), sr = seri(a);
+    const buAy = a.some((x) => x.t && new Date(x.t).getMonth() === new Date().getMonth() && new Date(x.t).getFullYear() === yil);
+    const seriHtml = sr ? `<p class="seri">${ik("flame", 18)} ${TL(`${sr} ay üst üste gezdin`, `${sr}-month travel streak`)}${!buAy ? TL(" · bu ay da bir yere git, serin sürsün", " · visit somewhere this month to keep it") : ""}</p>` : "";
+    const secim = [3, 5, 10, 20].map((n) => `<button data-hedef="${n}">${n} ${TL("il", n > 1 ? "provinces" : "province")}</button>`).join("");
+    if (!h) {
+      kutu.innerHTML = `<span class="hbas">${ik("target", 20)} ${TL(`${yil} gezi hedefin`, `Your ${yil} travel goal`)}</span><p>${TL("Bu yıl kaç il gezmek istersin? Hedef koy, \"Buraya gittim\" dedikçe ilerle.", "How many provinces do you want to visit this year? Set a goal and track it with \"I've been here\".")}</p><div class="hsec">${secim}</div>${seriHtml}`;
+      return;
+    }
+    const tamam = b.il >= h.n, yuzde = Math.min(100, Math.round((b.il / h.n) * 100));
+    kutu.innerHTML = `<span class="hbas">${ik(tamam ? "trophy" : "target", 20)} ${TL(`${yil} gezi hedefin`, `Your ${yil} travel goal`)}</span>
+      <div class="hsay"><b>${TL(`${b.il} / ${h.n} il`, `${b.il} / ${h.n} provinces`)}</b><small>${TL(`Bu yıl ${b.yer} yer`, `${b.yer} places this year`)}</small></div>
+      <span class="bar"><i style="width:${Math.max(3, yuzde)}%"></i></span>
+      <p>${tamam ? TL("Hedefini tamamladın, tebrikler! Yeni bir hedef koyabilirsin.", "Goal complete, congratulations! You can set a new one.") : TL(`Hedefine ${h.n - b.il} il kaldı.`, `${h.n - b.il} more to reach your goal.`)}</p>
+      ${seriHtml}<button class="linkbtn" data-hedef="0">${TL("Hedefi değiştir", "Change goal")}</button>`;
+  }
+  function hedefKontrol(onceki) {
+    const h = hedefOku(); if (!h) return false;
+    const simdi = buYil(gittiklerim()).il;
+    if (onceki < h.n && simdi >= h.n) { rozetKutla({ ikon: "trophy", ad: TL("Yıllık hedef tamam!", "Yearly goal reached!"), acik: TL(`Bu yıl ${simdi} il gezdin.`, `You've visited ${simdi} provinces this year.`) }); return true; }
+    return false;
   }
   function rozetKutla(r) {
     const d = document.createElement("div"); d.className = "tanit";
@@ -1081,6 +1132,7 @@
 
   function showIl(d, tab) {
     view = { mode: "il", d };
+    try { localStorage.setItem("gezi-son-il", d.s); } catch (e) {}
     show("city");
     $("eyebrow").textContent = d.plaka ? `${d.plaka} · ${T("İl")}` : T("İl");
     $("title").textContent = d.ad;
@@ -1293,7 +1345,9 @@
     const hedef = p.gq ? encodeURIComponent(p.gq) : q;
     $("dMap").href = `https://www.google.com/maps/search/?api=1&query=${hedef}`;
     $("dDir").href = `https://www.google.com/maps/dir/?api=1&destination=${hedef}`;
-    $("dYakin").innerHTML = [["utensils", T("Yemek"), "restoran"], ["coffee", T("Kafe"), "kafe"], ["bed", T("Konaklama"), "otel"], ["fuel", T("Benzin"), "benzin istasyonu"], ["square-parking", T("Otopark"), "otopark"]].map(([e, ad, ara]) =>
+    // Müze ve tarihi yerlerde güncel ziyaret saatleri ve giriş ücreti (bilgiyi biz tutmuyoruz, her zaman güncel kaynağa gider)
+    const saat = p.k === "m" || p.k === "t" ? `<a class="ykn" target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent(`${p.ad} ${p.il} ${TL("ziyaret saatleri giriş ücreti", "opening hours ticket price")}`)}">${ik("clock", 16)} ${TL("Saatler ve giriş ücreti", "Hours & tickets")}</a>` : "";
+    $("dYakin").innerHTML = saat + [["utensils", T("Yemek"), "restoran"], ["coffee", T("Kafe"), "kafe"], ["bed", T("Konaklama"), "otel"], ["fuel", T("Benzin"), "benzin istasyonu"], ["square-parking", T("Otopark"), "otopark"]].map(([e, ad, ara]) =>
       `<a class="ykn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent(ara)}/@${p.lat},${p.lng},15z">${ik(e, 16)} ${ad}</a>`).join("");
     // Yakındaki gezilecek yerler (aynı ilde, 25 km içinde, en yakın 5)
     const il = IL.get(p.ilS);
@@ -1436,10 +1490,26 @@
   $("dFav").addEventListener("click", () => { if (open) favDegis(open); });
   $("dShare").addEventListener("click", () => { if (open) paylas(open); });
   $("dGit").addEventListener("click", () => { if (open) gitDegis(open); });
+  // Bilgi yanlış ya da eksik mi: yer adı ve kimliği hazır yazılmış e-posta
+  $("dYanlis").addEventListener("click", () => {
+    const p = open; if (!p) return;
+    const yer = [...new Set([p.ilce, p.il].filter(Boolean))].join(", ");
+    const konu = TL("Bilgi düzeltme: ", "Correction: ") + adi(p) + " (" + p.il + ")";
+    const govde = TL(`Yer: ${p.ad}\nİl / ilçe: ${yer}\nKimlik: ${p.q || "-"}\n\nNe yanlış ya da eksik? (Fotoğraf, bilgi, konum…)\n\n\n(Sürüm ${SURUM})`,
+      `Place: ${adi(p)}\nProvince / district: ${yer}\nID: ${p.q || "-"}\n\nWhat is wrong or missing? (Photo, text, location…)\n\n\n(Version ${SURUM})`);
+    location.href = `mailto:${ILETISIM}?subject=${encodeURIComponent(konu)}&body=${encodeURIComponent(govde)}`;
+  });
   document.querySelectorAll(".onerbtn").forEach((b) => b.addEventListener("click", yerOner));
   $("dDinle").addEventListener("click", dinle);
   $("gezBtn").addEventListener("click", () => { $("gezList").hidden = !$("gezList").hidden; });
   $("karneBtn").addEventListener("click", karne);
+  $("hedefSec").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-hedef]"); if (!b) return;
+    const n = +b.dataset.hedef;
+    try { if (n) localStorage.setItem(HEDEF, JSON.stringify({ y: new Date().getFullYear(), n })); else localStorage.removeItem(HEDEF); } catch (err) {}
+    renderHedef();
+    if (n) toast(TL(`Hedefin: bu yıl ${n} il. Hadi yola!`, `Goal set: ${n} provinces this year. Let's go!`));
+  });
   $("indirBtn").addEventListener("click", ilIndir);
   $("plan").addEventListener("click", (e) => {
     if (e.target.closest("#planYeni")) { planBas++; planGoster(view.d); return; }
@@ -1476,6 +1546,81 @@
       if (Date.now() - cikisZamani < 2000) { CapApp.exitApp(); return; }
       cikisZamani = Date.now(); toast(T("Çıkmak için tekrar geri bas"));
     });
+  }
+  // ---------- hafta sonu önerisi: her Cuma 18:00'de telefonda hazırlanan yerel bildirim (yalnızca uygulamada) ----------
+  const LN = window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() !== "web" && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications;
+  const BILDIRIM = "gezi-bildirim", HS_ID = 7001;
+  const bildirimAcik = () => { try { return localStorage.getItem(BILDIRIM) === "1"; } catch (e) { return false; } };
+  // Her açılışta yeniden kurulur: öneriler o anki konuma ya da son bakılan ile göre, gidilmemiş ve fotoğraflı 3 yer
+  async function haftaSonuKur() {
+    if (!LN) return;
+    try {
+      await LN.cancel({ notifications: [{ id: HS_ID }] });
+      if (!bildirimAcik()) return;
+      if ((await LN.checkPermissions()).display !== "granted") return;
+      await loadAra(); if (!ARA) return;
+      const gidilen = new Set(gittiklerim().map((x) => x.s + "|" + x.ad));
+      let aday = ARA.filter((x) => x[7] === 1 && !gidilen.has(x[2] + "|" + x[1])), merkez = me;
+      if (!merkez) { let s = null; try { s = localStorage.getItem("gezi-son-il"); } catch (e) {} const il = s && IDX && IDX.ilBy.get(s); if (il && il.lat != null) merkez = { lat: il.lat, lng: il.lng }; }
+      if (merkez) {
+        const u = aday.map((x) => [km(merkez, { lat: x[4], lng: x[5] }), x]).sort((a, b) => a[0] - b[0]);
+        const yakin = u.filter((x) => x[0] <= 150);
+        aday = (yakin.length >= 6 ? yakin : u).slice(0, 15).map((x) => x[1]);
+      }
+      const sec = [];
+      while (aday.length && sec.length < 3) sec.push(aday.splice(Math.floor(Math.random() * aday.length), 1)[0]);
+      if (!sec.length) return;
+      const adlar = sec.map((x) => (DIL === "en" ? x[9] : x[1])).join(", ");
+      let hedef = "#/yakin";
+      try { const d = await loadIl(sec[0][2]); const p = d.yerler[sec[0][3]]; if (p && p.q) hedef = `#/il/${d.s}/yer/${p.q}`; } catch (e) {}
+      await LN.schedule({ notifications: [{
+        id: HS_ID,
+        title: TL("Bu hafta sonu nereye?", "Where to this weekend?"),
+        body: TL(`${merkez ? "Sana yakın" : "Senin için"} 3 öneri: ${adlar}`, `3 ideas ${merkez ? "near you" : "for you"}: ${adlar}`),
+        schedule: { on: { weekday: 6, hour: 18, minute: 0 }, allowWhileIdle: true },
+        extra: { git: hedef }
+      }] });
+    } catch (e) {}
+  }
+  function bildirimYazi() {
+    const b = $("bildirimBtn"); if (!b) return;
+    b.hidden = !LN;
+    $("bildirimYazi").textContent = bildirimAcik() ? TL("Hafta sonu önerisi: Açık (Cuma 18:00)", "Weekend ideas: On (Fridays 6 pm)") : TL("Hafta sonu önerisi: Kapalı", "Weekend ideas: Off");
+  }
+  async function bildirimAc(ac) {
+    if (!LN) return;
+    if (ac) {
+      let izin = "denied";
+      try { izin = (await LN.requestPermissions()).display; } catch (e) {}
+      if (izin !== "granted") {
+        try { localStorage.setItem(BILDIRIM, "0"); } catch (e) {}
+        bildirimYazi(); toast(TL("Bildirim izni verilmedi. Telefonunun ayarlarından açabilirsin.", "Notifications aren't allowed. You can turn them on in your phone settings."));
+        return;
+      }
+    }
+    try { localStorage.setItem(BILDIRIM, ac ? "1" : "0"); } catch (e) {}
+    bildirimYazi(); await haftaSonuKur();
+    toast(ac ? TL("Tamam! Her Cuma 18:00'de hafta sonu için 3 öneri gelecek.", "Done! Every Friday at 6 pm you'll get 3 weekend ideas.") : TL("Hafta sonu önerisi kapatıldı.", "Weekend ideas turned off."));
+  }
+  // Listeye ilk yer eklendiğinde bir kez sorulur; "Şimdi değil" denirse bir daha sorulmaz (ayarlardan açılabilir)
+  function bildirimTeklif() {
+    if (!LN || document.querySelector(".tanit")) return;
+    try { if (localStorage.getItem(BILDIRIM) != null) return; } catch (e) { return; }
+    const d = document.createElement("div"); d.className = "tanit";
+    d.innerHTML = `<div class="tkart"><div class="temo">${ik("bell", 36)}</div><h2>${TL("Hafta sonu önerisi ister misin?", "Want weekend ideas?")}</h2><p>${TL("Her Cuma akşamı sana yakın 3 gezilecek yer önerelim. Öneri telefonunda hazırlanır, hiçbir bilgi bize gelmez. İstediğin zaman kapatabilirsin.", "Every Friday evening we'll suggest 3 places near you. It's prepared on your phone and nothing is sent to us. You can turn it off anytime.")}</p><div class="tbtn"><button class="linkbtn" data-k="sonra">${TL("Şimdi değil", "Not now")}</button><button class="btn primary" data-k="evet">${TL("Evet, gönder", "Yes, please")}</button></div></div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    d.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-k]");
+      if (e.target === d || (b && b.dataset.k === "sonra")) { try { localStorage.setItem(BILDIRIM, "0"); } catch (err) {} bildirimYazi(); kapat(); }
+      else if (b && b.dataset.k === "evet") { kapat(); bildirimAc(true); }
+    });
+    document.body.appendChild(d);
+  }
+  if (LN) {
+    $("bildirimBtn").addEventListener("click", () => bildirimAc(!bildirimAcik()));
+    if (LN.addListener) LN.addListener("localNotificationActionPerformed", (a) => { const g = a && a.notification && a.notification.extra && a.notification.extra.git; if (g) git(g); });
+    bildirimYazi();
+    setTimeout(haftaSonuKur, 4000);
   }
   // ---------- özel günler: milli bayramlar, anma günleri, dini bayramlar ----------
   async function ozelGun() {
