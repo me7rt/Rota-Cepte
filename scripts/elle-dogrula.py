@@ -12,22 +12,12 @@ def al(url, ham=False):
 def wapi(host, **p):
     p.update(format="json"); return al(f"https://{host}/w/api.php?" + urllib.parse.urlencode(p))
 YER = [
- ("kilis","Ravanda Kalesi",["Ravanda Kalesi","Ravanda"]),
- ("kilis","Kilis Mevlevihanesi",["Kilis Mevlevihanesi","Mevlevihane Kilis"]),
- ("bingol","Kös Kaplıcaları",["Kös Kaplıcaları","Kös kaplıcası","Kös Bingöl"]),
- ("hakkari","Berçelan Yaylası",["Berçelan Yaylası","Berçelan","Bercelan"]),
- ("hakkari","Sat Gölleri",["Sat Gölleri","Sat Gölü","Sat Dağları"]),
- ("igdir","Aras Kuş Cenneti",["Aras Kuş Cenneti","Aras Kuş","Aras Bird"]),
- ("igdir","Tuzluca Tuz Mağarası",["Tuzluca Tuz Mağarası","Tuzluca tuz","Tuzluca salt"]),
- ("tunceli","Munzur Gözeleri",["Munzur Gözeleri","Munzur Gözesi","Munzur"]),
- ("tunceli","Pülümür Vadisi",["Pülümür Vadisi","Pülümür Çayı","Pülümür"]),
- ("sirnak","Mem û Zin Türbesi",["Mem û Zin Türbesi","Mem ü Zin","Mem û Zîn","Mem and Zin"]),
- ("bayburt","Sirakayalar Şelalesi",["Sirakayalar Şelalesi","Sirakayalar","Sırakayalar"]),
- ("erzincan","Ergan Dağı Kayak Merkezi",["Ergan Dağı Kayak Merkezi","Ergan Dağı","Ergan"]),
- ("erzincan","Terzi Baba Türbesi",["Terzi Baba Türbesi","Terzibaba","Terzi Baba"]),
- ("gumushane","Santa Harabeleri",["Santa Harabeleri","Santa Dumanlı","Dumanlı Gümüşhane"]),
- ("gumushane","Artabel Gölleri Tabiat Parkı",["Artabel Gölleri","Artabel Gölü","Artabel"]),
- ("siirt","İbrahim Hakkı Hazretleri Türbesi",["İbrahim Hakkı Türbesi","İbrahim Hakkı Hazretleri","Tillo"]),
+ ("kilis","Ravanda Kalesi",["Ravanda Castle","Ravendel","Ravanda Kilis","Ravanda kale"]),
+ ("kilis","Kilis Mevlevihanesi",["Kilis Mevlevihane","Mevlevihane Camii Kilis","Kilis mosque"]),
+ ("bingol","Kös Kaplıcaları",["Kös kaplıca","Ilıcalar Bingöl","Bingöl kaplıca","Bingöl hot spring"]),
+ ("igdir","Aras Kuş Cenneti",["Aras Kuş Araştırma","Iğdır kuş","Çıyrıklı","Aras River Bird","Tuzluca bird"]),
+ ("bayburt","Sırakayalar Şelalesi",["Sırakayalar Şelalesi","Sırakayalar","Bayburt şelale","Bayburt waterfall"]),
+ ("erzincan","Ergan Dağı Kayak Merkezi",["Ergan Kayak","Ergan ski","Erzincan kayak","Ergan Dağı","Erzincan ski"]),
 ]
 os.makedirs("out/foto", exist_ok=True)
 sonuc = []
@@ -60,15 +50,15 @@ for s, ad, varyant in YER:
             a = x.get("address", {})
             k["osm"].append({"v": v, "ad": x.get("name"), "tam": x.get("display_name"), "lat": x.get("lat"), "lon": x.get("lon"), "tur": f'{x.get("category")}/{x.get("type")}', "il": a.get("province") or a.get("state")})
     adlar = []
-    for v in varyant[:2] + [ad.split()[0]]:
-        j = wapi("commons.wikimedia.org", action="query", list="search", srnamespace="6", srlimit="12", srsearch=v)
+    for v in varyant:
+        j = wapi("commons.wikimedia.org", action="query", list="search", srnamespace="6", srlimit="10", srsearch=v)
         for x in (j.get("query") or {}).get("search", []):
             t = x["title"]
             if t not in adlar: adlar.append(t)
         time.sleep(0.3)
     for w in k["wikidata"]:
         if w["P18"] and "File:" + w["P18"] not in adlar: adlar.insert(0, "File:" + w["P18"])
-    adlar = adlar[:14]
+    adlar = adlar[:30]
     if adlar:
         j = wapi("commons.wikimedia.org", action="query", titles="|".join(adlar), prop="imageinfo", iiprop="url|size|extmetadata", iiurlwidth="360")
         for p in ((j.get("query") or {}).get("pages") or {}).values():
