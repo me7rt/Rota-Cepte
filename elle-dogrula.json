@@ -1,0 +1,1745 @@
+[
+ {
+  "s": "kilis",
+  "ad": "Ravanda Kalesi",
+  "wikidata": [
+   {
+    "q": "Q11904675",
+    "tr": "Ravendel",
+    "en": "Ravendel",
+    "acik": "crusader castle",
+    "koor": [
+     36.793102,
+     36.949187
+    ],
+    "P18": null,
+    "P373": null,
+    "P131": "Q128978",
+    "trwiki": null,
+    "enwiki": null
+   },
+   {
+    "q": "Q206881",
+    "tr": "Kilis Merkez",
+    "en": "Kilis",
+    "acik": "Kilis ilinin merkez ilçesi",
+    "koor": [
+     36.716666666667,
+     37.116666666667
+    ],
+    "P18": "Kilis city center.jpg",
+    "P373": "Kilis",
+    "P131": "Q128978",
+    "trwiki": "Kilis",
+    "enwiki": "Kilis"
+   },
+   {
+    "q": "Q131901862",
+    "tr": "Ravanda Kalesi",
+    "en": "Ravendel castle",
+    "acik": "Polateli'nde kale",
+    "koor": [
+     36.873175,
+     37.053698
+    ],
+    "P18": null,
+    "P373": null,
+    "P131": "Q1018509",
+    "trwiki": null,
+    "enwiki": null
+   }
+  ],
+  "osm": [
+   {
+    "v": "Ravanda Castle",
+    "ad": "Ravanda Kalesi",
+    "tam": "Ravanda Kalesi, Belenözü, Polateli, Kilis, Güneydoğu Anadolu Bölgesi, Türkiye",
+    "lat": "36.8730683",
+    "lon": "37.0538644",
+    "tur": "historic/castle",
+    "il": "Kilis"
+   },
+   {
+    "v": "Ravendel",
+    "ad": "Belenözü",
+    "tam": "Belenözü, Polateli, Kilis, Güneydoğu Anadolu Bölgesi, Türkiye",
+    "lat": "36.8779925",
+    "lon": "37.0725357",
+    "tur": "place/village",
+    "il": "Kilis"
+   },
+   {
+    "v": "Ravanda Kilis",
+    "ad": "Belenözü",
+    "tam": "Belenözü, Polateli, Kilis, Güneydoğu Anadolu Bölgesi, Türkiye",
+    "lat": "36.8779925",
+    "lon": "37.0725357",
+    "tur": "place/village",
+    "il": "Kilis"
+   }
+  ],
+  "commons": [
+   {
+    "dosya": "African Gorillas.jpg",
+    "w": 3000,
+    "h": 4000,
+    "lisans": "CC0",
+    "yazar": "<a href=\"//commons.wikimedia.org/wiki/User:MBERABAHIZI\" title=\"User:MBERABAHIZI\">MBERABAHIZI</a>",
+    "tarih": "2024-09-21",
+    "acik": "The Gorillas they plays a crucial role in local biodiversity, roaming through large territories and helping such as to spread seeds of the fruit they consume.",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/African_Gorillas.jpg/500px-African_Gorillas.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Ravanda_Kale-0.jpg"
+   },
+   {
+    "dosya": "Boy Ponders in Window - Kilis - Turkey (5772612918).jpg",
+    "w": 3456,
+    "h": 2304,
+    "lisans": "CC BY-SA 2.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/41000732@N04\">Adam Jones</a> from Kelowna, BC, Canada",
+    "tarih": "2011-05-29 03:51",
+    "acik": "Boy Ponders in Window - Kilis - Turkey",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/Boy_Ponders_in_Window_-_Kilis_-_Turkey_%285772612918%29.jpg/500px-Boy_Ponders_in_Window_-_Kilis_-_Turkey_%285772612918%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Ravanda_Kale-1.jpg"
+   },
+   {
+    "dosya": "Detail of Mosque Minaret - Kilis - Turkey (5772075889).jpg",
+    "w": 3456,
+    "h": 2304,
+    "lisans": "CC BY-SA 2.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/41000732@N04\">Adam Jones</a> from Kelowna, BC, Canada",
+    "tarih": "2011-05-29 04:08",
+    "acik": "Detail of Mosque Minaret - Kilis - Turkey",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/Detail_of_Mosque_Minaret_-_Kilis_-_Turkey_%285772075889%29.jpg/500px-Detail_of_Mosque_Minaret_-_Kilis_-_Turkey_%285772075889%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Ravanda_Kale-2.jpg"
+   },
+   {
+    "dosya": "Facade of Abandoned Building - Kilis - Turkey (5772560928).jpg",
+    "w": 2304,
+    "h": 3456,
+    "lisans": "CC BY-SA 2.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/41000732@N04\">Adam Jones</a> from Kelowna, BC, Canada",
+    "tarih": "2011-05-29 03:02",
+    "acik": "Facade of Abandoned Building - Kilis - Turkey",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Facade_of_Abandoned_Building_-_Kilis_-_Turkey_%285772560928%29.jpg/500px-Facade_of_Abandoned_Building_-_Kilis_-_Turkey_%285772560928%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Ravanda_Kale-3.jpg"
+   },
+   {
+    "dosya": "Il Cittadino Italiano n 11-1886 (IA CittadinoItaliano1888-163).pdf",
+    "w": 1381,
+    "h": 1979,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nIl Cittadino Italiano</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<p>Il Cittadino Italiano -  giornale -  religioso -  politico -  scientifico -  commerciale\n</p>\n<br>Subjects: Friuli; Periodico;</div",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Il_Cittadino_Italiano_n_11-1886_%28IA_CittadinoItaliano1888-163%29.pdf/page1-500px-Il_Cittadino_Italiano_n_11-1886_%28IA_CittadinoItaliano1888-163%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Ravanda_Kale-4.jpg"
+   },
+   {
+    "dosya": "Karamelik Köyü.jpg",
+    "w": 1600,
+    "h": 1200,
+    "lisans": "CC BY-SA 4.0",
+    "yazar": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Mahlidem&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Mahlidem (page does not exist)\">Mahlidem",
+    "tarih": "2023-02-03",
+    "acik": "<table cellspacing=\"0\" style=\"width:600px; text-align:start; color:#000; background:#ddd; border:1px solid #bbb; margin:1px;\" lang=\"en\" dir=\"ltr\" class=\"layoutt",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/Karamelik_K%C3%B6y%C3%BC.jpg/500px-Karamelik_K%C3%B6y%C3%BC.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Ravanda_Kale-5.jpg"
+   },
+   {
+    "dosya": "Kilis Turkey Provinces locator.gif",
+    "w": 579,
+    "h": 262,
+    "lisans": "CC BY-SA 3.0",
+    "yazar": "",
+    "tarih": "",
+    "acik": "",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/Kilis_Turkey_Provinces_locator.gif/500px-Kilis_Turkey_Provinces_locator.gif?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Ravanda_Kale-6.jpg"
+   },
+   {
+    "dosya": "Kilis city center.jpg",
+    "w": 2969,
+    "h": 2229,
+    "lisans": "Public domain",
+    "yazar": "<a href=\"//commons.wikimedia.org/wiki/User:Bdell555\" title=\"User:Bdell555\">Brian Dell</a>",
+    "tarih": "2010-04-22",
+    "acik": "Photo taken at or near the center of <a href=\"https://en.wikipedia.org/wiki/Kilis\" class=\"extiw\" title=\"en:Kilis\">Kilis</a>, Turkey.  Elevation here is about 66",
+    "koor": [
+     "36.716533",
+     "37.114333"
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/Kilis_city_center.jpg/500px-Kilis_city_center.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Ravanda_Kale-7.jpg"
+   },
+   {
+    "dosya": "Kilis location Merkez.png",
+    "w": 1280,
+    "h": 759,
+    "lisans": "CC BY-SA 4.0",
+    "yazar": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Batuhan_duz&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Batuhan duz (page does not exist)\">Ba",
+    "tarih": "2016-08-06",
+    "acik": "Kilis Merkez ilçesinin konumu",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/Kilis_location_Merkez.png/500px-Kilis_location_Merkez.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Ravanda_Kale-8.jpg"
+   },
+   {
+    "dosya": "Posters Commemorating Turkey-Syria Links - Kilis - Turkey (5772556560).jpg",
+    "w": 3456,
+    "h": 2304,
+    "lisans": "CC BY-SA 2.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/41000732@N04\">Adam Jones</a> from Kelowna, BC, Canada",
+    "tarih": "2011-05-29 02:44",
+    "acik": "Sign showing where to register Syrian-plated cars in the border town of Kilis, Turkey.",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/66/Posters_Commemorating_Turkey-Syria_Links_-_Kilis_-_Turkey_%285772556560%29.jpg/500px-Posters_Commemorating_Turkey-Syria_Links_-_Kilis_-_Turkey_%285772556560%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Ravanda_Kale-9.jpg"
+   },
+   {
+    "dosya": "Rural works 07.jpg",
+    "w": 3456,
+    "h": 4608,
+    "lisans": "CC BY-SA 4.0",
+    "yazar": "<a href=\"//commons.wikimedia.org/wiki/User:Annick_green\" title=\"User:Annick green\">Annick green</a>",
+    "tarih": "2024-10-08",
+    "acik": "Activities carried out in rural areas of Rwanda",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Rural_works_07.jpg/500px-Rural_works_07.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Ravanda_Kale-10.jpg"
+   }
+  ]
+ },
+ {
+  "s": "kilis",
+  "ad": "Kilis Mevlevihanesi",
+  "wikidata": [
+   {
+    "q": "Q132134419",
+    "tr": "Kilis Mevlevihanesi",
+    "en": "Kilis Mevlevihanesi",
+    "acik": "Kilis'in merkez ilçesinde tarihi cami",
+    "koor": [
+     36.7155495,
+     37.1143875
+    ],
+    "P18": null,
+    "P373": null,
+    "P131": "Q206881",
+    "trwiki": null,
+    "enwiki": null
+   }
+  ],
+  "osm": [],
+  "commons": [
+   {
+    "dosya": "Aksam 1935 eylul 25.pdf",
+    "w": 2181,
+    "h": 3133,
+    "lisans": "Public domain",
+    "yazar": "Akşam Gazetesi",
+    "tarih": "1935-09-01",
+    "acik": "Akşam Gazetesi - 1935 Eylül 25",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a9/Aksam_1935_eylul_25.pdf/page1-500px-Aksam_1935_eylul_25.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Kilis_Mevlev-0.jpg"
+   },
+   {
+    "dosya": "Detail of Mosque Minaret - Kilis - Turkey (5772075889).jpg",
+    "w": 3456,
+    "h": 2304,
+    "lisans": "CC BY-SA 2.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/41000732@N04\">Adam Jones</a> from Kelowna, BC, Canada",
+    "tarih": "2011-05-29 04:08",
+    "acik": "Detail of Mosque Minaret - Kilis - Turkey",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/Detail_of_Mosque_Minaret_-_Kilis_-_Turkey_%285772075889%29.jpg/500px-Detail_of_Mosque_Minaret_-_Kilis_-_Turkey_%285772075889%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Kilis_Mevlev-1.jpg"
+   },
+   {
+    "dosya": "Evliya Çelebi seyahatnamesi (IA evliyaelebisey10evliuoft).pdf",
+    "w": 966,
+    "h": 1370,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nEvliya Çelebi, 1611?-1682?</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<p>26\n</p>\n<br>Subjects: Turkey -- Social life and customs; Turkey -- History -- 1453-1683; Istanbul (Turkey) -- Description and trave",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Evliya_%C3%87elebi_seyahatnamesi_%28IA_evliyaelebisey10evliuoft%29.pdf/page1-500px-Evliya_%C3%87elebi_seyahatnamesi_%28IA_evliyaelebisey10evliuoft%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Kilis_Mevlev-2.jpg"
+   },
+   {
+    "dosya": "Exterior of 16th-Century Tekke Mosque - Kilis - Turkey (5772594464).jpg",
+    "w": 2304,
+    "h": 3456,
+    "lisans": "CC BY-SA 2.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/41000732@N04\">Adam Jones</a> from Kelowna, BC, Canada",
+    "tarih": "2011-05-29 03:34",
+    "acik": "Exterior of 16th-Century Tekke Mosque - Kilis - Turkey",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/Exterior_of_16th-Century_Tekke_Mosque_-_Kilis_-_Turkey_%285772594464%29.jpg/500px-Exterior_of_16th-Century_Tekke_Mosque_-_Kilis_-_Turkey_%285772594464%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Kilis_Mevlev-3.jpg"
+   },
+   {
+    "dosya": "Interior of Tekke Mosque - Kilis - Turkey - 01 (5772577112).jpg",
+    "w": 3456,
+    "h": 2304,
+    "lisans": "CC BY-SA 2.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/41000732@N04\">Adam Jones</a> from Kelowna, BC, Canada",
+    "tarih": "2011-05-29 03:24",
+    "acik": "Interior of Tekke Mosque - Kilis - Turkey - 01",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Interior_of_Tekke_Mosque_-_Kilis_-_Turkey_-_01_%285772577112%29.jpg/500px-Interior_of_Tekke_Mosque_-_Kilis_-_Turkey_-_01_%285772577112%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Kilis_Mevlev-4.jpg"
+   },
+   {
+    "dosya": "Interior of Tekke Mosque - Kilis - Turkey - 02 (5772044823).jpg",
+    "w": 3456,
+    "h": 2304,
+    "lisans": "CC BY-SA 2.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/41000732@N04\">Adam Jones</a> from Kelowna, BC, Canada",
+    "tarih": "2011-05-29 03:29",
+    "acik": "Interior of Tekke Mosque - Kilis - Turkey - 02",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Interior_of_Tekke_Mosque_-_Kilis_-_Turkey_-_02_%285772044823%29.jpg/500px-Interior_of_Tekke_Mosque_-_Kilis_-_Turkey_-_02_%285772044823%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Kilis_Mevlev-5.jpg"
+   },
+   {
+    "dosya": "Man Performs Ablutions outside Tekke Mosque - Kilis - Turkey (5772599080).jpg",
+    "w": 2304,
+    "h": 3456,
+    "lisans": "CC BY-SA 2.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/41000732@N04\">Adam Jones</a> from Kelowna, BC, Canada",
+    "tarih": "2011-05-29 03:35",
+    "acik": "Man Performs Ablutions outside Tekke Mosque - Kilis - Turkey",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/Man_Performs_Ablutions_outside_Tekke_Mosque_-_Kilis_-_Turkey_%285772599080%29.jpg/500px-Man_Performs_Ablutions_outside_Tekke_Mosque_-_Kilis_-_Turkey_%285772599080%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Kilis_Mevlev-6.jpg"
+   },
+   {
+    "dosya": "Mediæval India under Mohammedan rule, 712-1764 (IA medivalindiaun00lane).pdf",
+    "w": 864,
+    "h": 1402,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nLane-Poole, Stanley, 1854-1931</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\nSubjects:</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/Medi%C3%A6val_India_under_Mohammedan_rule%2C_712-1764_%28IA_medivalindiaun00lane%29.pdf/page1-500px-Medi%C3%A6val_India_under_Mohammedan_rule%2C_712-1764_%28IA_medivalindiaun00lane%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Kilis_Mevlev-7.jpg"
+   },
+   {
+    "dosya": "Milliyet 1932 nisan 3.pdf",
+    "w": 2652,
+    "h": 3470,
+    "lisans": "Public domain",
+    "yazar": "Milliyet Gazetesi",
+    "tarih": "1932-04-03",
+    "acik": "3 Nisan 1932 - Milliyet Gazetesi",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Milliyet_1932_nisan_3.pdf/page1-500px-Milliyet_1932_nisan_3.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Kilis_Mevlev-8.jpg"
+   },
+   {
+    "dosya": "Milliyet 1933 agustos 17.pdf",
+    "w": 2672,
+    "h": 3652,
+    "lisans": "Public domain",
+    "yazar": "Milliyet Gazetesi",
+    "tarih": "1933-08-17",
+    "acik": "17 Ağustos 1933 - Milliyet Gazetesi",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Milliyet_1933_agustos_17.pdf/page1-500px-Milliyet_1933_agustos_17.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Kilis_Mevlev-9.jpg"
+   },
+   {
+    "dosya": "Mosque in A'zaz.jpg",
+    "w": 2085,
+    "h": 3258,
+    "lisans": "Public domain",
+    "yazar": "<a href=\"//commons.wikimedia.org/wiki/User:Bdell555\" title=\"User:Bdell555\">Brian Dell</a>",
+    "tarih": "2010-04-22",
+    "acik": "Mosque on the northeast outskirts of <a href=\"https://en.wikipedia.org/wiki/Azaz\" class=\"extiw\" title=\"en:Azaz\">A'zaz</a> (أعزاز‎), Syria, on the road to <a hre",
+    "koor": [
+     "36.591350",
+     "37.049558"
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/72/Mosque_in_A%27zaz.jpg/500px-Mosque_in_A%27zaz.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Kilis_Mevlev-10.jpg"
+   },
+   {
+    "dosya": "Panorama of Interior of Tekke Mosque - Kilis - Turkey (5772590546).jpg",
+    "w": 4949,
+    "h": 1080,
+    "lisans": "CC BY-SA 2.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/41000732@N04\">Adam Jones</a> from Kelowna, BC, Canada",
+    "tarih": "2011-05-29 03:30",
+    "acik": "Panorama of Interior of Tekke Mosque - Kilis - Turkey",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Panorama_of_Interior_of_Tekke_Mosque_-_Kilis_-_Turkey_%285772590546%29.jpg/500px-Panorama_of_Interior_of_Tekke_Mosque_-_Kilis_-_Turkey_%285772590546%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Kilis_Mevlev-11.jpg"
+   },
+   {
+    "dosya": "Stone Mihrab in Tekke Mosque - Kilis - Turkey (5772039371).jpg",
+    "w": 3456,
+    "h": 2304,
+    "lisans": "CC BY-SA 2.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/41000732@N04\">Adam Jones</a> from Kelowna, BC, Canada",
+    "tarih": "2011-05-29 03:28",
+    "acik": "Stone Mihrab in Tekke Mosque - Kilis - Turkey",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/Stone_Mihrab_in_Tekke_Mosque_-_Kilis_-_Turkey_%285772039371%29.jpg/500px-Stone_Mihrab_in_Tekke_Mosque_-_Kilis_-_Turkey_%285772039371%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Kilis_Mevlev-12.jpg"
+   },
+   {
+    "dosya": "Tekke cami.jpg",
+    "w": 575,
+    "h": 242,
+    "lisans": "CC BY-SA 4.0",
+    "yazar": "Tekye Cami",
+    "tarih": "2013-03-22 09:55:17",
+    "acik": "Tekye cami",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Tekke_cami.jpg/500px-Tekke_cami.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/kilis-Kilis_Mevlev-13.jpg"
+   }
+  ]
+ },
+ {
+  "s": "bingol",
+  "ad": "Kös Kaplıcaları",
+  "wikidata": [
+   {
+    "q": "Q49741951",
+    "tr": "Kös Kaplıcası",
+    "en": "Kös Kaplıcası",
+    "acik": null,
+    "koor": [
+     40.840555555556,
+     32.898333333333
+    ],
+    "P18": null,
+    "P373": null,
+    "P131": "Q272662",
+    "trwiki": null,
+    "enwiki": null
+   }
+  ],
+  "osm": [
+   {
+    "v": "Ilıcalar Bingöl",
+    "ad": "Ilıcalar",
+    "tam": "Ilıcalar, Bingöl Merkez, Bingöl, Doğu Anadolu Bölgesi, Türkiye",
+    "lat": "38.9811254",
+    "lon": "40.6773257",
+    "tur": "place/village",
+    "il": "Bingöl"
+   }
+  ],
+  "commons": [
+   {
+    "dosya": "Bingöl in Turkey.svg",
+    "w": 1579,
+    "h": 677,
+    "lisans": "CC BY-SA 3.0",
+    "yazar": "<a href=\"//commons.wikimedia.org/wiki/User:TUBS\" title=\"User:TUBS\">TUBS</a><sup><span typeof=\"mw:File\"><a href=\"//commons.wikimedia.org/wiki/User_talk:TUBS\" tit",
+    "tarih": "2011-07-30",
+    "acik": "Location of province XY (see filename) in <a href=\"https://en.wikipedia.org/wiki/Turkey\" class=\"extiw\" title=\"en:Turkey\">Turkey</a>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Bing%C3%B6l_in_Turkey.svg/500px-Bing%C3%B6l_in_Turkey.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-0.jpg"
+   },
+   {
+    "dosya": "Gazeta W. Xięstwa Poznańskiego. 1850, № 199 (27 sierpnia) (IA jbc.bj.uj.edu pl.0198 NDIGCZAS030703 89468120).pdf",
+    "w": 1475,
+    "h": 2150,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nKamieński, Napoleon Ludwik Felicjan</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\nSubjects: zabór pruski; Poznań (Polska; region); Prusy 19 w.; czasopisma polskie 19 w.; Wielkie Księstwo Poznańskie</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Gazeta_W._Xi%C4%99stwa_Pozna%C5%84skiego._1850%2C_%E2%84%96_199_%2827_sierpnia%29_%28IA_jbc.bj.uj.edu_pl.0198_NDIGCZAS030703_89468120%29.pdf/page1-500px-Gazeta_W._Xi%C4%99stwa_Pozna%C5%84skiego._1850%2C_%E2%84%96_199_%2827_sierpnia%29_%28IA_jbc.bj.uj.edu_pl.0198_NDIGCZAS030703_89468120%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-1.jpg"
+   },
+   {
+    "dosya": "Grobowiec rodziny Kosów w oliwskiej katedrze P1020592 krz.JPG",
+    "w": 3000,
+    "h": 4000,
+    "lisans": "CC BY-SA 3.0 pl",
+    "yazar": "<a href=\"//commons.wikimedia.org/wiki/User:Krzymill\" title=\"User:Krzymill\">Krzymill</a>",
+    "tarih": "2012-04-29 07:08:50",
+    "acik": "zespół pocysterski (kościół p.w. św. Trójcy (Katedra Oliwska), klasztor i mur klasztorny, kaplica NMP, <a href=\"//commons.wikimedia.org/w/index.php?title=Common",
+    "koor": [
+     "54.389708",
+     "18.574575"
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/95/Grobowiec_rodziny_Kos%C3%B3w_w_oliwskiej_katedrze_P1020592_krz.JPG/500px-Grobowiec_rodziny_Kos%C3%B3w_w_oliwskiej_katedrze_P1020592_krz.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-2.jpg"
+   },
+   {
+    "dosya": "Józef Lompa - Krótki rys jeografii Szląska dla nauki początkowej (1847).djvu",
+    "w": 1093,
+    "h": 2040,
+    "lisans": "Public domain",
+    "yazar": "<bdi><a href=\"https://www.wikidata.org/wiki/Q11730843\" class=\"extiw\" title=\"d:Q11730843\"><span title=\"Polish national activist in Silesia, poet, publicist (1797",
+    "tarih": "",
+    "acik": "Podręcznik szkolny",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/J%C3%B3zef_Lompa_-_Kr%C3%B3tki_rys_jeografii_Szl%C4%85ska_dla_nauki_pocz%C4%85tkowej_%281847%29.djvu/page1-500px-J%C3%B3zef_Lompa_-_Kr%C3%B3tki_rys_jeografii_Szl%C4%85ska_dla_nauki_pocz%C4%85tkowej_%281847%29.djvu.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-3.jpg"
+   },
+   {
+    "dosya": "Kazimierz Jung - Klasztory w Warcie.djvu",
+    "w": 1508,
+    "h": 2012,
+    "lisans": "Public domain",
+    "yazar": "Kazimierz Jung (1869-1943)",
+    "tarih": "1930",
+    "acik": "skan broszury PL",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Kazimierz_Jung_-_Klasztory_w_Warcie.djvu/page1-500px-Kazimierz_Jung_-_Klasztory_w_Warcie.djvu.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-4.jpg"
+   },
+   {
+    "dosya": "Kryjaki; o szescdziesiat trzecim roku opowiesc z przedmowa Stefana Zeromskiego .. (IA kryjakioszescdzi00wiel).pdf",
+    "w": 689,
+    "h": 989,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nWielopolska, Marja Jahanne (Walewskas) hrabina. [from old catalog]</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\nSubjects:</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/Kryjaki%3B_o_szescdziesiat_trzecim_roku_opowiesc_z_przedmowa_Stefana_Zeromskiego_.._%28IA_kryjakioszescdzi00wiel%29.pdf/page1-500px-Kryjaki%3B_o_szescdziesiat_trzecim_roku_opowiesc_z_przedmowa_Stefana_Zeromskiego_.._%28IA_kryjakioszescdzi00wiel%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-5.jpg"
+   },
+   {
+    "dosya": "Krzyż. R. 1 (1865), nr 20 (IA dlibra.kul pl.44651 V-914 Krzyz--R--1--1865---).pdf",
+    "w": 1170,
+    "h": 1541,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\n<dl><dd>Pobudkiewicz, Franciszek Ksawery (1825-1907).</dd>\n<dd>Karczewski, Ludwik Feliks (1821-1904).</dd>\n<dd>Serwatowski, Walerian (181",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<p>R. 1 (1865), nr 20\n</p>\n<br>Subjects:</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Krzy%C5%BC._R._1_%281865%29%2C_nr_20_%28IA_dlibra.kul_pl.44651_V-914_Krzyz--R--1--1865---%29.pdf/page1-500px-Krzy%C5%BC._R._1_%281865%29%2C_nr_20_%28IA_dlibra.kul_pl.44651_V-914_Krzyz--R--1--1865---%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-6.jpg"
+   },
+   {
+    "dosya": "Kurjer Warszawski. 1862, № 192 (23 sierpnia) (IA jbc.bj.uj.edu pl.0159 NDIGCZAS035218 97955309).pdf",
+    "w": 1035,
+    "h": 1433,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\n[Kucz, Karol</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\nSubjects: zabór rosyjski; życie społeczne; czasopisma polskie 19 w.; życie intelektualne; dzienniki polskie</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Kurjer_Warszawski._1862%2C_%E2%84%96_192_%2823_sierpnia%29_%28IA_jbc.bj.uj.edu_pl.0159_NDIGCZAS035218_97955309%29.pdf/page1-500px-Kurjer_Warszawski._1862%2C_%E2%84%96_192_%2823_sierpnia%29_%28IA_jbc.bj.uj.edu_pl.0159_NDIGCZAS035218_97955309%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-7.jpg"
+   },
+   {
+    "dosya": "Laskowa (PL-KOS) - kaplica (2011-05-29).jpg",
+    "w": 3456,
+    "h": 2592,
+    "lisans": "CC BY-SA 4.0",
+    "yazar": "<a href=\"//commons.wikimedia.org/wiki/User:Zetzecik\" title=\"User:Zetzecik\">Zetzecik</a>",
+    "tarih": "2011-05-29 11:38:53",
+    "acik": "Widok kaplicy w Laskowej (gm. Zator, pow. oświęcimski, woj. małopolskie, Polska) od strony wschodniej.",
+    "koor": [
+     "49.980083",
+     "19.458222"
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Laskowa_%28PL-KOS%29_-_kaplica_%282011-05-29%29.jpg/500px-Laskowa_%28PL-KOS%29_-_kaplica_%282011-05-29%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-8.jpg"
+   },
+   {
+    "dosya": "Milliyet 1934 agustos 19.pdf",
+    "w": 2697,
+    "h": 3685,
+    "lisans": "Public domain",
+    "yazar": "Milliyet Gazetesi",
+    "tarih": "1934-08-19",
+    "acik": "19 Ağustos 1934 - Milliyet Gazetesi",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/Milliyet_1934_agustos_19.pdf/page1-500px-Milliyet_1934_agustos_19.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-9.jpg"
+   },
+   {
+    "dosya": "Milliyet 1934 kanunuevvel 15.pdf",
+    "w": 2683,
+    "h": 3625,
+    "lisans": "Public domain",
+    "yazar": "Milliyet Gazetesi",
+    "tarih": "1934-12-15",
+    "acik": "15 Aralık 1934 - Milliyet Gazetesi",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/Milliyet_1934_kanunuevvel_15.pdf/page1-500px-Milliyet_1934_kanunuevvel_15.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-10.jpg"
+   },
+   {
+    "dosya": "Milliyet 1934 temmuz 16.pdf",
+    "w": 2660,
+    "h": 3683,
+    "lisans": "Public domain",
+    "yazar": "Milliyet Gazetesi",
+    "tarih": "1934-07-16",
+    "acik": "16 Temmuz 1934 - Milliyet Gazetesi",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/Milliyet_1934_temmuz_16.pdf/page1-500px-Milliyet_1934_temmuz_16.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-11.jpg"
+   },
+   {
+    "dosya": "OJ C 202500500 of 2025 - EN English.pdf",
+    "w": 1239,
+    "h": 1752,
+    "lisans": "Public domain",
+    "yazar": "<a href=\"https://en.wikipedia.org/wiki/en:Publications_Office_of_the_European_Union\" class=\"extiw\" title=\"w:en:Publications Office of the European Union\"><span ",
+    "tarih": "Published on 24 January 2025",
+    "acik": "Official Journal of the European Union - C_202500500 of 24 January 2025 - English edition <span class=\"mw-valign-text-top noprint\" typeof=\"mw:File/Frameless\"><a",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/OJ_C_202500500_of_2025_-_EN_English.pdf/page1-500px-OJ_C_202500500_of_2025_-_EN_English.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-12.jpg"
+   },
+   {
+    "dosya": "Rozmaitości Warszawskie - pismo dodatkowe do Gazety Korrespondenta Warszawskiego. 1830, nr 42 (10 listopada) (IA jbc.bj.uj.edu pl.0038 NDIGCZAS033867 92501990).pdf",
+    "w": 997,
+    "h": 1237,
+    "lisans": "Public domain",
+    "yazar": "",
+    "tarih": "",
+    "acik": "<div class=\"description\">\nSubjects: czasopisma polskie 19 w.; czasopisma społeczno-kulturalne</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Rozmaito%C5%9Bci_Warszawskie_-_pismo_dodatkowe_do_Gazety_Korrespondenta_Warszawskiego._1830%2C_nr_42_%2810_listopada%29_%28IA_jbc.bj.uj.edu_pl.0038_NDIGCZAS033867_92501990%29.pdf/page1-500px-thumbnail.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-13.jpg"
+   },
+   {
+    "dosya": "The Turk and the land of Haig; or, Turkey and Armenia- descriptive, historical, and picturesque (IA turklandofhaigor00azhd).pdf",
+    "w": 897,
+    "h": 1154,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nAzhderian, Antranig (1871-?)</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<p>Photocopy\n</p>\n<br>Subjects: Armenian question</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/The_Turk_and_the_land_of_Haig%3B_or%2C_Turkey_and_Armenia-_descriptive%2C_historical%2C_and_picturesque_%28IA_turklandofhaigor00azhd%29.pdf/page1-500px-The_Turk_and_the_land_of_Haig%3B_or%2C_Turkey_and_Armenia-_descriptive%2C_historical%2C_and_picturesque_%28IA_turklandofhaigor00azhd%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-14.jpg"
+   },
+   {
+    "dosya": "Zschokke, Malavašič - Zlata vas.pdf",
+    "w": 647,
+    "h": 1002,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nHeinrich Zschokke</div>",
+    "tarih": "",
+    "acik": "",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Zschokke%2C_Malava%C5%A1i%C4%8D_-_Zlata_vas.pdf/page1-500px-Zschokke%2C_Malava%C5%A1i%C4%8D_-_Zlata_vas.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-15.jpg"
+   },
+   {
+    "dosya": "Çır Şelalesi.jpg",
+    "w": 1025,
+    "h": 683,
+    "lisans": "Public domain",
+    "yazar": "Mahmut Bozarslan",
+    "tarih": "2022-05-22",
+    "acik": "Waterfall of Çır, Ilıcalar, Bingöl Province,Turkey.",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/%C3%87%C4%B1r_%C5%9Eelalesi.jpg/500px-%C3%87%C4%B1r_%C5%9Eelalesi.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/bingol-Kös_Kaplıcal-16.jpg"
+   }
+  ]
+ },
+ {
+  "s": "igdir",
+  "ad": "Aras Kuş Cenneti",
+  "wikidata": [],
+  "osm": [
+   {
+    "v": "Çıyrıklı",
+    "ad": "Aşağıçıyrıklı",
+    "tam": "Aşağıçıyrıklı, Tuzluca, Iğdır, Doğu Anadolu Bölgesi, Türkiye",
+    "lat": "40.1230631",
+    "lon": "43.5840438",
+    "tur": "place/village",
+    "il": "Iğdır"
+   },
+   {
+    "v": "Çıyrıklı",
+    "ad": "Yukarıçıyrıklı",
+    "tam": "Yukarıçıyrıklı, Tuzluca, Iğdır, Doğu Anadolu Bölgesi, Türkiye",
+    "lat": "40.1256035",
+    "lon": "43.6076974",
+    "tur": "place/neighbourhood",
+    "il": "Iğdır"
+   },
+   {
+    "v": "Aras River Bird",
+    "ad": "Aras River Bird Banding Station",
+    "tam": "Aras River Bird Banding Station, Aşağıçıyrıklı, Tuzluca, Iğdır, Doğu Anadolu Bölgesi, Türkiye",
+    "lat": "40.1192588",
+    "lon": "43.5806059",
+    "tur": "natural/wetland",
+    "il": "Iğdır"
+   },
+   {
+    "v": "Tuzluca bird",
+    "ad": "Aras River Bird Banding Station",
+    "tam": "Aras River Bird Banding Station, Aşağıçıyrıklı, Tuzluca, Iğdır, Doğu Anadolu Bölgesi, Türkiye",
+    "lat": "40.1192588",
+    "lon": "43.5806059",
+    "tur": "natural/wetland",
+    "il": "Iğdır"
+   }
+  ],
+  "commons": [
+   {
+    "dosya": "Ahmed Metin ve irzad (IA ahmedmetinveirza00ahmeuoft).pdf",
+    "w": 972,
+    "h": 1527,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nAhmet Mithat, 1844-1912</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<p>26\n</p>\n<br>Subjects:</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3c/Ahmed_Metin_ve_irzad_%28IA_ahmedmetinveirza00ahmeuoft%29.pdf/page1-500px-Ahmed_Metin_ve_irzad_%28IA_ahmedmetinveirza00ahmeuoft%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-0.jpg"
+   },
+   {
+    "dosya": "Anadolu’dan Rumeli’ye Türk-İslam Kültürünün İzleri Çardak Kasabası’ndaki Tarihi ve Kültürel Varlıklar Örneği.pdf",
+    "w": 943,
+    "h": 1416,
+    "lisans": "CC BY 4.0",
+    "yazar": "kolektif",
+    "tarih": "2021",
+    "acik": "Türklerin Anadolu’da gerçekleştirdikleri fetih hareketinden önce ıssızlaşan ve harabeye dönen Anadolu, yeni gelen yoğun Türk nüfusu ile birdenbire canlılık kaza",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Anadolu%E2%80%99dan_Rumeli%E2%80%99ye_T%C3%BCrk-%C4%B0slam_K%C3%BClt%C3%BCr%C3%BCn%C3%BCn_%C4%B0zleri_%C3%87ardak_Kasabas%C4%B1%E2%80%99ndaki_Tarihi_ve_K%C3%BClt%C3%BCrel_Varl%C4%B1klar_%C3%96rne%C4%9Fi.pdf/page1-500px-Anadolu%E2%80%99dan_Rumeli%E2%80%99ye_T%C3%BCrk-%C4%B0slam_K%C3%BClt%C3%BCr%C3%BCn%C3%BCn_%C4%B0zleri_%C3%87ardak_Kasabas%C4%B1%E2%80%99ndaki_Tarihi_ve_K%C3%BClt%C3%BCrel_Varl%C4%B1klar_%C3%96rne%C4%9Fi.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-1.jpg"
+   },
+   {
+    "dosya": "Bilim Hucresi Postas 1.pdf",
+    "w": 1239,
+    "h": 1752,
+    "lisans": "CC BY-SA 4.0",
+    "yazar": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Do%C4%9Fancan_%C3%96zg%C3%B6k%C3%A7eler&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Doğancan ",
+    "tarih": "2022-12-02",
+    "acik": "Bilim Hücresi Sanal Okul adlı bir discord serverı için çıkarılmış entelektüel konuları içeren dijital bir gazete olan \"Bilim Hücresi Postası\" 1.Sayısı.",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Bilim_Hucresi_Postas_1.pdf/page1-500px-Bilim_Hucresi_Postas_1.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-2.jpg"
+   },
+   {
+    "dosya": "Ceiling piece with birds, by Abraham Busschop.jpg",
+    "w": 4044,
+    "h": 2302,
+    "lisans": "Public domain",
+    "yazar": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:Abraham_Busschop\" class=\"extiw\" title=\"w:en:Abraham Busschop\"><span title=\"18th century painter from the Northern",
+    "tarih": "1708<div style=\"display: none;\">date QS:P571,+1708-00-00T00:00:00Z/9</div>",
+    "acik": "<div class=\"description\">\nCeiling \"trompe-l'oeil\" piece with birds, depicting the story of <a href=\"https://en.wikipedia.org/wiki/en:Aesop\" class=\"extiw\" title=",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/Ceiling_piece_with_birds%2C_by_Abraham_Busschop.jpg/500px-Ceiling_piece_with_birds%2C_by_Abraham_Busschop.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-3.jpg"
+   },
+   {
+    "dosya": "Foz do Iguaçú - Parque das Aves - Foz do Iguaçu - Bird's Park - Arara-Canindé (Ara Ararauna) - Blue-and-yellow macaw or Blue-and-gold Macaw (14431251845).jpg",
+    "w": 2010,
+    "h": 3025,
+    "lisans": "CC BY 2.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/45600179@N08\">Deni Williams</a> from São Paulo, Brasil",
+    "tarih": "2013-11-24 17:36",
+    "acik": "<p>Português\n</p><p>O Parque das Aves é um passeio essencial para quem visita Foz do Iguaçu, localizado próximo às Cataratas do Iguaçu, no Parque Nacional do Ig",
+    "koor": [
+     "-25.614421",
+     "-54.482531"
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/63/Foz_do_Igua%C3%A7%C3%BA_-_Parque_das_Aves_-_Foz_do_Igua%C3%A7u_-_Bird%27s_Park_-_Arara-Canind%C3%A9_%28Ara_Ararauna%29_-_Blue-and-yellow_macaw_or_Blue-and-gold_Macaw_%2814431251845%29.jpg/500px-thumbnail.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-4.jpg"
+   },
+   {
+    "dosya": "Foz do Iguaçú - Parque das Aves - Foz do Iguaçu - Bird's Park - Arara-Canindé (Ara Ararauna) - Blue-and-yellow macaw or Blue-and-gold Macaw (14451399403).jpg",
+    "w": 4912,
+    "h": 3264,
+    "lisans": "CC BY 2.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/45600179@N08\">Deni Williams</a> from São Paulo, Brasil",
+    "tarih": "2013-11-24 17:50",
+    "acik": "<p>Português\n</p><p>O Parque das Aves é um passeio essencial para quem visita Foz do Iguaçu, localizado próximo às Cataratas do Iguaçu, no Parque Nacional do Ig",
+    "koor": [
+     "-25.614353",
+     "-54.482306"
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Foz_do_Igua%C3%A7%C3%BA_-_Parque_das_Aves_-_Foz_do_Igua%C3%A7u_-_Bird%27s_Park_-_Arara-Canind%C3%A9_%28Ara_Ararauna%29_-_Blue-and-yellow_macaw_or_Blue-and-gold_Macaw_%2814451399403%29.jpg/500px-thumbnail.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-5.jpg"
+   },
+   {
+    "dosya": "Foz do Iguaçú - Parque das Aves - Foz do Iguaçu - Bird's Park - Arara-Piranga, Aracanga, Arara-Macau, Macau - Scarlet Macaw (14429927512).jpg",
+    "w": 3264,
+    "h": 4912,
+    "lisans": "CC BY 2.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/45600179@N08\">Deni Williams</a> from São Paulo, Brasil",
+    "tarih": "2013-11-24 17:37",
+    "acik": "<p>ARARA PIRANGA / SCARLET MACAW\n</p><p>ORDEM / Order: Psittaciformes\nFAMÍLIA / Family: Psittacidae\nNOME POPULAR / Popular name: Arara-piranga (Scarlet Macaw)\nN",
+    "koor": [
+     "-25.614421",
+     "-54.482531"
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cb/Foz_do_Igua%C3%A7%C3%BA_-_Parque_das_Aves_-_Foz_do_Igua%C3%A7u_-_Bird%27s_Park_-_Arara-Piranga%2C_Aracanga%2C_Arara-Macau%2C_Macau_-_Scarlet_Macaw_%2814429927512%29.jpg/500px-Foz_do_Igua%C3%A7%C3%BA_-_Parque_das_Aves_-_Foz_do_Igua%C3%A7u_-_Bird%27s_Park_-_Arara-Piranga%2C_Aracanga%2C_Arara-Macau%2C_Macau_-_Scarlet_Macaw_%2814429927512%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-6.jpg"
+   },
+   {
+    "dosya": "Idylls of bird life - bird and nature essays (IA idyllsofbirdlife00hoch).pdf",
+    "w": 1114,
+    "h": 1820,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nHochwalt, Bert G., 1893-1920</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<p>146 p. : 25 cm\n</p>\n<br>Subjects: Birds</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/Idylls_of_bird_life_-_bird_and_nature_essays_%28IA_idyllsofbirdlife00hoch%29.pdf/page1-500px-Idylls_of_bird_life_-_bird_and_nature_essays_%28IA_idyllsofbirdlife00hoch%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-7.jpg"
+   },
+   {
+    "dosya": "Milliyet 1930 tesrinievvel 1.pdf",
+    "w": 2597,
+    "h": 3527,
+    "lisans": "Public domain",
+    "yazar": "Milliyet Gazetesi",
+    "tarih": "1930-10-01",
+    "acik": "1 Ekim 1930 - Milliyet Gazetesi",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Milliyet_1930_tesrinievvel_1.pdf/page1-500px-Milliyet_1930_tesrinievvel_1.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-8.jpg"
+   },
+   {
+    "dosya": "Milliyet 1934 tesrinisani 24.pdf",
+    "w": 2706,
+    "h": 3602,
+    "lisans": "Public domain",
+    "yazar": "Milliyet Gazetesi",
+    "tarih": "1934-11-24",
+    "acik": "24 Kasım 1934 - Milliyet Gazetesi",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Milliyet_1934_tesrinisani_24.pdf/page1-500px-Milliyet_1934_tesrinisani_24.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-9.jpg"
+   },
+   {
+    "dosya": "Nuhun izinde gezi parkuru.jpg",
+    "w": 4128,
+    "h": 2322,
+    "lisans": "CC BY-SA 4.0",
+    "yazar": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Atabey_seyhan&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Atabey seyhan (page does not exist)",
+    "tarih": "2019-04-28 10:35:24",
+    "acik": "Nuh’un İzinde Gezi Parkuru: Ağrı Dağı'nın eteklerinde Iğdır’ın ilk ve tek ücretsiz gezi parkuru,  Mitolojik efsanelerin yanı sıra Yontma taş devri, Urartular, İ",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/Nuhun_izinde_gezi_parkuru.jpg/500px-Nuhun_izinde_gezi_parkuru.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-10.jpg"
+   },
+   {
+    "dosya": "Parabas rojas.jpg",
+    "w": 2048,
+    "h": 1463,
+    "lisans": "CC BY-SA 4.0",
+    "yazar": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Gabvia&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Gabvia (page does not exist)\">Gabvia</a>",
+    "tarih": "2018-12-13 07:12:41",
+    "acik": "A macaw couple flies over the forests of the Tuichi River.",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Parabas_rojas.jpg/500px-Parabas_rojas.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-11.jpg"
+   },
+   {
+    "dosya": "TANSU GÜRPINAR.pdf",
+    "w": 1150,
+    "h": 1475,
+    "lisans": "CC0",
+    "yazar": "kolektif",
+    "tarih": "2020",
+    "acik": "TANSU GÜRPINAR",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/TANSU_G%C3%9CRPINAR.pdf/page1-500px-TANSU_G%C3%9CRPINAR.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-12.jpg"
+   },
+   {
+    "dosya": "The Mackaw Clay Lick Tambopata River (258135891).jpeg",
+    "w": 2048,
+    "h": 1365,
+    "lisans": "CC BY 3.0",
+    "yazar": "<div class=\"fn value\">\n<a rel=\"nofollow\" class=\"external text\" href=\"https://500px.com/bthodla\">Bhasker Thodla</a></div>",
+    "tarih": "6 September 2017, 09:46:29 (UTC)",
+    "acik": "<div class=\"description\">\nThe Mackaw Clay Lick Tambopata River</div>",
+    "koor": [
+     "-12.932002",
+     "-69.272794"
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fb/The_Mackaw_Clay_Lick_Tambopata_River_%28258135891%29.jpeg/500px-The_Mackaw_Clay_Lick_Tambopata_River_%28258135891%29.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-13.jpg"
+   },
+   {
+    "dosya": "The Niagara River (IA niagarariver01hulb).pdf",
+    "w": 862,
+    "h": 1368,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nHulbert, Archer Butler, 1873-1933</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<p>Includes bibliographical references and index\n</p>\n<br>Subjects:</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/The_Niagara_River_%28IA_niagarariver01hulb%29.pdf/page1-500px-The_Niagara_River_%28IA_niagarariver01hulb%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-14.jpg"
+   },
+   {
+    "dosya": "The Thousand Island and St. Lawrence River Steamboat Companies Limited - the Folger System, in connection with the New York Central & Hudson River R.R (IA thousandislandst00newy).pdf",
+    "w": 525,
+    "h": 1172,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\n<dl><dd>New York Central and Hudson River Railroad Company</dd>\n<dd>New York Central and Hudson River Railroad Company</dd>\n<dd>Thousand ",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<dl><dd>Cover title</dd>\n<dd>Index, photos, information, pull out map titled : ROUTES OF THE THOUSAND ISLAND STEAMBOAT CO. AND ST. LAW",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/The_Thousand_Island_and_St._Lawrence_River_Steamboat_Companies_Limited_-_the_Folger_System%2C_in_connection_with_the_New_York_Central_%26_Hudson_River_R.R_%28IA_thousandislandst00newy%29.pdf/page1-500px-thumbnail.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-15.jpg"
+   },
+   {
+    "dosya": "The naturalist on the River Amazons 1863 v1.djvu",
+    "w": 2434,
+    "h": 3879,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nHenry Walter Bates</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\nV. 1. contains letter from author to Col. G.E. Church</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/The_naturalist_on_the_River_Amazons_1863_v1.djvu/page1-500px-The_naturalist_on_the_River_Amazons_1863_v1.djvu.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-16.jpg"
+   },
+   {
+    "dosya": "Tire süt kooperatifi.pdf",
+    "w": 1150,
+    "h": 1475,
+    "lisans": "CC0",
+    "yazar": "kolektif",
+    "tarih": "2015",
+    "acik": "tire süt kooperatifi",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Tire_s%C3%BCt_kooperatifi.pdf/page1-500px-Tire_s%C3%BCt_kooperatifi.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-17.jpg"
+   },
+   {
+    "dosya": "Türkiye`nin tek Ermeni köyü Vakıflı (Hatay-Samandağ) üzerine bir toplumsal coğrafya araştırması.pdf",
+    "w": 1239,
+    "h": 1752,
+    "lisans": "CC BY 4.0",
+    "yazar": "Aksoy, Serap",
+    "tarih": "2020",
+    "acik": "Türkiye`nin tek Ermeni köyü Vakıflı (Hatay-Samandağ) üzerine bir toplumsal coğrafya araştırması",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/T%C3%BCrkiye%60nin_tek_Ermeni_k%C3%B6y%C3%BC_Vak%C4%B1fl%C4%B1_%28Hatay-Samanda%C4%9F%29_%C3%BCzerine_bir_toplumsal_co%C4%9Frafya_ara%C5%9Ft%C4%B1rmas%C4%B1.pdf/page1-500px-T%C3%BCrkiye%60nin_tek_Ermeni_k%C3%B6y%C3%BC_Vak%C4%B1fl%C4%B1_%28Hatay-Samanda%C4%9F%29_%C3%BCzerine_bir_toplumsal_co%C4%9Frafya_ara%C5%9Ft%C4%B1rmas%C4%B1.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-18.jpg"
+   },
+   {
+    "dosya": "Ulus 1934 ilkkanun 4.pdf",
+    "w": 2262,
+    "h": 3220,
+    "lisans": "Public domain",
+    "yazar": "Ulus Gazetesi",
+    "tarih": "1934-12-04",
+    "acik": "Ulus Gazetesi - 1934 Aralık 4",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/Ulus_1934_ilkkanun_4.pdf/page1-500px-Ulus_1934_ilkkanun_4.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-19.jpg"
+   },
+   {
+    "dosya": "Ulus 1935 ilkkanun 29.pdf",
+    "w": 2279,
+    "h": 3100,
+    "lisans": "Public domain",
+    "yazar": "Ulus Gazetesi",
+    "tarih": "1935-01-29",
+    "acik": "Ulus Gazetesi - 1935 Ocak 29",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Ulus_1935_ilkkanun_29.pdf/page1-500px-Ulus_1935_ilkkanun_29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-20.jpg"
+   },
+   {
+    "dosya": "Ulus 1935 nisan 24.pdf",
+    "w": 2150,
+    "h": 3097,
+    "lisans": "Public domain",
+    "yazar": "Ulus Gazetesi",
+    "tarih": "1935-04-24",
+    "acik": "Ulus Gazetesi - 1935 Nisan 24",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Ulus_1935_nisan_24.pdf/page1-500px-Ulus_1935_nisan_24.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-21.jpg"
+   },
+   {
+    "dosya": "Ulus 1935 nisan 3.pdf",
+    "w": 2187,
+    "h": 3139,
+    "lisans": "Public domain",
+    "yazar": "Ulus Gazetesi",
+    "tarih": "1935-04-03",
+    "acik": "Ulus Gazetesi - 1935 Nisan 3",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/93/Ulus_1935_nisan_3.pdf/page1-500px-Ulus_1935_nisan_3.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/igdir-Aras_Kuş_Cen-22.jpg"
+   }
+  ]
+ },
+ {
+  "s": "bayburt",
+  "ad": "Sırakayalar Şelalesi",
+  "wikidata": [
+   {
+    "q": "Q109387368",
+    "tr": "Sırakayalar Şelalesi",
+    "en": "Sırakayalar Waterfall",
+    "acik": "waterfall in Sırakayalar, Bayburt",
+    "koor": null,
+    "P18": null,
+    "P373": null,
+    "P131": "Q982559",
+    "trwiki": "Sırakayalar Şelalesi",
+    "enwiki": null
+   },
+   {
+    "q": "Q982559",
+    "tr": "Sırakayalar",
+    "en": "Sırakayalar",
+    "acik": "Bayburt Merkez, Türkiye'de köy",
+    "koor": [
+     40.09222222222222,
+     40.236666666666665
+    ],
+    "P18": null,
+    "P373": null,
+    "P131": "Q211828",
+    "trwiki": "Sırakayalar, Bayburt",
+    "enwiki": "Sırakayalar, Bayburt"
+   },
+   {
+    "q": "Q133467944",
+    "tr": "Sırakayalar Antik Limanı",
+    "en": null,
+    "acik": "Mudanya'da iskele",
+    "koor": [
+     40.3588486,
+     28.9940853
+    ],
+    "P18": null,
+    "P373": null,
+    "P131": "Q856171",
+    "trwiki": null,
+    "enwiki": null
+   }
+  ],
+  "osm": [
+   {
+    "v": "Sırakayalar Şelalesi",
+    "ad": "Sırakayalar Şelalesi",
+    "tam": "Sırakayalar Şelalesi, Sırakayalar, Bayburt Merkez, Bayburt, Karadeniz Bölgesi, Türkiye",
+    "lat": "40.0976493",
+    "lon": "40.2334346",
+    "tur": "waterway/waterfall",
+    "il": "Bayburt"
+   },
+   {
+    "v": "Sırakayalar",
+    "ad": "Sırakayalar",
+    "tam": "Sırakayalar, Bayburt Merkez, Bayburt, Karadeniz Bölgesi, Türkiye",
+    "lat": "40.0925710",
+    "lon": "40.2366410",
+    "tur": "place/village",
+    "il": "Bayburt"
+   },
+   {
+    "v": "Sırakayalar",
+    "ad": "Sırakayalar",
+    "tam": "Sırakayalar, Bünyan, Kayseri, İç Anadolu Bölgesi, Türkiye",
+    "lat": "38.9432389",
+    "lon": "35.7034099",
+    "tur": "natural/peak",
+    "il": "Kayseri"
+   }
+  ],
+  "commons": []
+ },
+ {
+  "s": "erzincan",
+  "ad": "Ergan Dağı Kayak Merkezi",
+  "wikidata": [
+   {
+    "q": "Q21523647",
+    "tr": "Ergan Kayak Merkez",
+    "en": null,
+    "acik": null,
+    "koor": null,
+    "P18": null,
+    "P373": null,
+    "P131": null,
+    "trwiki": "Ergan Kayak Merkezi",
+    "enwiki": null
+   },
+   {
+    "q": "Q31191381",
+    "tr": "Ergan Dağı",
+    "en": "Mount Ergan",
+    "acik": null,
+    "koor": null,
+    "P18": null,
+    "P373": null,
+    "P131": "Q483173",
+    "trwiki": "Ergan Dağı",
+    "enwiki": null
+   }
+  ],
+  "osm": [
+   {
+    "v": "Ergan Kayak",
+    "ad": "Ergan Dağı Kış Sporları Turizm Merkezi",
+    "tam": "Ergan Dağı Kış Sporları Turizm Merkezi, Yaylabaşı, Erzincan Merkez, Erzincan, Doğu Anadolu Bölgesi, Türkiye",
+    "lat": "39.6116426",
+    "lon": "39.4972079",
+    "tur": "landuse/winter_sports",
+    "il": "Erzincan"
+   },
+   {
+    "v": "Erzincan kayak",
+    "ad": "Ergan Dağı Kış Sporları Turizm Merkezi",
+    "tam": "Ergan Dağı Kış Sporları Turizm Merkezi, Yaylabaşı, Erzincan Merkez, Erzincan, Doğu Anadolu Bölgesi, Türkiye",
+    "lat": "39.6116426",
+    "lon": "39.4972079",
+    "tur": "landuse/winter_sports",
+    "il": "Erzincan"
+   },
+   {
+    "v": "Erzincan kayak",
+    "ad": "Yıldırım Akbulut Kayak Evi",
+    "tam": "Yıldırım Akbulut Kayak Evi, Erzincan - Sivas Yolu, Yeni Yurtbaşı, Yeniköy, Refahiye, Erzincan, Doğu Anadolu Bölgesi, Türkiye",
+    "lat": "39.8731922",
+    "lon": "39.0341281",
+    "tur": "tourism/hotel",
+    "il": "Erzincan"
+   },
+   {
+    "v": "Ergan Dağı",
+    "ad": "Ergan Dağı",
+    "tam": "Ergan Dağı, Erzincan Merkez, Erzincan, Doğu Anadolu Bölgesi, Türkiye",
+    "lat": "39.5643361",
+    "lon": "39.5099140",
+    "tur": "natural/peak",
+    "il": "Erzincan"
+   }
+  ],
+  "commons": [
+   {
+    "dosya": "Aksam 1934 eylul 9.pdf",
+    "w": 2218,
+    "h": 3177,
+    "lisans": "Public domain",
+    "yazar": "Akşam Gazetesi",
+    "tarih": "1934-09-09",
+    "acik": "9 Eylül 1934 - Akşam Gazetesi",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/Aksam_1934_eylul_9.pdf/page1-500px-Aksam_1934_eylul_9.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-0.jpg"
+   },
+   {
+    "dosya": "Aksam 1935 temmuz 1.pdf",
+    "w": 2175,
+    "h": 3156,
+    "lisans": "Public domain",
+    "yazar": "Akşam Gazetesi",
+    "tarih": "1935-07-01",
+    "acik": "Akşam Gazetesi - 1935 Temmuz 1",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Aksam_1935_temmuz_1.pdf/page1-500px-Aksam_1935_temmuz_1.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-1.jpg"
+   },
+   {
+    "dosya": "Aksam 1935 tesrinisani 27.pdf",
+    "w": 2145,
+    "h": 3150,
+    "lisans": "Public domain",
+    "yazar": "Akşam Gazetesi",
+    "tarih": "1935-11-27",
+    "acik": "Akşam Gazetesi - 1935 Kasım 27",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Aksam_1935_tesrinisani_27.pdf/page1-500px-Aksam_1935_tesrinisani_27.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-2.jpg"
+   },
+   {
+    "dosya": "Aksam 1936 kanunuevvel 13.pdf",
+    "w": 2277,
+    "h": 3220,
+    "lisans": "Public domain",
+    "yazar": "Akşam Gazetesi",
+    "tarih": "1936-12-13",
+    "acik": "Akşam Gazetesi - 1936 Aralık 13",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Aksam_1936_kanunuevvel_13.pdf/page1-500px-Aksam_1936_kanunuevvel_13.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-3.jpg"
+   },
+   {
+    "dosya": "Aksam 1936 nisan 26.pdf",
+    "w": 2222,
+    "h": 3179,
+    "lisans": "Public domain",
+    "yazar": "Akşam Gazetesi",
+    "tarih": "1936-04-26",
+    "acik": "Akşam Gazetesi - 1936 Nisan 26",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/Aksam_1936_nisan_26.pdf/page1-500px-Aksam_1936_nisan_26.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-4.jpg"
+   },
+   {
+    "dosya": "Chronologisk Register over de Kongelige Forordninger og Aabne Breve, samt andre trykte Anordninger som fra Aar 1670 af ere udkomne, ... VIII Deel (1781–1784).pdf",
+    "w": 704,
+    "h": 1145,
+    "lisans": "Public domain",
+    "yazar": "Jacob Henric Schou (1745–1840)",
+    "tarih": "1795",
+    "acik": "Chronologisk Register over de Kongelige Forordninger og Aabne Breve, samt andre trykte Anordninger som fra Aar 1670 af ere udkomne, tilligemed et nøiagtigts Udt",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Chronologisk_Register_over_de_Kongelige_Forordninger_og_Aabne_Breve%2C_samt_andre_trykte_Anordninger_som_fra_Aar_1670_af_ere_udkomne%2C_..._VIII_Deel_%281781%E2%80%931784%29.pdf/page1-500px-thumbnail.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-5.jpg"
+   },
+   {
+    "dosya": "Czas. (R.16), Ner 32 (10 lutego 1863) (IA jbc.bj.uj.edu pl.0032 NDIGCZAS026703 79807712).pdf",
+    "w": 2558,
+    "h": 3335,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nKłobukowski, Antoni Adam</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\nSubjects: Królestwo Galicji i Lodomerii (1772–1918); Kraków (Polska; region); konserwatyzm; czasopisma polskie 19 w.; dzienniki polski",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a4/Czas._%28R.16%29%2C_Ner_32_%2810_lutego_1863%29_%28IA_jbc.bj.uj.edu_pl.0032_NDIGCZAS026703_79807712%29.pdf/page1-500px-Czas._%28R.16%29%2C_Ner_32_%2810_lutego_1863%29_%28IA_jbc.bj.uj.edu_pl.0032_NDIGCZAS026703_79807712%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-6.jpg"
+   },
+   {
+    "dosya": "Forecasting wheat production in Turkey (IA CAT10309654).pdf",
+    "w": 1116,
+    "h": 1487,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nCoffing, Arthur L</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<p>Bibliography: p. 27-29\n</p>\n<br>Subjects: Wheat Turkey Forecasting; Crops and climate Turkey</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/Forecasting_wheat_production_in_Turkey_%28IA_CAT10309654%29.pdf/page1-500px-Forecasting_wheat_production_in_Turkey_%28IA_CAT10309654%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-7.jpg"
+   },
+   {
+    "dosya": "Geschichte der Städteverfassung in Deutschland (IA geschichtederstd04maur).pdf",
+    "w": 812,
+    "h": 1297,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nMaurer, Georg Ludwig von, 1790-1872</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<p>26\n</p>\n<br>Subjects: Municipal government</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/Geschichte_der_St%C3%A4dteverfassung_in_Deutschland_%28IA_geschichtederstd04maur%29.pdf/page1-500px-Geschichte_der_St%C3%A4dteverfassung_in_Deutschland_%28IA_geschichtederstd04maur%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-8.jpg"
+   },
+   {
+    "dosya": "Internationale Monatsschrift für Anatomie und Physiologie (IA internationalemo1906leip).pdf",
+    "w": 895,
+    "h": 1387,
+    "lisans": "Public domain",
+    "yazar": "",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<dl><dd>Text in French, English, German, Italian, or Latin</dd>\n<dd>Journal international mensuel d'anatomie et d'histologie</dd>\n<dd>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/Internationale_Monatsschrift_f%C3%BCr_Anatomie_und_Physiologie_%28IA_internationalemo1906leip%29.pdf/page1-500px-Internationale_Monatsschrift_f%C3%BCr_Anatomie_und_Physiologie_%28IA_internationalemo1906leip%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-9.jpg"
+   },
+   {
+    "dosya": "Jan Sygański - Wyroki ławicy sandeckiej.pdf",
+    "w": 935,
+    "h": 1362,
+    "lisans": "Public domain",
+    "yazar": "<bdi><a href=\"https://www.wikidata.org/wiki/Q46121626\" class=\"extiw\" title=\"d:Q46121626\"><span title=\"Polish Jesuit and historian (1853-1918)\">Jan Sygański</spa",
+    "tarih": "1918",
+    "acik": "Nowy Sącz szkic dotyczący sądownictwa w XVII wieku",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/81/Jan_Syga%C5%84ski_-_Wyroki_%C5%82awicy_sandeckiej.pdf/page1-500px-Jan_Syga%C5%84ski_-_Wyroki_%C5%82awicy_sandeckiej.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-10.jpg"
+   },
+   {
+    "dosya": "Kurjer Warszawski. 1858, № 203 (4 sierpnia) (IA jbc.bj.uj.edu pl.0196 NDIGCZAS035218 97908074).pdf",
+    "w": 1075,
+    "h": 1435,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\n[Kucz, Karol</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\nSubjects: zabór rosyjski; życie społeczne; życie intelektualne; czasopisma polskie 19 w.; dzienniki polskie</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/Kurjer_Warszawski._1858%2C_%E2%84%96_203_%284_sierpnia%29_%28IA_jbc.bj.uj.edu_pl.0196_NDIGCZAS035218_97908074%29.pdf/page1-500px-Kurjer_Warszawski._1858%2C_%E2%84%96_203_%284_sierpnia%29_%28IA_jbc.bj.uj.edu_pl.0196_NDIGCZAS035218_97908074%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-11.jpg"
+   },
+   {
+    "dosya": "Milliyet 1929 haziran 11.pdf",
+    "w": 2577,
+    "h": 3600,
+    "lisans": "Public domain",
+    "yazar": "Milliyet Gazetesi",
+    "tarih": "1929-06-11",
+    "acik": "11 Haziran 1929 - Milliyet Gazetesi",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Milliyet_1929_haziran_11.pdf/page1-500px-Milliyet_1929_haziran_11.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-12.jpg"
+   },
+   {
+    "dosya": "Milliyet 1930 tesrinisani 10.pdf",
+    "w": 2647,
+    "h": 3543,
+    "lisans": "Public domain",
+    "yazar": "Miliyet Gazetesi",
+    "tarih": "1930-11-10",
+    "acik": "10 Kasım 1930 - Milliyet Gazetesi",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Milliyet_1930_tesrinisani_10.pdf/page1-500px-Milliyet_1930_tesrinisani_10.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-13.jpg"
+   },
+   {
+    "dosya": "Milliyet 1933 tesrinisani 27.pdf",
+    "w": 2687,
+    "h": 3600,
+    "lisans": "Public domain",
+    "yazar": "Milliyet Gazetesi",
+    "tarih": "1933-11-27",
+    "acik": "27 Kasım 1933 - Milliyet Gazetesi",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/Milliyet_1933_tesrinisani_27.pdf/page1-500px-Milliyet_1933_tesrinisani_27.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-14.jpg"
+   },
+   {
+    "dosya": "Muhammed KÖSEN, Ergan Dağı'nda bir arabanın reklam filmini çekerken... - panoramio.jpg",
+    "w": 2048,
+    "h": 1536,
+    "lisans": "CC BY 3.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://web.archive.org/web/20161012231610/http://www.panoramio.com/user/2652987?with_photo_id=17545552\">Muhammed ",
+    "tarih": "Taken on 21 December 2008",
+    "acik": "Muhammed KÖSEN, Ergan Dağı'nda bir arabanın reklam filmini çekerken...",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/Muhammed_K%C3%96SEN%2C_Ergan_Da%C4%9F%C4%B1%27nda_bir_araban%C4%B1n_reklam_filmini_%C3%A7ekerken..._-_panoramio.jpg/500px-Muhammed_K%C3%96SEN%2C_Ergan_Da%C4%9F%C4%B1%27nda_bir_araban%C4%B1n_reklam_filmini_%C3%A7ekerken..._-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-15.jpg"
+   },
+   {
+    "dosya": "Muhammed KÖSEN, Ergan Dağı'nda bir arabanın reklam filmini çekerken... - panoramio - Muhammed KÖSEN.jpg",
+    "w": 2048,
+    "h": 1536,
+    "lisans": "CC BY 3.0",
+    "yazar": "<a rel=\"nofollow\" class=\"external text\" href=\"https://web.archive.org/web/20161013072821/http://www.panoramio.com/user/2652987?with_photo_id=17545638\">Muhammed ",
+    "tarih": "Taken on 21 December 2008",
+    "acik": "Muhammed KÖSEN, Ergan Dağı'nda bir arabanın reklam filmini çekerken...",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5d/Muhammed_K%C3%96SEN%2C_Ergan_Da%C4%9F%C4%B1%27nda_bir_araban%C4%B1n_reklam_filmini_%C3%A7ekerken..._-_panoramio_-_Muhammed_K%C3%96SEN.jpg/500px-Muhammed_K%C3%96SEN%2C_Ergan_Da%C4%9F%C4%B1%27nda_bir_araban%C4%B1n_reklam_filmini_%C3%A7ekerken..._-_panoramio_-_Muhammed_K%C3%96SEN.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-16.jpg"
+   },
+   {
+    "dosya": "Neuere Geschichte der Deutschen, Vol. VII, VIII, IX; Geschichte der Deutschen, Part XII, XIII and XIV (IA dli.granth.77115).pdf",
+    "w": 641,
+    "h": 1050,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\n<dl><dd>Schmidts, Michael Ignaz</dd>\n<dd>Milbiller, Joseph</dd></dl></div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<dl><dd><p>Source: Asiatic Society of Mumbai<br>Identifier: BK_00037546<br>Digitization Sponsor: Indian Express</p></dd>\n<dd>Original ",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/78/Neuere_Geschichte_der_Deutschen%2C_Vol._VII%2C_VIII%2C_IX%3B_Geschichte_der_Deutschen%2C_Part_XII%2C_XIII_and_XIV_%28IA_dli.granth.77115%29.pdf/page1-500px-Neuere_Geschichte_der_Deutschen%2C_Vol._VII%2C_VIII%2C_IX%3B_Geschichte_der_Deutschen%2C_Part_XII%2C_XIII_and_XIV_%28IA_dli.granth.77115%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-17.jpg"
+   },
+   {
+    "dosya": "Porträt von zwei türkischen Soldaten mit Ski und Schneehemden - LABW - Generallandesarchiv Karlsruhe F-S Paulcke Nr. 8091.jpg",
+    "w": 716,
+    "h": 982,
+    "lisans": "CC BY 4.0",
+    "yazar": "",
+    "tarih": "",
+    "acik": "Porträt von zwei türkischen Soldaten mit Ski und Schneehemden",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Portr%C3%A4t_von_zwei_t%C3%BCrkischen_Soldaten_mit_Ski_und_Schneehemden_-_LABW_-_Generallandesarchiv_Karlsruhe_F-S_Paulcke_Nr._8091.jpg/500px-Portr%C3%A4t_von_zwei_t%C3%BCrkischen_Soldaten_mit_Ski_und_Schneehemden_-_LABW_-_Generallandesarchiv_Karlsruhe_F-S_Paulcke_Nr._8091.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-18.jpg"
+   },
+   {
+    "dosya": "Privilegirte Schlesische Zeitung. 1823, No. 99 (23 August) + dod. (IA jbc.bj.uj.edu pl.0023 NDIGCZAS039217 94317861).pdf",
+    "w": 964,
+    "h": 1191,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nRhode. Red.</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<p>Zawiera: Nachtrag zu No. 99 der privilegirten Schlesischen Zeitung;Zawiera: Beilage zu No. 99 der privilegirten Schlesischen Zeitun",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Privilegirte_Schlesische_Zeitung._1823%2C_No._99_%2823_August%29_%2B_dod._%28IA_jbc.bj.uj.edu_pl.0023_NDIGCZAS039217_94317861%29.pdf/page1-500px-Privilegirte_Schlesische_Zeitung._1823%2C_No._99_%2823_August%29_%2B_dod._%28IA_jbc.bj.uj.edu_pl.0023_NDIGCZAS039217_94317861%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-19.jpg"
+   },
+   {
+    "dosya": "Privilegirte Schlesische Zeitung. 1827, No. 43 (9 April) + dod. (IA jbc.bj.uj.edu pl.0043 NDIGCZAS032898 94323550).pdf",
+    "w": 993,
+    "h": 1189,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nRhode. Red.</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<p>Zawiera: Nachtrag zu No. 43 der privilegirten Schlesischen Zeitung;Zawiera: Beilage zu No. 43 der privilegirten Schlesischen Zeitun",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Privilegirte_Schlesische_Zeitung._1827%2C_No._43_%289_April%29_%2B_dod._%28IA_jbc.bj.uj.edu_pl.0043_NDIGCZAS032898_94323550%29.pdf/page1-500px-Privilegirte_Schlesische_Zeitung._1827%2C_No._43_%289_April%29_%2B_dod._%28IA_jbc.bj.uj.edu_pl.0043_NDIGCZAS032898_94323550%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-20.jpg"
+   },
+   {
+    "dosya": "Privilegirte Schlesische Zeitung. 1829, No. 92 (18 April) + dod. (IA jbc.bj.uj.edu pl.0092 NDIGCZAS032898 94382362).pdf",
+    "w": 1060,
+    "h": 1310,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\nKunisch, Johann Gottlieb</div>",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<p>Zawiera: Erste Beilage zu No. 92 der privilegirten Schlesischen Zeitung;Zawiera: Zweite Beilage zu No. 92 der privilegirten Schlesi",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Privilegirte_Schlesische_Zeitung._1829%2C_No._92_%2818_April%29_%2B_dod._%28IA_jbc.bj.uj.edu_pl.0092_NDIGCZAS032898_94382362%29.pdf/page1-500px-Privilegirte_Schlesische_Zeitung._1829%2C_No._92_%2818_April%29_%2B_dod._%28IA_jbc.bj.uj.edu_pl.0092_NDIGCZAS032898_94382362%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-21.jpg"
+   },
+   {
+    "dosya": "Skiausbildung Türkischer Gebirgsjäger durch das Deutsche Skikommando bei der Kaukasus Armee im (Armenischen Hochland) - LABW - Generallandesarchiv Karlsruhe F-S Paulcke Nr. 11460 -1.jpg",
+    "w": 1292,
+    "h": 958,
+    "lisans": "CC BY 4.0",
+    "yazar": "",
+    "tarih": "1916<div style=\"display: none;\">date QS:P571,+1916-00-00T00:00:00Z/9</div>",
+    "acik": "Skiausbildung Türkischer Gebirgsjäger durch das Deutsche Skikommando bei der Kaukasus Armee im [Armenischen Hochland]",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Skiausbildung_T%C3%BCrkischer_Gebirgsj%C3%A4ger_durch_das_Deutsche_Skikommando_bei_der_Kaukasus_Armee_im_%28Armenischen_Hochland%29_-_LABW_-_Generallandesarchiv_Karlsruhe_F-S_Paulcke_Nr._11460_-1.jpg/500px-thumbnail.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-22.jpg"
+   },
+   {
+    "dosya": "Ulus 1934 ilkkanun 25.pdf",
+    "w": 2262,
+    "h": 3220,
+    "lisans": "Public domain",
+    "yazar": "Ulus Gazetesi",
+    "tarih": "1934-12-25",
+    "acik": "Ulus Gazetesi - 1934 Aralık 25",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Ulus_1934_ilkkanun_25.pdf/page1-500px-Ulus_1934_ilkkanun_25.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-23.jpg"
+   },
+   {
+    "dosya": "Ulus 1935 mart 18.pdf",
+    "w": 2216,
+    "h": 3208,
+    "lisans": "Public domain",
+    "yazar": "Ulus Gazetesi",
+    "tarih": "1935-03-18",
+    "acik": "Ulus Gazetesi - 1935 Mart 18",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9f/Ulus_1935_mart_18.pdf/page1-500px-Ulus_1935_mart_18.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-24.jpg"
+   },
+   {
+    "dosya": "Ulus 1935 mart 25.pdf",
+    "w": 2206,
+    "h": 3204,
+    "lisans": "Public domain",
+    "yazar": "Ulus Gazetesi",
+    "tarih": "1935-03-25",
+    "acik": "Ulus Gazetesi - 1935 Mart 25",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/Ulus_1935_mart_25.pdf/page1-500px-Ulus_1935_mart_25.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-25.jpg"
+   },
+   {
+    "dosya": "Vakit 1939 birincikanun 27.pdf",
+    "w": 2062,
+    "h": 3075,
+    "lisans": "Public domain",
+    "yazar": "Vakit Gazetesi",
+    "tarih": "1939-01-27",
+    "acik": "Vakit Gazetesi - 1939 Ocak 27",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/Vakit_1939_birincikanun_27.pdf/page1-500px-Vakit_1939_birincikanun_27.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-26.jpg"
+   },
+   {
+    "dosya": "Wilhelm Paulcke mit drei weiteren Personen in Skiausrüstung - LABW - Generallandesarchiv Karlsruhe F-S Paulcke Nr. 11462.jpg",
+    "w": 1185,
+    "h": 952,
+    "lisans": "CC BY 4.0",
+    "yazar": "",
+    "tarih": "1916<div style=\"display: none;\">date QS:P571,+1916-00-00T00:00:00Z/9</div>",
+    "acik": "Wilhelm Paulcke mit drei weiteren Personen in Skiausrüstung",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Wilhelm_Paulcke_mit_drei_weiteren_Personen_in_Skiausr%C3%BCstung_-_LABW_-_Generallandesarchiv_Karlsruhe_F-S_Paulcke_Nr._11462.jpg/500px-Wilhelm_Paulcke_mit_drei_weiteren_Personen_in_Skiausr%C3%BCstung_-_LABW_-_Generallandesarchiv_Karlsruhe_F-S_Paulcke_Nr._11462.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-27.jpg"
+   },
+   {
+    "dosya": "Zeitschrift für deutsches altertum und deutsche litteratur 21 1877 (IA bub gb dKZJAAAAYAAJ).pdf",
+    "w": 625,
+    "h": 877,
+    "lisans": "Public domain",
+    "yazar": "<div class=\"fn value\">\n<dl><dd>Haupt, Moriz, 1808-1874, [from old catalog] ed</dd>\n<dd>Müllenhoff, Karl Victor, 1818-1884, [from old catalog] ed</dd>\n<dd>Steinm",
+    "tarih": "",
+    "acik": "<div class=\"description\">\n<p>Holdings in 3x5 and visible files\n</p>\n<br>Subjects: bub_upload; Germanic philology; German literature</div>",
+    "koor": [
+     "",
+     ""
+    ],
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/63/Zeitschrift_f%C3%BCr_deutsches_altertum_und_deutsche_litteratur_21_1877_%28IA_bub_gb_dKZJAAAAYAAJ%29.pdf/page1-500px-Zeitschrift_f%C3%BCr_deutsches_altertum_und_deutsche_litteratur_21_1877_%28IA_bub_gb_dKZJAAAAYAAJ%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "yerel": "foto/erzincan-Ergan_Dağı_K-28.jpg"
+   }
+  ]
+ }
+]
