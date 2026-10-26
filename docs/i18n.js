@@ -6,6 +6,8 @@
   try { dil = localStorage.getItem("gezi-dil") || ""; } catch (e) {}
   if (dil !== "tr" && dil !== "en") dil = /^tr/i.test(navigator.language || "tr") ? "tr" : "en";
   const EN = {
+    // v6.4
+    "Bilgi yanlış ya da eksik mi? Bize bildir": "Is something wrong or missing? Let us know", "Seri gezgin": "Streak traveler", "3 ay üst üste en az bir yere git": "Visit at least one place 3 months in a row",
     // v6.0 yeni tasarım
     "Gezilerim": "My trips", "Listem": "My list", "Yakınımda": "Nearby", "Gezi haritan ve rozetler": "Travel map & badges",
     "Listen henüz boş": "Your list is empty", "Yerleri keşfet": "Explore places", "Rozetler": "Badges",

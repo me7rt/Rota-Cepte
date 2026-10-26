@@ -342,6 +342,8 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 .ykns{display:flex;flex-wrap:wrap;gap:8px}
 .ykn{display:inline-flex;align-items:center;gap:6px;min-height:44px;text-decoration:none;color:var(--fg);font-weight:700;font-size:13.5px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:0 14px}
 .ykn .ik{color:var(--pri-ink)}
+.yanlis{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0;margin:-2px 0 4px;background:none;border:0;color:var(--muted);font:inherit;font-size:13px;font-weight:700;cursor:pointer;text-align:left}
+.yanlis .ik{flex:none}
 .cevre .row{min-height:64px}
 .galeri{display:flex;gap:8px;overflow-x:auto;padding:10px 18px 0;scrollbar-width:none}
 .galeri::-webkit-scrollbar{display:none}
@@ -370,6 +372,20 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 .bar{display:block;height:8px;border-radius:999px;background:var(--surface2);overflow:hidden}
 .bar i{display:block;height:100%;background:var(--ok);border-radius:999px;transition:width .6s ease}
 .karnebtn{width:100%}
+/* Yıllık gezi hedefi ve seri */
+.hedef{margin-top:12px;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-l);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.hedef:empty{display:none}
+.hbas{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800}
+.hbas .ik{color:var(--pri-ink)}
+.hedef p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.45}
+.hsec{display:flex;flex-wrap:wrap;gap:8px}
+.hsec button{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface2);color:var(--fg);font:inherit;font-size:14px;font-weight:800}
+.hsay{display:flex;justify-content:space-between;align-items:baseline;font-variant-numeric:tabular-nums}
+.hsay b{font-size:17px}
+.hsay small{color:var(--muted);font-size:13px}
+.hedef .linkbtn{align-self:flex-start;min-height:36px;padding:0}
+.seri{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--fg)}
+.seri .ik{color:var(--k-t)}
 
 /* rozetler */
 .rozetler{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}

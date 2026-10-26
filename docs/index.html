@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6eee7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#11131f" media="(prefers-color-scheme: dark)">
-<script>try{var t=localStorage.getItem("gezi-tema");if(t==="ege"||t==="karadeniz")document.documentElement.setAttribute("data-tema",t)}catch(e){}</script>
+<script>try{var t=localStorage.getItem("gezi-tema");if(t==="ege"||t==="karadeniz")document.documentElement.setAttribute("data-tema",t);if(localStorage.getItem("gezi-acilis-gordu"))document.documentElement.classList.add("sp-hizli")}catch(e){}</script>
 <title>Rota Cepte · Türkiye Gezi Rehberi</title>
 <meta name="author" content="Mert Turanlıoğlu">
 <meta name="copyright" content="© 2026 Mert Turanlıoğlu. Tüm hakları saklıdır.">
@@ -21,7 +21,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="vendor/leaflet.css">
 <link rel="preload" href="vendor/font/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=6.3">
+<link rel="stylesheet" href="style.css?v=6.4">
 <style>
 /* Açılış ekranı v6.2: koyu lacivert zemin + yavaş kayan ışık bulutları, Türkiye nokta haritası,
    ışıklı rota ve iğne, uygulama simgesi + yazı, sayan rakamlar, alt kısımda yükleme çizgisi */
@@ -81,6 +81,8 @@ html.yas .sp-aura,html.yas .sp-isik{filter:grayscale(1)}
 @keyframes spIsik{0%{opacity:0;transform:scale(.4)}60%{opacity:1}100%{opacity:.75;transform:scale(1)}}
 @keyframes spYukle{to{transform:scaleX(1)}}
 @media (prefers-reduced-motion:reduce){.splash *{animation:none!important;opacity:1!important;stroke-dashoffset:0!important;transform:none!important}.splash .sp-tasi{transform:translate(174px,89px)!important}.sp-kuyruk,.sp-dalga,.sp-patla{display:none}.sp-yukle i{transform:scaleX(1)!important}}
+/* İlk açılıştan sonra kısa açılış: canlandırma yok, son hâli bir an görünür */
+html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dashoffset:0!important;transform:none!important}html.sp-hizli .splash .sp-tasi{transform:translate(174px,89px)!important}html.sp-hizli .sp-kuyruk,html.sp-hizli .sp-dalga,html.sp-hizli .sp-patla{display:none}html.sp-hizli .sp-yukle i{transform:scaleX(1)!important}
 .sp-patla circle{fill:#ffd27a;opacity:0;animation:spPatla .9s 2.45s ease-out forwards}
 @keyframes spPatla{0%{opacity:1;transform:translate(0,-20px)}100%{opacity:0;transform:translate(var(--dx),var(--dy))}}
 .kopya{position:fixed;left:0;right:0;bottom:0;z-index:9000;background:#c2462e;color:#fff;font:600 13px/1.4 system-ui,sans-serif;text-align:center;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px))}
@@ -140,6 +142,7 @@ html.yas .sp-aura,html.yas .sp-isik{filter:grayscale(1)}
     <button class="grow" id="paylasBtn"><i data-ik="share-2"></i><span>Rota Cepte'yi arkadaşlarına öner</span></button>
     <button class="grow" id="dilBtn"><i data-ik="languages"></i><span id="dilYazi"></span></button>
     <button class="grow" id="temaBtn"><i data-ik="palette"></i><span id="temaYazi"></span></button>
+    <button class="grow" id="bildirimBtn" hidden><i data-ik="bell"></i><span id="bildirimYazi"></span></button>
     <a class="grow" href="gizlilik.html"><i data-ik="shield-check"></i><span>Gizlilik</span></a>
     <a class="grow" href="lisanslar.html"><i data-ik="copyright"></i><span>Kaynaklar ve lisanslar</span></a>
     <a class="grow" href="kosullar.html"><i data-ik="scale"></i><span>Kullanım koşulları</span></a>
@@ -169,6 +172,7 @@ html.yas .sp-aura,html.yas .sp-isik{filter:grayscale(1)}
 
 <main id="rozet" class="view" hidden>
   <section id="gezSec" class="gez" hidden><div class="harita" id="gezHarita"></div><button class="gezbtn" id="gezBtn"><span class="gezust"><b id="gezSay"></b><small id="gezAlt"></small></span><span class="bar"><i id="gezBar"></i></span></button><ul class="list" id="gezList" hidden></ul><button class="btn primary karnebtn" id="karneBtn" hidden><i data-ik="camera" data-boy="18"></i> Gezi karnemi paylaş</button></section>
+  <section class="hedef" id="hedefSec" aria-live="polite"></section>
   <h2 class="sec">Rozetler</h2>
   <p class="tsay">Kazandığın rozetler: <b id="rozetSay"></b>. Bir yerin sayfasında "Buraya gittim" dedikçe yenileri açılır.</p>
   <button class="gezbtn rozetbtn" id="rozetBtn" hidden></button>
@@ -242,6 +246,7 @@ html.yas .sp-aura,html.yas .sp-isik{filter:grayscale(1)}
       <p id="dText" class="text"></p>
       <a class="more" id="dWiki" target="_blank" rel="noopener">Vikipedi'de devamını oku</a>
       <small class="lisans" id="dLis" hidden></small>
+      <button class="yanlis" id="dYanlis"><i data-ik="flag" data-boy="15"></i><span>Bilgi yanlış ya da eksik mi? Bize bildir</span></button>
       <h3 class="yknbas" id="dCevreBas" hidden></h3>
       <ul class="list cevre" id="dCevre"></ul>
       <h3 class="yknbas">Yakınında bul</h3>
@@ -251,14 +256,16 @@ html.yas .sp-aura,html.yas .sp-isik{filter:grayscale(1)}
 </div>
 
 <script src="vendor/leaflet.js"></script>
-<script src="vendor/lucide.js?v=6.3"></script>
-<script src="i18n.js?v=6.3"></script>
-<script src="app.js?v=6.3"></script>
+<script src="vendor/lucide.js?v=6.4"></script>
+<script src="i18n.js?v=6.4"></script>
+<script src="app.js?v=6.4"></script>
 <script>
 /* Açılış ekranı ve kopya uyarısı · © 2026 Mert Turanlıoğlu */
 (function () {
   var s = document.getElementById("splash"), bitti = false;
-  function kapat() { if (bitti) return; bitti = true; s.classList.add("out"); setTimeout(function () { s.remove(); }, 500); }
+  // Tam gösteri yalnızca ilk açılışta; sonraki açılışlarda açılış ekranı kısa sürer
+  var hizli = document.documentElement.classList.contains("sp-hizli");
+  function kapat() { if (bitti) return; bitti = true; s.classList.add("out"); setTimeout(function () { s.remove(); }, 500); try { localStorage.setItem("gezi-acilis-gordu", "1"); } catch (e) {} }
   // Gizlilik / lisanslar / koşullar sayfasından dönülüyorsa açılış ekranını tekrar gösterme
   try { if (sessionStorage.getItem("gezi-acilis-atla")) { sessionStorage.removeItem("gezi-acilis-atla"); bitti = true; s.remove(); } } catch (e) {}
   // Sayaçlar: 81 il · 973 ilçe · 2.900+ yer (veri değişince güncelle; gerçek sayının altında yuvarlanmış), sıfırdan yukarı sayar
@@ -268,7 +275,7 @@ html.yas .sp-aura,html.yas .sp-isik{filter:grayscale(1)}
     if (en) { var ad = ["provinces", "districts", "places"]; t2.querySelectorAll("em").forEach(function (e, i) { e.textContent = ad[i]; }); }
     var yaz = function (b, n) { b.textContent = n.toLocaleString(en ? "en-US" : "tr-TR") + (+b.getAttribute("data-n") >= 1000 ? "+" : ""); };
     bs.forEach(function (b) { yaz(b, +b.getAttribute("data-n")); b.style.minWidth = b.offsetWidth + "px"; });
-    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!hizli && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
       bs.forEach(function (b) { yaz(b, 0); });
       var bas = 3150, sure = 1000;
       var adim = function () {
@@ -280,7 +287,14 @@ html.yas .sp-aura,html.yas .sp-isik{filter:grayscale(1)}
       setTimeout(function () { requestAnimationFrame(adim); }, Math.max(0, bas - performance.now()));
     }
   }
-  function hazir() { setTimeout(kapat, Math.max(0, 5000 - performance.now())); }
+  // İlk açılış 5 sn; sonra 1,2 sn (özel gün mesajı varsa okunsun diye 2,6 sn)
+  function hazir() {
+    var bekle = function () {
+      var h = !hizli ? 5000 : t2 && t2.classList.contains("sp-ozel") ? 2600 : 1200, k = h - performance.now();
+      if (k > 0) setTimeout(bekle, Math.min(k, 300)); else kapat();
+    };
+    bekle();
+  }
   s.addEventListener("click", kapat);
   if (document.readyState === "complete") hazir(); else addEventListener("load", hazir);
   setTimeout(kapat, 7000);

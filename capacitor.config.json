@@ -2,5 +2,11 @@
   "appId": "io.github.me7rt.rotacepte",
   "appName": "Rota Cepte",
   "webDir": "docs",
-  "appendUserAgent": "RotaCepte (+https://me7rt.github.io/Rota-Cepte/)"
+  "appendUserAgent": "RotaCepte (+https://me7rt.github.io/Rota-Cepte/)",
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_rota",
+      "iconColor": "#D13415"
+    }
+  }
 }

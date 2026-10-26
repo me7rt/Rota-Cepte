@@ -31,6 +31,9 @@ jobs:
           sed -i 's#<uses-permission android:name="android.permission.INTERNET" />#<uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />\n    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />#' android/app/src/main/AndroidManifest.xml
           grep -q "ACCESS_FINE_LOCATION" android/app/src/main/AndroidManifest.xml || { echo "Konum izni eklenemedi"; exit 1; }
           npx @capacitor/assets generate --android --iconBackgroundColor '#1f4fa3' --splashBackgroundColor '#1f4fa3' || echo "simge uretilemedi, varsayilan kullanilacak"
+          # Bildirim simgesi (hafta sonu önerisi): durum çubuğu için beyaz harita iğnesi
+          for d in assets/android-bildirim/drawable-*; do mkdir -p "android/app/src/main/res/$(basename $d)"; cp "$d/ic_stat_rota.png" "android/app/src/main/res/$(basename $d)/"; done
+          ls android/app/src/main/res/drawable-xxhdpi/ic_stat_rota.png
           npx cap sync android
           # Google Play: en az Android 7 (SDK 24), hedef SDK 36
           sed -i 's/minSdkVersion = [0-9]*/minSdkVersion = 24/; s/compileSdkVersion = [0-9]*/compileSdkVersion = 36/; s/targetSdkVersion = [0-9]*/targetSdkVersion = 36/' android/variables.gradle
