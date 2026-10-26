@@ -1622,6 +1622,40 @@
     bildirimYazi();
     setTimeout(haftaSonuKur, 4000);
   }
+  // ---------- yeni sürüm: Google Play'de güncelleme varsa uygulama içinde sorulur (yalnızca Play'den kurulan Android uygulaması) ----------
+  const AU = ANDROID && window.Capacitor.Plugins && window.Capacitor.Plugins.AppUpdate;
+  const GUN_SONRA = "gezi-guncelle-sonra";
+  let gunSon = 0, gunDene = 0;
+  async function guncelle(izin) {
+    try {
+      if (izin) { const r = await AU.performImmediateUpdate(); if (r && (r.code === 0 || r.code === 1)) return; } // 0 güncellendi, 1 vazgeçti; diğerlerinde Play sayfası açılır
+      await AU.openAppStore();
+    } catch (e) { try { await AU.openAppStore(); } catch (e2) {} }
+  }
+  async function guncellemeKontrol() {
+    if (!AU || Date.now() - gunSon < 6 * 36e5) return;
+    let b;
+    try { b = await AU.getAppUpdateInfo(); } catch (e) { return; } // Play'den kurulmamışsa (APK) sessizce geçer
+    gunSon = Date.now();
+    if (b.updateAvailability === 3) { guncelle(true); return; } // yarım kalan güncellemeyi sürdür
+    if (b.updateAvailability !== 2) return;
+    let ert = null; try { ert = JSON.parse(localStorage.getItem(GUN_SONRA)); } catch (e) {}
+    if (ert && ert.v === b.availableVersionCode && Date.now() - ert.t < 864e5) return; // "Sonra" dendiyse bir gün sorma
+    if (document.querySelector(".tanit")) { gunSon = 0; if (++gunDene < 4) setTimeout(guncellemeKontrol, 15000); return; }
+    const d = document.createElement("div"); d.className = "tanit";
+    d.innerHTML = `<div class="tkart"><div class="temo">${ik("download", 36)}</div><h2>${TL("Yeni sürüm hazır", "A new version is ready")}</h2><p>${TL("Rota Cepte'nin yeni sürümü Google Play'de. Yeni yerler ve düzeltmeler için şimdi güncelleyebilirsin, bir dakika sürer.", "A new version of Rota Cepte is on Google Play. Update now for new places and fixes; it takes about a minute.")}</p><div class="tbtn"><button class="linkbtn" data-k="sonra">${TL("Sonra", "Later")}</button><button class="btn primary" data-k="guncelle">${TL("Güncelle", "Update")}</button></div></div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    d.addEventListener("click", (e) => {
+      const k = e.target.closest("[data-k]");
+      if (e.target === d || (k && k.dataset.k === "sonra")) { try { localStorage.setItem(GUN_SONRA, JSON.stringify({ v: b.availableVersionCode, t: Date.now() })); } catch (err) {} kapat(); }
+      else if (k && k.dataset.k === "guncelle") { kapat(); guncelle(b.immediateUpdateAllowed !== false); }
+    });
+    document.body.appendChild(d);
+  }
+  if (AU) {
+    setTimeout(guncellemeKontrol, 3000);
+    if (CapApp && CapApp.addListener) CapApp.addListener("resume", () => guncellemeKontrol());
+  }
   // ---------- özel günler: milli bayramlar, anma günleri, dini bayramlar ----------
   async function ozelGun() {
     try {
