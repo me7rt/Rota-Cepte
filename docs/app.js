@@ -204,7 +204,7 @@
   let me = null, watchId = null, konumBekleyen = [];
   let view = { mode: "home" };
   let places = [], cat = "hepsi", sortMode = "oner", shown = 60;
-  let map = null, layer = null, meMarker = null, fitted = false;
+  let map = null, layer = null, meMarker = null, fitted = false, kanvas = null;
   let open = null, sheetPushed = false, bekleyenYer = null, homeMe = null, sonSira = 0, routeNo = 0;
 
   // ---------- konum ----------
@@ -974,11 +974,11 @@
     } catch (e) { kesifYuk = false; }
   }
   // ---------- gezi haritası: ilçelerini gezdikçe il boyanır ----------
-  let HARITA = null, haritaSoz = null, HARITA_ORAN = new Map(), HARITA_KUTU = [80, 0, 1050, 585];
+  let HARITA = null, haritaSoz = null, HARITA_ORAN = new Map(), HARITA_KUTU = [0, 0, 1020, 456];
   async function renderHarita() {
     const kutu = $("gezHarita"); if (!kutu || !IDX) return;
     try {
-      if (!HARITA) { haritaSoz = haritaSoz || getJSON("tr-harita.json?v=2"); HARITA = await haritaSoz; }
+      if (!HARITA) { haritaSoz = haritaSoz || getJSON("tr-harita.json?v=3"); HARITA = await haritaSoz; }
       const a = gittiklerim(), ilBy = new Map();
       for (const x of a) { if (!ilBy.has(x.s)) ilBy.set(x.s, []); ilBy.get(x.s).push(x); }
       const oran = new Map();
@@ -997,7 +997,7 @@
         const renk = o >= 1 ? "var(--gez-tam)" : o > 0 ? `color-mix(in srgb,var(--gez-yari) ${Math.round(25 + o * 60)}%,var(--hbos))` : "var(--hbos)";
         return `<path d="${d}" style="fill:${renk}" data-go="#/il/${il.s}"><title>${esc(il.ad)}${o ? " · %" + Math.round(o * 100) : ""}</title></path>`;
       }).join("");
-      kutu.innerHTML = `<svg viewBox="80 0 1050 585" class="trh" role="img" aria-label="${T("Gezi haritan")}">${yollar}</svg>
+      kutu.innerHTML = `<svg viewBox="0 0 1020 456" class="trh" role="img" aria-label="${T("Gezi haritan")}">${yollar}</svg>
         <div class="hleg"><span><i style="background:var(--hbos)"></i>${T("Gitmedin")}</span><span><i style="background:color-mix(in srgb,var(--gez-yari) 45%,var(--hbos))"></i>${T("Başladın")}</span><span><i style="background:var(--gez-tam)"></i>${T("Tüm ilçeler")}</span></div>
         <p class="hnot">${a.length ? TL(`${ilBy.size} ile gittin${tam ? `, ${tam} ilin tüm ilçelerini gezdin` : ""}. Bir ilin ilçelerini gezdikçe rengi koyulaşır.`, `You've been to ${ilBy.size} provinces${tam ? `, all districts of ${tam}` : ""}. A province gets darker as you visit its districts.`) : TL(`Bir yere "Buraya gittim" dediğinde o il haritada yeşile boyanmaya başlar. İlçelerini gezdikçe rengi koyulaşır.`, `Tap "I've been here" on a place and its province turns green on the map. It gets darker as you visit its districts.`)}</p>`;
       try { const sv = kutu.querySelector("svg"), b = sv.getBBox(); if (b.width) { sv.setAttribute("viewBox", `${b.x - 4} ${b.y - 4} ${b.width + 8} ${b.height + 8}`); HARITA_KUTU = [b.x, b.y, b.width, b.height]; } } catch (e) {}
@@ -1277,9 +1277,18 @@
     if (!map) return;
     layer.clearLayers();
     meMarker = null;
-    const pts = [];
-    for (const p of visible()) {
+    const pts = [], v = visible();
+    // Çok yer varsa (İstanbul 400) öne çıkmayanları tek bir tuvale nokta olarak çiz: yüzlerce simgeli işaret eski telefonlarda takılıyordu
+    const cok = v.length > 80, kok = cok && getComputedStyle(document.documentElement), renk = {};
+    if (cok && !kanvas) kanvas = L.canvas({ padding: 0.5, tolerance: 8 });
+    for (const p of v) {
       const big = !!p.one, s = big ? 34 : 26;
+      if (cok && !big) {
+        L.circleMarker([p.lat, p.lng], { renderer: kanvas, radius: 7, color: "#fff", weight: 2, fillColor: renk[p.k] || (renk[p.k] = kok.getPropertyValue(`--k-${p.k}`).trim() || "#888"), fillOpacity: 1 })
+          .on("click", () => openDetail(p)).addTo(layer);
+        pts.push([p.lat, p.lng]);
+        continue;
+      }
       L.marker([p.lat, p.lng], {
         icon: L.divIcon({ className: "", html: `<div class="pin${big ? " big" : ""}" style="background:${CATS[p.k].renk}">${icon(p.k, big ? 16 : 13)}</div>`, iconSize: [s, s], iconAnchor: [s / 2, s / 2] }),
         title: adi(p), alt: adi(p), keyboard: false, zIndexOffset: big ? 500 : 0
