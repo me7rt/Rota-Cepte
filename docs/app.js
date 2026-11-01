@@ -1142,7 +1142,9 @@
   }
   function temaChips() {
     ayKart();
-    $("temaChips").innerHTML = `<button class="tchip tata" data-go="#/ataturk"><i>${ik("footprints", 20)}</i><span>${TL("Atatürk'ün izinde", "In Atatürk's footsteps")}</span></button>` + Object.entries(TEMA).map(([k, t]) =>
+    // Kasım kartında zaten Atatürk çipi varsa aşağıda tekrar gösterme
+    const ataAy = (AYLAR[new Date().getMonth()] || {}).ata;
+    $("temaChips").innerHTML = (ataAy ? "" : `<button class="tchip tata" data-go="#/ataturk"><i>${ik("footprints", 20)}</i><span>${TL("Atatürk'ün izinde", "In Atatürk's footsteps")}</span></button>`) + Object.entries(TEMA).map(([k, t]) =>
       `<button class="tchip" data-go="#/tema/${k}"><i>${ik(t.e, 20)}</i><span>${esc(t.ad)}</span></button>`).join("");
   }
   function showTema(k) {
