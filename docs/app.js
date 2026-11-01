@@ -283,6 +283,7 @@
     $("home").hidden = v !== "home";
     $("tema").hidden = v !== "tema";
     $("rota").hidden = v !== "rota";
+    $("yol").hidden = v !== "yol";
     $("rozet").hidden = v !== "rozet";
     $("listem").hidden = v !== "listem";
     $("city").hidden = v !== "city";
@@ -324,6 +325,7 @@
       if (h[0] === "yakin") return await showNear(no);
       if (h[0] === "tema" && TEMA[h[1]]) return showTema(h[1]);
       if (h[0] === "rota") return await showRota(h[1], no);
+      if (h[0] === "yol") return showYol(h[1], h[2]);
       if (h[0] === "rozetler") { view = { mode: "rozet" }; show("rozet"); $("eyebrow").textContent = T("Gezi haritan ve rozetler"); $("title").textContent = T("Gezilerim"); renderGez(); return; }
       if (h[0] === "listem") { view = { mode: "listem" }; show("listem"); $("eyebrow").textContent = "Rota Cepte"; $("title").textContent = T("Gideceğim yerler"); renderFav(); return; }
       showHome();
@@ -909,6 +911,119 @@
     $("rotaAc").href = `https://www.google.com/maps/dir/?api=1&destination=${nk(son)}${ara ? "&waypoints=" + encodeURIComponent(ara) : ""}&travelmode=driving`;
     $("rotaAc").hidden = !ds.length;
   }
+  // ---------- yol üstü keşif: iki il arasındaki yolda mola verilecek yerler ----------
+  // Yol, komşu illerin merkezlerinden geçen en kısa hattır (il-komsu.json, Natural Earth sınırlarından).
+  // Gerçek karayoluna yakın bir tahmindir; ekranda da "yaklaşık" diye yazılır.
+  const YOL = "gezi-yol", YOL_GENIS = [5, 15, 30], YOL_ILK = 6;
+  let KOMSU = null, yolGenis = 15, yolAcik = new Set();
+  try { const g = JSON.parse(localStorage.getItem(YOL) || "{}").g; if (YOL_GENIS.includes(g)) yolGenis = g; } catch (e) {}
+  function loadKomsu() {
+    if (!KOMSU) KOMSU = getJSON(`il-komsu.json?v=${SURUM}`).catch(() => { KOMSU = null; return null; });
+    return KOMSU;
+  }
+  // 81 düğümlü küçük Dijkstra: ağırlık = il merkezleri arası kuş uçuşu mesafe
+  function yolBul(K, a, b) {
+    const d = new Map([[a, 0]]), once = new Map(), bitti = new Set();
+    for (;;) {
+      let u = null, m = Infinity;
+      for (const [s, v] of d) if (!bitti.has(s) && v < m) { m = v; u = s; }
+      if (u === null || u === b) break;
+      bitti.add(u);
+      const iu = IDX.ilBy.get(u);
+      for (const v of K[u] || []) {
+        const iv = IDX.ilBy.get(v); if (!iv || bitti.has(v)) continue;
+        const n = m + km(iu, iv);
+        if (!d.has(v) || n < d.get(v)) { d.set(v, n); once.set(v, u); }
+      }
+    }
+    if (!d.has(b)) return null;
+    const yol = [b];
+    while (yol[0] !== a) yol.unshift(once.get(yol[0]));
+    return yol;
+  }
+  // Her yerin hatta uzaklığı (sapma) ve hat boyunca konumu; başlangıç ve varış illerinin kendi yerleri hariç
+  function yolYerleri(yol) {
+    const KX = 111.32 * Math.cos((39 * Math.PI) / 180), KY = 110.57;
+    const P = yol.map((s) => { const i = IDX.ilBy.get(s); return [i.lng * KX, i.lat * KY]; });
+    const bir = [0];
+    for (let i = 1; i < P.length; i++) bir.push(bir[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]));
+    const uc = new Set([yol[0], yol[yol.length - 1]]), r = [];
+    for (const x of ARA) {
+      if (uc.has(x[2])) continue;
+      const px = x[5] * KX, py = x[4] * KY;
+      let sap = Infinity, konum = 0;
+      for (let i = 1; i < P.length; i++) {
+        const [ax, ay] = P[i - 1], dx = P[i][0] - ax, dy = P[i][1] - ay, L2 = dx * dx + dy * dy;
+        const t = L2 ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / L2)) : 0;
+        const dd = Math.hypot(px - ax - t * dx, py - ay - t * dy);
+        if (dd < sap) { sap = dd; konum = bir[i - 1] + t * Math.sqrt(L2); }
+      }
+      if (sap <= yolGenis) r.push({ x, sap, konum });
+    }
+    return { r, toplam: bir[bir.length - 1] };
+  }
+  const YOL_CARPAN = 1.2; // il merkezleri arası hat → karayolu için kaba düzeltme
+  function yolDoldur(a, b) {
+    const iller = IDX.iller.slice().sort((x, y) => x.ad.localeCompare(y.ad, "tr"));
+    let kayit = {};
+    try { kayit = JSON.parse(localStorage.getItem(YOL) || "{}"); } catch (e) {}
+    const yakinIl = me ? IDX.iller.reduce((en, i) => (km(me, i) < km(me, en) ? i : en), IDX.iller[0]).s : null;
+    let son = null; try { son = localStorage.getItem("gezi-son-il"); } catch (e) {}
+    const var_ = (s) => s && IDX.ilBy.has(s);
+    a = [a, kayit.a, yakinIl, son, "istanbul"].find(var_);
+    b = [b, kayit.b, a === "ankara" ? "istanbul" : "ankara"].find((s) => var_(s) && s !== a) || "ankara";
+    const sec = (v) => iller.map((i) => `<option value="${i.s}"${i.s === v ? " selected" : ""}>${esc(i.ad)}</option>`).join("");
+    $("yolA").innerHTML = sec(a); $("yolB").innerHTML = sec(b);
+    $("yolGenis").innerHTML = YOL_GENIS.map((g) => `<button data-g="${g}" aria-pressed="${g === yolGenis}">${g} km</button>`).join("");
+  }
+  function showYol(a, b) {
+    view = { mode: "yol" }; show("yol");
+    $("eyebrow").textContent = T("Yolculuk planı"); $("title").textContent = T("Yol üstü keşif");
+    yolAcik = new Set();
+    yolDoldur(a, b);
+    renderYol();
+  }
+  async function renderYol() {
+    if (!view || view.mode !== "yol") return;
+    const a = $("yolA").value, b = $("yolB").value, ilAd = (s) => (IDX.ilBy.get(s) || {}).ad || s;
+    try { localStorage.setItem(YOL, JSON.stringify({ a, b, g: yolGenis })); } catch (e) {}
+    if (location.hash !== `#/yol/${a}/${b}`) history.replaceState(null, "", `#/yol/${a}/${b}`);
+    for (const x of $("yolGenis").children) x.setAttribute("aria-pressed", String(+x.dataset.g === yolGenis));
+    $("yolAc").hidden = true;
+    if (a === b) { $("yolSay").textContent = ""; $("yolHat").innerHTML = ""; $("yolList").innerHTML = `<li class="empty">${T("Nereden ve nereye için iki farklı il seç.")}</li>`; return; }
+    if (!ARA || !KOMSU || typeof KOMSU.then === "function") {
+      $("yolList").innerHTML = `<li class="empty">${T("Yükleniyor…")}</li>`;
+      const [, k] = await Promise.all([loadAra(), loadKomsu()]);
+      if (!ARA || !k) { $("yolList").innerHTML = `<li class="empty">${T("Yol bilgisi yüklenemedi. İnternet bağlantını kontrol et.")}</li>`; KOMSU = null; return; }
+      KOMSU = k;
+      return renderYol();
+    }
+    const yol = yolBul(KOMSU, a, b);
+    if (!yol) { $("yolList").innerHTML = `<li class="empty">${T("Bu iki il arasında yol bulunamadı.")}</li>`; return; }
+    const { r, toplam } = yolYerleri(yol);
+    r.sort((p, q) => p.konum - q.konum);
+    const grup = new Map();
+    for (const y of r) { if (!grup.has(y.x[2])) grup.set(y.x[2], { konum: y.konum, l: [] }); grup.get(y.x[2]).l.push(y); }
+    $("yolSay").textContent = TL(`Yaklaşık ${fmt(toplam * YOL_CARPAN)} yol · ${r.length} mola yeri · ${grup.size} ilde`, `About ${fmt(toplam * YOL_CARPAN)} of driving · ${r.length} stops · in ${grup.size} provinces`);
+    $("yolHat").innerHTML = yol.map((s, i) => `<button class="yhil${i === 0 || i === yol.length - 1 ? " uc" : ""}" data-go="#/il/${s}">${esc(ilAd(s))}</button>`).join(`<i>${ik("chevron-right", 14)}</i>`);
+    const g = gittiklerim();
+    let html = "";
+    for (const [s, { konum, l }] of grup) {
+      // İl içinde önce öne çıkanlar, sonra fotoğraflılar, sonra yola en yakın olanlar
+      l.sort((p, q) => (q.x[7] || 0) - (p.x[7] || 0) || (q.x[8] ? 1 : 0) - (p.x[8] ? 1 : 0) || p.sap - q.sap);
+      const goster = yolAcik.has(s) ? l : l.slice(0, YOL_ILK);
+      html += `<li class="yolil"><b>${esc(ilAd(s))}</b><small>${TL(`başlangıçtan ~${fmt(konum * YOL_CARPAN)}`, `~${fmt(konum * YOL_CARPAN)} from start`)}</small></li>`;
+      html += goster.map(({ x, sap }) => {
+        const c = CATS[x[6]] || CATS.t, ok = g.some((y) => y.s === x[2] && y.ad === x[1]);
+        return `<li><button class="row res" data-yer="${x[2]}|${x[3]}">${x[8] ? thumb({ p: x[8], w: 1e5 }, x[6] || "t") : `<span class="thumb" style="--c:${c.renk}">${icon(x[6] || "t", 20)}</span>`}<span class="rt"><b>${x[7] ? `<i class="star" title="${T("Öne çıkan")}">${ik("star", 14)}</i>` : ""}${esc(araAd(x))}</b><small>${esc(c.ad)} · ${TL(`yoldan ~${fmt(sap)}`, `~${fmt(sap)} off the road`)}</small></span><span class="km${ok ? " ok" : ""}">${ok ? ik("circle-check", 20) : OKIK}</span></button></li>`;
+      }).join("");
+      if (l.length > goster.length) html += `<li><button class="linkbtn yolfazla" data-yolil="${s}">${TL(`${ilAd(s)}: ${l.length - goster.length} yer daha göster`, `Show ${l.length - goster.length} more in ${ilAd(s)}`)}</button></li>`;
+    }
+    $("yolList").innerHTML = html || `<li class="empty">${TL("Bu yolun yakınında kayıtlı yer bulamadık. Yoldan sapma mesafesini artırmayı dene.", "No places found near this road. Try a wider distance.")}</li>`;
+    const A = IDX.ilBy.get(a), B = IDX.ilBy.get(b);
+    $("yolAc").href = `https://www.google.com/maps/dir/?api=1&origin=${A.lat},${A.lng}&destination=${B.lat},${B.lng}&travelmode=driving`;
+    $("yolAc").hidden = false;
+  }
   // ---------- yer öner (e-posta taslağı açar) ----------
   const ILETISIM = "mertturanlioglu.apps@gmail.com";
   function yerOner() {
@@ -1406,6 +1521,13 @@
   $("ilAra").addEventListener("input", () => { ilAra = sade($("ilAra").value.trim()); $("ilAraSil").hidden = !ilAra; shown = 60; renderList(); drawPins(); });
   $("ilAraSil").addEventListener("click", () => { ilAraSifirla(); renderList(); drawPins(); $("ilAra").focus(); });
   $("nearBtn").addEventListener("click", () => git("#/yakin"));
+  $("yolBtn").addEventListener("click", () => git("#/yol"));
+  const yolYeni = () => { yolAcik = new Set(); renderYol(); };
+  $("yolA").addEventListener("change", yolYeni);
+  $("yolB").addEventListener("change", yolYeni);
+  $("yolTers").addEventListener("click", () => { const a = $("yolA").value; $("yolA").value = $("yolB").value; $("yolB").value = a; yolYeni(); });
+  $("yolGenis").addEventListener("click", (e) => { const b = e.target.closest("[data-g]"); if (!b) return; yolGenis = +b.dataset.g; renderYol(); });
+  $("yolList").addEventListener("click", (e) => { const b = e.target.closest("[data-yolil]"); if (!b) return; yolAcik.add(b.dataset.yolil); renderYol(); });
   $("dilYazi").textContent = TL("Language: English", "Dil: Türkçe");
   $("dilBtn").addEventListener("click", () => dilDegistir(TL("en", "tr")));
   // ---------- tema (renk paleti): varsayılan Gün Batımı, Ayarlar'dan değişir ----------

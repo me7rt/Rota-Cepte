@@ -131,6 +131,12 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
       <small id="nearSub">Konumunu aç, sana en yakın gezilecek yerleri sıralayalım</small></span>
       <i class="nearok" data-ik="chevron-right"></i>
     </button>
+    <button class="near yolbtn" id="yolBtn">
+      <span class="nearik"><i data-ik="car-front" data-boy="22"></i></span>
+      <span class="neartxt"><b>Yol üstü keşif</b>
+      <small>Yola mı çıkıyorsun? İki il seç, yol boyunca mola yerlerini bulalım</small></span>
+      <i class="nearok" data-ik="chevron-right"></i>
+    </button>
     <div id="gunun"></div>
     <section class="kesfet"><h2 class="sec">Keşfet</h2><div class="mevsim" id="mevsim"></div><div class="tchips" id="temaChips"></div></section>
     <section id="rotaSec" hidden><h2 class="sec">Hazır rotalar</h2><div class="rkartlar" id="rotaKart"></div></section>
@@ -168,6 +174,20 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
   <ul class="list rlist" id="rotaList"></ul>
   <a class="btn primary rotaac" id="rotaAc" target="_blank" rel="noopener" hidden><i data-ik="navigation" data-boy="18"></i> Rotayı Google Haritalar'da başlat</a>
   <p class="tsay">Mesafeler yaklaşık. Durağa dokununca ayrıntısını görürsün.</p>
+</main>
+
+<main id="yol" class="view" hidden>
+  <div class="yolform">
+    <label class="yolsec"><small>Nereden</small><select id="yolA" aria-label="Nereden"></select><i class="yolok" data-ik="chevron-down" data-boy="16"></i></label>
+    <button class="yolters" id="yolTers" aria-label="Yönü değiştir"><i data-ik="arrow-up-down" data-boy="18"></i></button>
+    <label class="yolsec"><small>Nereye</small><select id="yolB" aria-label="Nereye"></select><i class="yolok" data-ik="chevron-down" data-boy="16"></i></label>
+  </div>
+  <div class="yolg"><small>Yoldan en fazla</small><span class="seg" id="yolGenis"></span></div>
+  <p class="tsay" id="yolSay"></p>
+  <div class="yolhat" id="yolHat"></div>
+  <ul class="list" id="yolList"></ul>
+  <a class="btn primary rotaac" id="yolAc" target="_blank" rel="noopener" hidden><i data-ik="navigation" data-boy="18"></i> Yol tarifini Google Haritalar'da aç</a>
+  <p class="tsay">Yol, illerin merkezlerinden geçen yaklaşık bir hattır. Gerçek güzergâh farklı olabilir, mesafeler yaklaşıktır. Başlangıç ve varış illerindeki yerler o illerin kendi sayfasında.</p>
 </main>
 
 <main id="rozet" class="view" hidden>
