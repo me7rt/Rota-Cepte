@@ -30,16 +30,7 @@ fs.writeFileSync(`${out}/secilen.json`, JSON.stringify(bilgi, null, 1));
 // 2) Ek arama: yeni tasarımlar için aday fotoğraflar
 const QI = ' incategory:"Quality_images"', FP = ' incategory:"Featured_pictures_on_Wikimedia_Commons"';
 const TEMA = {
-  kapadokya: { kat: ["Hot air balloons in Cappadocia", "Hot air balloons over Göreme"], ara: ["Cappadocia balloons" + QI, "Cappadocia balloons sunrise", "Göreme hot air balloons" + FP] },
-  pamukkale: { kat: ["Pamukkale travertines"], ara: ["Pamukkale travertine" + QI, "Pamukkale terraces", "Pamukkale" + FP] },
-  oludeniz: { kat: ["Ölüdeniz"], ara: ["Ölüdeniz", "Ölüdeniz" + QI, "Oludeniz lagoon"] },
-  sumela: { kat: ["Sumela Monastery"], ara: ["Sumela Monastery" + QI, "Sumela Monastery"] },
-  nemrut: { kat: ["Mount Nemrut"], ara: ["Mount Nemrut" + QI, "Nemrut Dağı statues"] },
-  efes: { kat: ["Library of Celsus"], ara: ["Library of Celsus" + QI, "Library of Celsus Ephesus" + FP] },
-  istanbul: { kat: ["Galata Tower"], ara: ["Istanbul Bosphorus skyline" + QI, "Galata Tower" + QI, "Istanbul panorama" + FP] },
-  uzungol: { kat: ["Uzungöl"], ara: ["Uzungöl", "Uzungöl" + QI] },
-  mardin: { kat: [], ara: ["Mardin old city view" + QI, "Mardin skyline", "Mardin" + FP] },
-  kackar: { kat: ["Kaçkar Mountains"], ara: ["Kaçkar Mountains" + QI, "Ayder plateau", "Kaçkar"] },
+  ucmakdere: { hepsi: true, kat: ["Uçmakdere"], ara: ["Uçmakdere", "Ucmakdere", "Uçmakdere Tekirdağ", "Uçmakdere köyü"] },
 };
 const sonuc = {};
 for (const [tema, t] of Object.entries(TEMA)) {
@@ -52,7 +43,7 @@ for (const [tema, t] of Object.entries(TEMA)) {
     for (const pg of (j.query && j.query.pages) || []) {
       const ii = pg.imageinfo && pg.imageinfo[0]; if (!ii) continue;
       const em = ii.extmetadata || {}, lis = temiz(em, "LicenseShortName");
-      if (!(t.hepsi ? !/gfdl/i.test(lis) && lis : izinli(lis)) || ii.width < 1500 || ii.height < 1000) continue;
+      if (!(t.hepsi ? !/gfdl/i.test(lis) && lis : izinli(lis)) || ii.width < 1000 || ii.height < 700) continue;
       const qi = /Quality images|Featured pictures|Valued images/i.test(temiz(em, "Categories"));
       aday.push({ ad: pg.title.replace(/^File:/, ""), lis, lisUrl: temiz(em, "LicenseUrl"), yazar: temiz(em, "Artist").slice(0, 90), tarih: temiz(em, "DateTimeOriginal").slice(0, 10), aciklama: temiz(em, "ImageDescription").slice(0, 160), w: ii.width, h: ii.height, qi, kucuk: ii.thumburl, sayfa: ii.descriptionurl });
     }
