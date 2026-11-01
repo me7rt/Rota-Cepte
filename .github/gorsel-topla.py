@@ -28,7 +28,9 @@ def uygun(lis):
     return l.startswith("cc0") or "public domain" in l or l == "pd" or l.startswith("cc by")
 
 meta = {}
-for anahtar, (arama, tur, adet) in SORGULAR.items():
+for anahtar, deger in SORGULAR.items():
+    arama, tur, adet = deger[:3]
+    enaz = deger[3] if len(deger) > 3 else 1800
     q = {"action": "query", "format": "json", "generator": "search",
          "gsrsearch": f"{arama} filetype:{tur}", "gsrnamespace": "6", "gsrlimit": "50",
          "prop": "imageinfo", "iiprop": "url|size|extmetadata|mime", "iiurlwidth": "1600"}
@@ -41,7 +43,7 @@ for anahtar, (arama, tur, adet) in SORGULAR.items():
         lis = temiz(em.get("LicenseShortName", {}).get("value"))
         if not uygun(lis):
             continue
-        if tur == "bitmap" and (ii.get("width", 0) < 1800 or ii.get("height", 0) < 1000):
+        if tur == "bitmap" and (max(ii.get("width", 0), ii.get("height", 0)) < enaz):
             continue
         if tur == "video" and ii.get("size", 0) > 80_000_000:
             continue

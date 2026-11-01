@@ -14,14 +14,9 @@ jobs:
       - name: Commons gorselleri
         run: |
           python3 .github/gorsel-topla.py cikti '{
-            "balon": ["Cappadocia hot air balloons", "bitmap", 10],
-            "balon-goreme": ["Göreme balloons sunrise", "bitmap", 6],
-            "peri": ["fairy chimneys Cappadocia", "bitmap", 8],
-            "uchisar": ["Uçhisar castle", "bitmap", 6],
-            "derinkuyu": ["Derinkuyu underground city", "bitmap", 6],
-            "kizilcukur": ["Kızılçukur valley", "bitmap", 5],
-            "gunbatimi": ["Cappadocia sunset", "bitmap", 5],
-            "video": ["Cappadocia", "video", 6]
+            "derinkuyu": ["Derinkuyu underground city", "bitmap", 8, 1000],
+            "kaymakli": ["Kaymakli underground city", "bitmap", 8, 1000],
+            "yeralti": ["underground city Cappadocia", "bitmap", 8, 1000]
           }'
       - name: video-deneme dalina koy
         run: |
@@ -30,4 +25,4 @@ jobs:
           git config user.name "Mert Turanlıoğlu"
           git config user.email "me7rtt@gmail.com"
           git add . && git commit -qm "Kısa video görsel adayları"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" video-deneme
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:video-deneme-2
