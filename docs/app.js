@@ -439,8 +439,10 @@
   function gitBtn(p) {
     const on = gittimMi(p), b = $("dGit");
     b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); b.querySelector("span").textContent = on ? T("Gittim") : T("Buraya gittim");
+    notSatir(p);
   }
   function renderGez() {
+    renderSevdik();
     const a = gittiklerim();
     $("gezSec").hidden = false; renderHarita(); renderRozet(); renderHedef(); renderPasaport();
     $("gezBtn").hidden = $("karneBtn").hidden = !a.length; ozetBtn();
@@ -1255,6 +1257,88 @@
       const c = CATS[x[6]] || CATS.t, il = (IDX.ilBy.get(x[2]) || {}).ad || "";
       return `<li><button class="row res" data-yer="${x[2]}|${x[3]}">${x[8] ? thumb({ p: x[8], w: 1e5 }, x[6] || "t") : `<span class="thumb" style="--c:${c.renk}">${icon(x[6] || "t", 20)}</span>`}<span class="rt"><b>${esc(araAd(x))}</b><small>${esc(il)}</small></span><span class="km">${me ? fmt(km(me, { lat: x[4], lng: x[5] })) : OKIK}</span></button></li>`;
     }).join("") : `<li class="empty">${T("Bu türde yer bulunamadı.")}</li>`;
+  }
+  // ---------- v6.5 gezi notu ve puan, en sevdiğin yerler ----------
+  // Puan (p: 1-5) ve not (n) yalnızca bu cihazda, "gezi-gittim" kaydının içinde durur; hiçbir yere gönderilmez.
+  const NOT_UZ = 280;
+  const gitKayit = (p) => gittiklerim().find((x) => ayni(x, p));
+  // Gittiğin yerin kaydına puan / not yaz (boş değer alanı siler), diğer alanlara dokunma
+  function gitGuncelle(p, alan) {
+    try {
+      const a = JSON.parse(localStorage.getItem(GIT)) || [], x = a.find((y) => ayni(y, p));
+      if (!x) return false;
+      for (const [k, v] of Object.entries(alan)) { if (v) x[k] = v; else delete x[k]; }
+      localStorage.setItem(GIT, JSON.stringify(a));
+      return true;
+    } catch (e) { return false; }
+  }
+  const yildizlar = (n, boy) => [1, 2, 3, 4, 5].map((i) => `<i${i <= n ? ' class="on"' : ""}>${ik("star", boy)}</i>`).join("");
+  // Detay kartı: "Gittim" işaretliyse 5 yıldız ve kısa not
+  let notZaman = null, notBekleyen = null;
+  function notSatir(p) {
+    notYaz();
+    const kutu = $("dNot"), x = p && p.q ? gitKayit(p) : null;
+    kutu.hidden = !x;
+    if (!x) { kutu.innerHTML = ""; return; }
+    const puan = x.p || 0, not = x.n || "";
+    kutu.innerHTML = `<div class="gpuan"><span id="dPuanBas">${TL("Puanın", "Your rating")}</span><div class="yildiz" role="group" aria-labelledby="dPuanBas">${[1, 2, 3, 4, 5].map((i) =>
+      `<button type="button" data-p="${i}" style="--i:${i}"${i <= puan ? ' class="on"' : ""} aria-pressed="${i === puan}" aria-label="${TL(`${i} yıldız`, `${i} star${i > 1 ? "s" : ""}`)}">${ik("star", 26)}</button>`).join("")}</div></div>` +
+      `<button type="button" class="gnotbtn" aria-expanded="${!!not}" aria-controls="dNotAlan">${ik("message-circle-heart", 18)}<span>${not ? TL("Notun", "Your note") : TL("Not ekle", "Add a note")}</span>${ik("chevron-down", 18, "gac")}</button>` +
+      `<div class="gnotalan" id="dNotAlan"${not ? "" : " hidden"}><textarea id="dNotYazi" rows="3" maxlength="${NOT_UZ}" placeholder="${esc(TL("Burada neler yaşadın? Kendine kısa bir not bırak.", "What was it like? Leave yourself a short note."))}" aria-label="${esc(TL("Gezi notun", "Your trip note"))}">${esc(not)}</textarea><small class="gsay" id="dNotSay">${not.length} / ${NOT_UZ}</small></div>`;
+  }
+  // Yıldızları yeniden çizmeden güncelle (odak yerinde kalsın)
+  function puanGoster(n) {
+    for (const b of $("dNot").querySelectorAll("[data-p]")) {
+      const i = +b.dataset.p;
+      b.classList.toggle("on", i <= n); b.setAttribute("aria-pressed", i === n);
+      b.classList.remove("pop"); if (i <= n) { void b.offsetWidth; b.classList.add("pop"); }
+    }
+  }
+  // Notu kaydet: yazarken 0,7 sn bekleyerek, alandan çıkınca ve uygulama arka plana geçince hemen
+  function notYaz() {
+    clearTimeout(notZaman); notZaman = null;
+    const b = notBekleyen; notBekleyen = null;
+    if (!b) return;
+    const n = b.v.trim().slice(0, NOT_UZ);
+    if (!gitGuncelle(b.p, { n }) || open !== b.p || !$("dNotSay")) return;
+    $("dNotSay").textContent = `${TL("Kaydedildi", "Saved")} · ${b.v.length} / ${NOT_UZ}`;
+    $("dNot").querySelector(".gnotbtn span").textContent = n ? TL("Notun", "Your note") : TL("Not ekle", "Add a note");
+  }
+  $("dNot").addEventListener("click", (e) => {
+    const y = e.target.closest("[data-p]");
+    if (y && open) {
+      const x = gitKayit(open); if (!x) return;
+      // Aynı yıldıza tekrar dokununca puan silinir
+      const n = +y.dataset.p === x.p ? 0 : +y.dataset.p;
+      if (gitGuncelle(open, { p: n })) puanGoster(n);
+      return;
+    }
+    const b = e.target.closest(".gnotbtn");
+    if (b) {
+      const alan = $("dNotAlan"), ac = alan.hidden;
+      alan.hidden = !ac; b.setAttribute("aria-expanded", ac);
+      if (ac) $("dNotYazi").focus();
+    }
+  });
+  $("dNot").addEventListener("input", (e) => {
+    if (e.target.id !== "dNotYazi" || !open) return;
+    $("dNotSay").textContent = `${e.target.value.length} / ${NOT_UZ}`;
+    notBekleyen = { p: open, v: e.target.value };
+    clearTimeout(notZaman); notZaman = setTimeout(notYaz, 700);
+  });
+  $("dNot").addEventListener("focusout", (e) => { if (e.target.id === "dNotYazi") notYaz(); });
+  addEventListener("pagehide", notYaz);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) notYaz(); });
+  // Gezilerim: 4-5 yıldız verdiğin yerler (önce puan, sonra tarih)
+  function renderSevdik() {
+    const a = gittiklerim(), l = a.filter((x) => x.p >= 4).sort((x, y) => y.p - x.p || (y.t || 0) - (x.t || 0));
+    $("sevSec").hidden = !a.length;
+    $("sevSec").classList.toggle("ipucu", !l.length);
+    $("sevBas").hidden = $("sevList").hidden = !l.length; $("sevIpucu").hidden = !!l.length;
+    $("sevList").innerHTML = l.map((x) => {
+      const ilk = String(x.n || "").split("\n").map((s) => s.trim()).find(Boolean) || "";
+      return `<li><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${thumb(x.f, x.k)}<span class="rt"><b>${esc(kayitAd(x))}</b><small><span class="sevy" role="img" aria-label="${TL(`${x.p} yıldız`, `${x.p} stars`)}">${yildizlar(x.p, 13)}</span>${esc(x.il)}</small>${ilk ? `<em>${esc(ilk)}</em>` : ""}</span>${OKIK}</button></li>`;
+    }).join("");
   }
   // ---------- internetsiz kullanım: ilin verisini ve fotoğraflarını telefona indir ----------
   const INDK = "gezi-indirilen", INDC = "gezi-indir";

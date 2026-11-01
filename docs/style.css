@@ -902,3 +902,48 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 .haltin small em{font-style:normal;font-weight:700;color:var(--fg)}
 .haltin.on{box-shadow:inset 0 0 0 1.5px var(--altin-b)}
 .haltin.on small em{font-weight:800;color:var(--amber-ink)}
+
+/* v6.5 gezi notu ve sana özel */
+/* detay kartı: gittiğin yere puan ve not */
+.gnot{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r-m);background:var(--surface);overflow:hidden;animation:gnGel .25s ease}
+@keyframes gnGel{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.gpuan{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:52px;padding:2px 4px 2px 14px}
+.gpuan>span{min-width:0;font-size:14px;font-weight:800;line-height:1.2}
+.yildiz{flex:none;display:flex}
+.yildiz button{display:grid;place-items:center;width:42px;height:46px;padding:0;border:0;border-radius:12px;background:none;color:color-mix(in srgb,var(--muted) 42%,var(--surface))}
+.yildiz button svg{transition:transform .15s}
+.yildiz button:active svg{transform:scale(.82)}
+.yildiz button.on{color:var(--altin-b)}
+.yildiz button.on svg{fill:var(--altin-a);stroke:var(--altin-b)}
+.yildiz button.pop svg{animation:yzPop .38s cubic-bezier(.3,1.5,.5,1) calc((var(--i) - 1) * 40ms) both}
+@keyframes yzPop{0%{transform:scale(.6)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+.gnotbtn{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;padding:0 14px;border:0;border-top:1px solid var(--line);background:none;color:var(--fg);font-size:14px;font-weight:800;text-align:left;transition:background-color .15s}
+.gnotbtn>.ik:first-child{color:var(--pri-ink)}
+.gnotbtn span{flex:1;min-width:0}
+.gnotbtn .gac{color:var(--muted);transition:transform .2s}
+.gnotbtn[aria-expanded="true"] .gac{transform:rotate(180deg)}
+.gnotbtn:active{background:var(--surface2)}
+.gnotalan{position:relative;padding:0 12px 12px}
+.gnotalan textarea{display:block;width:100%;min-height:92px;max-height:260px;field-sizing:content;resize:none;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--fg);padding:10px 12px 26px;font-size:16px;line-height:1.45;-webkit-appearance:none;appearance:none;overflow-wrap:anywhere}
+.gnotalan textarea::placeholder{color:var(--muted);opacity:.85}
+.gnotalan textarea:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px color-mix(in srgb,var(--pri) 22%,transparent)}
+.gsay{position:absolute;right:22px;bottom:18px;font-size:11.5px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;pointer-events:none}
+@media (max-width:359px){.gpuan{padding-left:12px}.gpuan>span{font-size:13px}.yildiz button{width:37px}}
+/* Gezilerim: en sevdiğin yerler */
+.sevsec{margin-top:12px;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-l);padding:14px 14px 6px;display:flex;flex-direction:column;gap:6px}
+.sevsec .hbas .ik{color:var(--altin-b);fill:var(--altin-a)}
+.sevlist{gap:0}
+.sevlist .row{min-height:74px;border:0;border-radius:var(--r-s);background:transparent;padding:8px 2px 8px 0}
+.sevlist li+li .row{border-top:1px solid var(--line);border-radius:0}
+.sevlist .row:active{background:var(--surface2)}
+.sevlist em{display:block;margin-top:2px;font-style:normal;font-size:13px;color:var(--fg);opacity:.86;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sevlist em::before{content:"“"}
+.sevlist em::after{content:"”"}
+.sevy{display:inline-flex;gap:1px;margin-right:6px;vertical-align:-2px}
+.sevy i{display:inline-flex;color:color-mix(in srgb,var(--muted) 35%,var(--surface))}
+.sevy i.on{color:var(--altin-b)}
+.sevy i.on svg{fill:var(--altin-a);stroke:var(--altin-b)}
+.sevsec.ipucu{padding:12px 14px}
+.sevipucu{display:flex;align-items:center;gap:8px;margin:0;font-size:13.5px;font-weight:600;color:var(--muted);line-height:1.4}
+.sevipucu .ik{flex:none;color:var(--altin-b)}
+@media (prefers-reduced-motion:reduce){.gnot{animation:none}.yildiz button.pop svg{animation:none}}
