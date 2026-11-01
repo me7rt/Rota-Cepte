@@ -10,7 +10,7 @@ const temiz = (em, k) => (em[k] ? String(em[k].value).replace(/<[^>]+>/g, " ").r
 const out = "out"; fs.mkdirSync(out + "/b", { recursive: true });
 
 // 1) Seçilen dosyaları büyük boy indir (kısa kenar ~1500 px; şimdilik veri denetimi için birkaç dosya)
-const SECILEN = {};
+const SECILEN = { "uc-2": "Tekirdağ Kartaltepe Natural Park.jpg", "uc-3": "Yeniköy Yamacından... - panoramio.jpg", "uc-4": "Yeniköy Kıyıları... - panoramio.jpg", "uc-5": "Tepeden Marmara... - panoramio.jpg" };
 const bilgi = {};
 for (const [no, ad] of Object.entries(SECILEN)) {
   const j = await al({ action: "query", titles: "File:" + ad, prop: "imageinfo", iiprop: "url|size|extmetadata", iiextmetadatafilter: EM });
@@ -21,7 +21,7 @@ for (const [no, ad] of Object.entries(SECILEN)) {
   const k = await al({ action: "query", titles: "File:" + ad, prop: "imageinfo", iiprop: "url", iiurlwidth: String(ii.width >= ii.height ? Math.min(ii.width, Math.round(ii.width * 1500 / ii.height)) : Math.min(ii.width, 1500)) });
   const kk = k.query.pages[0].imageinfo[0];
   const ok = await indir(kk.thumburl || kk.url, `${out}/b/${no}.jpg`);
-  bilgi[no] = { ad, ok, w: ii.width, h: ii.height, lis: temiz(em, "LicenseShortName"), lisUrl: temiz(em, "LicenseUrl"), yazar: temiz(em, "Artist"), kredi: temiz(em, "Credit").slice(0, 200), tarih: temiz(em, "DateTimeOriginal"), atif: temiz(em, "AttributionRequired"), sayfa: ii.descriptionurl, izinli: izinli(temiz(em, "LicenseShortName")) };
+  bilgi[no] = { ad, ok, w: ii.width, h: ii.height, lis: temiz(em, "LicenseShortName"), lisUrl: temiz(em, "LicenseUrl"), yazar: temiz(em, "Artist"), kredi: temiz(em, "Credit").slice(0, 200), tarih: temiz(em, "DateTimeOriginal"), atif: temiz(em, "AttributionRequired"), sayfa: ii.descriptionurl, kat: temiz(em, "Categories"), aciklama: temiz(em, "ImageDescription").slice(0, 400), izinli: izinli(temiz(em, "LicenseShortName")) };
   console.log(no, ok, bilgi[no].lis, bilgi[no].yazar);
   await bekle(400);
 }
@@ -29,9 +29,7 @@ fs.writeFileSync(`${out}/secilen.json`, JSON.stringify(bilgi, null, 1));
 
 // 2) Ek arama: yeni tasarımlar için aday fotoğraflar
 const QI = ' incategory:"Quality_images"', FP = ' incategory:"Featured_pictures_on_Wikimedia_Commons"';
-const TEMA = {
-  ucmakdere: { hepsi: true, kat: ["Uçmakdere"], ara: ["Uçmakdere", "Ucmakdere", "Uçmakdere Tekirdağ", "Uçmakdere köyü"] },
-};
+const TEMA = {};
 const sonuc = {};
 for (const [tema, t] of Object.entries(TEMA)) {
   const adlar = new Set();
