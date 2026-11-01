@@ -804,7 +804,13 @@
     61: ["cloud-rain", T("Hafif yağmur")], 63: ["cloud-rain", T("Yağmurlu")], 65: ["cloud-rain", T("Kuvvetli yağmur")], 66: ["cloud-rain", T("Dondurucu yağmur")], 67: ["cloud-rain", T("Dondurucu yağmur")],
     71: ["cloud-snow", T("Hafif kar")], 73: ["cloud-snow", T("Karlı")], 75: ["snowflake", T("Yoğun kar")], 77: ["cloud-snow", T("Kar")], 80: ["cloud-drizzle", T("Sağanak")], 81: ["cloud-rain", T("Sağanak")], 82: ["cloud-lightning", T("Kuvvetli sağanak")],
     85: ["cloud-snow", T("Kar sağanağı")], 86: ["snowflake", T("Kar sağanağı")], 95: ["cloud-lightning", T("Gök gürültülü")], 96: ["cloud-lightning", T("Dolu")], 99: ["cloud-lightning", T("Dolu")] };
-  const havaOnbellek = new Map();
+  // Anlık hava: il başına 10 dakika saklanır; il sayfası açıkken dakikada bir bakılır, eskiyince yenilenir
+  const HAVA_TAZE = 10 * 6e4;
+  const havaOnbellek = new Map(); // il -> { d: 3 günlük, c: şu an, t: alındığı an }
+  const havaHata = new Map(), havaYuk = new Map(); // son başarısız deneme; süren istek (aynı il için ikinci istek açılmasın)
+  let havaSaat = 0, havaIl = null, havaGunH = ""; // dakikalık sayaç, kutusu açık olan il, ekrandaki güneş satırı
+  // Sayaç dakika başında döndüğü için 30 sn pay: veri 10. dakikada yenilenir, 11.'yi beklemez
+  const havaTaze = (v) => !!v && Date.now() - v.t < HAVA_TAZE - 3e4;
   // Gün doğumu ve batımı: internetsiz hesap (NOAA'nın sadeleştirilmiş güneş denklemi), Türkiye saatiyle
   function gunes(lat, lng, t) {
     const R = Math.PI / 180, J = t / 864e5 + 2440587.5, n = Math.round(J - 2451545 - 0.0009 - (-lng) / 360);
@@ -819,15 +825,28 @@
   const saatYaz = (t) => new Date(t).toLocaleTimeString(DIL === "en" ? "en-GB" : "tr-TR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Istanbul" });
   // Gün batımı için manzaralı yer: tepe, kale, burun, sahil, seyir terası...
   const MANZARA = /seyir|tepe|kalesi|burnu|feneri|sahil|teras|panorama|kordon|yayla|dagi/;
+  // Türkiye saatiyle bugünün öğlesi (UTC+3): gece yarısından sonra da bugünün doğuş/batış saatleri hesaplansın
+  const ogle = (t) => t - ((t + 108e5) % 864e5) + 432e5;
+  // Altın saat (yaklaşık): gün doğumundan sonraki ve gün batımından önceki bir saat. Şu anki ya da sıradaki pencere seçilir.
+  function altinSaat(il, simdi) {
+    for (let k = 0; k < 2; k++) {
+      const g = gunes(il.lat, il.lng, ogle(simdi) + k * 864e5); if (!isFinite(g.batis)) return null;
+      for (const [a, b, sabah] of [[g.dogus, g.dogus + 36e5, true], [g.batis - 36e5, g.batis, false]]) if (b > simdi) return { a, b, sabah };
+    }
+    return null;
+  }
   function gunesSatir(d, il) {
-    const g = gunes(il.lat, il.lng, Date.now()); if (!isFinite(g.batis)) return "";
-    const kalan = g.batis - Date.now();
+    const simdi = Date.now(), g = gunes(il.lat, il.lng, ogle(simdi)); if (!isFinite(g.batis)) return "";
+    const kalan = g.batis - simdi, dk = Math.max(1, Math.round(kalan / 6e4)), sa = Math.floor(dk / 60), kd = dk % 60;
     const yer = d && d.yerler && (d.yerler.find((y) => y.one && MANZARA.test(sade(y.ad))) || d.yerler.find((y) => MANZARA.test(sade(y.ad))));
     const not = kalan > 0 && kalan < 3 * 36e5
-      ? TL(`Gün batımına ${Math.floor(kalan / 36e5) ? Math.floor(kalan / 36e5) + " sa " : ""}${Math.round((kalan % 36e5) / 6e4)} dk var.`, `Sunset in ${Math.floor(kalan / 36e5) ? Math.floor(kalan / 36e5) + " h " : ""}${Math.round((kalan % 36e5) / 6e4)} min.`)
+      ? TL(`Gün batımına ${sa ? sa + " sa " : ""}${kd ? kd + " dk " : ""}var.`, `Sunset in ${[sa ? sa + " h" : "", kd ? kd + " min" : ""].filter(Boolean).join(" ")}.`)
       : "";
-    return `<div class="gunes"><span>${ik("sun", 18)} ${TL("Gün doğumu", "Sunrise")} <b>${saatYaz(g.dogus)}</b></span><span>${ik("sun", 18)} ${TL("Gün batımı", "Sunset")} <b>${saatYaz(g.batis)}</b></span></div>` +
-      (yer ? `<button class="honer gbyer" data-hy="${d.yerler.indexOf(yer)}">${ik("camera", 16)} <span>${not ? not + " " : ""}${TL("Gün batımı için güzel bir yer:", "A good spot for sunset:")} <b>${esc(adi(yer))}</b></span>${ik("chevron-right", 16)}</button>` : (not ? `<p class="hnot">${not}</p>` : ""));
+    const al = altinSaat(il, simdi);
+    const ne = !al ? "" : al.a <= simdi ? TL("Şu an", "Right now") : !al.sabah ? TL("Bu akşam", "This evening") : al.a < ogle(simdi) + 432e5 ? TL("Bu sabah", "This morning") : TL("Yarın sabah", "Tomorrow morning");
+    const altin = al ? `<div class="haltin${al.a <= simdi ? " on" : ""}" title="${TL("Yaklaşık değer: gerçek süre mevsime ve enleme göre değişir.", "Approximate: the real duration varies with season and latitude.")}"><i>${ik("camera", 17)}</i><span><span class="hasat"><b>${TL("Altın saat", "Golden hour")}</b><strong>${saatYaz(al.a)} – ${saatYaz(al.b)}</strong></span><small><em>${ne}</em> · ${TL("fotoğraf için en güzel ışık (yaklaşık)", "best light for photos (approx.)")}</small></span></div>` : "";
+    return `<div class="gunes"><span>${ik("sunrise", 18)} ${TL("Gün doğumu", "Sunrise")} <b>${saatYaz(g.dogus)}</b></span><span>${ik("sunset", 18)} ${TL("Gün batımı", "Sunset")} <b>${saatYaz(g.batis)}</b></span></div>` + altin +
+      (yer ? `<button class="honer gbyer" data-hy="${d.yerler.indexOf(yer)}">${ik("map-pin", 16)} <span>${not ? not + " " : ""}${TL("Gün batımı için güzel bir yer:", "A good spot for sunset:")} <b>${esc(adi(yer))}</b></span>${ik("chevron-right", 16)}</button>` : (not ? `<p class="hnot">${not}</p>` : ""));
   }
   // Havaya göre öneri: yağışta kapalı mekânlar, sıcakta serin yerler, güzel havada doğa
   const KAPALI = /muze|carsi|bedesten|hani|kervansaray|magara|saray|konag|kosk|hamam|kulliye|cami/, SERIN = /selale|magara|golu|gol |yayla|plaj|koy|kanyon|vadi|orman|kaynak/;
@@ -842,28 +861,99 @@
     if (!r.length) return "";
     return `<div class="honerk"><small>${ik("lightbulb", 15)} ${baslik}</small><div class="honerl">${r.map((y) => `<button class="hyer" data-hy="${d.yerler.indexOf(y)}">${thumb(y.f, y.k)}<span>${esc(adi(y))}</span></button>`).join("")}</div></div>`;
   }
-  async function havaGoster(il) {
-    const kutu = $("hava"); kutu.hidden = true; kutu.innerHTML = "";
-    if (!il || il.lat == null) return;
-    const s = il.s, d0 = view && view.d && view.d.s === s ? view.d : null;
-    const gun = gunesSatir(d0, il);
-    if (gun) { kutu.innerHTML = gun; kutu.hidden = false; }
+  // Kutunun açık olduğu il hâlâ ekranda mı (ilçe sayfasında kutu gizlidir)
+  const havaAcik = (s) => !!(view && view.mode === "il" && view.d && view.d.s === s);
+  // İnternet yoksa ya da hata olursa elde ne varsa o döner (eski veri, saatiyle); hatadan sonra yaklaşık 2 dakika yeniden denenmez
+  function havaGetir(il) {
+    const s = il.s, v = havaOnbellek.get(s);
+    if (havaTaze(v)) return Promise.resolve(v);
+    if (havaYuk.has(s)) return havaYuk.get(s);
+    if (Date.now() - (havaHata.get(s) || 0) < 9e4) return Promise.resolve(v || null);
+    const p = fetch(`https://api.open-meteo.com/v1/forecast?latitude=${il.lat}&longitude=${il.lng}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,is_day&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Europe%2FIstanbul&forecast_days=3`)
+      .then((r) => { if (!r.ok) throw new Error("hava " + r.status); return r.json(); })
+      .then((j) => {
+        const g = j && j.daily;
+        if (!g || !g.time || !g.weathercode || !g.temperature_2m_max || !g.temperature_2m_min) throw new Error("hava veri");
+        const y = { d: j.daily, c: j.current || null, t: Date.now() };
+        havaOnbellek.set(s, y); havaHata.delete(s); return y;
+      })
+      .catch(() => { havaHata.set(s, Date.now()); return v || null; })
+      .finally(() => havaYuk.delete(s));
+    havaYuk.set(s, p);
+    return p;
+  }
+  // "Şu an" satırı: anlık sıcaklık, durum, hissedilen, rüzgâr ve güncellenme saati
+  function havaSimdi(v) {
+    const c = v.c; if (!c || c.temperature_2m == null) return "";
+    const gece = c.is_day === 0;
+    let [hik, ad] = HAVA[c.weather_code] || ["thermometer", ""];
+    if (gece) hik = { sun: "moon", "cloud-sun": "cloud-moon" }[hik] || hik;
+    const hs = c.apparent_temperature != null ? `<span>${TL("Hissedilen", "Feels like")} ${Math.round(c.apparent_temperature)}°</span>` : "";
+    const rz = c.wind_speed_10m != null ? `<span title="${TL("Rüzgâr", "Wind")}">${ik("wind", 15)}<span class="hgizli">${TL("Rüzgâr", "Wind")}</span> ${Math.round(c.wind_speed_10m)} ${TL("km/sa", "km/h")}</span>` : "";
+    return `<div class="hsimdi${gece ? " gece" : ""}"><div class="hsust"><span class="hcanli"><i></i>${TL("Şu an", "Now")}</span><small>${TL("Güncellendi", "Updated")} ${saatYaz(v.t)}</small></div>` +
+      `<i class="hsik">${ik(hik, 40)}</i><b class="hsder">${Math.round(c.temperature_2m)}°</b><span class="hsyaz"><b>${ad}</b>${hs || rz ? `<small>${hs}${rz}</small>` : ""}</span></div>`;
+  }
+  // Kutuyu yeniden yazarken klavye odağı kaybolmasın
+  function havaYaz(el, html) {
+    const o = document.activeElement, hy = o && el.contains(o) && o.dataset ? o.dataset.hy : null;
+    el.innerHTML = html;
+    if (hy != null) { const b = el.querySelector(`[data-hy="${hy}"]`); if (b) b.focus(); }
+  }
+  function havaCiz(il, v) {
+    const kutu = $("hava"), gun = gunesSatir(view.d, il), gunK = gun ? `<div class="hgunes">${gun}</div>` : "";
+    havaGunH = gun;
+    if (!v) { havaYaz(kutu, gunK); kutu.hidden = !gunK; return; }
+    const d = v.d, gunler = [T("Bugün"), T("Yarın")];
+    let html;
     try {
-      let d = havaOnbellek.get(s);
-      if (!d) {
-        const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${il.lat}&longitude=${il.lng}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Europe%2FIstanbul&forecast_days=3`);
-        if (!r.ok) return;
-        d = (await r.json()).daily; havaOnbellek.set(s, d);
-      }
-      if (!view || !view.d || view.d.s !== s) return;
-      const gunler = [T("Bugün"), T("Yarın")];
-      kutu.innerHTML = `<small>${TL(esc(il.ad) + " hava durumu", "Weather in " + esc(il.ad))}</small><div class="hgun">` + d.time.map((t, i) => {
+      html = `<small>${TL(esc(il.ad) + " hava durumu", "Weather in " + esc(il.ad))}</small>` + havaSimdi(v) + `<div class="hgun">` + d.time.map((t, i) => {
         const [hik, ad] = HAVA[d.weathercode[i]] || ["thermometer", ""];
         const g = gunler[i] || new Date(t + "T12:00").toLocaleDateString(DIL === "en" ? "en-GB" : "tr-TR", { weekday: "long" });
         return `<span><em>${g}</em><i>${ik(hik, 28)}</i><b>${Math.round(d.temperature_2m_max[i])}° <small>${Math.round(d.temperature_2m_min[i])}°</small></b><small>${ad}</small></span>`;
-      }).join("") + `</div>` + havaOneri(view.d, d.weathercode[0], d.temperature_2m_max[0]) + gun + `<a class="hkaynak" href="https://open-meteo.com/" target="_blank" rel="noopener">${TL("Hava durumu verisi: Open-Meteo.com", "Weather data by Open-Meteo.com")}</a>`;
-      kutu.hidden = false;
-    } catch (e) {}
+      }).join("") + `</div>` + havaOneri(view.d, d.weathercode[0], d.temperature_2m_max[0]) + gunK + `<a class="hkaynak" href="https://open-meteo.com/" target="_blank" rel="noopener">${TL("Hava durumu verisi: Open-Meteo.com", "Weather data by Open-Meteo.com")}</a>`;
+    } catch (e) { return; } // beklenmedik veri: ekrandaki kutu olduğu gibi kalır
+    havaYaz(kutu, html);
+    kutu.hidden = false;
+  }
+  // Dakikalık bakım: gün batımı sayacı ve altın saat yeniden yazılır (internetsiz), veri eskidiyse yenisi çekilir
+  function havaTazele(il) {
+    const b = $("hava").querySelector(".hgunes");
+    if (b) { const h = gunesSatir(view.d, il); if (h !== havaGunH) { havaYaz(b, h); havaGunH = h; } }
+    const v = havaOnbellek.get(il.s);
+    if (havaTaze(v) || havaYuk.has(il.s)) return;
+    havaGetir(il).then((y) => { if (y && y !== v && havaAcik(il.s)) havaCiz(il, y); });
+  }
+  // Tek sayaç: her dakika başında çalışır; il sayfasından çıkılınca kendini durdurur, başka il açılınca sıfırlanır
+  function havaSayac(il) {
+    clearTimeout(havaSaat); havaIl = il;
+    const sonraki = () => 60500 - (Date.now() % 6e4);
+    const tik = () => {
+      if (!havaAcik(il.s)) { havaSaat = 0; havaIl = null; return; }
+      havaSaat = setTimeout(tik, sonraki());
+      if (!document.hidden) havaTazele(il);
+    };
+    havaSaat = setTimeout(tik, sonraki());
+  }
+  // Uygulamaya geri dönünce (ya da internet gelince) beklemeden tazele
+  function havaDon() { if (havaIl && !document.hidden && havaAcik(havaIl.s)) havaTazele(havaIl); }
+  document.addEventListener("visibilitychange", havaDon);
+  window.addEventListener("online", () => { havaHata.clear(); havaDon(); });
+  // CapApp aşağıda tanımlanıyor; burada henüz kullanılamadığı için eklenti doğrudan alınır
+  const havaUyg = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App;
+  if (havaUyg && havaUyg.addListener) havaUyg.addListener("resume", havaDon);
+  async function havaGoster(il) {
+    const kutu = $("hava"); kutu.hidden = true; kutu.innerHTML = "";
+    clearTimeout(havaSaat); havaSaat = 0; havaIl = null;
+    if (!il || il.lat == null) return;
+    const s = il.s;
+    if (!havaAcik(s)) return;
+    // Önce elde olanı göster (gün doğumu/batımı hemen, son veri varsa o da), sonra gerekirse yenisini çek
+    havaCiz(il, havaOnbellek.get(s) || null);
+    havaSayac(il);
+    const v = havaOnbellek.get(s);
+    if (havaTaze(v)) return;
+    const y = await havaGetir(il);
+    if (y && y !== v && havaAcik(s)) havaCiz(il, y);
   }
   // ---------- meşhur yemekler ----------
   function ekDe(ad) {
