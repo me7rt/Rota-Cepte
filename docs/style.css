@@ -656,3 +656,33 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 .skart .linkbtn{color:#c9ced6}
 .skart .btn.primary{background:#e30a17;color:#fff}
 .ozelgun small+small{margin-top:2px}
+/* v6.5 Atatürk'ün izinde */
+.tchip.tata i{background:#e30a17;color:#fff}
+.athero{position:relative;overflow:hidden;border-radius:var(--r-l);padding:20px 18px 18px;background:linear-gradient(155deg,#b0101c,#e30a17 55%,#c20d18);color:#fff;box-shadow:0 10px 28px rgba(176,16,28,.25)}
+.athero::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%);pointer-events:none}
+.atbayrak{display:block;width:66px;height:44px;border-radius:6px;box-shadow:0 0 0 2px rgba(255,255,255,.85),0 6px 16px rgba(0,0,0,.25)}
+.athero h2{margin:14px 0 6px;font-size:24px;letter-spacing:-.01em;color:#fff}
+.athero p{margin:0;font-size:15px;line-height:1.5;color:rgba(255,255,255,.92)}
+.atsay{margin-top:14px;display:flex;flex-direction:column;gap:6px}
+.atsay b{font-size:15px;font-variant-numeric:tabular-nums}
+.atsay .bar{background:rgba(255,255,255,.25)}.atsay .bar i{background:#fff}
+.atsay small{font-size:13px;color:rgba(255,255,255,.88)}
+.atzaman{list-style:none;margin:16px 0 0;padding:0 0 0 26px;position:relative;display:flex;flex-direction:column;gap:12px}
+.atzaman::before{content:"";position:absolute;left:9px;top:10px;bottom:10px;width:2px;border-radius:2px;background:linear-gradient(#e30a17,#7a0a12)}
+.atzaman li{position:relative}
+.atnokta{position:absolute;left:-26px;top:16px;width:20px;height:20px;border-radius:50%;background:var(--bg);border:3px solid #e30a17;display:grid;place-items:center;color:#fff;box-sizing:border-box}
+.atzaman li.on .atnokta{background:#e30a17}
+.atkart{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:6px;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:12px 12px 10px;color:var(--fg);cursor:pointer;transition:transform .15s,background-color .15s}
+.atkart:active{transform:scale(.985);background:var(--surface2)}
+.atkart:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.attarih{align-self:flex-start;font-size:12px;font-weight:800;letter-spacing:.04em;color:#fff;background:#e30a17;border-radius:999px;padding:3px 10px;font-variant-numeric:tabular-nums}
+.atbas{font-size:17px;font-weight:800;letter-spacing:-.01em}
+.atmetin{font-size:14px;line-height:1.5;color:var(--muted)}
+.atyer{display:grid;grid-template-columns:48px 1fr auto;gap:10px;align-items:center;margin-top:4px;padding-top:10px;border-top:1px solid var(--line)}
+.atyer .thumb{width:48px;height:48px}
+.atyer .rt{min-width:0}.atyer .rt b{display:block;font-weight:700;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.atyer .rt small{display:block;color:var(--muted);font-size:12.5px}
+.atok{color:var(--ok-ink);font-style:normal;display:grid}
+.atev .row small{white-space:normal;line-height:1.4}
+.atsoz{margin:22px 0 8px;padding:16px 18px;border-left:3px solid #e30a17;background:var(--surface);border-radius:var(--r-m);font-style:italic;font-size:15px;line-height:1.55;color:var(--fg)}
+.atsoz cite{display:block;margin-top:8px;font-style:normal;font-weight:800;font-size:13px;color:var(--muted)}

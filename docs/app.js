@@ -288,6 +288,7 @@
     $("rota").hidden = v !== "rota";
     $("yol").hidden = v !== "yol";
     for (const x of ["plist", "kacamak", "kartlar"]) $(x).hidden = v !== x;
+    $("ataturk").hidden = v !== "ataturk";
     $("rozet").hidden = v !== "rozet";
     $("listem").hidden = v !== "listem";
     $("city").hidden = v !== "city";
@@ -328,6 +329,7 @@
       }
       if (h[0] === "yakin") return await showNear(no);
       if (h[0] === "tema" && TEMA[h[1]]) return showTema(h[1]);
+      if (h[0] === "ataturk") return await showAtaturk();
       if (h[0] === "rota") return await showRota(h[1], no);
       if (h[0] === "yol") return showYol(h[1], h[2]);
       if (h[0] === "liste") return await showListe(h[1], no);
@@ -816,6 +818,95 @@
     if (NTTS) yerelOku(cumleler, no); else webOku(cumleler, no);
   }
   if (webSes && !NTTS) speechSynthesis.getVoices();
+  // ---------- Atatürk'ün izinde: Çanakkale'den Anıtkabir'e, tarih sırasıyla ----------
+  // [il, yerin verideki adı, tarih [tr, en], başlık [tr, en], kısa bilgi [tr, en]]
+  const ATA = [
+    ["canakkale", "57. Alay Şehitliği", ["25 Nisan 1915", "25 April 1915"], ["Çanakkale Cephesi", "The Gallipoli front"],
+      ["Conkbayırı'nda Yarbay Mustafa Kemal, 57. Alay'a “Ben size taarruzu emretmiyorum, ölmeyi emrediyorum” dedi. Çanakkale geçilmez oldu.", "At Conkbayırı, Lt. Col. Mustafa Kemal told the 57th Regiment: “I don't order you to attack, I order you to die.” The straits held."]],
+    ["samsun", "Bandırma Vapuru", ["19 Mayıs 1919", "19 May 1919"], ["Samsun'a çıkış", "Landing at Samsun"],
+      ["Mustafa Kemal, Bandırma Vapuru ile Samsun'a çıktı ve Millî Mücadele başladı. Bugün vapurun aslına uygun bir kopyası müze olarak geziliyor.", "Mustafa Kemal landed at Samsun aboard the Bandırma and the War of Independence began. A faithful replica of the ship is now a museum."]],
+    ["samsun", "Gazi Müzesi", ["Mayıs 1919", "May 1919"], ["İlk karargâh", "The first headquarters"],
+      ["Samsun'a çıktığında kaldığı eski Mıntıka Palas Oteli. Kaldığı oda ve eşyaları korunuyor.", "The former Mıntıka Palas hotel where he stayed after landing at Samsun. His room and belongings are preserved."]],
+    ["sivas", "Sivas Atatürk ve Kongre Müzesi", ["4-11 Eylül 1919", "4-11 September 1919"], ["Sivas Kongresi", "The Sivas Congress"],
+      ["Millî Mücadele'nin yol haritasını çizen Sivas Kongresi bu binada toplandı. Atatürk'ün çalışma odası ve yatak odası korunuyor.", "The Sivas Congress, which set the course of the national struggle, met in this building. His study and bedroom are preserved."]],
+    ["ankara", "Kurtuluş Savaşı Müzesi", ["23 Nisan 1920", "23 April 1920"], ["Birinci Meclis", "The first Grand National Assembly"],
+      ["Türkiye Büyük Millet Meclisi 23 Nisan 1920'de bu binada açıldı. Cumhuriyet de 29 Ekim 1923'te bu binada ilan edildi.", "The Grand National Assembly opened in this building on 23 April 1920, and the Republic was proclaimed here on 29 October 1923."]],
+    ["ankara", "Atatürk Konutu ve Demiryolları Müzesi", ["1920-1921", "1920-1921"], ["Ankara'daki ilk evi", "His first home in Ankara"],
+      ["Millî Mücadele'nin ilk yıllarında Ankara'da kaldığı istasyon binası. Sade odaları bugün de korunuyor.", "The railway station building where he lived in the first years of the struggle. His simple rooms are preserved."]],
+    ["ankara", "Alagöz Karargâh Müzesi", ["Ağustos-Eylül 1921", "August-September 1921"], ["Sakarya Meydan Muharebesi", "The Battle of Sakarya"],
+      ["Sakarya Meydan Muharebesi'nde Başkomutan Mustafa Kemal'in karargâh olarak kullandığı köy evi.", "The village house that served as Commander-in-Chief Mustafa Kemal's headquarters during the Battle of Sakarya."]],
+    ["kastamonu", "Atatürk ve Şerife Bacı Anıtı", ["1921", "1921"], ["Cepheye cephane taşıyanlar", "Carrying ammunition to the front"],
+      ["İnebolu'dan cepheye cephane taşırken donarak şehit düşen Şerife Bacı'nın ve Millî Mücadele'nin kadın kahramanlarının anısına.", "In memory of Şerife Bacı, who froze to death carrying ammunition from İnebolu to the front, and of the women heroes of the struggle."]],
+    ["konya", "Batı Cephesi Karargahı Müzesi", ["1922", "1922"], ["Büyük Taarruz'a hazırlık", "Preparing the Great Offensive"],
+      ["Akşehir'deki bu bina, Büyük Taarruz'un hazırlandığı Batı Cephesi karargâhıydı.", "This building in Akşehir was the Western Front headquarters where the Great Offensive was prepared."]],
+    ["afyonkarahisar", "Büyük Taarruz Şehitliği", ["26 Ağustos 1922", "26 August 1922"], ["Büyük Taarruz", "The Great Offensive"],
+      ["Büyük Taarruz 26 Ağustos sabahı Kocatepe'den başladı. Şehitlik, bu zafer için canını verenleri anıyor.", "The Great Offensive began at dawn on 26 August from Kocatepe. This memorial honours those who gave their lives for the victory."]],
+    ["kutahya", "Dumlupınar Şehitliği", ["30 Ağustos 1922", "30 August 1922"], ["Başkomutanlık Meydan Muharebesi", "The Battle of Dumlupınar"],
+      ["30 Ağustos'ta Dumlupınar'da kazanılan zafer her yıl Zafer Bayramı olarak kutlanıyor. Şehitlik ve Meçhul Asker Anıtı burada.", "The victory won at Dumlupınar on 30 August is celebrated every year as Victory Day. The memorial and the Unknown Soldier monument stand here."]],
+    ["izmir", "İzmir Atatürk Müzesi", ["9 Eylül 1922", "9 September 1922"], ["İzmir'in kurtuluşu", "The liberation of İzmir"],
+      ["Ordumuz 9 Eylül'de İzmir'e girdi. Atatürk'ün sonraki İzmir ziyaretlerinde kaldığı ev bugün müze.", "The army entered İzmir on 9 September. The house where Atatürk later stayed on his visits is now a museum."]],
+    ["bursa", "Mudanya Mütareke Evi", ["11 Ekim 1922", "11 October 1922"], ["Mudanya Ateşkesi", "The Armistice of Mudanya"],
+      ["Kurtuluş Savaşı'nın silahlı dönemini bitiren Mudanya Ateşkes Antlaşması bu evde imzalandı.", "The Armistice of Mudanya, which ended the armed phase of the War of Independence, was signed in this house."]],
+    ["ankara", "Cumhuriyet Müzesi", ["15-20 Ekim 1927", "15-20 October 1927"], ["Nutuk", "The Great Speech"],
+      ["İkinci Meclis binası. Atatürk, Millî Mücadele'yi anlattığı Nutuk'u 1927'de burada altı gün boyunca okudu.", "The second parliament building, where Atatürk delivered his Great Speech (Nutuk) over six days in 1927."]],
+    ["istanbul", "Dolmabahçe Sarayı", ["10 Kasım 1938", "10 November 1938"], ["Saat 09.05", "09:05"],
+      ["Atatürk, 10 Kasım 1938 sabahı saat 09.05'te Dolmabahçe Sarayı'nda hayata gözlerini yumdu. Her yıl o saatte bütün Türkiye saygı duruşunda bulunur.", "Atatürk passed away at 09:05 on 10 November 1938 in Dolmabahçe Palace. Every year at that minute, all of Türkiye stands in silence."]],
+    ["ankara", "Anıtkabir", ["10 Kasım 1953", "10 November 1953"], ["Ebedî istirahatgâhı", "His eternal resting place"],
+      ["Atatürk'ün naaşı 10 Kasım 1953'te Anıtkabir'e taşındı. Türkiye'nin her köşesinden gelenlerin ziyaret ettiği yer.", "Atatürk's remains were moved to Anıtkabir on 10 November 1953. People from every corner of Türkiye come to pay their respects."]]
+  ];
+  // Evleri ve köşkleri: [il, yerin verideki adı, kısa bilgi [tr, en] (boşsa genel cümle)]
+  const ATA_EV = [
+    ["ankara", "Atatürk Müze Köşkü", ["1921'de taşındığı Çankaya'daki bağ evi. Bugün Müze Köşk.", "The vineyard house in Çankaya he moved into in 1921, now a museum."]],
+    ["yalova", "Yürüyen Köşk", ["Bir çınarın dalı köşke zarar verince Atatürk ağacı kestirmek yerine köşkü raylar üzerinde kaydırttı. Adı buradan geliyor.", "When a plane tree's branch threatened the house, Atatürk had the building moved on rails instead of cutting the tree. Hence the name."]],
+    ["istanbul", "Florya Atatürk Deniz Köşkü", ["Atatürk'ün yaz günlerini geçirdiği, deniz üstüne kurulu köşk.", "The mansion built over the sea where Atatürk spent summer days."]],
+    ["istanbul", "Atatürk Müzesi", ["Şişli'de annesi ve kız kardeşiyle kaldığı ev.", "The house in Şişli where he lived with his mother and sister."]],
+    ["trabzon", "Atatürk Köşkü", ["Trabzonluların Atatürk'e armağan ettiği köşk.", "The mansion the people of Trabzon gave to Atatürk."]],
+    ["yalova", "Yalova Atatürk Köşkü", ["", ""]], ["ankara", "Ankara Atatürk Evi Müzesi", ["", ""]], ["afyonkarahisar", "Şuhut Atatürk Evi", ["", ""]],
+    ["adana", "Adana Atatürk Evi Müzesi", ["", ""]], ["antalya", "Antalya Atatürk Müzesi", ["", ""]], ["bursa", "Bursa Atatürk Müzesi", ["", ""]],
+    ["kayseri", "Atatürk Evi Müzesi", ["", ""]], ["konya", "Atatürk Evi Müzesi", ["", ""]], ["mersin", "Mersin Atatürk Evi", ["", ""]],
+    ["mersin", "Silifke Atatürk Evi", ["", ""]], ["rize", "Rize Atatürk Evi Müzesi", ["", ""]], ["giresun", "Şebinkarahisar Atatürk Evi Müzesi", ["", ""]],
+    ["balikesir", "Karesi Atatürk Evi", ["", ""]], ["gaziantep", "Atatürk Anı Müzesi", ["", ""]], ["denizli", "Atatürk ve Etnografya Müzesi", ["", ""]]
+  ];
+  // Türk bayrağı (ay yıldız, bayrak kanunundaki oranlarla)
+  const BAYRAK = `<svg class="atbayrak" viewBox="0 -30000 90000 60000" aria-hidden="true"><path fill="#e30a17" d="M0-30000h90000v60000H0z"/><path fill="#fff" d="m41750 0 13568-4408-8386 11541V-7133l8386 11541zm925 8021a15000 15000 0 1 1 0-16042 12000 12000 0 1 0 0 16042z"/></svg>`;
+  async function showAtaturk() {
+    view = { mode: "ataturk" }; show("ataturk");
+    $("eyebrow").textContent = TL("Millî Mücadele rotası", "Independence route"); $("title").textContent = TL("Atatürk'ün izinde", "In Atatürk's footsteps");
+    renderAtaturk();
+    await loadAra(); renderAtaturk();
+  }
+  function renderAtaturk() {
+    if (!view || view.mode !== "ataturk") return;
+    const bul = (s, ad) => (ARA ? ARA.find((x) => x[2] === s && x[1] === ad) : null);
+    const gidilen = new Set(gittiklerim().map((x) => x.s + "|" + x.ad));
+    const ilAd = (s) => { const i = IDX.ilBy.get(s); return i ? i.ad : s; };
+    const yerAd = (x, ad) => (x ? araAd(x) : ad);
+    const uzak = (x) => (me && x ? " · " + fmt(km(me, { lat: x[4], lng: x[5] })) : "");
+    const durak = ATA.map((a) => ({ a, x: bul(a[0], a[1]) })).filter((d) => d.x || !ARA);
+    const ok = durak.filter((d) => gidilen.has(d.a[0] + "|" + d.a[1])).length;
+    const kart = (x, s) => (x ? `data-yer="${x[2]}|${x[3]}"` : `data-go="#/il/${s}"`);
+    $("ataturk").innerHTML = `<section class="athero">${BAYRAK}
+      <h2>${TL("1915'ten Anıtkabir'e", "From 1915 to Anıtkabir")}</h2>
+      <p>${TL("Çanakkale'den Samsun'a, Sivas'tan Ankara'ya: Millî Mücadele'nin ve Cumhuriyet'in yazıldığı yerleri tarih sırasıyla gez.", "From Çanakkale to Samsun, from Sivas to Ankara: visit the places where the War of Independence and the Republic were written, in order.")}</p>
+      <div class="atsay"><b>${TL(`${ok} / ${durak.length} durak`, `${ok} / ${durak.length} stops`)}</b><span class="bar"><i style="width:${Math.max(3, Math.round((ok / (durak.length || 1)) * 100))}%"></i></span><small>${ok ? TL("Gittiğin duraklar işaretli. Devam!", "Stops you've visited are ticked. Keep going!") : TL("Bir durakta \"Buraya gittim\" de, burada işaretlensin.", "Tap \"I've been here\" at a stop to tick it off.")}</small></div>
+    </section>
+    <ol class="atzaman">${durak.map(({ a, x }) => {
+      const on = gidilen.has(a[0] + "|" + a[1]);
+      return `<li class="${on ? "on" : ""}"><span class="atnokta">${on ? ik("check", 14) : ""}</span><button class="atkart" ${kart(x, a[0], a[1])}>
+        <span class="attarih">${esc(TL(a[2][0], a[2][1]))}</span><b class="atbas">${esc(TL(a[3][0], a[3][1]))}</b>
+        <span class="atmetin">${esc(TL(a[4][0], a[4][1]))}</span>
+        <span class="atyer">${x && x[8] ? thumb({ p: x[8], w: 1e5 }, x[6] || "t") : `<span class="thumb">${ik("landmark", 20)}</span>`}<span class="rt"><b>${esc(yerAd(x, a[1]))}</b><small>${esc(ilAd(a[0]))}${uzak(x)}</small></span>${on ? `<i class="atok">${ik("circle-check", 20)}</i>` : ik("chevron-right", 18)}</span>
+      </button></li>`;
+    }).join("")}</ol>
+    <h2 class="sec">${TL("Evleri ve köşkleri", "His houses and mansions")}</h2>
+    <p class="tsay">${TL("Atatürk'ün yaşadığı, ziyaretlerinde kaldığı ya da hatırasını yaşatan, bugün müze olan evler.", "Houses where Atatürk lived or stayed, or that keep his memory alive, now museums.")}</p>
+    <ul class="list atev">${ATA_EV.map((a) => ({ a, x: bul(a[0], a[1]) })).filter((d) => d.x || !ARA).map(({ a, x }) => {
+      const on = gidilen.has(a[0] + "|" + a[1]);
+      const not = TL(a[2][0], a[2][1]) || TL("Atatürk'ün hatırasını yaşatan ev müze.", "A house museum keeping Atatürk's memory alive.");
+      return `<li><button class="row res" ${kart(x, a[0], a[1])}>${x && x[8] ? thumb({ p: x[8], w: 1e5 }, x[6] || "m") : `<span class="thumb">${ik("house", 20)}</span>`}<span class="rt"><b>${esc(yerAd(x, a[1]))}</b><small>${esc(ilAd(a[0]))}${uzak(x)} · ${esc(not)}</small></span><span class="km${on ? " ok" : ""}">${on ? ik("circle-check", 20) : OKIK}</span></button></li>`;
+    }).join("")}</ul>
+    <blockquote class="atsoz">${esc(TL("“Beni görmek demek mutlaka yüzümü görmek değildir. Benim fikirlerimi, benim duygularımı anlıyorsanız ve hissediyorsanız bu kâfidir.”", "“To see me does not necessarily mean to see my face. To understand my ideas and my feelings is enough.”"))}<cite>Mustafa Kemal Atatürk</cite></blockquote>`;
+  }
   // ---------- keşfet: tema listeleri (Türkiye geneli) ----------
   const TEMA = {
     aile: { ad: T("Çocuklarla gezi"), e: "heart-handshake", k: ["hayvanat", "akvaryum", "oyuncak", "bilim", "botanik", "teleferik", "rahmi m", "havacilik", "deniz muzesi", "millet bahcesi", "kent ormani", "tabiat park", "kus cenneti", "kelebek", "magara", "selale", "planetaryum", "lunapark", "plaj", "demiryolu", "miniaturk"] },
@@ -846,7 +937,7 @@
   }
   function temaChips() {
     mevsimKart();
-    $("temaChips").innerHTML = Object.entries(TEMA).map(([k, t]) =>
+    $("temaChips").innerHTML = `<button class="tchip tata" data-go="#/ataturk"><i>${ik("footprints", 20)}</i><span>${TL("Atatürk'ün izinde", "In Atatürk's footsteps")}</span></button>` + Object.entries(TEMA).map(([k, t]) =>
       `<button class="tchip" data-go="#/tema/${k}"><i>${ik(t.e, 20)}</i><span>${esc(t.ad)}</span></button>`).join("");
   }
   function showTema(k) {
@@ -1369,12 +1460,14 @@
     let son = "istanbul"; try { son = localStorage.getItem("gezi-son-il") || son; } catch (e) {}
     // Her madde bir öğretici: dokununca o özellik açılır. Rotası olmayan madde yalnızca bilgi.
     const s = [
+      ["footprints", TL("Atatürk'ün izinde", "In Atatürk's footsteps"), TL("1915 Çanakkale'den Anıtkabir'e 16 durak: Millî Mücadele'nin ve Cumhuriyet'in yerlerini tarih sırasıyla gez.", "16 stops from Gallipoli 1915 to Anıtkabir: visit the places of the War of Independence and the Republic in order."), "#/ataturk"],
       ["car-front", T("Yol üstü keşif"), TL("Yola çıkarken iki il seç, yol boyunca uğrayabileceğin yerleri sırayla gösterelim.", "Pick two provinces before a road trip and we'll list the stops along the way."), "#/yol"],
       ["shuffle", T("Nereye gitsem?"), TL("Fotoğraflı kartları kaydır: sağa kaydırdığın yer listene girer, sola kaydırdığını geçeriz.", "Swipe photo cards: right to save a place, left to skip."), "#/kartlar"],
       ["calendar-days", T("Hafta sonu kaçamağı"), TL("Arabayla birkaç saatlik illeri öneririz; bayramda 3-4 günlük rotalar.", "Provinces a few hours' drive away; longer trips for holidays."), "#/kacamak"],
       ["stamp", T("Gezi pasaportu"), TL("Bir yerde \"Buraya gittim\" de, o ilin damgası pasaportuna basılsın. 81 damgayı topla, paylaş.", "Tap \"I've been here\" on a place to get that province's stamp. Collect all 81 and share them."), "#/rozetler"],
       ["cloud-sun", TL("Havaya göre öneri", "Weather-smart tips"), TL("İl sayfasındaki hava kutusu yağmurda müze, sıcakta serin yer önerir; gün batımı saati de orada.", "The weather box on a province page suggests museums in rain and cool spots in heat, plus sunset times."), `#/il/${son}`],
       ["share-2", TL("Listeni linkle paylaş", "Share your list"), TL("Listem sekmesinde \"Listeyi linkle paylaş\": arkadaşın tek dokunuşla kendi listesine ekler.", "In My list, tap \"Share list as a link\": friends add it to theirs in one tap."), "#/listem"],
+      ["flag", TL("Özel günler", "Special days"), TL("Millî bayramlarda kaçıncı yıl olduğunu, kandillerde ve bayramlarda tebrik mesajını ana sayfada görürsün. 10 Kasım'da saygı kartı açılır.", "National days show their anniversary, and religious holidays a greeting, on the home screen. On 10 November a remembrance card opens."), ""],
       ["camera", TL("Daha güzel fotoğraflar", "Better photos"), TL("İl kapakları yenilendi; yanlış fotoğraflar ve gezilecek bir şeyi olmayan yerler çıkarıldı.", "New province covers; wrong photos and places with nothing to see were removed."), ""]
     ];
     const d = document.createElement("div"); d.className = "tanit";
