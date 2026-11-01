@@ -946,4 +946,23 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 .sevsec.ipucu{padding:12px 14px}
 .sevipucu{display:flex;align-items:center;gap:8px;margin:0;font-size:13.5px;font-weight:600;color:var(--muted);line-height:1.4}
 .sevipucu .ik{flex:none;color:var(--altin-b)}
+/* ana sayfa: sana özel */
+.ozel{min-width:0;display:flex;flex-direction:column;gap:12px;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-l);padding:14px 0;box-shadow:var(--sh-1)}
+.ozbas{display:flex;align-items:center;gap:12px;padding:0 14px}
+.ozik{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(150deg,var(--altin-a),var(--altin-b));color:var(--altin-ink)}
+.oztxt{min-width:0;display:flex;flex-direction:column}
+.oztxt b{font-size:16px}
+.oztxt small{color:var(--muted);font-size:13px;line-height:1.4}
+.ozkartlar{display:grid;grid-auto-flow:column;grid-auto-columns:136px;gap:10px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;padding:0 14px 2px;scroll-snap-type:x mandatory;scroll-padding:0 14px}
+.ozkartlar::-webkit-scrollbar{display:none}
+.ozk{position:relative;display:block;aspect-ratio:4/5;padding:0;border:0;border-radius:16px;overflow:hidden;background:var(--surface2);color:#fff;text-align:left;font:inherit;scroll-snap-align:start;transition:transform .15s}
+.ozk:active{transform:scale(.97)}
+.ozk .cover{position:absolute;inset:0;aspect-ratio:auto;height:100%}
+.ozk .cover>.ik{opacity:.5;margin-bottom:34%}
+.ozk .cover img{outline:0}
+.ozk::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.78));pointer-events:none}
+.ozkt{position:absolute;left:0;right:0;bottom:0;z-index:1;display:flex;flex-direction:column;gap:1px;padding:10px 10px 11px}
+.ozkt b{font-size:14px;line-height:1.25;font-weight:800;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
+.ozkt small{font-size:12px;font-weight:600;opacity:.88;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ozkm{position:absolute;z-index:1;top:8px;left:8px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,.45);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-style:normal;font-size:11.5px;font-weight:800;font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion:reduce){.gnot{animation:none}.yildiz button.pop svg{animation:none}}

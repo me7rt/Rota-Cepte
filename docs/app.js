@@ -1258,7 +1258,7 @@
       return `<li><button class="row res" data-yer="${x[2]}|${x[3]}">${x[8] ? thumb({ p: x[8], w: 1e5 }, x[6] || "t") : `<span class="thumb" style="--c:${c.renk}">${icon(x[6] || "t", 20)}</span>`}<span class="rt"><b>${esc(araAd(x))}</b><small>${esc(il)}</small></span><span class="km">${me ? fmt(km(me, { lat: x[4], lng: x[5] })) : OKIK}</span></button></li>`;
     }).join("") : `<li class="empty">${T("Bu türde yer bulunamadı.")}</li>`;
   }
-  // ---------- v6.5 gezi notu ve puan, en sevdiğin yerler ----------
+  // ---------- v6.5 gezi notu ve puan, en sevdiğin yerler, sana özel ----------
   // Puan (p: 1-5) ve not (n) yalnızca bu cihazda, "gezi-gittim" kaydının içinde durur; hiçbir yere gönderilmez.
   const NOT_UZ = 280;
   const gitKayit = (p) => gittiklerim().find((x) => ayni(x, p));
@@ -1339,6 +1339,76 @@
       const ilk = String(x.n || "").split("\n").map((s) => s.trim()).find(Boolean) || "";
       return `<li><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${thumb(x.f, x.k)}<span class="rt"><b>${esc(kayitAd(x))}</b><small><span class="sevy" role="img" aria-label="${TL(`${x.p} yıldız`, `${x.p} stars`)}">${yildizlar(x.p, 13)}</span>${esc(x.il)}</small>${ilk ? `<em>${esc(ilk)}</em>` : ""}</span>${OKIK}</button></li>`;
     }).join("");
+  }
+  // Sana özel: listendeki ve gittiğin yerlerden zevkini çıkar, her gün 6 yer öner (hesap cihazda yapılır)
+  const OZ_TEMA = { aile: ["çocuklarla gezmeyi", "family days out"], selale: ["şelaleleri", "waterfalls"], magara: ["mağaraları", "caves"], kanyon: ["kanyonları", "canyons"], gol: ["gölleri", "lakes"], ada: ["adaları", "islands"], park: ["milli parkları", "national parks"], dag: ["dağları", "mountains"], kale: ["kaleleri", "castles"], kopru: ["tarihi köprüleri", "historic bridges"], saray: ["sarayları", "palaces"], han: ["kervansarayları", "caravanserais"], muze: ["müzeleri", "museums"] };
+  const OZ_KAT = { t: ["tarihi yerleri", "historic sites"], d: ["doğayı", "nature"], m: ["müzeleri", "museums"], c: ["çarşıları", "bazaars"], s: ["şehir semtlerini", "city quarters"] };
+  // Temanın zaten söylediği kategori ("şelaleleri ve doğayı" olmasın)
+  const OZ_TK = { selale: "d", magara: "d", kanyon: "d", gol: "d", ada: "d", park: "d", dag: "d", kale: "t", kopru: "t", saray: "t", han: "t", muze: "m" };
+  const temaUyarAd = (t, sadeAd, k) => TEMA[t].k.some((w) => (" " + sadeAd + " ").includes(w)) && (!TEMA[t].d || k === "d");
+  // Bir yerin temaları (renderTema ile aynı anahtar kelimeler); "Çocuklarla gezi" yalnızca başka temaya girmeyen yerde sayılır
+  function yerTema(sadeAd, k) {
+    const l = Object.keys(TEMA).filter((t) => temaUyarAd(t, sadeAd, k)), o = l.filter((t) => t !== "aile");
+    return o.length ? o : l;
+  }
+  function zevk() {
+    const f = favs(), g = gittiklerim(), w = new Map();
+    for (const x of f) w.set(x.s + "|" + x.q, [x, 1]);
+    // Gittiğin yerde 4-5 yıldız iki kat, 1-2 yıldız eksi sayılır
+    for (const x of g) w.set(x.s + "|" + x.q, [x, x.p >= 4 ? 2 : x.p > 0 && x.p <= 2 ? -1 : 1]);
+    const tema = {}, kat = {}; let say = 0;
+    for (const [x, a] of w.values()) {
+      if (a > 0) say++;
+      for (const t of yerTema(sade(x.ad || ""), x.k)) tema[t] = (tema[t] || 0) + a;
+      if (CATS[x.k]) kat[x.k] = (kat[x.k] || 0) + a;
+    }
+    return { say, tema, kat, haric: new Set([...f, ...g].map((x) => x.s + "|" + x.ad)) };
+  }
+  // Güne bağlı sabit sayı (0-1): aynı gün aynı öneriler
+  function gunSayi(s) {
+    let h = 2166136261;
+    for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+    h ^= h >>> 16; h = Math.imul(h, 2246822507); h ^= h >>> 13; h = Math.imul(h, 3266489909); h ^= h >>> 16;
+    return (h >>> 0) / 4294967296;
+  }
+  let ozelHtml = "";
+  function ozelGizle() { $("ozelSec").hidden = true; $("ozelKart").innerHTML = ozelHtml = ""; }
+  async function sanaOzel() {
+    try {
+      if (zevk().say < 3) return ozelGizle();
+      await loadAra(); if (!ARA || !IDX) return;
+      const z = zevk(); if (z.say < 3) return ozelGizle();
+      const sira = (o) => Object.entries(o).filter((e) => e[1] > 0).sort((a, b) => b[1] - a[1]);
+      const neden = sira(z.tema).slice(0, 2).map(([t]) => ({ t }));
+      for (const [k] of sira(z.kat)) if (neden.length < 2 && !neden.some((n) => OZ_TK[n.t] === k || n.k === k)) neden.push({ k });
+      if (!neden.length) return ozelGizle();
+      // Öne çıkan yer işareti veride yoksa: fotoğraflı ve ilinin ilk 10 yerinden biri
+      const oneVar = ARA.some((x) => x[11]), one = (x) => (oneVar ? x[11] : x[7] === 1 && x[8] && x[3] < 10);
+      const g = new Date(), tohum = `${g.getFullYear()}-${g.getMonth() + 1}-${g.getDate()}|`;
+      const listeler = neden.map((n) => ARA.filter((x) => !z.haric.has(x[2] + "|" + x[1]) && (n.t ? temaUyarAd(n.t, x[0], x[6]) : x[6] === n.k)).map((x) => {
+        const r = gunSayi(tohum + x[2] + "|" + x[3]), s = one(x) ? 0 : x[8] ? 1 : 2, uz = me ? km(me, { lat: x[4], lng: x[5] }) : null;
+        // Konum açıksa yakındakiler öne (gün içinde sabit küçük sapmayla), değilse öne çıkanlar güne göre karışık
+        return { x, uz, v: me ? uz * (0.75 + r * 0.5) + [0, 60, 250][s] : s + r };
+      }).sort((a, b) => a.v - b.v));
+      // Temalardan sırayla birer yer al, her ilden en fazla bir yer
+      const sec = [], il = new Set(), ix = listeler.map(() => 0);
+      for (let ekledi = true; ekledi && sec.length < 6;) {
+        ekledi = false;
+        listeler.forEach((l, i) => {
+          while (sec.length < 6 && ix[i] < l.length) {
+            const c = l[ix[i]++];
+            if (il.has(c.x[2])) continue;
+            il.add(c.x[2]); sec.push(c); ekledi = true; break;
+          }
+        });
+      }
+      if (sec.length < 3) return ozelGizle();
+      const ad = (n) => (n.t ? OZ_TEMA[n.t] : OZ_KAT[n.k]), tr = neden.map((n) => ad(n)[0]).join(" ve ");
+      $("ozelNeden").textContent = TL(tr.charAt(0).toLocaleUpperCase("tr") + tr.slice(1) + " seviyorsun", "You love " + neden.map((n) => ad(n)[1]).join(" and "));
+      const html = sec.map(({ x, uz }) => `<button class="ozk" data-yer="${x[2]}|${x[3]}">${thumb(x[8] ? { p: x[8], w: 1e5 } : null, x[6] || "t", 400, "cover")}${uz != null ? `<em class="ozkm">${ik("navigation", 11)}${fmt(uz)}</em>` : ""}<span class="ozkt"><b>${esc(araAd(x))}</b><small>${esc((IDX.ilBy.get(x[2]) || {}).ad || "")}</small></span></button>`).join("");
+      if (html !== ozelHtml) { ozelHtml = html; $("ozelKart").innerHTML = html; }
+      $("ozelSec").hidden = false;
+    } catch (e) { console.warn("Sana özel:", e); }
   }
   // ---------- internetsiz kullanım: ilin verisini ve fotoğraflarını telefona indir ----------
   const INDK = "gezi-indirilen", INDC = "gezi-indir";
@@ -2231,7 +2301,7 @@
     if (!IDX) return;
     const q = $("search").value.trim();
     if (q.length >= 2) return renderSearch(q);
-    gununKesfi(); ayKart(); renderPasOzet();
+    gununKesfi(); sanaOzel(); ayKart(); renderPasOzet();
     $("results").hidden = true; $("homeMain").hidden = false;
     const iller = IDX.iller.slice();
     if (me) iller.sort((a, b) => km(me, a) - km(me, b));

@@ -7,7 +7,7 @@
   if (dil !== "tr" && dil !== "en") dil = /^tr/i.test(navigator.language || "tr") ? "tr" : "en";
   const EN = {
     // v6.5
-    "En sevdiğin yerler": "Your favourite places",
+    "Sana özel": "Picked for you", "En sevdiğin yerler": "Your favourite places",
     "Gittiğin yerlere yıldız ver, en sevdiklerin burada toplansın.": "Rate the places you've visited and your favourites will gather here.",
     "Gezi pasaportum":"My travel passport", "Gittiğin her ilin damgası pasaportuna basılır. Renkli damgaya dokun, büyüt ve paylaş.": "Every province you visit gets a stamp in your passport. Tap a coloured stamp to enlarge and share it.",
     "Bu sürümde neler yeni?": "What's new in this version?",
