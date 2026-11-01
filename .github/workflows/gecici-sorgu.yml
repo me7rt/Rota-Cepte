@@ -3,12 +3,25 @@ on:
   push:
     branches: [claude/project-thread-tpajlk]
     paths: ["scripts/gecici-sorgu.mjs", ".github/workflows/gecici-sorgu.yml"]
+permissions:
+  contents: write
 jobs:
   sorgu:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - run: node scripts/gecici-sorgu.mjs
+      - name: Sonucu kart-foto dalina yukle
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd out
+          git init -q -b kart-foto
+          git config user.name "Mert Turanlıoğlu"
+          git config user.email "me7rtt@gmail.com"
+          git add -A
+          git commit -q -m "Kart fotoğraf adayları (geçici)"
+          git push -f "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git" kart-foto
