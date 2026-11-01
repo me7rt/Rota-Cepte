@@ -1365,7 +1365,9 @@
     const s = [
       ["car-front", T("Yol üstü keşif"), TL("Yola çıkarken iki il seç, yol boyunca uğrayabileceğin yerleri sırayla gösterelim.", "Pick two provinces before a road trip and we'll list the stops along the way.")],
       ["stamp", T("Gezi pasaportu"), TL("Gittiğin her il pasaportuna damga olarak basılır. 81 damganın hepsini topla, paylaş.", "Every province you visit becomes a stamp in your passport. Collect all 81 and share them.")],
-      ["map", TL("Yenilenen harita", "Refreshed map"), TL("Daha net il sınırları; İstanbul gibi kalabalık illerde çok daha hızlı harita.", "Sharper province borders and a much faster map in busy provinces like Istanbul.")]
+      ["shuffle", T("Nereye gitsem?"), TL("Fotoğraflı kartları kaydır: beğendiğin yer listene girsin.", "Swipe photo cards and save the places you like.")],
+      ["calendar-days", T("Hafta sonu kaçamağı"), TL("Arabayla birkaç saatlik illeri öneririz; bayramda 3-4 günlük rotalar.", "Provinces a few hours' drive away; longer trips for holidays.")],
+      ["cloud-sun", TL("Havaya göre öneri", "Weather-smart tips"), TL("Yağmurda müzeler, sıcakta şelaleler; il sayfasında gün batımı saati de var.", "Museums when it rains, waterfalls when it's hot, plus sunset times.")]
     ];
     const d = document.createElement("div"); d.className = "tanit";
     d.innerHTML = `<div class="tkart yenilik"><div class="temo altin">${ik("sparkles", 36)}</div><h2>${TL(`Sürüm ${SURUM}'te yeni`, `New in version ${SURUM}`)}</h2><ul class="ylist">${s.map((x) => `<li><i>${ik(x[0], 22)}</i><span><b>${x[1]}</b><small>${x[2]}</small></span></li>`).join("")}</ul><div class="tbtn"><button class="linkbtn" data-k="kapat">${T("Kapat")}</button><button class="btn primary" data-k="dene">${ik("car-front", 18)} ${TL("Yol üstü keşfi dene", "Try Along the way")}</button></div></div>`;
