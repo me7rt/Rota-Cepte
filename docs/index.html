@@ -142,6 +142,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
       <button class="mini" id="kacBtn"><span class="miniik"><i data-ik="calendar-days" data-boy="22"></i></span><b>Hafta sonu kaçamağı</b><small>Arabayla birkaç saatlik iller</small></button>
     </div>
     <div id="gunun"></div>
+    <div id="pasOzet" hidden></div>
     <section class="kesfet"><h2 class="sec">Keşfet</h2><div class="mevsim" id="mevsim"></div><div class="tchips" id="temaChips"></div></section>
     <section id="rotaSec" hidden><h2 class="sec">Hazır rotalar</h2><div class="rkartlar" id="rotaKart"></div></section>
     <h2 class="sec">81 il</h2>
@@ -221,10 +222,11 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
   <section id="gezSec" class="gez" hidden><div class="harita" id="gezHarita"></div><button class="gezbtn" id="gezBtn"><span class="gezust"><b id="gezSay"></b><small id="gezAlt"></small></span><span class="bar"><i id="gezBar"></i></span></button><ul class="list" id="gezList" hidden></ul><button class="btn primary karnebtn" id="karneBtn" hidden><i data-ik="camera" data-boy="18"></i> Gezi karnemi paylaş</button><button class="btn karnebtn ozetbtn" id="ozetBtn" hidden><i data-ik="sparkles" data-boy="18"></i> <span></span></button></section>
   <section class="hedef" id="hedefSec" aria-live="polite"></section>
   <section class="pasaport" id="pasSec">
-    <div class="pasbas"><span class="hbas"><i data-ik="stamp" data-boy="20"></i> Gezi pasaportum</span><b id="pasSay"></b></div>
-    <p class="tsay">Gittiğin her ilin damgası pasaportuna basılır. Renkli damgaya dokun, büyüt ve paylaş.</p>
-    <div class="pbolgeler" id="pasBolge"></div>
-    <ol class="pasgrid" id="pasGrid"></ol>
+    <div class="pkapak" id="pasKapak"></div>
+    <div class="pbolgeler" id="pasBolge" role="tablist"></div>
+    <div class="psayfalar" id="pasSayfa"></div>
+    <div id="pasSira"></div>
+    <button class="btn primary ppay" id="pasPay" hidden><i data-ik="share-2" data-boy="18"></i> Pasaportumu paylaş</button>
   </section>
   <h2 class="sec">Rozetler</h2>
   <p class="tsay">Kazandığın rozetler: <b id="rozetSay"></b>. Bir yerin sayfasında "Buraya gittim" dedikçe yenileri açılır.</p>
@@ -243,6 +245,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
     <small class="lisans" id="heroLis" hidden></small>
     <div class="hava" id="hava" hidden></div>
     <section class="yemek" id="yemek" hidden></section>
+    <button class="ildamga" id="ilDamga" hidden></button>
   </section>
   <section class="plan" id="plan" hidden></section>
   <div class="tabs" id="tabs" role="tablist">

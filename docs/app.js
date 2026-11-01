@@ -424,6 +424,7 @@
     else a.unshift({ q: p.q, s: p.ilS, ad: p.ad, il: [...new Set([p.ilce, p.il].filter(Boolean))].join(", "), k: p.k, f: p.f, t: Date.now() });
     try { localStorage.setItem(GIT, JSON.stringify(a)); } catch (e) {}
     gitBtn(p);
+    if (view && view.d && view.d.s === p.ilS) ilDamga(view.d);
     if (!vardi) {
       const iller = new Set(a.map((x) => x.s)).size;
       const yeni = rozetler().find((r) => r.tamam && !onceki.has(r.ad));
@@ -569,17 +570,167 @@
         <text x="73" y="127" font-size="15" text-anchor="middle" stroke="none">★</text><text x="167" y="127" font-size="15" text-anchor="middle" stroke="none">★</text>
       </g></svg>`;
   }
+  // Unvanlar: damga sayısına göre (81 ilin hepsi: Evliya Çelebi)
+  const UNVAN = [
+    [0, "footprints", TL("Yeni yolcu", "New traveller")], [1, "footprints", TL("Yolcu", "Traveller")], [5, "backpack", TL("Gezgin", "Wanderer")],
+    [15, "compass", TL("Kâşif", "Explorer")], [30, "map", TL("Seyyah", "Voyager")], [50, "crown", TL("Usta seyyah", "Master voyager")], [81, "star", "Evliya Çelebi"]
+  ];
+  function unvanBul(n) {
+    let i = 0; while (i + 1 < UNVAN.length && n >= UNVAN[i + 1][0]) i++;
+    const [, ikon, ad] = UNVAN[i], sonraki = UNVAN[i + 1];
+    return { ikon, ad, sonraki: sonraki ? { ad: sonraki[2], kalan: sonraki[0] - n, oran: (n - UNVAN[i][0]) / (sonraki[0] - UNVAN[i][0]) } : null };
+  }
+  const ayYil = (t) => new Date(t).toLocaleDateString(DIL === "en" ? "en-GB" : "tr-TR", { month: "short", year: "numeric" }).toLocaleUpperCase(DIL === "en" ? "en" : "tr").replace(".", "");
+  // Bölge haritası (pasaport sayfasının filigranı): illerin sınır çizgilerinden kutu hesabı
+  const BOLGE_KUTU = new Map();
+  function bolgeHarita(b, D) {
+    if (!HARITA) return "";
+    const l = BOLGE[b].split(" ");
+    if (!BOLGE_KUTU.has(b)) {
+      let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+      for (const s of l) { const n = (HARITA[s] || "").match(/-?\d+(\.\d+)?/g) || []; for (let i = 0; i + 1 < n.length; i += 2) { const x = +n[i], y = +n[i + 1]; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; } }
+      BOLGE_KUTU.set(b, [x0 - 4, y0 - 4, x1 - x0 + 8, y1 - y0 + 8].map((v) => Math.round(v)).join(" "));
+    }
+    return `<svg class="pyharita" viewBox="${BOLGE_KUTU.get(b)}" aria-hidden="true">${l.map((s) => HARITA[s] ? `<path d="${HARITA[s]}"${D.has(s) ? ' class="on"' : ""}/>` : "").join("")}</svg>`;
+  }
+  // Sıradaki damga: konum varsa en yakın damgasız il; yoksa tamamlanmaya en yakın bölge; yoksa son gidilen ile en yakın il
+  function siradaki(D) {
+    const kalan = IDX.iller.filter((i) => !D.has(i.s) && i.lat != null);
+    if (!kalan.length) return null;
+    const yakin = (o) => kalan.map((i) => [km(o, i), i]).sort((x, y) => x[0] - y[0])[0];
+    const bolgeNot = (il) => {
+      const b = IL_BOLGE.get(il.s), x = BOLGE[b].split(" "), eksik = x.filter((s) => !D.has(s)).length;
+      return eksik === 1 ? TL(`Bu damgayla ${T(b)} sayfan tamamlanır!`, `This stamp completes your ${T(b)} page!`) : eksik <= 3 && x.length - eksik > 0 ? TL(`${T(b)} sayfasını tamamlamana ${eksik} il kaldı.`, `${eksik} provinces left to complete your ${T(b)} page.`) : "";
+    };
+    if (me) { const [m, il] = yakin(me); return { il, neden: TL(`Sana en yakın damgasız il · ${fmt(m)}`, `Nearest province without a stamp · ${fmt(m)}`), ek: bolgeNot(il) }; }
+    const bolge = Object.entries(BOLGE).map(([b, l]) => { const x = l.split(" "); return { b, eksik: x.filter((s) => !D.has(s)), n: x.filter((s) => D.has(s)).length }; })
+      .filter((r) => r.eksik.length && r.n && r.eksik.length <= 3).sort((x, y) => x.eksik.length - y.eksik.length)[0];
+    const gidilen = gittiklerim().filter((x) => x.t).sort((x, y) => y.t - x.t);
+    const son = gidilen.length ? IDX.ilBy.get(gidilen[0].s) : null;
+    if (bolge) {
+      const merkez = son || IDX.ilBy.get(BOLGE[bolge.b].split(" ").find((s) => D.has(s)));
+      const il = bolge.eksik.map((s) => IDX.ilBy.get(s)).filter(Boolean).sort((x, y) => km(merkez, x) - km(merkez, y))[0];
+      if (il) return { il, neden: TL(`${T(bolge.b)} sayfasını tamamlamana ${bolge.eksik.length} il kaldı`, `${bolge.eksik.length} more to complete your ${T(bolge.b)} page`), ek: "" };
+    }
+    let ref = son; if (!ref) { try { ref = IDX.ilBy.get(localStorage.getItem("gezi-son-il") || ""); } catch (e) {} }
+    if (ref && !D.has(ref.s)) return { il: ref, neden: TL("En son baktığın il", "The province you viewed last"), ek: bolgeNot(ref) };
+    if (ref) { const [m, il] = yakin(ref); return { il, neden: D.size ? TL(`Son gittiğin ${ref.ad} iline ${fmt(m)}`, `${fmt(m)} from ${ref.ad}, where you last went`) : TL(`En son baktığın ${ref.ad} iline ${fmt(m)}`, `${fmt(m)} from ${ref.ad}, which you viewed last`), ek: bolgeNot(il) }; }
+    return null;
+  }
   function renderPasaport() {
-    const D = damgalar(), iller = IDX.iller.slice().sort((a, b) => (+a.plaka) - (+b.plaka));
-    $("pasSay").textContent = `${D.size} / 81`;
-    $("pasBolge").innerHTML = Object.entries(BOLGE).map(([b, l]) => {
+    const D = damgalar(), u = unvanBul(D.size), C = 2 * Math.PI * 52;
+    if (!HARITA && !haritaSoz) { haritaSoz = getJSON("tr-harita.json?v=3"); }
+    // harita sonradan gelirse sayfalara yalnızca filigranı ekle (gezi haritası da aynı dosyayı bekliyor olabilir)
+    if (!HARITA && haritaSoz) haritaSoz.then((h) => {
+      HARITA = HARITA || h; const D2 = damgalar(), bl = Object.keys(BOLGE);
+      document.querySelectorAll("#pasSayfa .pyaprak").forEach((a, i) => { if (!a.querySelector(".pyharita") && bl[i]) a.insertAdjacentHTML("afterbegin", bolgeHarita(bl[i], D2)); });
+    }).catch(() => {});
+    // kapak
+    $("pasKapak").innerHTML = `<div class="pkust"><small>ROTA CEPTE</small><b>${TL("GEZİ PASAPORTU", "TRAVEL PASSPORT")}</b><small>${TL("TRAVEL PASSPORT", "GEZİ PASAPORTU")}</small></div>
+      <div class="pkorta"><svg class="phalka" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="pkAltin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe3a3"/><stop offset="1" stop-color="#c9953f"/></linearGradient></defs><circle cx="60" cy="60" r="52" class="pz"/><circle cx="60" cy="60" r="52" class="pd" stroke-dasharray="${(C * D.size) / 81} ${C}"/></svg>
+        <span class="phsay"><b>${D.size}</b><small>/ 81 ${TL("il", "provinces")}</small></span></div>
+      <div class="pkunvan">${ik(u.ikon, 18)}<span><small>${TL("UNVAN", "TITLE")}</small><b>${esc(u.ad)}</b></span></div>
+      ${u.sonraki ? `<p class="pksonraki">${esc(TL(`${u.sonraki.ad} unvanına ${u.sonraki.kalan} damga kaldı`, `${u.sonraki.kalan} more stamp${u.sonraki.kalan === 1 ? "" : "s"} to become ${u.sonraki.ad}`))}</p><span class="pkbar"><i style="width:${Math.max(4, Math.round(u.sonraki.oran * 100))}%"></i></span>` : `<p class="pksonraki">${TL("81 ilin hepsini gezdin. Sen bir Evliya Çelebi'sin!", "You've visited all 81 provinces. A true Evliya Çelebi!")}</p>`}`;
+    // bölge sekmeleri ve sayfalar
+    const B = Object.entries(BOLGE);
+    $("pasBolge").innerHTML = B.map(([b, l], i) => {
       const x = l.split(" "), n = x.filter((s) => D.has(s)).length;
-      return `<span class="pbolge${n === x.length ? " tam" : ""}" style="--d:${DAMGA_RENK[b]}"><i></i>${esc(T(b))} <b>${n}/${x.length}</b></span>`;
+      return `<button class="pbolge${n === x.length ? " tam" : ""}" data-sayfa="${i}" style="--d:${DAMGA_RENK[b]}" role="tab" aria-selected="${i === 0}">${n === x.length ? ik("check", 13) : "<i></i>"}${esc(T(b))} <b>${n}/${x.length}</b></button>`;
     }).join("");
-    $("pasGrid").innerHTML = iller.map((il) => {
-      const ok = D.has(il.s), no = +il.plaka || 1;
-      return `<li><button class="pas${ok ? " on" : ""}" data-pas="${il.s}" style="--d:${DAMGA_RENK[IL_BOLGE.get(il.s)] || "#888"};--r:${((no * 37) % 13) - 6}deg" aria-label="${esc(il.ad)}${ok ? " · " + T("damga var") : ""}" title="${esc(il.ad)}">${esc(il.plaka)}</button></li>`;
+    $("pasSayfa").innerHTML = B.map(([b, l], i) => {
+      const x = l.split(" ").map((s) => IDX.ilBy.get(s)).filter(Boolean).sort((p, q) => (+p.plaka) - (+q.plaka)), n = x.filter((il) => D.has(il.s)).length, tam = n === x.length;
+      return `<article class="pyaprak" style="--d:${DAMGA_RENK[b]}" aria-label="${esc(T(b))}">${bolgeHarita(b, D)}
+        <div class="pyust"><span>${TL("SAYFA", "PAGE")} ${i + 1}</span><b>${esc(T(b).toLocaleUpperCase(DIL === "en" ? "en" : "tr"))}</b><em>${n}/${x.length}</em></div>
+        <ol class="pyizgara">${x.map((il) => {
+          const d = D.get(il.s), no = +il.plaka || 1, r = ((no * 37) % 13) - 6;
+          return d ? `<li><button class="pslot on" data-pas="${il.s}" style="--r:${r}deg" aria-label="${esc(il.ad)} · ${T("damga var")}"><span class="pmini"><b>${esc(il.plaka)}</b>${d.t ? `<small>${esc(ayYil(d.t))}</small>` : ""}</span><em>${esc(il.ad)}</em></button></li>`
+            : `<li><button class="pslot" data-go="#/il/${il.s}" aria-label="${esc(il.ad)}"><span class="pmini"><b>${esc(il.plaka)}</b></span><em>${esc(il.ad)}</em></button></li>`;
+        }).join("")}</ol>
+        <div class="pyalt">${tam ? `<span class="pmuhur">${ik("check", 16)} ${TL("SAYFA TAMAM", "PAGE COMPLETE")}</span>` : `<small>${n ? TL(`Bu sayfayı tamamlamana ${x.length - n} il kaldı`, `${x.length - n} more to complete this page`) : TL("Bu sayfa ilk damganı bekliyor", "This page is waiting for its first stamp")}</small>`}</div>
+      </article>`;
     }).join("");
+    // sıradaki damga
+    const sr = siradaki(D);
+    $("pasSira").innerHTML = sr ? `<button class="psira" data-go="#/il/${sr.il.s}">${thumb(sr.il.f, "s", 250)}<span class="rt"><small>${D.size ? TL("Sıradaki damgan", "Your next stamp") : TL("İlk damgan", "Your first stamp")}</small><b>${esc(sr.il.ad)}</b><span>${esc(sr.neden)}${sr.ek ? " · " + esc(sr.ek) : ""}</span></span>${ik("chevron-right", 18)}</button>` : "";
+    $("pasPay").hidden = !D.size;
+    pasSekme();
+  }
+  // Kaydırınca etkin bölge sekmesi değişsin
+  // Bir sayfanın kaydırma adımı (sayfa genişliği + aradaki boşluk)
+  const pasAdim = (k) => (k.children[1] ? k.children[1].offsetLeft - k.children[0].offsetLeft : k.clientWidth) || 1;
+  function pasSekme() {
+    const k = $("pasSayfa"), i = Math.round(k.scrollLeft / pasAdim(k));
+    document.querySelectorAll("#pasBolge [data-sayfa]").forEach((b) => {
+      b.setAttribute("aria-selected", +b.dataset.sayfa === i);
+      // seçili sekme görünür kalsın
+      if (+b.dataset.sayfa === i) { const t = b.parentElement, x = b.offsetLeft - t.offsetLeft; if (x < t.scrollLeft + 16 || x + b.offsetWidth > t.scrollLeft + t.clientWidth - 16) t.scrollTo({ left: x - 16, behavior: "smooth" }); }
+    });
+  }
+  // Ana sayfada küçük pasaport özeti (en az bir damga varsa)
+  function renderPasOzet() {
+    const k = $("pasOzet"); if (!k || !IDX) return;
+    const D = damgalar(); if (!D.size) { k.hidden = true; return; }
+    const u = unvanBul(D.size), sr = siradaki(D);
+    k.innerHTML = `<button class="pozet" data-go="#/rozetler"><span class="pozik">${ik("stamp", 22)}</span><span class="rt"><small>${TL("Gezi pasaportun", "Your travel passport")} · ${esc(u.ad)}</small><b>${TL(`${D.size} / 81 il damgası`, `${D.size} / 81 province stamps`)}</b>${sr ? `<span>${esc(TL(`Sıradaki: ${sr.il.ad}`, `Next: ${sr.il.ad}`))} · ${esc(sr.neden)}</span>` : ""}</span>${ik("chevron-right", 18)}</button>`;
+    k.hidden = false;
+  }
+  // İl sayfasında bu ilin damgası
+  function ilDamga(d) {
+    const k = $("ilDamga"); if (!k || !d || !IDX || !IDX.ilBy.has(d.s)) return;
+    const il = IDX.ilBy.get(d.s), x = damgalar().get(d.s), no = +il.plaka || 1;
+    k.style.setProperty("--d", DAMGA_RENK[IL_BOLGE.get(d.s)] || "#888"); k.style.setProperty("--r", ((no * 37) % 13) - 6 + "deg");
+    k.classList.toggle("on", !!x);
+    k.innerHTML = `<span class="pmini"><b>${esc(il.plaka)}</b>${x && x.t ? `<small>${esc(ayYil(x.t))}</small>` : ""}</span><span class="rt"><b>${x ? TL(`${il.ad} damgası pasaportunda`, `${il.ad} stamp collected`) : TL(`${il.ad} damgası seni bekliyor`, `The ${il.ad} stamp is waiting for you`)}</b><small>${x ? TL(`${x.n} yere gittin · büyütmek için dokun`, `${x.n} place${x.n === 1 ? "" : "s"} visited · tap to open`) : TL("Bu ilde bir yerin sayfasında \"Buraya gittim\" de, damga pasaportuna basılsın.", "Tap \"I've been here\" on any place in this province to get the stamp.")}</small></span>${x ? ik("chevron-right", 18) : ""}`;
+    k.hidden = false;
+  }
+  // Tüm pasaportu tek görselde paylaş (hikâye boyutu)
+  async function pasaportPaylas() {
+    const D = damgalar(), u = unvanBul(D.size);
+    try { await document.fonts.load("800 40px Manrope"); await document.fonts.load("600 30px Manrope"); } catch (e) {}
+    const W = 1080, H = 1920, c = document.createElement("canvas"); c.width = W; c.height = H;
+    const g = c.getContext("2d"), F = (w, px) => `${w} ${px}px Manrope, system-ui, sans-serif`;
+    // kapak rengi üst bant ve krem sayfa
+    const gr = g.createLinearGradient(0, 0, W, 420); gr.addColorStop(0, "#6d1424"); gr.addColorStop(1, "#4a0c18");
+    g.fillStyle = "#f7f0e3"; g.fillRect(0, 0, W, H);
+    g.fillStyle = gr; g.fillRect(0, 0, W, 430);
+    g.strokeStyle = "rgba(240,207,134,.55)"; g.lineWidth = 3; g.strokeRect(28, 28, W - 56, 374);
+    g.textAlign = "center"; g.fillStyle = "#f0cf86";
+    g.font = F(700, 28); try { g.letterSpacing = "6px"; } catch (e) {} g.fillText("ROTA CEPTE", W / 2, 96); try { g.letterSpacing = "0px"; } catch (e) {}
+    g.font = F(800, 64); g.fillText(TL("GEZİ PASAPORTUM", "MY TRAVEL PASSPORT"), W / 2, 178);
+    g.font = F(800, 120); g.fillText(`${D.size}`, W / 2 - 70, 320); g.font = F(700, 44); g.textAlign = "left"; g.fillText(`/ 81 ${TL("il", "provinces")}`, W / 2 - 10, 318);
+    g.textAlign = "center"; g.font = F(700, 34); g.fillText(TL(`Unvan: ${u.ad}`, `Title: ${u.ad}`), W / 2, 380);
+    // 81 damga yuvası: plakaya göre 9x9
+    const iller = IDX.iller.slice().sort((a, b) => (+a.plaka) - (+b.plaka)), hc = 108, x0 = (W - hc * 9) / 2 + hc / 2, y0 = 520;
+    iller.forEach((il, i) => {
+      const x = x0 + (i % 9) * hc, y = y0 + Math.floor(i / 9) * (hc + 6), d = D.get(il.s), renk = DAMGA_RENK[IL_BOLGE.get(il.s)] || "#888", no = +il.plaka || 1;
+      g.save(); g.translate(x, y);
+      if (d) {
+        g.rotate((((no * 37) % 13) - 6) * Math.PI / 180); g.strokeStyle = g.fillStyle = renk; g.globalAlpha = 0.92;
+        g.lineWidth = 5; g.beginPath(); g.arc(0, 0, 44, 0, Math.PI * 2); g.stroke();
+        g.lineWidth = 2; g.beginPath(); g.arc(0, 0, 36, 0, Math.PI * 2); g.stroke();
+        g.font = F(800, 34); g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(il.plaka, 0, 2);
+        // mürekkep dokusu
+        let t = no * 7919; const rnd = () => ((t = (t * 16807) % 2147483647) / 2147483647);
+        g.globalCompositeOperation = "destination-out"; g.globalAlpha = 1;
+        for (let k = 0; k < 90; k++) { const a = rnd() * Math.PI * 2, r = Math.sqrt(rnd()) * 47; g.globalAlpha = 0.3 + rnd() * 0.6; g.beginPath(); g.arc(Math.cos(a) * r, Math.sin(a) * r, 0.5 + rnd() * 1.6, 0, Math.PI * 2); g.fill(); }
+      } else {
+        g.strokeStyle = "rgba(120,90,60,.35)"; g.setLineDash([6, 7]); g.lineWidth = 2.5; g.beginPath(); g.arc(0, 0, 40, 0, Math.PI * 2); g.stroke(); g.setLineDash([]);
+        g.fillStyle = "rgba(120,90,60,.45)"; g.font = F(700, 28); g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(il.plaka, 0, 2);
+      }
+      g.restore();
+    });
+    g.globalCompositeOperation = "source-over"; g.globalAlpha = 1; g.textBaseline = "alphabetic";
+    // bölgeler
+    let y = y0 + 9 * (hc + 6) + 20;
+    g.textAlign = "left"; g.font = F(700, 30);
+    Object.entries(BOLGE).forEach(([b, l], i) => {
+      const x = l.split(" "), n = x.filter((s) => D.has(s)).length, cx = 90 + (i % 2) * 470, cy = y + Math.floor(i / 2) * 52;
+      g.fillStyle = DAMGA_RENK[b]; g.beginPath(); g.arc(cx, cy - 10, 11, 0, Math.PI * 2); g.fill();
+      g.fillStyle = "#3b2e25"; g.fillText(`${T(b)}  ${n}/${x.length}${n === x.length ? " ✓" : ""}`, cx + 24, cy);
+    });
+    g.textAlign = "center"; g.fillStyle = "#c4441b"; sigdir(g, T("Yol senin, rotan cepte!"), W / 2, H - 110, W - 160, (px) => F(800, px), 46);
+    g.fillStyle = "#5b4636"; g.font = F(600, 30); g.fillText("Rota Cepte · me7rt.github.io/Rota-Cepte", W / 2, H - 60);
+    gorselPaylas(c.toDataURL("image/png"), "gezi-pasaportum.png", TL(`Gezi pasaportumda ${D.size} / 81 il damgası var, unvanım: ${u.ad}! Sen kaç il gezdin? Rota Cepte: https://me7rt.github.io/Rota-Cepte/`, `I've collected ${D.size} of 81 province stamps in my travel passport (${u.ad})! How many have you? Rota Cepte: https://me7rt.github.io/Rota-Cepte/`));
   }
   // Paylaşılan görsel için damgayı tuvale çiz (SVG resmi içinde yazı tipi geç yüklendiği için yazılar kayboluyordu)
   function damgaCiz(s, t, R) {
@@ -1682,7 +1833,7 @@
     if (!IDX) return;
     const q = $("search").value.trim();
     if (q.length >= 2) return renderSearch(q);
-    gununKesfi();
+    gununKesfi(); renderPasOzet();
     $("results").hidden = true; $("homeMain").hidden = false;
     const iller = IDX.iller.slice();
     if (me) iller.sort((a, b) => km(me, a) - km(me, b));
@@ -1742,7 +1893,7 @@
     $("tabs").hidden = false;
     $("tabBtnIlce").textContent = `${T("İlçeler")} (${d.ilceler.length})`;
     $("tabBtnYer").textContent = `${T("Gezilecek yerler")} (${d.yerler.length})`;
-    havaGoster(IDX.ilBy.get(d.s) || d); yemekGoster(d);
+    havaGoster(IDX.ilBy.get(d.s) || d); yemekGoster(d); ilDamga(d);
     planBas = 0; planGoster(d);
     indirBtn();
     places = d.yerler; cat = "hepsi"; shown = 60; fitted = false;
@@ -2138,7 +2289,13 @@
   $("gezBtn").addEventListener("click", () => { $("gezList").hidden = !$("gezList").hidden; });
   $("karneBtn").addEventListener("click", karne);
   $("ozetBtn").addEventListener("click", () => yilOzeti());
-  $("pasGrid").addEventListener("click", (e) => { const b = e.target.closest("[data-pas]"); if (b) pasAc(b.dataset.pas); });
+  $("pasSec").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-pas]"); if (b) return pasAc(b.dataset.pas);
+    const t = e.target.closest("[data-sayfa]"); if (t) { const k = $("pasSayfa"); k.scrollTo({ left: +t.dataset.sayfa * pasAdim(k), behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); }
+    if (e.target.closest("#pasPay")) pasaportPaylas();
+  });
+  $("pasSayfa").addEventListener("scroll", () => { clearTimeout(pasSekme.z); pasSekme.z = setTimeout(pasSekme, 60); }, { passive: true });
+  $("ilDamga").addEventListener("click", () => { if (view && view.d && damgalar().has(view.d.s)) pasAc(view.d.s); });
   $("hedefSec").addEventListener("click", (e) => {
     const b = e.target.closest("[data-hedef]"); if (!b) return;
     const n = +b.dataset.hedef;
