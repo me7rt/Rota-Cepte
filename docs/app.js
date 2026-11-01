@@ -2521,12 +2521,23 @@
     d.addEventListener("click", (e) => { e.stopPropagation(); ozelKart(og, n, msj, d); });
     b.querySelector("span").appendChild(d);
   }
+  // Günlere özel çizimler kartlar.js'te: yalnızca "Kartı paylaş"a basılınca yüklenir
+  let kartJS = null;
+  const kartYukle = () => kartJS || (kartJS = new Promise((ok) => {
+    if (window.RC_KARTLAR) return ok(true);
+    const s = document.createElement("script"); s.src = `kartlar.js?v=${SURUM}`;
+    s.onload = () => ok(!!window.RC_KARTLAR); s.onerror = () => { kartJS = null; s.remove(); ok(false); };
+    document.head.appendChild(s);
+  }));
+  const KART_YARDIM = { PF, blok, diz, satirla, tarihSatiri, bol, buyuk, imza, ayYildiz, hilal, harfAra, sigdir, TL, DIL: () => DIL };
   async function ozelKart(og, n, msj, dugme) {
     if (dugme.disabled) return;
     dugme.disabled = true;
     try {
       await yaziTipiHazir();
       const ikon = await resimYukle("icon-192.png", 4000).catch(() => null);
+      const cizim = og.kart && !og.yas ? await kartYukle() : false;
+      const foto = cizim && og.foto ? await resimYukle(og.foto, 6000).catch(() => null) : null;
       const W = 1080, H = 1350, c = document.createElement("canvas"); c.width = W; c.height = H;
       const g = c.getContext("2d"); g.textAlign = "center"; g.textBaseline = "middle";
       const yil = n.getFullYear(), gunAy = n.toLocaleDateString(LOC(), { day: "numeric", month: "long" });
@@ -2536,7 +2547,17 @@
         return (A.getMonth() === B.getMonth() ? A.getDate() + "–" : A.toLocaleDateString(LOC(), { day: "numeric", month: "long" }) + " – ") + B.toLocaleDateString(LOC(), uzun);
       };
       const o = { msj, ikon };
-      if (og.yas) {
+      if (cizim) {
+        [o.bas, o.alt] = bol(msj);
+        Object.assign(o, { kart: og.kart, foto, yil, sayi: og.yil ? yil - og.yil : 0 });
+        o.tarih = buyuk(og.bas ? tarihAraligi(og.bas, og.bit) : og.yil ? `${gunAy} ${og.yil} – ${yil}` : `${gunAy} ${yil}`);
+        if (og.mahya) o.mahya = DIL === "en" ? og.mahya.en || "" : og.mahya.tr;
+        if (og.soz) { o.soz = TL(og.soz.tr, og.soz.en || og.soz.tr); o.kim = DIL === "en" && og.soz.kimEn ? og.soz.kimEn : og.soz.kim || ""; }
+        o.imzaVar = !!og.imza;
+      }
+      if (cizim && window.RC_KARTLAR.ciz(og.kart, g, W, H, o, KART_YARDIM)) {
+        // çizim kartlar.js'te yapıldı
+      } else if (og.yas) {
         o.tarih = buyuk(`${gunAy} ${og.yil || yil}`) + (og.saygi ? TL(" · 09.05", " · 09:05") : "");
         if (og.saygi) {
           o.bas = TL(`Ebediyete intikalinin ${yil - og.yil}. yılında`, `${yil - og.yil} years since his passing`);
