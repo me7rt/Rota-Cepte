@@ -2,26 +2,20 @@ name: Gecici gorsel toplama
 on:
   push:
     branches: [claude/project-thread-oje5uw]
-    paths: [.github/workflows/gecici-gorsel.yml, .github/gorsel-topla.py, .github/gorsel-indir.py, .github/gorsel-secim.json]
+    paths: [.github/workflows/gecici-gorsel.yml, .github/gorsel-topla.py, .github/gorsel-sorgu-a.json, .github/gorsel-sorgu-b.json]
 permissions:
   contents: write
 jobs:
   topla:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 40
+    strategy:
+      matrix:
+        parti: [{ad: a, dal: video-deneme-8}, {ad: b, dal: video-deneme-9}]
     steps:
       - uses: actions/checkout@v4
       - name: Yeni adaylar
-        run: |
-          python3 .github/gorsel-topla.py cikti '{
-            "efes-tiyatro": ["Ephesus theatre", "bitmap", 6, 1200],
-            "efes-tiyatro2": ["Ephesus Great Theater", "bitmap", 6, 1200],
-            "nemrut-bas": ["Nemrut head statue", "bitmap", 8, 1200],
-            "nemrut-dag": ["Mount Nemrut", "bitmap", 8, 1200],
-            "nemrut-kis": ["Nemrut snow", "bitmap", 4, 1000],
-            "safran": ["Crocus sativus flower", "bitmap", 5, 1600],
-            "lokum": ["Turkish delight saffron", "bitmap", 4, 1200]
-          }' 2400
+        run: python3 .github/gorsel-topla.py cikti "$(cat .github/gorsel-sorgu-${{ matrix.parti.ad }}.json)" 2400
       - name: video-deneme dalina koy
         run: |
           cd cikti
@@ -29,4 +23,4 @@ jobs:
           git config user.name "Mert Turanlıoğlu"
           git config user.email "me7rtt@gmail.com"
           git add . && git commit -qm "Kısa video görsel adayları"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:video-deneme-7
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:${{ matrix.parti.dal }}
