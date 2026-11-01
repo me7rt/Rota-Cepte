@@ -11,15 +11,10 @@ const out = "out"; fs.mkdirSync(out + "/b", { recursive: true });
 
 // 1) Seçilen dosyaları büyük boy indir (kısa kenar ~1500 px)
 const SECILEN = {
-  "kandil-02": "Sultan Ahmed I Mosque in 2026 27.jpg", "kandil-33": "New Mosque in 2025 (cropped).jpg", "kandil-16": "Hagia Sophia (8395709547).jpg",
-  "kadir-08": "The Blue Mosque at night.jpg", "kadir-09": "Blue mosque minaret.jpg", "kadir-06": "The Sultan Ahmed Mosque (Blue Mosque) (8290130241).jpg",
-  "ramazan-24": "Istanbul.Sultanahmet.BlueMosque.Ramazan.02.jpg", "ramazan-02": "Iftar in Turkey 6643120.jpg", "ramazan-06": "Istanbul (48985794086).jpg",
-  "bayram-42": "Istanbul, Turkey (10582793774).jpg", "bayram-03": "Different types of Turkish delight.jpg",
-  "anneler-17": "Jacob van Hulsdonck - Tulips and carnations in an earthenware vase.jpg", "anneler-16": "Turkey (Istanbul) Orange-coloured Tulips in Emirgan Garden (26396252431).jpg",
-  "anneler-14": "Nicolaes van Verendael - Bouquet of flowers in a glass vase with butterfly, caterpillar and snail.jpg",
-  "babalar-06": "Road in Phrygia, Afyonkarahisar.jpg", "babalar-15": "Father And Son (68484147).jpeg",
-  "demokrasi-23": "Bosphorus Dinner Cruise (52126321474).jpg", "demokrasi-34": "Bosphorus Bridge (1973) in Istanbul.jpg", "demokrasi-26": "Walls of Istanbul and Turkish Flag, 2024.jpg", "demokrasi-08": "Bosphorus Bridge at night.jpg",
-  "yilbasi-11": "Fireworks over the Galata bridge - panoramio.jpg", "yilbasi-17": "Turkey (Istanbul) Frozen trees (24461559651).jpg", "kandil-01": "Istanbul (54510564205).jpg"
+  "yilbasi2-26": "Sparkler and bokeh (31179984783).jpg", "yilbasi2-29": "Fireworks in Sevierville, Tennessee on 4th of July - 1.jpg",
+  "yilbasi2-24": "2024-02-25 View of mountains near Ayder 8.jpg", "yilbasi2-19": "2024-02-25 Road between Ayder Yaylası and Ĥuser Yaylası in February 2.jpg",
+  "kurban2-15": "Ortaköy Mosque from the Bosporus, Istanbul, 20260606 1425 1509.jpg", "kurban2-08": "Süleymaniye Mosque, Istanbul, 20260606 0805 1307.jpg",
+  "kurban2-22": "Grand Çamlıca Mosque (99490).jpg", "kurban2-19": "Grand Çamlıca Mosque.jpg", "yilbasi-02": "Fındıkzade'de kar (21022025) 02.jpg"
 };
 const bilgi = {};
 for (const [no, ad] of Object.entries(SECILEN)) {
@@ -39,12 +34,7 @@ fs.writeFileSync(`${out}/secilen.json`, JSON.stringify(bilgi, null, 1));
 
 // 2) Ek arama: yılbaşı ve kurban için daha iyi adaylar
 const QI = ' incategory:"Quality_images"', FP = ' incategory:"Featured_pictures_on_Wikimedia_Commons"';
-const TEMA = {
-  yilbasi2: { kat: ["Fireworks in Istanbul", "New Year's Eve in Turkey", "Uludağ in winter", "Sarıkamış", "Palandöken Mountains", "Snow in Cappadocia"],
-    ara: ["fireworks" + FP, "fireworks" + QI, "sparkler" + QI, "sparklers bokeh", "fairy lights bokeh" + QI, "Uludağ snow", "Cappadocia snow" + QI, "snowy pine forest" + QI, "Kars snow", "Ayder snow", "winter night lights" + QI] },
-  kurban2: { kat: ["Süleymaniye Mosque at sunset", "Süleymaniye Mosque at dawn", "Eid al-Adha in Turkey", "Kurban Bayramı"],
-    ara: ["Süleymaniye Mosque" + QI, "Selimiye Mosque" + QI, "Sultan Ahmed Mosque" + FP, "mosque sunrise" + QI, "Eyüp Sultan Mosque" + QI, "Mihrimah Sultan Mosque" + QI, "Çamlıca Mosque", "Ortaköy Mosque" + QI, "Kurban Bayramı", "bayram namazı"] }
-};
+const TEMA = {};
 const sonuc = {};
 for (const [tema, t] of Object.entries(TEMA)) {
   const adlar = new Set();
