@@ -270,6 +270,7 @@
       if (!kesifYakin && !$("home").hidden) gununKesfi();
       if (hemen && view && view.mode === "tema") renderTema();
       if (hemen && view && view.mode === "kacamak") renderKacamak();
+      if (hemen && view && view.mode === "cark") carkKonum();
     }, hemen ? 0 : 400);
   }
   function updateKm() {
@@ -287,7 +288,7 @@
     $("tema").hidden = v !== "tema";
     $("rota").hidden = v !== "rota";
     $("yol").hidden = v !== "yol";
-    for (const x of ["plist", "kacamak", "kartlar", "oyun"]) $(x).hidden = v !== x;
+    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark"]) $(x).hidden = v !== x;
     $("ataturk").hidden = v !== "ataturk";
     $("rozet").hidden = v !== "rozet";
     $("listem").hidden = v !== "listem";
@@ -336,6 +337,7 @@
       if (h[0] === "kacamak") return showKacamak(h[1]);
       if (h[0] === "kartlar") return await showKartlar();
       if (h[0] === "oyun") return await showOyun();
+      if (h[0] === "cark") return showCark();
       if (h[0] === "ozet") { history.replaceState(null, "", "#/rozetler"); route(); setTimeout(() => yilOzeti(+h[1] || 0), 600); return; }
       if (h[0] === "rozetler") { view = { mode: "rozet" }; show("rozet"); $("eyebrow").textContent = T("Gezi haritan ve rozetler"); $("title").textContent = T("Gezilerim"); renderGez(); return; }
       if (h[0] === "listem") { view = { mode: "listem" }; show("listem"); $("eyebrow").textContent = "Rota Cepte"; $("title").textContent = T("Gideceğim yerler"); renderFav(); return; }
@@ -353,7 +355,7 @@
   // ---------- ana sayfa ----------
   function showHome() {
     view = { mode: "home" }; show("home");
-    $("eyebrow").textContent = "Rota Cepte"; $("title").textContent = T("Nereye gidiyorsun?");
+    $("eyebrow").textContent = selam(); $("title").textContent = T("Nereye gidiyorsun?");
     renderHome();
   }
   // ---------- gideceğim yerler (favoriler) ----------
@@ -532,6 +534,7 @@
     d.innerHTML = `<div class="tkart rkutla"><div class="temo altin">${ik(r.ikon, 40)}</div><small>${T("Yeni rozet!")}</small><h2>${esc(r.ad)}</h2><p>${esc(r.acik)}</p><div class="tbtn" style="justify-content:center"><button class="btn primary">${T("Süper!")}</button></div></div>`;
     d.addEventListener("click", (e) => { if (e.target === d || e.target.closest("button")) { d.classList.add("out"); setTimeout(() => d.remove(), 300); } });
     document.body.appendChild(d);
+    konfeti();
   }
   function renderRozet() {
     const R = rozetler(), k = R.filter((r) => r.tamam).length;
@@ -799,6 +802,7 @@
       if (e.target.closest("[data-k=dpay]")) damgaPaylas(s);
     });
     document.body.appendChild(m);
+    if (yeni) setTimeout(konfeti, 380); // damga basılırken
   }
   // ---------- hava durumu ----------
   const HAVA = { 0: ["sun", T("Açık")], 1: ["cloud-sun", T("Az bulutlu")], 2: ["cloud-sun", T("Parçalı bulutlu")], 3: ["cloud", T("Kapalı")], 45: ["cloud-fog", T("Sisli")], 48: ["cloud-fog", T("Sisli")],
@@ -1692,7 +1696,7 @@
     try { localStorage.setItem(YOL, JSON.stringify({ a, b, g: yolGenis })); } catch (e) {}
     if (location.hash !== `#/yol/${a}/${b}`) history.replaceState(null, "", `#/yol/${a}/${b}`);
     for (const x of $("yolGenis").children) x.setAttribute("aria-pressed", String(+x.dataset.g === yolGenis));
-    $("yolAc").hidden = true;
+    $("yolAc").hidden = true; $("yolMola").hidden = true;
     if (a === b) { $("yolSay").textContent = ""; $("yolHat").innerHTML = ""; $("yolList").innerHTML = `<li class="empty">${T("Nereden ve nereye için iki farklı il seç.")}</li>`; return; }
     if (!ARA || !KOMSU || typeof KOMSU.then === "function") {
       $("yolList").innerHTML = `<li class="empty">${T("Yükleniyor…")}</li>`;
@@ -1722,6 +1726,7 @@
       }).join("");
       if (l.length > goster.length) html += `<li><button class="linkbtn yolfazla" data-yolil="${s}">${TL(`${ilAd(s)}: ${l.length - goster.length} yer daha göster`, `Show ${l.length - goster.length} more in ${ilAd(s)}`)}</button></li>`;
     }
+    molaGoster(yol, r, toplam);
     $("yolList").innerHTML = html || `<li class="empty">${TL("Bu yolun yakınında kayıtlı yer bulamadık. Yoldan sapma mesafesini artırmayı dene.", "No places found near this road. Try a wider distance.")}</li>`;
     const A = IDX.ilBy.get(a), B = IDX.ilBy.get(b);
     $("yolAc").href = `https://www.google.com/maps/dir/?api=1&origin=${A.lat},${A.lng}&destination=${B.lat},${B.lng}&travelmode=driving`;
@@ -2083,6 +2088,7 @@
       ["shuffle", T("Nereye gitsem?"), TL("Fotoğraflı kartları kaydır: sağa kaydırdığın yer listene girer, sola kaydırdığını geçeriz.", "Swipe photo cards: right to save a place, left to skip."), "#/kartlar"],
       ["binoculars", TL("Hangi ilde?", "Which province?"), TL("Fotoğrafa bak, hangi ilde olduğunu tahmin et. 10 soruda kaç puan alacaksın?", "Look at a photo and guess the province. How many of 10 can you get?"), "#/oyun"],
       ["calendar-days", T("Hafta sonu kaçamağı"), TL("Arabayla birkaç saatlik illeri öneririz; bayramda 3-4 günlük rotalar.", "Provinces a few hours' drive away; longer trips for holidays."), "#/kacamak"],
+      ["target", TL("Şans çarkı", "Luck wheel"), TL("Karar veremedin mi? Çarkı çevir, gideceğin il çıksın.", "Can't decide? Spin the wheel and let it pick a province."), "#/cark"],
       ["stamp", T("Gezi pasaportu"), TL("Bir yerde \"Buraya gittim\" de, o ilin damgası pasaportuna basılsın. 81 damgayı topla, paylaş.", "Tap \"I've been here\" on a place to get that province's stamp. Collect all 81 and share them."), "#/rozetler"],
       ["cloud-sun", TL("Havaya göre öneri", "Weather-smart tips"), TL("İl sayfasındaki hava kutusu yağmurda müze, sıcakta serin yer önerir; gün batımı saati de orada.", "The weather box on a province page suggests museums in rain and cool spots in heat, plus sunset times."), `#/il/${son}`],
       ["share-2", TL("Listeni linkle paylaş", "Share your list"), TL("Listem sekmesinde \"Listeyi linkle paylaş\": arkadaşın tek dokunuşla kendi listesine ekler.", "In My list, tap \"Share list as a link\": friends add it to theirs in one tap."), "#/listem"],
@@ -3263,6 +3269,208 @@
   if (AU) {
     setTimeout(guncellemeKontrol, 3000);
     if (CapApp && CapApp.addListener) CapApp.addListener("resume", () => guncellemeKontrol());
+  }
+  // ---------- v6.5 küçük sevinçler: saate göre selam, konfeti, şans çarkı, mola planı ----------
+  // Ana sayfa üst yazısı: saate göre selam (05-11, 11-17, 17-22, 22-05)
+  function selam(t) {
+    const s = (t || new Date()).getHours();
+    const i = s >= 5 && s < 11 ? 0 : s >= 11 && s < 17 ? 1 : s >= 17 && s < 22 ? 2 : 3;
+    return TL(["Günaydın", "İyi günler", "İyi akşamlar", "İyi geceler"][i], ["Good morning", "Good afternoon", "Good evening", "Good night"][i]);
+  }
+  // Konfeti: yeni rozet, yıllık hedef ve yeni damgada kısa kutlama. Kütüphanesiz, 1,5 sn; hareket azaltma açıksa hiç çalışmaz.
+  function konfeti() {
+    try { if (matchMedia("(prefers-reduced-motion: reduce)").matches) return; } catch (e) { return; }
+    const c = document.createElement("canvas"), g = c.getContext && c.getContext("2d"); if (!g) return;
+    const W = innerWidth, H = innerHeight, dpr = Math.min(2, devicePixelRatio || 1);
+    c.className = "konfeti"; c.setAttribute("aria-hidden", "true"); c.width = W * dpr; c.height = H * dpr;
+    document.body.appendChild(c); g.scale(dpr, dpr);
+    const cs = getComputedStyle(document.documentElement), v = (k, y) => cs.getPropertyValue(k).trim() || y;
+    const renk = [v("--pri", "#d13415"), v("--altin-a", "#ffc53d"), v("--altin-b", "#e2a336"), "#ffd76a", v("--k-t", "#3a5bc7"), v("--k-d", "#2a7e3b"), v("--k-m", "#008573"), v("--k-s", "#953ea3")];
+    // patlama noktası: açılan kartın üstü (kart yoksa ekranın üst-ortası)
+    const k = [...document.querySelectorAll(".tanit .tkart")].pop(), r = k && k.getBoundingClientRect();
+    const ox = r ? r.left + r.width / 2 : W / 2, oy = r ? Math.max(80, r.top + 60) : H * 0.35;
+    const P = Array.from({ length: Math.round(Math.min(150, Math.max(80, W / 3))) }, () => {
+      const a = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.95, h = 6 + Math.random() * 10;
+      return { x: ox, y: oy, vx: Math.cos(a) * h, vy: Math.sin(a) * h, w: 6 + Math.random() * 5, h: 3 + Math.random() * 4, d: Math.random() * 6.28, vd: (Math.random() - 0.5) * 0.35, t: Math.random() * 6.28, c: renk[Math.floor(Math.random() * renk.length)], yuv: Math.random() < 0.22 };
+    });
+    const bas = performance.now(), SURE = 1500; let son = bas;
+    const adim = (simdi) => {
+      const dt = Math.min(3, (simdi - son) / 16.7), p = (simdi - bas) / SURE; son = simdi;
+      g.clearRect(0, 0, W, H);
+      if (p >= 1 || !c.isConnected) { c.remove(); return; }
+      g.globalAlpha = p < 0.65 ? 1 : 1 - (p - 0.65) / 0.35;
+      const s = Math.pow(0.975, dt);
+      for (const q of P) {
+        q.vx *= s; q.vy = q.vy * s + 0.3 * dt; q.x += q.vx * dt; q.y += q.vy * dt; q.d += q.vd * dt; q.t += 0.18 * dt;
+        g.save(); g.translate(q.x, q.y); g.rotate(q.d); g.scale(1, Math.cos(q.t)); g.fillStyle = q.c;
+        if (q.yuv) { g.beginPath(); g.arc(0, 0, q.h * 0.75, 0, 6.283); g.fill(); } else g.fillRect(-q.w / 2, -q.h / 2, q.w, q.h);
+        g.restore();
+      }
+      requestAnimationFrame(adim);
+    };
+    requestAnimationFrame(adim);
+  }
+  // Şans çarkı: 8 il (konum açıksa 400 km içinden), çevir, çark seçsin
+  const CARK_RENK = [["#d13415", "#fff"], ["#3a5bc7", "#fff"], ["#ffc53d", "#4f3422"], ["#008573", "#fff"], ["#953ea3", "#fff"], ["#2a7e3b", "#fff"], ["#cc4e00", "#fff"], ["#1f2d5c", "#fff"]];
+  let carkIl = [], carkAci = 0, carkDonuyor = false, carkYakin = 0;
+  const azHareket = () => { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } };
+  function showCark() {
+    view = { mode: "cark" }; show("cark");
+    $("eyebrow").textContent = T("Keşfet"); $("title").textContent = TL("Şans çarkı", "Luck wheel");
+    loadAra();
+    if (!carkDonuyor) carkKur();
+  }
+  function carkKur() {
+    let a = IDX.iller.slice(); carkYakin = 0;
+    if (me) {
+      // bulunduğun il (merkezi en yakın olan) çarka girmesin; 400 km içinde 8 il yoksa en yakın 8 il
+      const ev = a.reduce((en, i) => (km(me, i) < km(me, en) ? i : en));
+      a = a.filter((i) => i !== ev).sort((p, q) => km(me, p) - km(me, q));
+      const y = a.filter((i) => km(me, i) <= 400);
+      a = y.length >= 8 ? y : a.slice(0, 8); carkYakin = y.length >= 8 ? 1 : 2;
+    }
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    carkIl = a.slice(0, 8);
+    $("carkDon").innerHTML = carkSvg(carkIl);
+    $("carkDon").style.transform = `rotate(${carkAci}deg)`;
+    $("carkNot").textContent = carkYakin === 1 ? TL("Sana 400 km'den yakın 8 il çarkta. Çevir, gideceğin il çıksın.", "8 provinces within 400 km of you are on the wheel. Spin it and go where it lands.")
+      : carkYakin === 2 ? TL("Sana en yakın 8 il çarkta. Çevir, gideceğin il çıksın.", "The 8 provinces nearest to you are on the wheel. Spin it and go where it lands.")
+      : TL("Türkiye'nin dört bir yanından 8 il çarkta. Konumunu açarsan yakınındaki illerden seçeriz.", "8 provinces from all over Türkiye are on the wheel. Turn on location to get ones near you.");
+    $("carkLoc").hidden = !!me;
+  }
+  // Çark çizimi: dilim i tepeden saat yönünde i*45°; adlar merkezden dışa doğru okunur
+  function carkSvg(iller) {
+    const R = 150, n = iller.length, dil = 360 / n, nk = (a, r) => [(r * Math.sin((a * Math.PI) / 180)).toFixed(2), (-r * Math.cos((a * Math.PI) / 180)).toFixed(2)];
+    const dilimler = iller.map((il, i) => {
+      const [x1, y1] = nk(i * dil - dil / 2, R), [x2, y2] = nk(i * dil + dil / 2, R), [zemin, yazi] = CARK_RENK[i % CARK_RENK.length];
+      // ad göbeğe değmesin: en çok ~92 birim (Manrope 800'de harf başına ~0,64 em)
+      const fs = Math.min(16, Math.round((92 / (il.ad.length * 0.64)) * 2) / 2);
+      return `<path d="M0 0L${x1} ${y1}A${R} ${R} 0 0 1 ${x2} ${y2}Z" fill="${zemin}" data-i="${i}" data-s="${il.s}"/>`
+        + `<g transform="rotate(${i * dil})" pointer-events="none"><text transform="rotate(-90)" x="131" y="0" text-anchor="end" dominant-baseline="central" fill="${yazi}" font-size="${fs}" font-weight="800">${esc(il.ad)}</text></g>`;
+    }).join("");
+    const isik = Array.from({ length: 16 }, (_, i) => { const [x, y] = nk(i * 22.5 + 11.25, 155); return `<circle cx="${x}" cy="${y}" r="2.4" class="${i % 2 ? "ci2" : "ci1"}"/>`; }).join("");
+    const cizgi = iller.map((_, i) => { const [x, y] = nk(i * dil - dil / 2, R); return `<line x1="0" y1="0" x2="${x}" y2="${y}"/>`; }).join("");
+    return `<svg viewBox="-160 -160 320 320" role="img" aria-label="${esc(TL("Çarktaki iller: ", "Provinces on the wheel: ") + iller.map((i) => i.ad).join(", "))}">
+      <defs><radialGradient id="carkParla"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".16"/></radialGradient></defs>
+      <circle r="159" class="ckenar"/>${dilimler}<g class="cayrac" pointer-events="none">${cizgi}</g>
+      <circle r="${R}" fill="url(#carkParla)" pointer-events="none"/><g pointer-events="none">${isik}</g></svg>`;
+  }
+  function carkCevir() {
+    if (carkDonuyor || carkIl.length < 2 || !view || view.mode !== "cark") return;
+    carkDonuyor = true;
+    const el = $("carkDon"), ok = $("carkOk"), btn = $("carkCevir"), az = azHareket(), n = carkIl.length, dil = 360 / n;
+    btn.disabled = $("carkYeni").disabled = true; btn.querySelector("span").textContent = TL("Dönüyor…", "Spinning…");
+    $("cark").classList.add("donuyor");
+    // önce sonucu seç, sonra çarkı tam o dilimin içine (kenarlara 7° kala) çevir
+    const k = Math.floor(Math.random() * n), sap = (Math.random() - 0.5) * (dil - 14);
+    const hedef = (((-(k * dil + sap) - carkAci) % 360) + 360) % 360;
+    carkAci += (az ? 360 : 360 * (5 + Math.floor(Math.random() * 2))) + hedef;
+    const sure = az ? 900 : 3800 + Math.round(Math.random() * 600);
+    el.style.setProperty("transition", `transform ${sure}ms ${az ? "ease-out" : "cubic-bezier(.12,.72,.12,1)"}`, "important");
+    el.style.transform = `rotate(${carkAci}deg)`;
+    // ibre: dilim sınırı geçtikçe tık (yavaşlarken hafif titreşim)
+    let once = null, sonTik = 0, bitti = false;
+    const tik = (t) => {
+      if (bitti) return;
+      const m = getComputedStyle(el).transform;
+      if (m && m !== "none") {
+        const p = m.slice(m.indexOf("(") + 1).split(",").map(parseFloat), aci = (Math.atan2(p[1], p[0]) * 180) / Math.PI;
+        const i = Math.floor(((((-aci % 360) + 360) % 360) + dil / 2) / dil) % n;
+        if (once !== null && i !== once && !az) {
+          if (ok.animate) ok.animate([{ transform: "rotate(-20deg)" }, { transform: "rotate(0deg)" }], { duration: 240, easing: "cubic-bezier(.3,1.5,.5,1)" });
+          if (t - sonTik > 110 && navigator.vibrate) { try { navigator.vibrate(6); } catch (e) {} }
+          sonTik = t;
+        }
+        once = i;
+      }
+      requestAnimationFrame(tik);
+    };
+    requestAnimationFrame(tik);
+    const son = (e) => {
+      if (bitti || (e && e.target !== el)) return;
+      bitti = true; el.removeEventListener("transitionend", son); clearTimeout(yedek);
+      carkDonuyor = false; $("cark").classList.remove("donuyor");
+      btn.disabled = $("carkYeni").disabled = false; btn.querySelector("span").textContent = TL("Tekrar çevir", "Spin again");
+      if (!view || view.mode !== "cark") return; // çark dönerken sayfadan çıkıldı
+      if (navigator.vibrate && !az) { try { navigator.vibrate(18); } catch (er) {} }
+      const il = carkIl[k];
+      $("carkSonuc").textContent = TL(`Çark ${il.ad} dedi!`, `The wheel picked ${il.ad}!`);
+      setTimeout(() => { if (view && view.mode === "cark" && !carkDonuyor) carkKart(il); }, az ? 150 : 450);
+    };
+    el.addEventListener("transitionend", son);
+    const yedek = setTimeout(son, sure + 500); // sekme arka plandaysa transitionend gelmeyebilir
+  }
+  // Sonuç kartı: ilin kapak fotoğrafı, kısa bilgi, öne çıkan yerler, "İli keşfet" ve "Tekrar çevir"
+  function carkKart(il) {
+    const b = IL_BOLGE.get(il.s), uz = me ? km(me, il) : 0;
+    const ilY = ARA ? ARA.filter((x) => x[2] === il.s) : [], one = (ilY.some((x) => x[11]) ? ilY.filter((x) => x[11]) : ilY.filter((x) => x[8])).slice(0, 3).map(araAd);
+    const bilgi = [b && TL(`${b} Bölgesi`, `${T(b)} Region`), `${il.n} ${TL("gezilecek yer", "places to see")}`, `${il.ilceler.length} ${TL("ilçe", "districts")}`].filter(Boolean).join(" · ");
+    const src = foto(il.f, 960);
+    const d = document.createElement("div"); d.className = "tanit carkt";
+    d.innerHTML = `<div class="tkart ckart"><button class="ckapat" data-k="kapat" aria-label="${T("Kapat")}">${ik("x", 20)}</button>
+      <div class="ckapak">${ik("map-pin", 36)}${src ? `<img src="${src}" alt="" onerror="fotoHata(this)">` : ""}<span class="cplaka">${esc(il.plaka)}</span></div>
+      <small>${TL("Çark seçti", "The wheel picked")}</small><h2>${esc(il.ad)}</h2>
+      <p class="cbilgi">${esc(bilgi)}</p>
+      ${uz ? `<p class="cuzak">${ik("car-front", 15)} ${TL(`Arabayla yaklaşık ${sureYaz((uz * 1.25) / 80).replace("~", "")}`, `About ${sureYaz((uz * 1.25) / 80).replace("~", "")} by car`)}</p>` : ""}
+      ${one.length ? `<p class="cone">${ik("star", 14)}${one.map(esc).join(" · ")}</p>` : ""}
+      <div class="tbtn"><button class="btn" data-k="tekrar">${TL("Tekrar çevir", "Spin again")}</button><button class="btn primary" data-k="git">${ik("compass", 18)} ${TL("İli keşfet", "Explore")}</button></div></div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    d.addEventListener("click", (e) => {
+      const x = e.target.closest("[data-k]");
+      if (e.target === d || (x && x.dataset.k === "kapat")) return kapat();
+      if (!x) return;
+      kapat();
+      if (x.dataset.k === "tekrar") setTimeout(carkCevir, 200);
+      else if (x.dataset.k === "git") git(`#/il/${il.s}`);
+    });
+    document.body.appendChild(d);
+    loadIl(il.s).catch(() => {}); // il verisi önceden insin, "İli keşfet" hızlı açılsın
+  }
+  $("carkCevir").addEventListener("click", carkCevir);
+  $("carkKutu").addEventListener("click", carkCevir);
+  $("carkYeni").addEventListener("click", () => { if (!carkDonuyor) carkKur(); });
+  // konum ilk kez bulununca çarkı yakın illerle yeniden kur (dönerken ya da sonuç kartı açıkken değil)
+  function carkKonum() { if (me && !carkYakin && !carkDonuyor && !document.querySelector(".tanit.carkt")) carkKur(); }
+  $("carkLoc").addEventListener("click", () => startLocation());
+  $("carkBtn").addEventListener("click", () => git("#/cark"));
+  // Mola planı: 2,5 saati aşan yolda yaklaşık 2 saatte bir mola; her mola noktasına en yakın fotoğraflı durak
+  const MOLA_HIZ = 80, MOLA_SAAT = 2;
+  let molaAcik = "";
+  function molaGoster(yol, r, toplam) {
+    const kutu = $("yolMola"), yolKm = toplam * YOL_CARPAN, saat = yolKm / MOLA_HIZ, anahtar = yol.join(">");
+    if (saat <= 2.5) { kutu.hidden = true; return; }
+    const ilAd = (s) => (IDX.ilBy.get(s) || {}).ad || s, n = Math.ceil(saat / MOLA_SAAT) - 1;
+    // hattın il merkezlerinde birikimli uzunluğu (yolYerleri ile aynı düzlemde)
+    const KX = 111.32 * Math.cos((39 * Math.PI) / 180), KY = 110.57, bir = [0];
+    for (let i = 1; i < yol.length; i++) { const p = IDX.ilBy.get(yol[i - 1]), q = IDX.ilBy.get(yol[i]); bir.push(bir[i - 1] + Math.hypot((q.lng - p.lng) * KX, (q.lat - p.lat) * KY)); }
+    const kullan = new Set(), M = [];
+    for (let i = 1; i <= n; i++) {
+      const b = (toplam * i) / (n + 1);
+      let j = 1; while (j < bir.length - 1 && bir[j] < b) j++;
+      const yakinIl = b - bir[j - 1] < bir[j] - b ? yol[j - 1] : yol[j];
+      // mola noktasından en çok ~30 km önce ya da sonra, yola yakın, fotoğraflı; kısa molada dağ ve göl yerine şehirdeki yerler öne
+      let en = null, ep = Infinity;
+      for (const y of r) {
+        if (!y.x[8] || kullan.has(y.x)) continue;
+        const fark = Math.abs(y.konum - b); if (fark > 30) continue;
+        const p = fark + y.sap * 2.5 + (y.x[6] === "d" ? 15 : 0) - (y.x[11] ? 8 : 0);
+        if (p < ep) { ep = p; en = y; }
+      }
+      if (en) kullan.add(en.x);
+      // gösterilen km ve süre önerilen yerin kendi konumu (yer yoksa mola noktası), 10 km'ye yuvarlı
+      M.push({ no: i, km: Math.round(((en ? en.konum : b) * YOL_CARPAN) / 10) * 10, y: en, s: en ? en.x[2] : yakinIl });
+    }
+    const hepsi = molaAcik === anahtar || M.length <= 5, goster = hepsi ? M : M.slice(0, 4);
+    const satir = (m) => {
+      const ic = `<span class="mno">${m.no}</span><span class="mt"><b>${TL(`${m.no}. mola`, `Break ${m.no}`)} <span class="mkm">~${fmt(m.km)} · ${sureYaz(m.km / MOLA_HIZ)}</span></b><small>${m.y ? `${esc(ilAd(m.s))} · ${esc(araAd(m.y.x))}` : esc(TL(`${ilAd(m.s)} civarında, yol üstünde güvenli bir dinlenme tesisi`, `A safe rest area on the road near ${ilAd(m.s)}`))}</small></span>`;
+      return `<li>${m.y ? `<button class="mrow" data-yer="${m.y.x[2]}|${m.y.x[3]}">${ic}${OKIK}</button>` : `<div class="mrow">${ic}</div>`}</li>`;
+    };
+    kutu.innerHTML = `<div class="mbas"><span class="mik">${ik("coffee", 20)}</span><span><b>${TL("Mola planı", "Break plan")}</b><small>${TL(`Yaklaşık ${sureYaz(saat).replace("~", "")} sürüş · ortalama ${MOLA_HIZ} km/sa`, `About ${sureYaz(saat).replace("~", "")} of driving · avg. ${MOLA_HIZ} km/h`)}</small></span></div>
+      <p class="mnot">${TL("Uzun yolda yaklaşık 2 saatte bir mola vermek yorgunluğu azaltır.", "On long drives, taking a break about every 2 hours helps reduce fatigue.")}${saat > 10 ? " " + TL("10 saati aşan bir yolu iki güne bölmek daha güvenli.", "Splitting a drive of more than 10 hours over two days is safer.") : ""}</p>
+      <ol class="mlist">${goster.map(satir).join("")}${hepsi ? `<li><div class="mrow mvar"><span class="mno">${ik("flag", 14)}</span><span class="mt"><b>${TL("Varış", "Arrival")} <span class="mkm">~${fmt(yolKm)} · ${sureYaz(saat)}</span></b><small>${esc(ilAd(yol[yol.length - 1]))}</small></span></div></li>` : ""}</ol>
+      ${hepsi ? "" : `<button class="linkbtn mfazla" data-mola="1">${TL(`${M.length - goster.length} mola daha göster`, `Show ${M.length - goster.length} more breaks`)}</button>`}`;
+    kutu.hidden = false;
+    kutu.onclick = (e) => { if (e.target.closest("[data-mola]")) { molaAcik = anahtar; renderYol(); } };
   }
   // ---------- özel günler: milli bayramlar, anma günleri, dini bayramlar ----------
   // Bayram geri sayımı: 60 gün kala ana sayfada, bayram tatili için 3-4 günlük kaçamak önerisine götürür

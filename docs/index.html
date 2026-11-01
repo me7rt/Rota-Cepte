@@ -186,6 +186,25 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
   <button class="loc tkonum" id="kacLoc" hidden><i data-ik="locate-fixed" data-boy="18"></i> Konumumu kullan</button>
   <p class="tsay" id="kacSay"></p>
   <ul class="kaclist" id="kacList"></ul>
+  <button class="near yolbtn carkgir" id="carkBtn">
+    <span class="nearik carkik" aria-hidden="true"></span>
+    <span class="neartxt"><b><span>Karar veremedin mi?</span> <span>Çarkı çevir</span></b>
+    <small>8 il arasından şans çarkı seçsin</small></span>
+    <i class="nearok" data-ik="chevron-right"></i>
+  </button>
+</main>
+
+<main id="cark" class="view" hidden>
+  <p class="tsay" id="carkNot"></p>
+  <button class="loc tkonum" id="carkLoc" hidden><i data-ik="locate-fixed" data-boy="18"></i> Konumumu kullan</button>
+  <div class="carkkutu" id="carkKutu">
+    <div class="carkdis"><div class="carkdon" id="carkDon"></div></div>
+    <span class="carkgobek" aria-hidden="true"><i data-ik="map-pin" data-boy="26"></i></span>
+    <span class="carkok" id="carkOk" aria-hidden="true"><svg viewBox="0 0 36 46" width="36" height="46"><path d="M18 44C11 33 3 26 3 16a15 15 0 0 1 30 0c0 10-8 17-15 28z"/><circle cx="18" cy="16" r="5.5"/></svg></span>
+  </div>
+  <button class="btn primary carkcevir" id="carkCevir"><i data-ik="sparkles" data-boy="18"></i> <span>Çevir</span></button>
+  <button class="linkbtn carkyeni" id="carkYeni"><i data-ik="shuffle" data-boy="16"></i> Başka iller</button>
+  <p class="carkgizli" id="carkSonuc" aria-live="polite"></p>
 </main>
 
 <main id="kartlar" class="view" hidden>
@@ -223,6 +242,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
   <div class="yolg"><small>Yoldan en fazla</small><span class="seg" id="yolGenis"></span></div>
   <p class="tsay" id="yolSay"></p>
   <div class="yolhat" id="yolHat"></div>
+  <div class="mola" id="yolMola" hidden></div>
   <ul class="list" id="yolList"></ul>
   <a class="btn primary rotaac" id="yolAc" target="_blank" rel="noopener" hidden><i data-ik="navigation" data-boy="18"></i> Yol tarifini Google Haritalar'da aç</a>
   <p class="tsay">Yol, illerin merkezlerinden geçen yaklaşık bir hattır. Gerçek güzergâh farklı olabilir, mesafeler yaklaşıktır. Başlangıç ve varış illerindeki yerler o illerin kendi sayfasında.</p>

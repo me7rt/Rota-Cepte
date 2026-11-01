@@ -18,6 +18,9 @@
     "Yol tarifini Google Haritalar'da aç": "Open directions in Google Maps", "Nereden ve nereye için iki farklı il seç.": "Pick two different provinces.",
     "Yol, illerin merkezlerinden geçen yaklaşık bir hattır. Gerçek güzergâh farklı olabilir, mesafeler yaklaşıktır. Başlangıç ve varış illerindeki yerler o illerin kendi sayfasında.": "The road is an approximate line through province centres. The actual route may differ and distances are approximate. Places in the start and destination provinces are on their own pages.",
     "Yol bilgisi yüklenemedi. İnternet bağlantını kontrol et.": "Couldn't load route data. Check your connection.", "Bu iki il arasında yol bulunamadı.": "No route found between these provinces.",
+    // v6.5 küçük sevinçler: şans çarkı
+    "Karar veremedin mi?": "Can't decide?", "Çarkı çevir": "Spin the wheel", "8 il arasından şans çarkı seçsin": "Let the luck wheel pick one of 8 provinces",
+    "Çevir": "Spin", "Başka iller": "Other provinces",
     // v6.4
     "Bilgi yanlış ya da eksik mi? Bize bildir": "Is something wrong or missing? Let us know", "Seri gezgin": "Streak traveler", "3 ay üst üste en az bir yere git": "Visit at least one place 3 months in a row",
     // v6.0 yeni tasarım
