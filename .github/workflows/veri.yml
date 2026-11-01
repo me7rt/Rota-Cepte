@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       gorev:
-        description: "teshis, uret veya dene (dene: main yerine veri-deneme dalina yazar)"
+        description: "teshis, uret, dene (main yerine veri-deneme dalina yazar) veya zorla (veri kapisini atlar)"
         default: "uret"
   push:
     branches: [main]
@@ -25,6 +25,9 @@ jobs:
       - name: Veriyi uret
         if: ${{ github.event.inputs.gorev != 'teshis' }}
         run: node scripts/uret.mjs
+      - name: Veri kapisi (yer sayisi belirgin azaldiysa durdur)
+        if: ${{ github.event.inputs.gorev != 'teshis' && github.event.inputs.gorev != 'dene' && github.event.inputs.gorev != 'zorla' }}
+        run: node scripts/veri-kapi.mjs
       - name: Deneme verisini veri-deneme dalina yukle
         if: ${{ github.event.inputs.gorev == 'dene' }}
         env:

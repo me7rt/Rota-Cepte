@@ -6,6 +6,21 @@
   try { dil = localStorage.getItem("gezi-dil") || ""; } catch (e) {}
   if (dil !== "tr" && dil !== "en") dil = /^tr/i.test(navigator.language || "tr") ? "tr" : "en";
   const EN = {
+    // v6.5
+    "Sana özel": "Picked for you", "En sevdiğin yerler": "Your favourite places",
+    "Gittiğin yerlere yıldız ver, en sevdiklerin burada toplansın.": "Rate the places you've visited and your favourites will gather here.",
+    "Gezi pasaportum":"My travel passport", "Gittiğin her ilin damgası pasaportuna basılır. Renkli damgaya dokun, büyüt ve paylaş.": "Every province you visit gets a stamp in your passport. Tap a coloured stamp to enlarge and share it.",
+    "Bu sürümde neler yeni?": "What's new in this version?",
+    "Pasaportumu paylaş": "Share my passport",
+    "Pasaportuna yeni damga!": "New passport stamp!", "Yeni rozet": "New badge", "damga var": "stamped",
+    "Yol üstü keşif": "Along the way", "Yola mı çıkıyorsun? İki il seç, yol boyunca mola yerlerini bulalım": "Road trip? Pick two provinces and we'll find stops along the way",
+    "Nereden": "From", "Nereye": "To", "Yönü değiştir": "Swap direction", "Yoldan en fazla": "Max. distance off the road", "Yolculuk planı": "Trip planner",
+    "Yol tarifini Google Haritalar'da aç": "Open directions in Google Maps", "Nereden ve nereye için iki farklı il seç.": "Pick two different provinces.",
+    "Yol, illerin merkezlerinden geçen yaklaşık bir hattır. Gerçek güzergâh farklı olabilir, mesafeler yaklaşıktır. Başlangıç ve varış illerindeki yerler o illerin kendi sayfasında.": "The road is an approximate line through province centres. The actual route may differ and distances are approximate. Places in the start and destination provinces are on their own pages.",
+    "Yol bilgisi yüklenemedi. İnternet bağlantını kontrol et.": "Couldn't load route data. Check your connection.", "Bu iki il arasında yol bulunamadı.": "No route found between these provinces.",
+    // v6.5 küçük sevinçler: şans çarkı
+    "Karar veremedin mi?": "Can't decide?", "Çarkı çevir": "Spin the wheel", "8 il arasından şans çarkı seçsin": "Let the luck wheel pick one of 8 provinces",
+    "Çevir": "Spin", "Başka iller": "Other provinces",
     // v6.4
     "Bilgi yanlış ya da eksik mi? Bize bildir": "Is something wrong or missing? Let us know", "Seri gezgin": "Streak traveler", "3 ay üst üste en az bir yere git": "Visit at least one place 3 months in a row",
     // v6.0 yeni tasarım
@@ -114,6 +129,17 @@
     "Rakım": "Elevation", "UNESCO Dünya Mirası": "UNESCO World Heritage", "İpucu:": "Tip:", "Fotoğraf:": "Photo:",
     "Vikipedi (İngilizce)": "Wikipedia", "Vikipedi'de oku": "Read on Wikipedia", "Vikipedi'de (İngilizce) oku": "Read more on Wikipedia",
     "Gitmedin": "Not yet", "Başladın": "Started", "Tüm ilçeler": "All districts", "İlçe bilgisi": "District info",
+    "Gezi pasaportu": "Travel passport", "Çocuklarla gezi": "Family days out", "Çocuklarla": "With kids",
+    "Nereye gitsem?": "Where should I go?", "Kartları kaydır, beğendiğini listene at": "Swipe the cards, save the ones you like",
+    "Hangi ilde?": "Which province?", "Fotoğrafa bak, ili tahmin et": "Look at the photo, guess the province",
+    "Hafta sonu kaçamağı": "Weekend getaway", "Arabayla birkaç saatlik iller": "Provinces a few hours' drive away",
+    "Listeyi linkle paylaş": "Share list as a link", "Hepsini listeme ekle": "Add all to my list", "Hepsi listende": "All in your list",
+    "Paylaşılan liste": "Shared list", "Bu listedeki yerler bulunamadı.": "The places in this list could not be found.",
+    "Hafta sonu": "Weekend", "3-4 günlük tatil": "3-4 day holiday", "Konumumu kullan": "Use my location", "Kısa tatil önerisi": "Short break ideas",
+    "Bayram kaçamağı": "Holiday getaway", "Nereden yola çıkacağını bilmemiz gerek: konumunu aç ya da önce bir ilin sayfasına gir.": "We need a starting point: turn on location or open a province page first.",
+    "Bu mesafede il bulunamadı.": "No provinces found at this distance.", "Sağa kaydır: listene ekle · Sola kaydır: geç · Dokun: ayrıntı": "Swipe right: save · Swipe left: skip · Tap: details",
+    "Ayrıntı": "Details", "Listeme ekle": "Add to my list", "LİSTEME": "SAVE", "GEÇ": "SKIP", "Bu turluk bu kadar!": "That's all for this round!",
+    "Listeme git": "Go to my list", "Yeni kartlar": "New cards",
     "Hazır rota": "Ready-made route", "📸 Gezi karnemi paylaş": "📸 Share my travel card", "Bugün keşfet": "Today's discovery", "Yakınında keşfet": "Discover nearby"
   };
   window.DIL = dil;

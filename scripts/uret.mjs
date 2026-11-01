@@ -12,8 +12,18 @@ const okuJSON = (p, d) => (fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, "utf
 // Elle düzeltmeler: kontrol sırasında bulunan kötü fotoğraflar vb.
 const DUZ = okuJSON("data/foto-duzelt.json", {});
 const YASAK = new Set((DUZ.yasak || []).map((s) => s.replace(/_/g, " ")));
+// Aynı serinin numarası değişen kardeş dosyaları da tutmasın diye ad parçasıyla yasak ("Felahiye finds" geçen her dosya)
+const YASAK_PARCA = (DUZ.yasakParca || []).map((s) => s.replace(/_/g, " "));
 const ZORLA = DUZ.zorla || {};
 const CIKAR = new Set(DUZ.cikar || []);
+// Önceki veride her yerin fotoğrafı. Yedek fotoğraf aramaları bütçeyle sınırlı ve sırası her çalışmada değişiyor;
+// önceki fotoğraf hâlâ uygunsa yeniden kullanılır, böylece yerler çalışmadan çalışmaya rastgele kaybolmaz.
+const ONCEKI_FOTO = new Map();
+for (const f of fs.existsSync(OUT + "/il") ? fs.readdirSync(OUT + "/il") : []) {
+  for (const y of okuJSON(`${OUT}/il/${f}`, {}).yerler || []) {
+    if (y.q && y.f && y.f.p) { try { ONCEKI_FOTO.set(y.q, decodeURIComponent(y.f.p.split("/").pop()).replace(/_/g, " ")); } catch {} }
+  }
+}
 const SECKIN = okuJSON("data/yerler-ham.json", {});
 // Vikipedi'de maddesi olmayan popüler yerler (elle eklenir)
 const ELLE = okuJSON("data/elle-yerler.json", {});
@@ -61,12 +71,15 @@ const KOTU_KELIME = new Set(("map maps harita haritasi haritalari karte carte ma
 const KOTU_PARCA = ["coat of arms", "location map", "harita", "locator", "landsat", "sentinel", "satellit", "lokasyon", "topograf",
   "logo", "emblem", "amblem", "bayrak", "flag", "grundriss", "floor plan", "plan of", "kartpostal", "postcard",
   "kiepert", "putzger", "munzkabinett", "uydu", "karte ", "inscription", "exhibition", "dirham", "drachm", "obverse", "reverse",
-  "miniature", "manuscript", "nusretname", "folio", "план", "карта", "схема"];
+  "miniature", "manuscript", "nusretname", "folio", "eclogite", "план", "карта", "схема"];
 const ascii = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i");
 function dosyaKotu(name) {
-  const n = ascii(name.replace(/\.[A-Za-z0-9]+$/, "")).replace(/_/g, " ");
+  const n = ascii(name.replace(/\.[A-Za-z0-9]+$/, "")).replace(/_/g, " ").trim();
   if (/\biss\d|\bsts-\d/.test(n)) return true;
   if (/map$|map\s|map\d/.test(n)) return true;
+  // Eski kitap ve gravür taramaları ("Başlık - Yazar - 1882", "118 of 'Karamania...'"), müze maketleri,
+  // yerle ilgisiz numaralı böcek ve çiçek fotoğrafları ("Insect 1350448", "Spider 1350476", "Flower 1350585n")
+  if (/ - [^-]+ - 1[5-8]\d\d$/.test(n) || /^\d+ of '/.test(n) || /\b(modell|maket)\b/.test(n) || /^[a-z]+\s*\d{6,}(\s*[a-z]{1,3})?$/.test(n)) return true;
   for (const t of n.split(/[^a-z0-9]+/)) if (KOTU_KELIME.has(t)) return true;
   for (const p of KOTU_PARCA) if (n.includes(p)) return true;
   return false;
@@ -266,18 +279,22 @@ const koorsuz = [...ilceler.values()].filter((o) => !o.koor);
 const etiketAra = [...eksikIlce.map((e) => ({ il: e.il, ad: e.ad })), ...koorsuz.map((o) => ({ il: iller.get(o.il), ad: o.ad, o }))];
 if (etiketAra.length) {
   const ilQ2 = [...new Set(etiketAra.map((e) => e.il.q))];
-  const rows = await sparql(`SELECT ?t ?l ?il ?c ?img ?trA ?cat ?alan WHERE {
+  const rows = await sparql(`SELECT ?t ?l ?il ?c ?img ?trA ?cat ?alan ?sl WHERE {
     VALUES ?l { ${[...new Set(etiketAra.map((e) => JSON.stringify(e.ad) + "@tr"))].join(" ")} }
     VALUES ?il { ${ilQ2.map((q) => "wd:" + q).join(" ")} }
-    ?t rdfs:label ?l ; wdt:P625 ?c ; wdt:P131+ ?il .
+    ?t rdfs:label ?l ; wdt:P625 ?c ; wdt:P131+ ?il ; wikibase:sitelinks ?sl .
     OPTIONAL { ?t wdt:P18 ?img } OPTIONAL { ?t wdt:P373 ?cat } OPTIONAL { ?t wdt:P2046 ?alan }
     OPTIONAL { ?trA schema:about ?t ; schema:isPartOf <https://tr.wikipedia.org/> } }`).catch((e) => { rapor("  UYARI eksik ilçe sorgusu:", e.message.slice(0, 80)); return []; });
   for (const e of etiketAra) {
     const r = rows.filter((b) => val(b, "l") === e.ad && qid(val(b, "il")) === e.il.q);
-    r.sort((x, y) => (val(y, "trA") ? 1 : 0) - (val(x, "trA") ? 1 : 0));
+    // Aynı adlı birden çok kayıt olabilir (ör. ilçe merkezi Kemer ile Kaş'taki Kemer köyü): her çalışmada aynı ve doğru
+    // kaydı seçmek için Vikipedi maddesi olan, sonra en çok dilde maddesi olan, sonra en eski Wikidata kaydı öne alınır
+    const qn = (b) => +qid(val(b, "t")).slice(1);
+    r.sort((x, y) => (val(y, "trA") ? 1 : 0) - (val(x, "trA") ? 1 : 0) || (+val(y, "sl") || 0) - (+val(x, "sl") || 0) || qn(x) - qn(y));
     if (!r.length) continue;
     const b = r[0]; const q = qid(val(b, "t"));
-    const imgs = [...new Set(r.map((x) => dosyaAdi(val(x, "img"))).filter(Boolean))];
+    // Fotoğraflar yalnızca seçilen kayıttan (aynı adlı başka yerleşimin fotoğrafı ilçeye düşmesin)
+    const imgs = [...new Set(r.filter((x) => qid(val(x, "t")) === q).map((x) => dosyaAdi(val(x, "img"))).filter(Boolean))];
     if (e.o) {
       e.o.koor = nokta(val(b, "c")); e.o.koorKaynak = "kasaba";
       if (!e.o.trA && makale(val(b, "trA"))) { e.o.trA = makale(val(b, "trA")); e.o.metinKaynak = "merkez"; }
@@ -391,7 +408,7 @@ function satirlariTopla(rows, harita) {
 }
 rapor("== Yerler");
 const HAM = new Map();
-async function sinifSorgu(grup) {
+async function sinifSorgu(grup, tekrar = 0) {
   try {
     satirlariTopla(await sparql(`SELECT ${SECIM} WHERE {
       VALUES ?cls { ${grup.map((q) => "wd:" + q).join(" ")} }
@@ -401,6 +418,8 @@ async function sinifSorgu(grup) {
       FILTER NOT EXISTS { ?p wdt:P576 [] }
       ${YER_EK} }`, 0, true), HAM);
   } catch (e) {
+    // tek sınıf zaman aşımına uğrarsa birkaç kez daha dene (yoksa o türdeki yerler bu çalışmada kaybolur)
+    if (e.zaman && grup.length === 1 && tekrar < 2) { await sleep(20000); return sinifSorgu(grup, tekrar + 1); }
     if (!e.zaman || grup.length === 1) { rapor("  UYARI sınıf sorgusu başarısız:", grup.join(","), e.message.slice(0, 100)); return; }
     const y = Math.ceil(grup.length / 2);
     await sinifSorgu(grup.slice(0, y)); await sinifSorgu(grup.slice(y));
@@ -413,11 +432,16 @@ rapor("Türkiye geneli aday yer:", HAM.size);
 const MADDESIZ = "Q34038 Q23397 Q35509 Q150784 Q40080 Q23442 Q39816 Q46169 Q179049 Q177380 Q23413 Q839954 Q15661340 Q12280 Q12518 Q33506 Q8502".split(" ");
 {
   const ek = new Map(); const trD = new Map();
-  async function maddesizSorgu(grup) {
+  // kutu: [batı, güney, doğu, kuzey]. Tek sınıf bile zaman aşımına uğrarsa (göller, Q23397) Türkiye boylamına göre dört kutuya bölünür
+  async function maddesizSorgu(grup, tekrar = 0, kutu = null) {
     try {
+      const konum = kutu
+        ? `SERVICE wikibase:box { ?p wdt:P625 ?coord . bd:serviceParam wikibase:cornerSouthWest "Point(${kutu[0]} ${kutu[1]})"^^geo:wktLiteral . bd:serviceParam wikibase:cornerNorthEast "Point(${kutu[2]} ${kutu[3]})"^^geo:wktLiteral . }`
+        : "";
       const rows = await sparql(`SELECT ${SECIM} ?trD WHERE {
         VALUES ?cls { ${grup.map((q) => "wd:" + q).join(" ")} }
-        ?p wdt:P31 ?cls ; wdt:P17 wd:Q43 ; wdt:P18 ?img ; wdt:P625 ?coord ; wikibase:sitelinks ?sl ; rdfs:label ?trL . FILTER(LANG(?trL) = "tr")
+        ${konum}
+        ?p wdt:P31 ?cls ; wdt:P17 wd:Q43 ; wdt:P18 ?img ;${kutu ? "" : " wdt:P625 ?coord ;"} wikibase:sitelinks ?sl ; rdfs:label ?trL . FILTER(LANG(?trL) = "tr")
         FILTER NOT EXISTS { ?a1 schema:about ?p ; schema:isPartOf <https://tr.wikipedia.org/> }
         FILTER NOT EXISTS { ?a2 schema:about ?p ; schema:isPartOf <https://en.wikipedia.org/> }
         FILTER NOT EXISTS { ?p wdt:P576 [] }
@@ -427,7 +451,14 @@ const MADDESIZ = "Q34038 Q23397 Q35509 Q150784 Q40080 Q23442 Q39816 Q46169 Q1790
       satirlariTopla(rows, ek);
       for (const b of rows) if (val(b, "trD")) trD.set(qid(val(b, "p")), val(b, "trD"));
     } catch (e) {
-      if (!e.zaman || grup.length === 1) { rapor("  UYARI maddesiz yer sorgusu:", grup.join(","), e.message.slice(0, 80)); return; }
+      if (e.zaman && grup.length === 1 && !kutu && tekrar < 1) { await sleep(20000); return maddesizSorgu(grup, tekrar + 1); }
+      if (e.zaman && grup.length === 1 && !kutu) {
+        rapor("  maddesiz yer sorgusu kutulara bölündü:", grup[0]);
+        for (const k of [[25.5, 35.7, 30.5, 42.3], [30.5, 35.7, 35.5, 42.3], [35.5, 35.7, 40.5, 42.3], [40.5, 35.7, 45, 42.3]]) await maddesizSorgu(grup, 0, k);
+        return;
+      }
+      if (e.zaman && kutu && tekrar < 2) { await sleep(15000); return maddesizSorgu(grup, tekrar + 1, kutu); }
+      if (!e.zaman || grup.length === 1) { rapor("  UYARI maddesiz yer sorgusu:", grup.join(","), kutu ? "kutu " + kutu.join(",") : "", e.message.slice(0, 80)); return; }
       const y = Math.ceil(grup.length / 2);
       await maddesizSorgu(grup.slice(0, y)); await maddesizSorgu(grup.slice(y));
     }
@@ -654,8 +685,9 @@ for (const il of iller.values()) {
     if (ZORLA[o.q]) o.imgs = [ZORLA[o.q]];
     liste.push(o);
   }
-  // İlçe başına sınır (fazlası: ünlülüğe göre ele)
-  liste.sort((a, b) => (b.one || 0) - (a.one || 0) || b.sl - a.sl);
+  // İlçe başına sınır (fazlası: ünlülüğe göre ele). Eşit ünlülükte Wikidata numarası küçük olan önce gelir; sıra SPARQL
+  // sonucuna bağlı kalırsa sınırdaki yerler çalışmadan çalışmaya yer değiştiriyor (İstanbul'da gidip gelen yerler)
+  liste.sort((a, b) => (b.one || 0) - (a.one || 0) || b.sl - a.sl || (+String(a.q).slice(1) || 0) - (+String(b.q).slice(1) || 0));
   const say = new Map(); const kalan = [];
   for (const o of liste) {
     if (o.one) { kalan.push(o); continue; }
@@ -691,7 +723,7 @@ function fotoKaydi(a, ii) {
 }
 function fotoUygun(a) {
   const f = FOTO.get(a);
-  if (!f || !f.p || YASAK.has(a)) return false;
+  if (!f || !f.p || YASAK.has(a) || YASAK_PARCA.some((o) => a.includes(o))) return false;
   if (f.mime !== "image/jpeg") return false;
   // Yalnızca GFDL lisanslı fotoğraflar: lisansın tam metnini her kopyayla vermek gerekir, mobil uygulamada pratik değil
   if (/^GFDL/i.test(f.lis || "")) return false;
@@ -703,7 +735,7 @@ const ilkAday = [];
 for (const il of iller.values()) {
   ilkAday.push(...il.imgs, ...il.basImgs);
   for (const d of il.ilceler) ilkAday.push(...d.imgs, d.sayfaFoto || "");
-  for (const o of il.adaylar) { o.ilAd = il.ad; ilkAday.push(...o.imgs, o.trSayfaFoto || ""); }
+  for (const o of il.adaylar) { o.ilAd = il.ad; ilkAday.push(...o.imgs, o.trSayfaFoto || "", ONCEKI_FOTO.get(o.q) || ""); }
 }
 await fotoBilgi(ilkAday);
 rapor("fotoğraf bilgisi alınan dosya:", FOTO.size, "| uygun:", [...FOTO.keys()].filter(fotoUygun).length);
@@ -778,9 +810,9 @@ for (const il of iller.values()) for (const o of il.adaylar) tumYer.push(o);
 tumYer.sort((a, b) => (b.one || 0) - (a.one || 0) || (a.seckinSira ?? 0) - (b.seckinSira ?? 0) || b.sl - a.sl);
 let yedekKat = 0, yedekYakin = 0, yedekAra = 0, fotosuzSeckin = 0, yedekHak = 4000, araHak = 1500;
 for (const o of tumYer) {
-  const adaylar = [...o.imgs, o.trSayfaFoto].filter(Boolean);
+  const adaylar = [...o.imgs, o.trSayfaFoto, ONCEKI_FOTO.get(o.q)].filter(Boolean);
   let sec = adaylar.find((a) => fotoUygun(a) && !KULLANILAN.has(a));
-  if (sec) o.fotoKaynak = o.imgs.includes(sec) ? "wikidata" : "vikipedi";
+  if (sec) o.fotoKaynak = o.imgs.includes(sec) ? "wikidata" : sec === o.trSayfaFoto ? "vikipedi" : "önceki";
   if (!sec && !o.one && o.cat && yedekHak > 0) {
     yedekHak--;
     for (const a of await kategoriFoto(o.cat, o.ad)) if (!KULLANILAN.has(a)) { sec = a; o.fotoKaynak = "kategori"; yedekKat++; break; }
@@ -806,6 +838,7 @@ for (const o of tumYer) {
   if (ek.length >= 2) { o.galeri = ek; galeriSay++; }
 }
 rapor("galerili öne çıkan yer:", galeriSay);
+rapor("önceki veriden korunan foto:", tumYer.filter((o) => o.fotoKaynak === "önceki").length);
 rapor("yedek foto: kategori", yedekKat, "| yakın", yedekYakin, "| Commons araması", yedekAra, "| hiç bulunamayan seçkin", fotosuzSeckin);
 
 // İl ve ilçe kapak fotoğrafları
@@ -841,7 +874,9 @@ for (const il of iller.values()) {
 rapor("az yerli illere eklenen fotoğrafsız (metinli) yer:", azIlEk);
 // İl kapağı: en bilinen yerlerin güncel (2016 ve sonrası), yatay, büyük fotoğrafı
 const GUNCEL = 2016;
-const kapakUygun = (a) => { const f = a && FOTO.get(a); return !!f && fotoUygun(a) && f.w >= 1200 && f.w > f.h * 1.15 && f.y >= GUNCEL; };
+// İl kapağı ilk izlenimdir: bilimsel çizim, deprem/hasar, cezaevi, iç mekân ve mezar fotoğrafları kapak olmaz
+const KAPAK_KOTU = /level|paleo|figure|\bfig\b|\bgraph|chart|earthquake|deprem|damage|hasar|enkaz|rubble|collaps|cezaev|prison|hapishane|geolog|sediment|interior|inside|\bic\b|tomb|turbe|mezar|grave|cemetery|mihrab|minber|ceiling|tavan|detail|detay/;
+const kapakUygun = (a) => { const f = a && FOTO.get(a); return !!f && fotoUygun(a) && !KAPAK_KOTU.test(ascii(a).replace(/_/g, " ")) && f.w >= 1200 && f.w > f.h * 1.15 && f.y >= GUNCEL; };
 let kapakGuncel = 0, kapakKat = 0;
 for (const il of iller.values()) {
   if (KAPAK[il.s]) continue;
@@ -854,7 +889,7 @@ for (const il of iller.values()) {
     for (const pg of (j.query && j.query.pages) || []) {
       const a = pg.title.replace(/^File:/, ""); const ii = pg.imageinfo && pg.imageinfo[0];
       if (!ii) continue; if (!FOTO.has(a)) FOTO.set(a, fotoKaydi(a, ii));
-      if (kapakUygun(a) && FOTO.get(a).w >= 1600) ok.push(a);
+      if (kapakUygun(a) && FOTO.get(a).w >= 1600 && adPuan(a, o.ad) >= 2) ok.push(a); // kategoriden gelen dosyanın adında yerin adı geçmeli
     }
     ok.sort((x, y) => adPuan(y, o.ad) - adPuan(x, o.ad) || FOTO.get(y).y - FOTO.get(x).y);
     if (ok.length) { il.kapakO = o; il.kapakFoto = ok[0]; kapakKat++; break; }
@@ -1014,7 +1049,8 @@ for (const il of ilSirali) {
   index.iller.push({ ad: il.ad, s: il.s, q: il.q, lat: dosya.lat, lng: dosya.lng, plaka: dosya.plaka, f: dosya.f, n: yerler.length, ilceler: ilceCikti.map((d) => [d.ad, d.lat, d.lng, d.n]) });
   // Arama/tema listesi: [ad, il, sıra, enlem, boylam, kategori, fotoğraf var mı, fotoğraf yolu (varsa; tema listesinde küçük resim), İngilizce ad (varsa)]
   // 9. alan (varsa): İngilizce Vikipedi adı (İngilizce modda arama ve listeler için; fotoğraf yoksa 8. alan 0)
-  yerler.forEach((y, j) => { const r = [y.ad, il.s, j, Math.round(y.lat * 1e3) / 1e3, Math.round(y.lng * 1e3) / 1e3, y.k, y.f ? 1 : 0]; if (y.f) r.push(y.f.p); const ae = en.y[y.q] && en.y[y.q][0]; if (ae) { if (!y.f) r.push(0); r.push(ae); } ara.push(r); });
+  // 10. alan (varsa): öne çıkan yer ise 1 (boş alanlar 0)
+  yerler.forEach((y, j) => { const ae = en.y[y.q] && en.y[y.q][0]; const r = [y.ad, il.s, j, Math.round(y.lat * 1e3) / 1e3, Math.round(y.lng * 1e3) / 1e3, y.k, y.f ? 1 : 0, y.f ? y.f.p : 0, ae || 0, y.one ? 1 : 0]; while (r.length > 7 && r[r.length - 1] === 0) r.pop(); ara.push(r); });
   // Kontrol listesi: il kapağı, ilçe kapakları, seçkin yerler ve her ilin en ünlü 8 yeri
   const kk = (tur, ad, a, kaynak) => a && kontrol.push({ tur, il: il.ad, ad, dosya: a, p: FOTO.get(a).p, w: FOTO.get(a).w, kaynak });
   kk("il", il.ad, il.foto, il.fotoKaynak);
