@@ -14,17 +14,13 @@ jobs:
       - name: Yeni adaylar
         run: |
           python3 .github/gorsel-topla.py cikti '{
-            "efes-celsus": ["Library of Celsus Ephesus", "bitmap", 8],
-            "efes-tiyatro": ["Great Theatre Ephesus", "bitmap", 6],
-            "efes-sokak": ["Curetes Street Ephesus", "bitmap", 6],
-            "efes-yamac": ["Terrace Houses Ephesus", "bitmap", 6, 1200],
-            "nemrut": ["Mount Nemrut statues heads", "bitmap", 8],
-            "nemrut-gun": ["Nemrut sunrise", "bitmap", 6, 1200],
-            "nemrut-tr": ["Nemrut Dağı", "bitmap", 6],
-            "safranbolu": ["Safranbolu houses", "bitmap", 8],
-            "safranbolu-tepe": ["Safranbolu Hıdırlık", "bitmap", 5, 1200],
-            "cinci": ["Cinci Han Safranbolu", "bitmap", 5, 1200],
-            "safranbolu-genel": ["Safranbolu", "bitmap", 8]
+            "efes-tiyatro": ["Ephesus theatre", "bitmap", 6, 1200],
+            "efes-tiyatro2": ["Ephesus Great Theater", "bitmap", 6, 1200],
+            "nemrut-bas": ["Nemrut head statue", "bitmap", 8, 1200],
+            "nemrut-dag": ["Mount Nemrut", "bitmap", 8, 1200],
+            "nemrut-kis": ["Nemrut snow", "bitmap", 4, 1000],
+            "safran": ["Crocus sativus flower", "bitmap", 5, 1600],
+            "lokum": ["Turkish delight saffron", "bitmap", 4, 1200]
           }' 2400
       - name: video-deneme dalina koy
         run: |
@@ -33,4 +29,4 @@ jobs:
           git config user.name "Mert Turanlıoğlu"
           git config user.email "me7rtt@gmail.com"
           git add . && git commit -qm "Kısa video görsel adayları"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:video-deneme-6
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:video-deneme-7
