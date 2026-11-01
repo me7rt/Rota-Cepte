@@ -693,6 +693,18 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 .skart cite{display:block;margin-top:8px;font-style:normal;font-weight:800;font-size:13px;color:#aab1bb}
 .skart .linkbtn{color:#c9ced6}
 .skart .btn.primary{background:#e30a17;color:#fff}
+/* 10 Kasım 09.05 saygı duruşu sayacı */
+.sdurus{position:fixed;inset:0;z-index:10001;background:#07080a;color:#eef0f2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;padding-top:calc(24px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));animation:sdGir .8s ease;transition:opacity .6s}
+.sdurus small{letter-spacing:.18em;font-weight:800;font-size:12px;color:#9aa3ad;text-transform:uppercase}
+.sdurus h2{margin:0;font-size:28px;font-weight:800;color:#fff}
+.sd-sayi{font-size:72px;font-weight:200;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.sd-cizgi{width:min(260px,70vw);height:3px;border-radius:3px;overflow:hidden;background:rgba(255,255,255,.14)}
+.sd-cizgi i{display:block;height:100%;background:#e30a17;transform-origin:left center;transition:transform .25s linear}
+.sdurus p{max-width:30ch;margin:6px 0 0;color:#c9ced6;font-size:15px;line-height:1.5}
+.sdurus .linkbtn{color:#8b939d;margin-top:18px}
+.sdurus.out{opacity:0}
+@keyframes sdGir{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.sdurus{animation:none}.sd-cizgi i{transition:none}}
 .ozelgun small+small{margin-top:2px}
 /* v6.5 Atatürk'ün izinde */
 .tchip.tata i{background:#e30a17;color:#fff}

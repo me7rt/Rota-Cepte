@@ -2089,8 +2089,8 @@
       ["sparkles", TL("Sana özel", "For you"), TL("Beğendiğin ve gittiğin yerlere göre her gün yeni öneriler; her ayın en güzel yerleri de ana sayfada.", "New picks every day based on the places you liked and visited; each month's best places are on the home screen too."), ""],
       ["star", TL("Puan ve not", "Ratings and notes"), TL("Gittiğin yerlere yıldız ver, kendine not bırak; en sevdiklerin Gezilerim'de toplanır.", "Rate the places you visited and leave yourself a note; your favourites gather in My trips."), "#/rozetler"],
       ["cloud-sun", TL("Canlı hava ve altın saat", "Live weather and golden hour"), TL("Hava durumu anlık güncellenir. Fotoğraf için en güzel ışığın saati, gün batımı ve havaya göre öneriler il sayfasında.", "The weather updates live. The best light for photos, sunset times and weather-smart tips are on each province page."), `#/il/${son}`],
-      ["camera", TL("Fotoğraflı paylaşım", "Photo sharing"), TL("Bir yeri fotoğraflı kartla paylaş; bayramlarda ve özel günlerde tebrik kartı gönder.", "Share a place as a photo card, and send greeting cards on holidays and special days."), ""],
-      ["flag", TL("Özel günler", "Special days"), TL("Millî bayramlarda kaçıncı yıl olduğunu, kandillerde ve bayramlarda tebrik mesajını ana sayfada görürsün. 10 Kasım'da saygı kartı açılır, uygulama gün boyu yas renklerine bürünür ve saat 09.05'te anma bildirimi gelir.", "National days show their anniversary, and religious holidays a greeting, on the home screen. On 10 November a remembrance card opens, the app turns to mourning colours for the day and a notification arrives at 9:05 am."), ""],
+      ["camera", TL("Fotoğraflı paylaşım", "Photo sharing"), TL("Bir yeri fotoğraflı kartla paylaş; bayramlarda ve özel günlerde o güne özel çizilmiş tebrik kartı gönder.", "Share a place as a photo card, and send greeting cards drawn for each holiday and special day."), ""],
+      ["flag", TL("Özel günler", "Special days"), TL("Millî bayramlarda kaçıncı yıl olduğunu, kandillerde ve bayramlarda tebrik mesajını ana sayfada görürsün. 10 Kasım'da saygı kartı açılır, uygulama gün boyu yas renklerine bürünür. Saat 09.05'te anma bildirimi gelir; uygulama açıksa bir dakikalık saygı duruşu sayacı başlar.", "National days show their anniversary, and religious holidays a greeting, on the home screen. On 10 November a remembrance card opens and the app turns to mourning colours for the day. At 9:05 am a notification arrives, and if the app is open a one-minute silence begins."), ""],
       ["car-front", TL("Yol üstü keşif", "Along the way"), TL("Yola çıkarken iki il seç; yol boyunca uğrayabileceğin yerleri ve mola önerilerini sırayla gösterelim.", "Pick two provinces before a road trip; we'll list the stops along the way and suggest breaks."), "#/yol"],
       ["shuffle", T("Nereye gitsem?"), TL("Fotoğraflı kartları kaydır: sağa kaydırdığın yer listene girer, sola kaydırdığını geçeriz.", "Swipe photo cards: right to save a place, left to skip."), "#/kartlar"],
       ["calendar-days", T("Hafta sonu kaçamağı"), TL("Arabayla birkaç saatlik illeri öneririz; bayramda 3-4 günlük rotalar.", "Provinces a few hours' drive away; longer trips for holidays."), "#/kacamak"],
@@ -3612,7 +3612,7 @@
       if (g.bayram) b.onclick = () => { const r = $("rotaSec"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); };
       else if (g.git) b.onclick = () => git(g.git);
       else if (alt) b.onclick = () => git("#/kacamak/3");
-      if (g.saygi) saygiKart(n, g);
+      if (g.saygi) { saygiKart(n, g); saygiDurusu(); }
     } catch (e) {}
   }
   // 10 Kasım: uygulama o gün ilk açıldığında bir kez saygı kartı (açılış ekranı kapandıktan sonra)
@@ -3639,6 +3639,41 @@
       document.body.appendChild(d);
     };
     setTimeout(bekle, 600);
+  }
+  // 10 Kasım 09.05: uygulama o dakika açıksa bir dakikalık sessiz saygı duruşu sayacı (ses ve titreşim yok)
+  function saygiDurusu() {
+    const n = new Date(), bas = new Date(n.getFullYear(), 10, 10, 9, 5, 0).getTime(), bit = bas + 60000;
+    if (n.getTime() >= bit) return;
+    const goster = () => {
+      if (document.querySelector(".sdurus")) return;
+      const d = document.createElement("div"); d.className = "sdurus";
+      d.setAttribute("role", "dialog"); d.setAttribute("aria-label", TL("Saygı duruşu", "Moment of silence"));
+      d.innerHTML = `<small>10 ${TL("Kasım", "November")} 1938 · 09.05</small>
+        <h2>${TL("Saygı duruşu", "Moment of silence")}</h2>
+        <div class="sd-sayi">1:00</div><div class="sd-cizgi" aria-hidden="true"><i></i></div>
+        <p>${esc(TL("Gazi Mustafa Kemal Atatürk'ü saygı, sevgi ve özlemle anıyoruz.", "We remember Mustafa Kemal Atatürk with respect and longing."))}</p>
+        <button class="linkbtn" data-k="kapat">${T("Kapat")}</button>`;
+      document.body.appendChild(d);
+      let kilit = null;
+      try { if (navigator.wakeLock) navigator.wakeLock.request("screen").then((k) => { kilit = k; }).catch(() => {}); } catch (e) {}
+      const sayi = d.querySelector(".sd-sayi"), cizgi = d.querySelector(".sd-cizgi i");
+      let t = 0;
+      const kapat = () => { clearInterval(t); try { if (kilit) kilit.release(); } catch (e) {} d.classList.add("out"); setTimeout(() => d.remove(), 600); };
+      const adim = () => {
+        const kalan = Math.max(0, Math.ceil((bit - Date.now()) / 1000));
+        sayi.textContent = kalan >= 60 ? "1:00" : `0:${String(kalan).padStart(2, "0")}`;
+        cizgi.style.transform = `scaleX(${kalan / 60})`;
+        if (!kalan) { clearInterval(t); setTimeout(kapat, 3000); }
+      };
+      t = setInterval(adim, 250); adim();
+      d.addEventListener("click", (e) => { if (e.target.closest("[data-k=kapat]")) kapat(); });
+    };
+    // Arka plandan dönüşte de (ör. 09.05 bildirimine dokununca) bak; sayaç yalnızca o bir dakika içinde açılır
+    const dene = () => { const x = Date.now(); if (x >= bas && x < bit && !document.hidden) goster(); };
+    const fark = bas - n.getTime();
+    if (fark <= 0) dene(); else if (fark < 864e5) setTimeout(dene, fark + 50);
+    const gorunur = () => { if (Date.now() >= bit) document.removeEventListener("visibilitychange", gorunur); else dene(); };
+    document.addEventListener("visibilitychange", gorunur);
   }
   // Sayfa başlığı ekrana göre değişsin (sekme, geçmiş, ekran okuyucu)
   new MutationObserver(() => { const t = $("title").textContent; document.title = t && view.mode !== "home" ? `${t} · Rota Cepte` : TL("Rota Cepte · Türkiye Gezi Rehberi", "Rota Cepte · Türkiye Travel Guide"); }).observe($("title"), { childList: true, characterData: true, subtree: true });
