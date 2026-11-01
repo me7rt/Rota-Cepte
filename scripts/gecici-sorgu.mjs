@@ -9,8 +9,8 @@ const EM = "Artist|LicenseShortName|LicenseUrl|AttributionRequired|DateTimeOrigi
 const temiz = (em, k) => (em[k] ? String(em[k].value).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim() : "");
 const out = "out"; fs.mkdirSync(out + "/b", { recursive: true });
 
-// 1) Seçilen dosyaları büyük boy indir (kısa kenar ~1500 px)
-const SECILEN = {"balon-07": "Hot air balloon flight over Cappadocia - panoramio.jpg", "yol-08": "Fort Ord Trail (52978519072).jpg"};
+// 1) Seçilen dosyaları büyük boy indir (kısa kenar ~1500 px; şimdilik veri denetimi için birkaç dosya)
+const SECILEN = {"tuz-1": "Lake Tuz.jpg", "tuz-2": "Lac Tuz (3).jpg", "yesilyurt": "Yesilyurt istanbul.jpg"};
 const bilgi = {};
 for (const [no, ad] of Object.entries(SECILEN)) {
   const j = await al({ action: "query", titles: "File:" + ad, prop: "imageinfo", iiprop: "url|size|extmetadata", iiextmetadatafilter: EM });
