@@ -2,7 +2,7 @@ name: Gecici gorsel toplama
 on:
   push:
     branches: [claude/project-thread-oje5uw]
-    paths: [.github/workflows/gecici-gorsel.yml, .github/gorsel-topla.py]
+    paths: [.github/workflows/gecici-gorsel.yml, .github/gorsel-topla.py, .github/gorsel-indir.py]
 permissions:
   contents: write
 jobs:
@@ -13,11 +13,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Commons gorselleri
         run: |
-          python3 .github/gorsel-topla.py cikti '{
-            "derinkuyu": ["Derinkuyu underground city", "bitmap", 8, 1000],
-            "kaymakli": ["Kaymakli underground city", "bitmap", 8, 1000],
-            "yeralti": ["underground city Cappadocia", "bitmap", 8, 1000]
-          }'
+          python3 .github/gorsel-indir.py cikti '{"s1.jpg": "File:Goreme-sunrise2025.jpg", "s2.jpg": "File:Fairy chimneys in Cappadocia - panoramio.jpg", "s3.jpg": "File:Cappadocia, Turkey, 2015-06-09 (Unsplash).jpg", "s4.jpg": "File:Kaymaklı Underground City - Cappadocia - Turkey - 29 Nov. 2012.jpg", "s5.jpg": "File:Uçhisar Castle (52399872486).jpg", "s6.jpg": "File:CAPPADOCIA Göreme National Park and the Rock Sites. World Heritage List. Turkey. Hot Air Ballooning Cappadocia.jpg"}'
       - name: video-deneme dalina koy
         run: |
           cd cikti
@@ -25,4 +21,4 @@ jobs:
           git config user.name "Mert Turanlıoğlu"
           git config user.email "me7rtt@gmail.com"
           git add . && git commit -qm "Kısa video görsel adayları"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:video-deneme-2
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:video-deneme-3
