@@ -10,7 +10,7 @@ const temiz = (em, k) => (em[k] ? String(em[k].value).replace(/<[^>]+>/g, " ").r
 const out = "out"; fs.mkdirSync(out + "/b", { recursive: true });
 
 // 1) Seçilen dosyaları büyük boy indir (kısa kenar ~1500 px; şimdilik veri denetimi için birkaç dosya)
-const SECILEN = {"tuz-1": "Lake Tuz.jpg", "tuz-2": "Lac Tuz (3).jpg", "yesilyurt": "Yesilyurt istanbul.jpg"};
+const SECILEN = {};
 const bilgi = {};
 for (const [no, ad] of Object.entries(SECILEN)) {
   const j = await al({ action: "query", titles: "File:" + ad, prop: "imageinfo", iiprop: "url|size|extmetadata", iiextmetadatafilter: EM });
@@ -29,7 +29,7 @@ fs.writeFileSync(`${out}/secilen.json`, JSON.stringify(bilgi, null, 1));
 
 // 2) Ek arama: yeni tasarımlar için aday fotoğraflar
 const QI = ' incategory:"Quality_images"', FP = ' incategory:"Featured_pictures_on_Wikimedia_Commons"';
-const TEMA = {};
+const TEMA = { tuz: { hepsi: true, kat: ["Lake Tuz", "Tuz Gölü Special Environmental Protection Area"], ara: ["Tuz Gölü", "Lake Tuz", "Tuz Gölü Aksaray", "Tuz Gölü Şereflikoçhisar"] } };
 const sonuc = {};
 for (const [tema, t] of Object.entries(TEMA)) {
   const adlar = new Set();
@@ -41,7 +41,7 @@ for (const [tema, t] of Object.entries(TEMA)) {
     for (const pg of (j.query && j.query.pages) || []) {
       const ii = pg.imageinfo && pg.imageinfo[0]; if (!ii) continue;
       const em = ii.extmetadata || {}, lis = temiz(em, "LicenseShortName");
-      if (!izinli(lis) || ii.width < 1500 || ii.height < 1000) continue;
+      if (!(t.hepsi ? !/gfdl/i.test(lis) && lis : izinli(lis)) || ii.width < 1500 || ii.height < 1000) continue;
       const qi = /Quality images|Featured pictures|Valued images/i.test(temiz(em, "Categories"));
       aday.push({ ad: pg.title.replace(/^File:/, ""), lis, yazar: temiz(em, "Artist").slice(0, 90), tarih: temiz(em, "DateTimeOriginal").slice(0, 10), aciklama: temiz(em, "ImageDescription").slice(0, 160), w: ii.width, h: ii.height, qi, kucuk: ii.thumburl, sayfa: ii.descriptionurl });
     }
