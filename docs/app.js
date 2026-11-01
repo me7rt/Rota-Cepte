@@ -1359,9 +1359,12 @@
   }
   // ---------- güncellemeden sonra bir kez: bu sürümde yeni neler var ----------
   let ESKI = false; try { ESKI = !!localStorage.getItem("gezi-tanitim"); } catch (e) {}
-  function yenilikler(dene) {
-    try { if (localStorage.getItem("gezi-yenilik") === SURUM) return; if (!ESKI) { localStorage.setItem("gezi-yenilik", SURUM); return; } } catch (e) { return; }
-    if (document.querySelector(".tanit") || !$("sheet").hidden) { if ((dene || 0) < 5) setTimeout(() => yenilikler((dene || 0) + 1), 15000); return; }
+  // zorla: ana sayfadaki "Bu sürümde neler yeni?" düğmesinden, istendiği zaman açılır
+  function yenilikler(dene, zorla) {
+    if (!zorla) {
+      try { if (localStorage.getItem("gezi-yenilik") === SURUM) return; if (!ESKI) { localStorage.setItem("gezi-yenilik", SURUM); return; } } catch (e) { return; }
+      if (document.querySelector(".tanit") || !$("sheet").hidden) { if ((dene || 0) < 5) setTimeout(() => yenilikler((dene || 0) + 1), 15000); return; }
+    }
     let son = "istanbul"; try { son = localStorage.getItem("gezi-son-il") || son; } catch (e) {}
     // Her madde bir öğretici: dokununca o özellik açılır. Rotası olmayan madde yalnızca bilgi.
     const s = [
@@ -1917,6 +1920,7 @@
   $("yolBtn").addEventListener("click", () => git("#/yol"));
   $("kacBtn").addEventListener("click", () => git("#/kacamak"));
   $("kartBtn").addEventListener("click", () => git("#/kartlar"));
+  $("yeniBtn").addEventListener("click", () => yenilikler(0, true));
   $("kacSure").addEventListener("click", (e) => { const b = e.target.closest("[data-g]"); if (b) { history.replaceState(null, "", `#/kacamak/${b.dataset.g}`); showKacamak(b.dataset.g); } });
   $("kacLoc").addEventListener("click", () => startLocation());
   $("favPay").addEventListener("click", listePaylas);
