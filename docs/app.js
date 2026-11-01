@@ -689,7 +689,7 @@
   // Tüm pasaportu tek görselde paylaş (hikâye boyutu)
   async function pasaportPaylas() {
     const D = damgalar(), u = unvanBul(D.size);
-    try { await document.fonts.load("800 40px Manrope"); await document.fonts.load("600 30px Manrope"); } catch (e) {}
+    try { await document.fonts.load("800 40px Manrope", "Rota ĞğŞşİıÇçÖöÜü"); await document.fonts.load("600 30px Manrope", "Rota ĞğŞşİıÇçÖöÜü"); } catch (e) {}
     const W = 1080, H = 1920, c = document.createElement("canvas"); c.width = W; c.height = H;
     const g = c.getContext("2d"), F = (w, px) => `${w} ${px}px Manrope, system-ui, sans-serif`;
     // kapak rengi üst bant ve krem sayfa
@@ -767,7 +767,7 @@
   }
   async function damgaPaylas(s) {
     const il = IDX.ilBy.get(s), D = damgalar(), d = D.get(s); if (!d) return;
-    try { await document.fonts.load("800 40px Manrope"); } catch (e) {}
+    try { await document.fonts.load("800 40px Manrope", "Rota ĞğŞşİıÇçÖöÜü"); } catch (e) {}
     const img = damgaCiz(s, d.t, 370);
     const W = 1080, H = 1350, c = document.createElement("canvas"); c.width = W; c.height = H;
     const g = c.getContext("2d"), F = (w, px) => `${w} ${px}px Manrope, system-ui, sans-serif`;
@@ -2155,7 +2155,7 @@
   async function karne() {
     const a = gittiklerim(); if (!a.length) return;
     await renderHarita();
-    try { await document.fonts.load("800 40px Manrope"); } catch (e) {}
+    try { await document.fonts.load("800 40px Manrope", "Rota ĞğŞşİıÇçÖöÜü"); } catch (e) {}
     const W = 1080, H = 1920, c = document.createElement("canvas"); c.width = W; c.height = H;
     const g = c.getContext("2d"), F = (w, px) => `${w} ${px}px Manrope, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`;
     const bg = g.createLinearGradient(0, 0, W * 0.4, H); bg.addColorStop(0, "#1d4a9e"); bg.addColorStop(0.55, "#0f2c66"); bg.addColorStop(1, "#071634");
@@ -2214,7 +2214,7 @@
   async function yilOzeti(yil) {
     const Y = yil || ozetYili(), a = yilGezi(Y);
     if (!a.length) { toast(TL(`${Y} yılında işaretlediğin bir gezi yok. "Buraya gittim" dediğin yerler burada özetlenir.`, `No trips marked in ${Y}. Places you mark as visited are summarised here.`), 5000); return; }
-    try { await document.fonts.load("800 40px Manrope"); } catch (e) {}
+    try { await document.fonts.load("800 40px Manrope", "Rota ĞğŞşİıÇçÖöÜü"); } catch (e) {}
     const say = new Map(); for (const x of a) say.set(x.s, (say.get(x.s) || 0) + 1);
     const enCok = [...say.entries()].sort((p, q) => q[1] - p[1])[0], enIl = IDX.ilBy.get(enCok[0]);
     const bolgeler = new Set(a.map((x) => IL_BOLGE.get(x.s)).filter(Boolean));
