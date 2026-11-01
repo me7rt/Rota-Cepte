@@ -51,7 +51,13 @@ const cek = async (pg, ad) => { await pg.screenshot({ path: path.join(CIKTI, ad 
     // il sayfası: hava kutusu
     await pg.goto(URL + "#/il/istanbul"); await bekle(pg, 3500); await resimler(pg); await cek(pg, `${ön}-il`);
     const h = await pg.$("#hava");
-    if (h) { await h.scrollIntoViewIfNeeded(); await bekle(pg, 1500); await resimler(pg); await h.screenshot({ path: path.join(CIKTI, `${ön}-hava.png`) }); bilgi.push("ok hava " + ön); }
+    if (h) {
+      await h.scrollIntoViewIfNeeded();
+      try { await pg.waitForFunction(() => document.querySelector("#hava .hgun"), null, { timeout: 25000 }); } catch (e) { bilgi.push("hava gelmedi " + ön); }
+      await bekle(pg, 1500); await resimler(pg);
+      await pg.addStyleTag({ content: "#tabbar{visibility:hidden!important}" });
+      await h.screenshot({ path: path.join(CIKTI, `${ön}-hava.png`) }); bilgi.push("ok hava " + ön);
+    }
     // gezilerim / pasaport
     await ctx.close(); ({ ctx, pg } = await sayfa(b, { git: true }));
     await pg.goto(URL + "#/rozetler"); await bekle(pg, 3500); await resimler(pg); await cek(pg, `${ön}-gezilerim`);
