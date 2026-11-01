@@ -773,3 +773,79 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 .ildamga .rt small{display:block;font-size:12.5px;color:#7a6252;line-height:1.35;margin-top:2px}
 .ildamga>.ik{color:var(--d)}
 @media (prefers-reduced-motion:reduce){.pslot,.psira,.pozet,.ildamga{transition:none}}
+
+/* v6.5 "Hangi ilde?" fotoğraf tahmin oyunu */
+.oyunbtn .nearik{background:linear-gradient(150deg,var(--altin-a),var(--altin-b));color:var(--altin-ink)}
+#oyun{--o-no:#dc3e42;--o-no-ink:#ce2c31}  /* red-10, red-11 */
+@media (prefers-color-scheme:dark){#oyun{--o-no-ink:#ff9592}}  /* red-dark-11 */
+.oyun{display:flex;flex-direction:column;gap:12px}
+.odurum{display:flex;align-items:center;gap:8px;min-height:32px;font-size:13.5px;font-weight:700;color:var(--muted)}
+.odurum b{color:var(--fg);font-variant-numeric:tabular-nums}
+.osayac{flex:1}
+.oseri,.opuan{display:inline-flex;align-items:center;gap:5px;min-height:30px;padding:0 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.oseri,.oseri b{color:var(--pri-ink)}
+.opuan svg{color:var(--amber-ink);fill:currentColor}
+.opuan.zipla{animation:oZipla .5s cubic-bezier(.3,1.6,.5,1)}
+.oadim{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+.oadim li{height:6px;border-radius:9px;background:var(--line);transition:background-color .25s}
+.oadim li.simdi{background:var(--fg)}
+.oadim li.ok{background:var(--ok)}
+.oadim li.no{background:var(--o-no)}
+/* Fotoğraf yüksekliği ekrana göre: küçük telefonda da 4 şık alt menünün üstünde kalsın */
+.ofoto{position:relative;margin:0;display:grid;place-items:center;height:clamp(160px,calc(100vh - 396px),min(76vw,380px));border-radius:24px;overflow:hidden;background:var(--c,var(--k-y));color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.ofoto>.ik{opacity:.5;margin-bottom:56px}
+.ofoto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;outline:0;opacity:0;transition:opacity .35s}
+.ofoto img.on{opacity:1}
+.ofoto::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 42%,rgba(0,0,0,.74));pointer-events:none}
+.oalt{position:absolute;left:0;right:0;bottom:0;z-index:1;display:flex;flex-direction:column;gap:2px;padding:16px 16px 14px}
+.oalt small{align-self:flex-start;font-size:11.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:3px 8px;border-radius:999px;margin-bottom:4px}
+.oalt b{font-size:clamp(19px,5.6vw,23px);line-height:1.2;letter-spacing:-.01em}
+.oalt span{font-size:14px;font-weight:700;opacity:.92}
+.okredi{margin:-6px 2px 0;min-height:18px;font-size:11.5px;line-height:18px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.okredi a{color:inherit;text-decoration:none}
+.osecenek{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+/* Uzun il adında (Afyonkarahisar) ✓ / ✗ simgesi sığmazsa adın altına geçer, ad bölünmez */
+.osik{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 6px;min-height:58px;padding:8px 10px;border:1.5px solid var(--line);border-radius:var(--r-m);background:var(--surface);color:var(--fg);font-weight:800;font-size:clamp(14px,4.2vw,16px);line-height:1.2;text-align:center;overflow-wrap:break-word;box-shadow:var(--sh-1);transition:transform .15s,background-color .2s,border-color .2s,opacity .2s}
+.osik:active{transform:scale(.97)}
+.osik:disabled{cursor:default;transform:none}
+.osik.dogru{background:var(--ok);border-color:var(--ok);color:#fff}
+.osik.yanlis{background:var(--o-no);border-color:var(--o-no);color:#fff}
+.osik.soluk{opacity:.45;box-shadow:none}
+.osik.dogru.anim{animation:oPop .45s cubic-bezier(.3,1.6,.5,1)}
+.osik.yanlis.anim{animation:oSalla .4s ease}
+.ocevap{display:flex;flex-direction:column;gap:6px;padding:14px;border:1px solid var(--line);border-radius:var(--r-l);background:var(--surface);box-shadow:var(--sh-1)}
+.ocevap.yeni{animation:tGel .3s cubic-bezier(.2,.9,.3,1)}
+.obas{display:flex;align-items:center;gap:8px;font-size:18px;letter-spacing:-.01em}
+.ocevap.ok .obas{color:var(--ok-ink)}
+.ocevap.no .obas{color:var(--o-no-ink)}
+.oyerad{margin:0;font-size:15px;line-height:1.4}
+.oyerad span{color:var(--muted);font-weight:700}
+.oyerad span:before{content:"·\00a0"}
+.onot{margin:0;color:var(--muted);font-size:14px;line-height:1.45}
+/* Düğmeler sığarsa yan yana eşit, sığmazsa alt alta tam genişlik (yazı bölünmez) */
+.obtn{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.obtn .btn{flex:1 1 0;min-width:max-content;padding:10px 14px;white-space:nowrap}
+.osonuc{display:flex;flex-direction:column;align-items:center;gap:2px;padding:24px 18px 18px;text-align:center;border:1px solid var(--line);border-radius:24px;background:var(--surface);box-shadow:var(--sh-1)}
+.osonuc .temo{margin-bottom:10px}
+.osonuc.yeni .temo{animation:spPop .6s cubic-bezier(.3,1.6,.5,1) both}
+.oetiket{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.oskor{font-size:56px;line-height:1.05;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.oskor span{font-size:24px;font-weight:700;color:var(--muted);letter-spacing:0}
+.osonuc h2{margin:4px 0 2px;font-size:22px;letter-spacing:-.01em}
+.osonuc p{margin:0;max-width:330px;color:var(--muted);font-size:15px;line-height:1.5}
+.osonuc .oadim{width:100%;max-width:280px;margin:14px 0 6px}
+.osonuc .oenl{display:inline-flex;align-items:center;gap:6px;color:var(--amber-ink);font-size:14px;font-weight:800}
+.osonuc .obtn{width:100%;max-width:400px;margin-top:14px}
+.oyerler{display:grid;grid-auto-flow:column;grid-auto-columns:144px;gap:10px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px 6px;scroll-snap-type:x mandatory;scroll-padding:16px}
+.oyerler::-webkit-scrollbar{display:none}
+.oyer{position:relative;display:flex;flex-direction:column;gap:3px;min-width:0;color:var(--fg);text-decoration:none;scroll-snap-align:start}
+.oyer .thumb{width:100%;height:auto;aspect-ratio:4/3;border-radius:14px;margin-bottom:4px;transition:transform .15s}
+.oyer b{font-size:13.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.oyer small{color:var(--muted);font-size:12.5px;font-weight:700}
+.oyer:active .thumb{transform:scale(.97)}
+.oisaret{position:absolute;top:6px;right:6px;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ok);color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.oyer.no .oisaret{background:var(--o-no)}
+@keyframes oPop{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes oSalla{0%,100%{transform:none}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes oZipla{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.osik.anim,.opuan.zipla,.ocevap.yeni,.osonuc.yeni .temo{animation:none}.ofoto img{transition:none}}

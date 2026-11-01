@@ -126,6 +126,7 @@
     "Gitmedin": "Not yet", "Başladın": "Started", "Tüm ilçeler": "All districts", "İlçe bilgisi": "District info",
     "Gezi pasaportu": "Travel passport", "Çocuklarla gezi": "Family days out", "Çocuklarla": "With kids",
     "Nereye gitsem?": "Where should I go?", "Kartları kaydır, beğendiğini listene at": "Swipe the cards, save the ones you like",
+    "Hangi ilde?": "Which province?", "Fotoğrafa bak, ili tahmin et": "Look at the photo, guess the province",
     "Hafta sonu kaçamağı": "Weekend getaway", "Arabayla birkaç saatlik iller": "Provinces a few hours' drive away",
     "Listeyi linkle paylaş": "Share list as a link", "Hepsini listeme ekle": "Add all to my list", "Hepsi listende": "All in your list",
     "Paylaşılan liste": "Shared list", "Bu listedeki yerler bulunamadı.": "The places in this list could not be found.",

@@ -287,7 +287,7 @@
     $("tema").hidden = v !== "tema";
     $("rota").hidden = v !== "rota";
     $("yol").hidden = v !== "yol";
-    for (const x of ["plist", "kacamak", "kartlar"]) $(x).hidden = v !== x;
+    for (const x of ["plist", "kacamak", "kartlar", "oyun"]) $(x).hidden = v !== x;
     $("ataturk").hidden = v !== "ataturk";
     $("rozet").hidden = v !== "rozet";
     $("listem").hidden = v !== "listem";
@@ -335,6 +335,7 @@
       if (h[0] === "liste") return await showListe(h[1], no);
       if (h[0] === "kacamak") return showKacamak(h[1]);
       if (h[0] === "kartlar") return await showKartlar();
+      if (h[0] === "oyun") return await showOyun();
       if (h[0] === "ozet") { history.replaceState(null, "", "#/rozetler"); route(); setTimeout(() => yilOzeti(+h[1] || 0), 600); return; }
       if (h[0] === "rozetler") { view = { mode: "rozet" }; show("rozet"); $("eyebrow").textContent = T("Gezi haritan ve rozetler"); $("title").textContent = T("Gezilerim"); renderGez(); return; }
       if (h[0] === "listem") { view = { mode: "listem" }; show("listem"); $("eyebrow").textContent = "Rota Cepte"; $("title").textContent = T("Gideceğim yerler"); renderFav(); return; }
@@ -1555,6 +1556,173 @@
     }
     setTimeout(kartCiz, 280);
   }
+  // ---------- "Hangi ilde?": fotoğrafa bak, ili tahmin et (10 soru) ----------
+  const OYUN_EN = "gezi-oyun-en", OYUN_GOR = "gezi-oyun-gor", OYUN_SORU = 10;
+  // İl merkezinin halk arasındaki adı da cevabı ele verir ("Antep Kalesi", "İzmit Saat Kulesi")
+  const IL_TAKMA = { gaziantep: "antep", kahramanmaras: "maras", sanliurfa: "urfa", afyonkarahisar: "afyon", kocaeli: "izmit", sakarya: "adapazari", hatay: "antakya" };
+  const OYUN_ALKIS = [["Bildin!", "Correct!"], ["Harika!", "Great!"], ["Tam isabet!", "Spot on!"], ["Süpersin!", "Nice one!"]];
+  let oyun = null;
+  const ilAdi = (s) => (IDX.ilBy.get(s) || {}).ad || s;
+  const karistir = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const oyunAnahtar = (x) => x[2] + "|" + x[1];
+  // Yerin Türkçe ya da İngilizce adında ilin adı kelime olarak geçiyor mu
+  function adaIlGeciyor(x, s) {
+    return [sade(ilAdi(s)), IL_TAKMA[s]].some((a) => a && new RegExp(`(^|[^a-z])${a}([^a-z]|$)`).test(x[0] + " / " + x[10]));
+  }
+  // Yanlış şıklar doğru ilin yakınından: ilk sorularda biraz daha geniş çevre, sonra komşu iller
+  function oyunSik(x, no) {
+    const il = IDX.ilBy.get(x[2]);
+    const yakin = IDX.iller.filter((b) => b !== il && !adaIlGeciyor(x, b.s)).sort((a, b) => km(il, a) - km(il, b));
+    return karistir([il.s, ...karistir(yakin.slice(0, no < 3 ? 14 : no < 7 ? 10 : 7)).slice(0, 3).map((b) => b.s)]);
+  }
+  function oyunKur() {
+    let gor = []; try { gor = JSON.parse(localStorage.getItem(OYUN_GOR)) || []; } catch (e) {}
+    const G = new Set(gor);
+    // Öne çıkan yerler yeterliyse onlar; yoksa her ilin listesindeki ilk (en bilinen) fotoğraflı yerler
+    let a = ARA.filter((x) => x[11] && x[8]);
+    if (a.length < 60) a = ARA.filter((x) => x[7] === 1 && x[8] && x[3] < 6);
+    const grup = new Map();
+    for (const x of a) if (IDX.ilBy.has(x[2]) && !adaIlGeciyor(x, x[2])) { if (!grup.has(x[2])) grup.set(x[2], []); grup.get(x[2]).push(x); }
+    // Her il eşit şansla gelir, bir oyunda bir kez; son oyunlarda görülmemiş yeri olan iller öne
+    const yeniVar = (s) => (grup.get(s).some((y) => !G.has(oyunAnahtar(y))) ? 1 : 0);
+    const iller = karistir([...grup.keys()]).sort((p, q) => yeniVar(q) - yeniVar(p)).slice(0, OYUN_SORU);
+    const sorular = iller.map((s, i) => {
+      const l = karistir(grup.get(s).slice()), x = l.find((y) => !G.has(oyunAnahtar(y))) || l[0];
+      return { x, sik: oyunSik(x, i), cevap: "", p: null };
+    });
+    oyun = sorular.length ? { sorular, no: 0, puan: 0, seri: 0, bitti: false } : null;
+  }
+  async function showOyun() {
+    view = { mode: "oyun" }; show("oyun");
+    $("eyebrow").textContent = TL("Mini oyun", "Mini game"); $("title").textContent = T("Hangi ilde?");
+    if (oyun) return oyunCiz(); // yarım kalan oyuna (ya da sonuca) geri dön
+    $("oyunKutu").innerHTML = `<p class="tsay">${T("Yükleniyor…")}</p>`;
+    await loadAra(); if (!view || view.mode !== "oyun") return;
+    if (ARA) oyunKur();
+    if (!oyun) { $("oyunKutu").innerHTML = `<p class="tsay">${TL("Sorular yüklenemedi. İnternet bağlantını kontrol edip", "Couldn't load the questions. Check your connection and")} <button class="linkbtn" data-k="tekrar">${TL("tekrar dene", "try again")}</button>.</p>`; return; }
+    oyunCiz();
+  }
+  function oyunDurum() {
+    const o = oyun, n = o.sorular.length;
+    return `<span class="osayac">${TL("Soru", "Question")} <b>${Math.min(o.no + 1, n)}</b>/${n}</span>` +
+      (o.seri >= 2 ? `<span class="oseri" title="${TL("Üst üste doğru", "In a row")}">${ik("flame", 15)}<b>${o.seri}</b></span>` : "") +
+      `<span class="opuan">${ik("star", 15)}<b>${o.puan}</b> ${TL("puan", o.puan === 1 ? "point" : "points")}</span>`;
+  }
+  const oyunAdim = () => oyun.sorular.map((r, i) => `<li class="${r.cevap ? (r.cevap === r.x[2] ? "ok" : "no") : i === oyun.no ? "simdi" : ""}"></li>`).join("");
+  function oyunCiz() {
+    const o = oyun;
+    if (o.bitti) return oyunSonuc();
+    const r = o.sorular[o.no], x = r.x, c = CATS[x[6]] || CATS.t;
+    $("oyunKutu").innerHTML = `<div class="odurum" id="oDurum">${oyunDurum()}</div><ol class="oadim" id="oAdim" aria-hidden="true">${oyunAdim()}</ol>
+      <figure class="ofoto" style="--c:${c.renk}">${icon(x[6] || "t", 44)}<img src="${foto({ p: x[8], w: 1e5 }, 960)}" alt="" onload="this.classList.add('on')" onerror="fotoHata(this)"><figcaption class="oalt"><small>${esc(c.ad)}</small><b>${esc(araAd(x))}</b><span>${TL("Bu yer hangi ilde?", "Which province is it in?")}</span></figcaption></figure>
+      <p class="okredi" id="oKredi"></p>
+      <div class="osecenek" role="group" aria-label="${TL("Şıklar", "Choices")}">${r.sik.map((s) => `<button class="osik" data-il="${s}"><span>${esc(ilAdi(s))}</span></button>`).join("")}</div>
+      <div id="oCevap"></div>`;
+    if (r.cevap) oyunGoster(false);
+    oyunYerYukle(r);
+    // Sonraki sorunun fotoğrafı şimdiden insin
+    const n = o.sorular[o.no + 1]; if (n) new Image().src = foto({ p: n.x[8], w: 1e5 }, 960);
+  }
+  function oyunCevap(s) {
+    const o = oyun, r = o && !o.bitti && o.sorular[o.no]; if (!r || r.cevap) return;
+    r.cevap = s;
+    if (s === r.x[2]) { o.puan++; o.seri++; } else o.seri = 0;
+    try { const g = JSON.parse(localStorage.getItem(OYUN_GOR)) || []; g.push(oyunAnahtar(r.x)); localStorage.setItem(OYUN_GOR, JSON.stringify(g.slice(-80))); } catch (e) {}
+    oyunGoster(true);
+  }
+  // Cevap: doğru şık yeşil, yanlış seçim kırmızı; altta yerin ili, kısa bilgi ve "Sonraki"
+  function oyunGoster(yeni) {
+    const o = oyun, r = o.sorular[o.no], x = r.x, dogru = r.cevap === x[2], son = o.no === o.sorular.length - 1;
+    for (const b of document.querySelectorAll("#oyunKutu .osik")) {
+      const s = b.dataset.il; b.disabled = true;
+      b.classList.add(s === x[2] ? "dogru" : s === r.cevap ? "yanlis" : "soluk");
+      if (yeni) b.classList.add("anim");
+      if (s === x[2] || s === r.cevap) b.insertAdjacentHTML("beforeend", ik(s === x[2] ? "check" : "x", 20));
+    }
+    $("oDurum").innerHTML = oyunDurum(); $("oAdim").innerHTML = oyunAdim();
+    if (yeni && dogru) $("oDurum").querySelector(".opuan").classList.add("zipla");
+    const il = IDX.ilBy.get(x[2]), sec = IDX.ilBy.get(r.cevap);
+    const alkis = o.seri >= 3 ? TL(`${o.seri} doğru üst üste!`, `${o.seri} in a row!`) : TL(...OYUN_ALKIS[(o.no + o.puan) % OYUN_ALKIS.length]);
+    const uzak = sec ? nf(Math.round(km(il, sec))) + " km" : "";
+    $("oCevap").innerHTML = `<div class="ocevap ${dogru ? "ok" : "no"}${yeni ? " yeni" : ""}" role="status">
+      <b class="obas">${ik(dogru ? "circle-check" : "x", 22)}<span>${dogru ? alkis : TL("Olmadı", "Not quite")}</span></b>
+      <p class="oyerad"><b>${esc(araAd(x))}</b> <span id="oYerIl">${esc(il.ad)}</span></p>
+      <p class="onot" id="oNot" hidden></p>
+      ${dogru || !sec ? "" : `<p class="onot">${TL(`Tahminin ${esc(sec.ad)}, kuş uçuşu ${uzak} ötede.`, `Your guess, ${esc(sec.ad)}, is ${uzak} away as the crow flies.`)}</p>`}
+      <div class="obtn"><a class="btn" id="oAc" href="#/il/${x[2]}" data-oac="${o.no}">${TL("Bu yeri aç", "Open place")}</a><button class="btn primary" data-k="sonraki">${son ? TL("Sonucu gör", "See result") : TL("Sonraki", "Next")}${ik("chevron-right", 18)}</button></div></div>`;
+    oyunDetay(r);
+    if (!yeni) return;
+    $("oCevap").querySelector("[data-k=sonraki]").focus({ preventScroll: true });
+    // Küçük ekranda cevap kutusu alt menünün altında kalmasın
+    const alt = $("oCevap").getBoundingClientRect().bottom, sinir = innerHeight - $("tabbar").offsetHeight - 12;
+    if (alt > sinir) window.scrollBy({ top: alt - sinir, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }
+  // İl verisi gelince: ilçe, kısa açıklama (Wikidata), fotoğraf atfı ve yerin bağlantısı
+  async function oyunYerYukle(r) {
+    if (!r.p) {
+      try { const d = await loadIl(r.x[2]), y = d.yerler[r.x[3]]; r.p = y && y.ad === r.x[1] ? y : d.yerler.find((z) => z.ad === r.x[1]) || null; } catch (e) { return null; }
+    }
+    if (view && view.mode === "oyun") oyunDetay(r);
+    return r.p;
+  }
+  function oyunDetay(r) {
+    const p = r.p; if (!p || !oyun || oyun.sorular[oyun.no] !== r) return;
+    const kr = $("oKredi"); if (kr && p.f && p.f.p === r.x[8]) kr.innerHTML = fotoAtif(p.f);
+    // İlçe adı yerin adında zaten geçiyorsa tekrar yazma ("Mudurnu · Mudurnu, Bolu" olmasın)
+    const il = $("oYerIl"); if (il && p.ilce && p.ilce !== p.il && !sade(p.ad).includes(sade(p.ilce))) il.textContent = `${p.ilce}, ${p.il}`;
+    // Wikidata açıklaması bazen İngilizce kalmış ("castle in Muş, eastern Turkey"): onları gösterme
+    const not = $("oNot"); if (not && DIL !== "en" && p.ac && !/(^|[\s(])(in|of|the|and|located|former|building|complex|village|lake|castle|church|beach|province|turkey)(?=[\s,.)]|$)/i.test(p.ac)) { not.textContent = p.ac.charAt(0).toLocaleUpperCase("tr") + p.ac.slice(1) + (/[.!?]$/.test(p.ac) ? "" : "."); not.hidden = false; }
+    const a = $("oAc"); if (a && p.q) a.href = `#/il/${p.ilS}/yer/${p.q}`;
+  }
+  // Yer oyunun üstünde açılır; kapatınca oyun kaldığı yerden sürer
+  async function oyunYerAc(i) {
+    const r = oyun && oyun.sorular[i]; if (!r) return;
+    const p = await oyunYerYukle(r);
+    if (p) openDetail(p); else git(`#/il/${r.x[2]}`);
+  }
+  function oyunSonraki() {
+    const o = oyun; if (!o || o.bitti || !o.sorular[o.no].cevap) return;
+    o.no++;
+    if (o.no >= o.sorular.length) oyunBitir();
+    oyunCiz(); window.scrollTo(0, 0);
+  }
+  function oyunBitir() {
+    const o = oyun; o.bitti = true; o.yeni = true;
+    let en = null; try { en = localStorage.getItem(OYUN_EN); } catch (e) {}
+    o.rekor = en != null && o.puan > +en; o.enIyi = Math.max(+en || 0, o.puan);
+    if (en == null || o.puan > +en) try { localStorage.setItem(OYUN_EN, String(o.puan)); } catch (e) {}
+    oyunRekorYaz();
+  }
+  // Puana göre unvan (10 soru üzerinden)
+  function oyunUnvan(p, n) {
+    const o = n ? (p * 10) / n : 0;
+    if (o >= 9) return { ik: "crown", ad: TL("Türkiye uzmanı", "Türkiye expert"), not: TL("Muhteşem! Haritayı avucunun içi gibi biliyorsun.", "Amazing! You know the map like the back of your hand."), altin: 1 };
+    if (o >= 7) return { ik: "compass", ad: T("Kâşif"), not: TL("Harika! Türkiye'nin dört bir yanını tanıyorsun.", "Great! You know every corner of Türkiye."), altin: 1 };
+    if (o >= 4) return { ik: "backpack", ad: T("Gezgin"), not: TL("Fena değil! Birkaç tur daha atınca kâşif olursun.", "Not bad! A few more rounds and you'll be an explorer.") };
+    return { ik: "footprints", ad: TL("Yola yeni çıktın", "Just setting off"), not: TL("Her büyük yolculuk ilk adımla başlar. Bir tur daha?", "Every great journey starts with a first step. Another round?") };
+  }
+  function oyunSonuc() {
+    const o = oyun, n = o.sorular.length, u = oyunUnvan(o.puan, n);
+    $("oyunKutu").innerHTML = `<div class="osonuc${o.yeni ? " yeni" : ""}"><div class="temo${u.altin ? " altin" : ""}">${ik(u.ik, 36)}</div>
+      <small class="oetiket">${TL("Sonucun", "Your score")}</small><b class="oskor">${o.puan}<span>/${n}</span></b>
+      <h2>${u.ad}</h2><p>${u.not}</p><ol class="oadim" aria-hidden="true">${oyunAdim()}</ol>
+      <p class="oenl">${ik("trophy", 16)} ${o.rekor ? TL("Yeni rekor!", "New best score!") : TL(`En iyi skorun: ${o.enIyi}/${n}`, `Your best: ${o.enIyi}/${n}`)}</p>
+      <div class="obtn"><button class="btn primary" data-k="tekrar">${ik("shuffle", 18)} ${TL("Tekrar oyna", "Play again")}</button><button class="btn" data-k="paylas">${ik("share-2", 18)} ${TL("Skorumu paylaş", "Share my score")}</button></div></div>
+      <h2 class="sec">${TL("Bu turdaki yerler", "Places in this round")}</h2>
+      <p class="tsay">${TL("Birine dokun, ayrıntısına bak; beğendiğini listene ekle.", "Tap one for details and save the ones you like.")}</p>
+      <div class="oyerler">${o.sorular.map((r, i) => `<a class="oyer${r.cevap === r.x[2] ? "" : " no"}" href="#/il/${r.x[2]}" data-oac="${i}">${thumb({ p: r.x[8], w: 1e5 }, r.x[6], 500)}<i class="oisaret">${ik(r.cevap === r.x[2] ? "check" : "x", 14)}</i><b>${esc(araAd(r.x))}</b><small>${esc(ilAdi(r.x[2]))}</small></a>`).join("")}</div>`;
+    o.yeni = false;
+  }
+  function oyunPaylas() {
+    const o = oyun; if (!o || !o.bitti) return;
+    const n = o.sorular.length, u = oyunUnvan(o.puan, n), kare = o.sorular.map((r) => (r.cevap === r.x[2] ? "🟩" : "🟥")).join("");
+    metinPaylas(T("Hangi ilde?"), TL(`Rota Cepte'nin "Hangi ilde?" oyununda ${n} sorudan ${o.puan} doğru yaptım: ${u.ad}!\n${kare}\nSen kaç yaparsın?`, `I got ${o.puan}/${n} in the "Which province?" quiz on Rota Cepte: ${u.ad}!\n${kare}\nCan you beat me?`), ANDROID ? PLAY : SITE + "#/oyun");
+  }
+  // Ana sayfadaki düğmede en iyi skor
+  function oyunRekorYaz() {
+    let en = null; try { en = localStorage.getItem(OYUN_EN); } catch (e) {}
+    if (en != null) $("oyunSub").textContent = TL(`En iyi skorun ${en}/${OYUN_SORU}. Rekorunu geçebilir misin?`, `Your best is ${en}/${OYUN_SORU}. Can you beat it?`);
+  }
   // ---------- yer öner (e-posta taslağı açar) ----------
   const ILETISIM = "mertturanlioglu.apps@gmail.com";
   function yerOner() {
@@ -1614,6 +1782,7 @@
       ["footprints", TL("Atatürk'ün izinde", "In Atatürk's footsteps"), TL("1915 Çanakkale'den Anıtkabir'e 16 durak: Millî Mücadele'nin ve Cumhuriyet'in yerlerini tarih sırasıyla gez.", "16 stops from Gallipoli 1915 to Anıtkabir: visit the places of the War of Independence and the Republic in order."), "#/ataturk"],
       ["car-front", T("Yol üstü keşif"), TL("Yola çıkarken iki il seç, yol boyunca uğrayabileceğin yerleri sırayla gösterelim.", "Pick two provinces before a road trip and we'll list the stops along the way."), "#/yol"],
       ["shuffle", T("Nereye gitsem?"), TL("Fotoğraflı kartları kaydır: sağa kaydırdığın yer listene girer, sola kaydırdığını geçeriz.", "Swipe photo cards: right to save a place, left to skip."), "#/kartlar"],
+      ["binoculars", TL("Hangi ilde?", "Which province?"), TL("Fotoğrafa bak, hangi ilde olduğunu tahmin et. 10 soruda kaç puan alacaksın?", "Look at a photo and guess the province. How many of 10 can you get?"), "#/oyun"],
       ["calendar-days", T("Hafta sonu kaçamağı"), TL("Arabayla birkaç saatlik illeri öneririz; bayramda 3-4 günlük rotalar.", "Provinces a few hours' drive away; longer trips for holidays."), "#/kacamak"],
       ["stamp", T("Gezi pasaportu"), TL("Bir yerde \"Buraya gittim\" de, o ilin damgası pasaportuna basılsın. 81 damgayı topla, paylaş.", "Tap \"I've been here\" on a place to get that province's stamp. Collect all 81 and share them."), "#/rozetler"],
       ["cloud-sun", TL("Havaya göre öneri", "Weather-smart tips"), TL("İl sayfasındaki hava kutusu yağmurda müze, sıcakta serin yer önerir; gün batımı saati de orada.", "The weather box on a province page suggests museums in rain and cool spots in heat, plus sunset times."), `#/il/${son}`],
@@ -2175,6 +2344,16 @@
   $("kBeg").addEventListener("click", () => kartKarar(true));
   $("kBilgi").addEventListener("click", kartAc);
   $("kDeste").addEventListener("click", (e) => { if (e.target.closest("[data-k=yeni]")) showKartlar(); });
+  $("oyunBtn").addEventListener("click", () => { if (oyun && oyun.bitti) oyun = null; git("#/oyun"); });
+  $("oyunKutu").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-il]"); if (b) { oyunCevap(b.dataset.il); return; }
+    const a = e.target.closest("[data-oac]"); if (a) { e.preventDefault(); oyunYerAc(+a.dataset.oac); return; }
+    const k = e.target.closest("[data-k]"); if (!k) return;
+    if (k.dataset.k === "sonraki") oyunSonraki();
+    else if (k.dataset.k === "paylas") oyunPaylas();
+    else if (k.dataset.k === "tekrar") { oyun = null; showOyun(); window.scrollTo(0, 0); }
+  });
+  oyunRekorYaz();
   const yolYeni = () => { yolAcik = new Set(); renderYol(); };
   $("yolA").addEventListener("change", yolYeni);
   $("yolB").addEventListener("change", yolYeni);

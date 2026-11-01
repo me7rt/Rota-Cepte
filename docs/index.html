@@ -141,6 +141,12 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
       <button class="mini" id="kartBtn"><span class="miniik"><i data-ik="shuffle" data-boy="22"></i></span><b>Nereye gitsem?</b><small>Kartları kaydır, beğendiğini listene at</small></button>
       <button class="mini" id="kacBtn"><span class="miniik"><i data-ik="calendar-days" data-boy="22"></i></span><b>Hafta sonu kaçamağı</b><small>Arabayla birkaç saatlik iller</small></button>
     </div>
+    <button class="near yolbtn oyunbtn" id="oyunBtn">
+      <span class="nearik"><i data-ik="binoculars" data-boy="22"></i></span>
+      <span class="neartxt"><b>Hangi ilde?</b>
+      <small id="oyunSub">Fotoğrafa bak, ili tahmin et</small></span>
+      <i class="nearok" data-ik="chevron-right"></i>
+    </button>
     <div id="gunun"></div>
     <div id="pasOzet" hidden></div>
     <section class="kesfet"><h2 class="sec">Keşfet</h2><div class="mevsim" id="mevsim"></div><div class="tchips" id="temaChips"></div></section>
@@ -189,6 +195,9 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
 </main>
 
 <main id="ataturk" class="view" hidden></main>
+<main id="oyun" class="view" hidden>
+  <div class="oyun" id="oyunKutu"></div>
+</main>
 
 <main id="tema" class="view" hidden>
   <button class="loc tkonum" id="temaLoc"><i data-ik="locate-fixed" data-boy="18"></i> Yakından uzağa sırala</button>
