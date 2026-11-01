@@ -1362,18 +1362,23 @@
   function yenilikler(dene) {
     try { if (localStorage.getItem("gezi-yenilik") === SURUM) return; if (!ESKI) { localStorage.setItem("gezi-yenilik", SURUM); return; } } catch (e) { return; }
     if (document.querySelector(".tanit") || !$("sheet").hidden) { if ((dene || 0) < 5) setTimeout(() => yenilikler((dene || 0) + 1), 15000); return; }
+    let son = "istanbul"; try { son = localStorage.getItem("gezi-son-il") || son; } catch (e) {}
+    // Her madde bir öğretici: dokununca o özellik açılır. Rotası olmayan madde yalnızca bilgi.
     const s = [
-      ["car-front", T("Yol üstü keşif"), TL("Yola çıkarken iki il seç, yol boyunca uğrayabileceğin yerleri sırayla gösterelim.", "Pick two provinces before a road trip and we'll list the stops along the way.")],
-      ["stamp", T("Gezi pasaportu"), TL("Gittiğin her il pasaportuna damga olarak basılır. 81 damganın hepsini topla, paylaş.", "Every province you visit becomes a stamp in your passport. Collect all 81 and share them.")],
-      ["shuffle", T("Nereye gitsem?"), TL("Fotoğraflı kartları kaydır: beğendiğin yer listene girsin.", "Swipe photo cards and save the places you like.")],
-      ["calendar-days", T("Hafta sonu kaçamağı"), TL("Arabayla birkaç saatlik illeri öneririz; bayramda 3-4 günlük rotalar.", "Provinces a few hours' drive away; longer trips for holidays.")],
-      ["cloud-sun", TL("Havaya göre öneri", "Weather-smart tips"), TL("Yağmurda müzeler, sıcakta şelaleler; il sayfasında gün batımı saati de var.", "Museums when it rains, waterfalls when it's hot, plus sunset times.")]
+      ["car-front", T("Yol üstü keşif"), TL("Yola çıkarken iki il seç, yol boyunca uğrayabileceğin yerleri sırayla gösterelim.", "Pick two provinces before a road trip and we'll list the stops along the way."), "#/yol"],
+      ["shuffle", T("Nereye gitsem?"), TL("Fotoğraflı kartları kaydır: sağa kaydırdığın yer listene girer, sola kaydırdığını geçeriz.", "Swipe photo cards: right to save a place, left to skip."), "#/kartlar"],
+      ["calendar-days", T("Hafta sonu kaçamağı"), TL("Arabayla birkaç saatlik illeri öneririz; bayramda 3-4 günlük rotalar.", "Provinces a few hours' drive away; longer trips for holidays."), "#/kacamak"],
+      ["stamp", T("Gezi pasaportu"), TL("Bir yerde \"Buraya gittim\" de, o ilin damgası pasaportuna basılsın. 81 damgayı topla, paylaş.", "Tap \"I've been here\" on a place to get that province's stamp. Collect all 81 and share them."), "#/rozetler"],
+      ["cloud-sun", TL("Havaya göre öneri", "Weather-smart tips"), TL("İl sayfasındaki hava kutusu yağmurda müze, sıcakta serin yer önerir; gün batımı saati de orada.", "The weather box on a province page suggests museums in rain and cool spots in heat, plus sunset times."), `#/il/${son}`],
+      ["share-2", TL("Listeni linkle paylaş", "Share your list"), TL("Listem sekmesinde \"Listeyi linkle paylaş\": arkadaşın tek dokunuşla kendi listesine ekler.", "In My list, tap \"Share list as a link\": friends add it to theirs in one tap."), "#/listem"],
+      ["camera", TL("Daha güzel fotoğraflar", "Better photos"), TL("İl kapakları yenilendi; yanlış fotoğraflar ve gezilecek bir şeyi olmayan yerler çıkarıldı.", "New province covers; wrong photos and places with nothing to see were removed."), ""]
     ];
     const d = document.createElement("div"); d.className = "tanit";
-    d.innerHTML = `<div class="tkart yenilik"><div class="temo altin">${ik("sparkles", 36)}</div><h2>${TL(`Sürüm ${SURUM}'te yeni`, `New in version ${SURUM}`)}</h2><ul class="ylist">${s.map((x) => `<li><i>${ik(x[0], 22)}</i><span><b>${x[1]}</b><small>${x[2]}</small></span></li>`).join("")}</ul><div class="tbtn"><button class="linkbtn" data-k="kapat">${T("Kapat")}</button><button class="btn primary" data-k="dene">${ik("car-front", 18)} ${TL("Yol üstü keşfi dene", "Try Along the way")}</button></div></div>`;
+    d.innerHTML = `<div class="tkart yenilik"><div class="temo altin">${ik("sparkles", 36)}</div><h2>${TL(`Sürüm ${SURUM}'te yeni`, `New in version ${SURUM}`)}</h2><p class="yalt">${TL("Denemek için birine dokun.", "Tap one to try it.")}</p><ul class="ylist">${s.map((x) => x[3] ? `<li><button class="ybtn" data-r="${x[3]}"><i>${ik(x[0], 22)}</i><span><b>${x[1]}</b><small>${x[2]}</small></span>${ik("chevron-right", 18)}</button></li>` : `<li><i>${ik(x[0], 22)}</i><span><b>${x[1]}</b><small>${x[2]}</small></span></li>`).join("")}</ul><div class="tbtn"><button class="linkbtn" data-k="kapat">${T("Kapat")}</button><button class="btn primary" data-k="dene">${ik("car-front", 18)} ${TL("Yol üstü keşfi dene", "Try Along the way")}</button></div></div>`;
     const kapat = () => { try { localStorage.setItem("gezi-yenilik", SURUM); } catch (e) {} d.classList.add("out"); setTimeout(() => d.remove(), 300); };
     d.addEventListener("click", (e) => {
-      const k = e.target.closest("[data-k]"); if (e.target !== d && !k) return;
+      const k = e.target.closest("[data-k]"), r = e.target.closest("[data-r]"); if (e.target !== d && !k && !r) return;
+      if (r) { kapat(); git(r.dataset.r); return; }
       kapat(); if (k && k.dataset.k === "dene") git("#/yol");
     });
     document.body.appendChild(d);

@@ -636,3 +636,11 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 /* yılın özeti düğmesi */
 .ozetbtn{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;border:0;color:#fff;background:linear-gradient(120deg,#2a1650,#7a2346 55%,#d0551f)}
 .ozetbtn[hidden]{display:none}
+
+/* 6.5 yenilikler kartı: maddeler dokunulabilir */
+.yalt{margin:6px 0 0;color:var(--muted);font-size:13.5px}
+.ylist .ybtn{all:unset;box-sizing:border-box;display:flex;gap:12px;align-items:center;width:calc(100% + 16px);padding:8px;margin:-8px;border-radius:16px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ylist .ybtn>span{flex:1;min-width:0}
+.ylist .ybtn>svg{flex:none;color:var(--muted)}
+.ylist .ybtn:active{background:var(--surface2)}
+.ylist .ybtn:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
