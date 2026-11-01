@@ -51,7 +51,7 @@ const cek = async (pg, ad) => { await pg.screenshot({ path: path.join(CIKTI, ad 
     // il sayfası: hava kutusu
     await pg.goto(URL + "#/il/istanbul"); await bekle(pg, 3500); await resimler(pg); await cek(pg, `${ön}-il`);
     const h = await pg.$("#hava");
-    if (h) { await h.scrollIntoViewIfNeeded(); await pg.evaluate(() => scrollBy(0, -120)); await bekle(pg, 800); await resimler(pg); await cek(pg, `${ön}-hava`); }
+    if (h) { await h.scrollIntoViewIfNeeded(); await bekle(pg, 1500); await resimler(pg); await h.screenshot({ path: path.join(CIKTI, `${ön}-hava.png`) }); bilgi.push("ok hava " + ön); }
     // gezilerim / pasaport
     await ctx.close(); ({ ctx, pg } = await sayfa(b, { git: true }));
     await pg.goto(URL + "#/rozetler"); await bekle(pg, 3500); await resimler(pg); await cek(pg, `${ön}-gezilerim`);

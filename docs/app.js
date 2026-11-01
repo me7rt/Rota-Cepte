@@ -1391,6 +1391,8 @@
         const yakin = u.filter((x) => x[0] <= 60);
         aday = (yakin.length >= 5 ? yakin : u.slice(0, 20)).map((x) => x[1]);
       }
+      // Öne çıkan (gezmeye değer) yerler varsa onlardan seç: ana sayfanın en büyük fotoğrafı höyük ya da semt olmasın
+      const one = aday.filter((x) => x[11]); if (one.length >= (me ? 3 : 30)) aday = one;
       const x = aday[Math.floor(Math.random() * aday.length)]; if (!x) return;
       const d = await loadIl(x[2]); const p = d.yerler[x[3]]; if (!p) return;
       const k = foto(p.f, 960), k2 = foto(p.f, 500);
