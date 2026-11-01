@@ -1,4 +1,4 @@
-// Geçici: özel gün kartları için serbest lisanslı (kamu malı, CC0, CC BY) fotoğraflar. CC BY-SA ve GFDL alınmaz.
+// Geçici: özel gün kartları ve mağaza tanıtım görseli için serbest lisanslı (kamu malı, CC0, CC BY) fotoğraflar. CC BY-SA ve GFDL alınmaz.
 import fs from "node:fs";
 const UA = "RotaCepte/6.5 (mertturanlioglu.apps@gmail.com)";
 const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -29,7 +29,18 @@ fs.writeFileSync(`${out}/secilen.json`, JSON.stringify(bilgi, null, 1));
 
 // 2) Ek arama: yeni tasarımlar için aday fotoğraflar
 const QI = ' incategory:"Quality_images"', FP = ' incategory:"Featured_pictures_on_Wikimedia_Commons"';
-const TEMA = { tuz: { hepsi: true, kat: ["Lake Tuz", "Tuz Gölü Special Environmental Protection Area"], ara: ["Tuz Gölü", "Lake Tuz", "Tuz Gölü Aksaray", "Tuz Gölü Şereflikoçhisar"] } };
+const TEMA = {
+  kapadokya: { kat: ["Hot air balloons in Cappadocia", "Hot air balloons over Göreme"], ara: ["Cappadocia balloons" + QI, "Cappadocia balloons sunrise", "Göreme hot air balloons" + FP] },
+  pamukkale: { kat: ["Pamukkale travertines"], ara: ["Pamukkale travertine" + QI, "Pamukkale terraces", "Pamukkale" + FP] },
+  oludeniz: { kat: ["Ölüdeniz"], ara: ["Ölüdeniz", "Ölüdeniz" + QI, "Oludeniz lagoon"] },
+  sumela: { kat: ["Sumela Monastery"], ara: ["Sumela Monastery" + QI, "Sumela Monastery"] },
+  nemrut: { kat: ["Mount Nemrut"], ara: ["Mount Nemrut" + QI, "Nemrut Dağı statues"] },
+  efes: { kat: ["Library of Celsus"], ara: ["Library of Celsus" + QI, "Library of Celsus Ephesus" + FP] },
+  istanbul: { kat: ["Galata Tower"], ara: ["Istanbul Bosphorus skyline" + QI, "Galata Tower" + QI, "Istanbul panorama" + FP] },
+  uzungol: { kat: ["Uzungöl"], ara: ["Uzungöl", "Uzungöl" + QI] },
+  mardin: { kat: [], ara: ["Mardin old city view" + QI, "Mardin skyline", "Mardin" + FP] },
+  kackar: { kat: ["Kaçkar Mountains"], ara: ["Kaçkar Mountains" + QI, "Ayder plateau", "Kaçkar"] },
+};
 const sonuc = {};
 for (const [tema, t] of Object.entries(TEMA)) {
   const adlar = new Set();
@@ -43,14 +54,22 @@ for (const [tema, t] of Object.entries(TEMA)) {
       const em = ii.extmetadata || {}, lis = temiz(em, "LicenseShortName");
       if (!(t.hepsi ? !/gfdl/i.test(lis) && lis : izinli(lis)) || ii.width < 1500 || ii.height < 1000) continue;
       const qi = /Quality images|Featured pictures|Valued images/i.test(temiz(em, "Categories"));
-      aday.push({ ad: pg.title.replace(/^File:/, ""), lis, yazar: temiz(em, "Artist").slice(0, 90), tarih: temiz(em, "DateTimeOriginal").slice(0, 10), aciklama: temiz(em, "ImageDescription").slice(0, 160), w: ii.width, h: ii.height, qi, kucuk: ii.thumburl, sayfa: ii.descriptionurl });
+      aday.push({ ad: pg.title.replace(/^File:/, ""), lis, lisUrl: temiz(em, "LicenseUrl"), yazar: temiz(em, "Artist").slice(0, 90), tarih: temiz(em, "DateTimeOriginal").slice(0, 10), aciklama: temiz(em, "ImageDescription").slice(0, 160), w: ii.width, h: ii.height, qi, kucuk: ii.thumburl, sayfa: ii.descriptionurl });
     }
     await bekle(300);
   }
-  aday.sort((a, b) => (b.qi ? 1 : 0) - (a.qi ? 1 : 0) || b.w * b.h - a.w * a.h);
-  sonuc[tema] = aday.slice(0, 48);
+  const serbest = (l) => /^(cc0|public domain|pd)/i.test(l) ? 1 : 0;
+  aday.sort((a, b) => (b.qi ? 1 : 0) - (a.qi ? 1 : 0) || serbest(b.lis) - serbest(a.lis) || b.w * b.h - a.w * a.h);
+  sonuc[tema] = aday.slice(0, 24);
   let n = 0;
   for (const a of sonuc[tema]) { a.no = `${tema}-${String(++n).padStart(2, "0")}`; await indir(a.kucuk, `${out}/${a.no}.jpg`); await bekle(150); }
+  // İlk 6 aday büyük boy (2000 px genişlik) da iner, tasarımda doğrudan kullanmak için
+  for (const a of sonuc[tema].slice(0, 6)) {
+    const k = await al({ action: "query", titles: "File:" + a.ad, prop: "imageinfo", iiprop: "url", iiurlwidth: "2000" });
+    const kk = k.query && k.query.pages && k.query.pages[0].imageinfo && k.query.pages[0].imageinfo[0];
+    if (kk) a.buyuk = await indir(kk.thumburl || kk.url, `${out}/b/${a.no}.jpg`);
+    await bekle(300);
+  }
   console.log(tema, "aday", liste.length, "izinli", aday.length);
 }
 fs.writeFileSync(`${out}/aday.json`, JSON.stringify(sonuc, null, 1));
