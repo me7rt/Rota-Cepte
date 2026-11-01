@@ -79,7 +79,7 @@ function dosyaKotu(name) {
   if (/map$|map\s|map\d/.test(n)) return true;
   // Eski kitap ve gravür taramaları ("Başlık - Yazar - 1882", "118 of 'Karamania...'"), müze maketleri,
   // yerle ilgisiz numaralı böcek ve çiçek fotoğrafları ("Insect 1350448", "Spider 1350476", "Flower 1350585n")
-  if (/ - [^-]+ - 1[5-8]\d\d$/.test(n) || /^\d+ of '/.test(n) || /\b(modell|maket)\b/.test(n) || /^[a-z]+\s*\d{6,}[a-z]?$/.test(n)) return true;
+  if (/ - [^-]+ - 1[5-8]\d\d$/.test(n) || /^\d+ of '/.test(n) || /\b(modell|maket)\b/.test(n) || /^[a-z]+\s*\d{6,}(\s*[a-z]{1,3})?$/.test(n)) return true;
   for (const t of n.split(/[^a-z0-9]+/)) if (KOTU_KELIME.has(t)) return true;
   for (const p of KOTU_PARCA) if (n.includes(p)) return true;
   return false;
