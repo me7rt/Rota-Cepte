@@ -10,7 +10,7 @@ const temiz = (em, k) => (em[k] ? String(em[k].value).replace(/<[^>]+>/g, " ").r
 const out = "out"; fs.mkdirSync(out + "/b", { recursive: true });
 
 // 1) Seçilen dosyaları büyük boy indir (kısa kenar ~1500 px)
-const SECILEN = {"anne-06": "Mother holding child in silhouette against sunset at a tranquil outdoor location.jpg", "anne-21": "Baby's feet (Unsplash).jpg", "baba-25": "Father and Son (5088486671).jpg", "baba-40": "FATHER AND SON FISHING ON ISLA DE CABRAS - NARA - 546410.jpg", "gece-10": "Hagia Sophia (8395709547).jpg", "gece-17": "Selimiye Mosque at night.JPG", "gece-28": "Ortaköy (2893165680).jpg"};
+const SECILEN = {"balon-07": "Hot air balloon flight over Cappadocia - panoramio.jpg", "yol-08": "Fort Ord Trail (52978519072).jpg"};
 const bilgi = {};
 for (const [no, ad] of Object.entries(SECILEN)) {
   const j = await al({ action: "query", titles: "File:" + ad, prop: "imageinfo", iiprop: "url|size|extmetadata", iiextmetadatafilter: EM });
@@ -29,10 +29,7 @@ fs.writeFileSync(`${out}/secilen.json`, JSON.stringify(bilgi, null, 1));
 
 // 2) Ek arama: yeni tasarımlar için aday fotoğraflar
 const QI = ' incategory:"Quality_images"', FP = ' incategory:"Featured_pictures_on_Wikimedia_Commons"';
-const TEMA = {
-  balon: { kat: ["Hot air balloons in Cappadocia"], ara: ["Cappadocia balloons sunrise", "Göreme hot air balloons", "Kapadokya balon"] },
-  yolt: { kat: [], ara: ["Göreme road Cappadocia", "Uçhisar road", "Zigana Pass road", "Artvin mountain road", "Yusufeli road", "Karadeniz Sahil Yolu", "Erzurum Turkey highway", "Bayburt road"] }
-};
+const TEMA = {};
 const sonuc = {};
 for (const [tema, t] of Object.entries(TEMA)) {
   const adlar = new Set();
