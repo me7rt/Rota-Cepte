@@ -1,5 +1,5 @@
 {
-  "_aciklama": "yasak: kullanılmayacak fotoğraf dosyaları (kontrol sayfalarından) | yasakOn: adı bununla başlayan dosyalar da kullanılmaz (aynı serinin kardeş fotoğrafları) | zorla: Wikidata no -> dosya adı | cikar: listeden çıkarılacak Wikidata no (artık var olmayan, baraj altında kalan, askerî/kapalı alan olan yerler, aynı yerin ikinci kaydı, gezilecek bir şeyi olmayan sıradan semt, cadde, mahalle parkı, salon ve küçük heykeller ve gezilecek yer olmayan yerleşim mahalleleri, görülecek kalıntısı olmayan antik kent ve höyükler, tarihî bölge adları)",
+  "_aciklama": "yasak: kullanılmayacak fotoğraf dosyaları (kontrol sayfalarından) | yasakParca: adında bu parça geçen dosyalar da kullanılmaz (aynı serinin kardeş fotoğrafları) | zorla: Wikidata no -> dosya adı | cikar: listeden çıkarılacak Wikidata no (artık var olmayan, baraj altında kalan, askerî/kapalı alan olan yerler, aynı yerin ikinci kaydı, gezilecek bir şeyi olmayan sıradan semt, cadde, mahalle parkı, salon ve küçük heykeller ve gezilecek yer olmayan yerleşim mahalleleri, görülecek kalıntısı olmayan antik kent ve höyükler, tarihî bölge adları)",
   "yasak": [
     "16400 Kulaca-İnegöl-Bursa, Turkey - panoramio.jpg",
     "38800 Akköy-Yeşilhisar-Kayseri, Turkey - panoramio.jpg",
@@ -103,9 +103,8 @@
     "Uçhisar Kalesi - Nevşehir 22.08.2026.jpg",
     "Hasanağa Bahçesi station 1.jpg"
   ],
-  "yasakOn": [
-    "Meta-eclogite (Arguvan District",
-    "Kayseri Archaeological Museum Felahiye finds",
+  "yasakParca": [
+    "Felahiye finds",
     "DPÜ Şaphane Meslek Yüksekokulu"
   ],
   "zorla": {
@@ -273,6 +272,15 @@
     "Q6039014",
     "Q6016009",
     "Q118188189",
-    "Q6028430"
+    "Q6028430",
+    "Q25476563",
+    "Q4838511",
+    "Q6020788",
+    "Q6066119",
+    "Q6080526",
+    "Q97725306",
+    "Q108915667",
+    "Q110272113",
+    "Q112575255"
   ]
 }

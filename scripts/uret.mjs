@@ -12,8 +12,8 @@ const okuJSON = (p, d) => (fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, "utf
 // Elle düzeltmeler: kontrol sırasında bulunan kötü fotoğraflar vb.
 const DUZ = okuJSON("data/foto-duzelt.json", {});
 const YASAK = new Set((DUZ.yasak || []).map((s) => s.replace(/_/g, " ")));
-// Aynı serinin numarası değişen kardeş dosyaları da tutmasın diye ad başlangıcıyla yasak ("... finds in 2023 5134" yasaksa 5135 de)
-const YASAK_ON = (DUZ.yasakOn || []).map((s) => s.replace(/_/g, " "));
+// Aynı serinin numarası değişen kardeş dosyaları da tutmasın diye ad parçasıyla yasak ("Felahiye finds" geçen her dosya)
+const YASAK_PARCA = (DUZ.yasakParca || []).map((s) => s.replace(/_/g, " "));
 const ZORLA = DUZ.zorla || {};
 const CIKAR = new Set(DUZ.cikar || []);
 // Önceki veride her yerin fotoğrafı. Yedek fotoğraf aramaları bütçeyle sınırlı ve sırası her çalışmada değişiyor;
@@ -71,15 +71,15 @@ const KOTU_KELIME = new Set(("map maps harita haritasi haritalari karte carte ma
 const KOTU_PARCA = ["coat of arms", "location map", "harita", "locator", "landsat", "sentinel", "satellit", "lokasyon", "topograf",
   "logo", "emblem", "amblem", "bayrak", "flag", "grundriss", "floor plan", "plan of", "kartpostal", "postcard",
   "kiepert", "putzger", "munzkabinett", "uydu", "karte ", "inscription", "exhibition", "dirham", "drachm", "obverse", "reverse",
-  "miniature", "manuscript", "nusretname", "folio", "план", "карта", "схема"];
+  "miniature", "manuscript", "nusretname", "folio", "eclogite", "план", "карта", "схема"];
 const ascii = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i");
 function dosyaKotu(name) {
   const n = ascii(name.replace(/\.[A-Za-z0-9]+$/, "")).replace(/_/g, " ").trim();
   if (/\biss\d|\bsts-\d/.test(n)) return true;
   if (/map$|map\s|map\d/.test(n)) return true;
   // Eski kitap ve gravür taramaları ("Başlık - Yazar - 1882", "118 of 'Karamania...'"), müze maketleri,
-  // yerle ilgisiz numaralı böcek ve çiçek fotoğrafları ("Insect 1350448", "Spider 1350476")
-  if (/ - [^-]+ - 1[5-8]\d\d$/.test(n) || /^\d+ of '/.test(n) || /\b(modell|maket)\b/.test(n) || /^[a-z]+\s*\d{6,}$/.test(n)) return true;
+  // yerle ilgisiz numaralı böcek ve çiçek fotoğrafları ("Insect 1350448", "Spider 1350476", "Flower 1350585n")
+  if (/ - [^-]+ - 1[5-8]\d\d$/.test(n) || /^\d+ of '/.test(n) || /\b(modell|maket)\b/.test(n) || /^[a-z]+\s*\d{6,}[a-z]?$/.test(n)) return true;
   for (const t of n.split(/[^a-z0-9]+/)) if (KOTU_KELIME.has(t)) return true;
   for (const p of KOTU_PARCA) if (n.includes(p)) return true;
   return false;
@@ -685,10 +685,9 @@ for (const il of iller.values()) {
     if (ZORLA[o.q]) o.imgs = [ZORLA[o.q]];
     liste.push(o);
   }
-  // İlçe başına sınır (fazlası: ünlülüğe göre ele). Önceki veride gösterilen yerler önce gelir; yoksa eşit ünlülükteki
-  // yerler çalışmadan çalışmaya yer değiştiriyor (İstanbul'da Binbirdirek Sarnıcı gidip yerine küçük çeşmeler geliyordu)
-  const onceki = (o) => (ONCEKI_FOTO.has(o.q) ? 1 : 0);
-  liste.sort((a, b) => (b.one || 0) - (a.one || 0) || onceki(b) - onceki(a) || b.sl - a.sl || (+String(a.q).slice(1) || 0) - (+String(b.q).slice(1) || 0));
+  // İlçe başına sınır (fazlası: ünlülüğe göre ele). Eşit ünlülükte Wikidata numarası küçük olan önce gelir; sıra SPARQL
+  // sonucuna bağlı kalırsa sınırdaki yerler çalışmadan çalışmaya yer değiştiriyor (İstanbul'da gidip gelen yerler)
+  liste.sort((a, b) => (b.one || 0) - (a.one || 0) || b.sl - a.sl || (+String(a.q).slice(1) || 0) - (+String(b.q).slice(1) || 0));
   const say = new Map(); const kalan = [];
   for (const o of liste) {
     if (o.one) { kalan.push(o); continue; }
@@ -724,7 +723,7 @@ function fotoKaydi(a, ii) {
 }
 function fotoUygun(a) {
   const f = FOTO.get(a);
-  if (!f || !f.p || YASAK.has(a) || YASAK_ON.some((o) => a.startsWith(o))) return false;
+  if (!f || !f.p || YASAK.has(a) || YASAK_PARCA.some((o) => a.includes(o))) return false;
   if (f.mime !== "image/jpeg") return false;
   // Yalnızca GFDL lisanslı fotoğraflar: lisansın tam metnini her kopyayla vermek gerekir, mobil uygulamada pratik değil
   if (/^GFDL/i.test(f.lis || "")) return false;
