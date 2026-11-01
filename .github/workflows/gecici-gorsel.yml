@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 40
     strategy:
       matrix:
-        parti: [{ad: a, dal: video-deneme-8}, {ad: b, dal: video-deneme-9}]
+        parti: [{ad: a, dal: video-deneme-10}, {ad: b, dal: video-deneme-11}]
     steps:
       - uses: actions/checkout@v4
       - name: Yeni adaylar
