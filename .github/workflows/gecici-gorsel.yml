@@ -1,0 +1,33 @@
+name: Gecici gorsel toplama
+on:
+  push:
+    branches: [claude/project-thread-oje5uw]
+    paths: [.github/workflows/gecici-gorsel.yml, .github/gorsel-topla.py]
+permissions:
+  contents: write
+jobs:
+  topla:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Commons gorselleri
+        run: |
+          python3 .github/gorsel-topla.py cikti '{
+            "balon": ["Cappadocia hot air balloons", "bitmap", 10],
+            "balon-goreme": ["Göreme balloons sunrise", "bitmap", 6],
+            "peri": ["fairy chimneys Cappadocia", "bitmap", 8],
+            "uchisar": ["Uçhisar castle", "bitmap", 6],
+            "derinkuyu": ["Derinkuyu underground city", "bitmap", 6],
+            "kizilcukur": ["Kızılçukur valley", "bitmap", 5],
+            "gunbatimi": ["Cappadocia sunset", "bitmap", 5],
+            "video": ["Cappadocia", "video", 6]
+          }'
+      - name: video-deneme dalina koy
+        run: |
+          cd cikti
+          git init -q -b video-deneme
+          git config user.name "Mert Turanlıoğlu"
+          git config user.email "me7rtt@gmail.com"
+          git add . && git commit -qm "Kısa video görsel adayları"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" video-deneme
