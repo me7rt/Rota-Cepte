@@ -74,8 +74,8 @@
   "07-15": {
    "e": "🇹🇷",
    "tr": "15 Temmuz Demokrasi ve Millî Birlik Günü. Şehitlerimizi rahmetle anıyoruz.",
-   "en": "July 15 Democracy and National Unity Day.",
-   "kart": "demokrasi-a"
+   "en": "July 15 Democracy and National Unity Day. We honour the memory of our martyrs.",
+   "kart": "demokrasi-f3"
   },
   "08-30": {
    "e": "🇹🇷",
@@ -179,7 +179,7 @@
    "e": "💐",
    "tr": "Anneler Günü kutlu olsun! Bugün annenle bir yere gitmeye ne dersin?",
    "en": "Happy Mother's Day! Why not take your mum somewhere today?",
-   "kart": "anneler-a"
+   "kart": "anneler-f3"
   },
   {
    "bas": "2027-06-20",
@@ -210,7 +210,7 @@
    "bayram": 1,
    "ad": "Ramazan Bayramı",
    "adEn": "Eid al-Fitr",
-   "kart": "rbayram-a"
+   "kart": "rbayram-f3"
   },
   {
    "bas": "2027-05-16",

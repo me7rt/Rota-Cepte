@@ -2551,7 +2551,7 @@
       const o = { msj, ikon };
       if (cizim) {
         [o.bas, o.alt] = bol(msj);
-        Object.assign(o, { kart: og.kart, foto, yil, sayi: og.yil ? yil - og.yil : 0 });
+        Object.assign(o, { kart: og.kart, foto, yil, sayi: og.yil ? yil - og.yil : 0, gun: og.bas || `${yil}-${String(n.getMonth() + 1).padStart(2, "0")}-${String(n.getDate()).padStart(2, "0")}` });
         o.tarih = buyuk(og.bas ? tarihAraligi(og.bas, og.bit) : og.yil ? `${gunAy} ${og.yil} – ${yil}` : `${gunAy} ${yil}`);
         if (og.mahya) o.mahya = DIL === "en" ? og.mahya.en || "" : og.mahya.tr;
         if (og.soz) { o.soz = TL(og.soz.tr, og.soz.en || og.soz.tr); o.kim = DIL === "en" && og.soz.kimEn ? og.soz.kimEn : og.soz.kim || ""; }
