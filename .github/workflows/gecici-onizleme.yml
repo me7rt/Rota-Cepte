@@ -1,0 +1,22 @@
+name: Gecici onizleme kontrolu
+on:
+  push:
+    branches: [claude/project-thread-tpajlk]
+    paths: [".github/workflows/gecici-onizleme.yml"]
+jobs:
+  kontrol:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: |
+          B="claude/project-thread-tpajlk"
+          for u in \
+            "https://raw.githack.com/me7rt/Rota-Cepte/$B/docs/index.html" \
+            "https://raw.githack.com/me7rt/Rota-Cepte/$B/docs/app.js" \
+            "https://raw.githack.com/me7rt/Rota-Cepte/$B/docs/data/index.json" \
+            "https://raw.githack.com/me7rt/Rota-Cepte/$B/docs/sw.js" \
+            "https://raw.githack.com/me7rt/Rota-Cepte/${{ github.sha }}/docs/index.html"; do
+            echo "== $u"; curl -sS -o /tmp/x -D /tmp/h -m 30 "$u" -w "kod=%{http_code} tur=%{content_type} boyut=%{size_download}\n" || true
+            grep -i "^cache-control\|^location" /tmp/h || true
+            head -c 120 /tmp/x | tr '\n' ' '; echo
+          done
