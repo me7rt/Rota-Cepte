@@ -76,8 +76,8 @@ function dosyaKotu(name) {
   if (/\biss\d|\bsts-\d/.test(n)) return true;
   if (/map$|map\s|map\d/.test(n)) return true;
   // Eski kitap ve gravür taramaları ("Başlık - Yazar - 1882", "118 of 'Karamania...'"), müze maketleri,
-  // yerle ilgisiz numaralı böcek ve çiçek fotoğrafları ("Insect 1350448")
-  if (/ - [^-]+ - 1[5-8]\d\d$/.test(n) || /^\d+ of '/.test(n) || /\b(modell|maket)\b/.test(n) || /^(insect|flower)\s*\d{6,}/.test(n)) return true;
+  // yerle ilgisiz numaralı böcek ve çiçek fotoğrafları ("Insect 1350448", "Spider 1350476")
+  if (/ - [^-]+ - 1[5-8]\d\d$/.test(n) || /^\d+ of '/.test(n) || /\b(modell|maket)\b/.test(n) || /^[a-z]+\s*\d{6,}$/.test(n)) return true;
   for (const t of n.split(/[^a-z0-9]+/)) if (KOTU_KELIME.has(t)) return true;
   for (const p of KOTU_PARCA) if (n.includes(p)) return true;
   return false;
@@ -277,18 +277,22 @@ const koorsuz = [...ilceler.values()].filter((o) => !o.koor);
 const etiketAra = [...eksikIlce.map((e) => ({ il: e.il, ad: e.ad })), ...koorsuz.map((o) => ({ il: iller.get(o.il), ad: o.ad, o }))];
 if (etiketAra.length) {
   const ilQ2 = [...new Set(etiketAra.map((e) => e.il.q))];
-  const rows = await sparql(`SELECT ?t ?l ?il ?c ?img ?trA ?cat ?alan WHERE {
+  const rows = await sparql(`SELECT ?t ?l ?il ?c ?img ?trA ?cat ?alan ?sl WHERE {
     VALUES ?l { ${[...new Set(etiketAra.map((e) => JSON.stringify(e.ad) + "@tr"))].join(" ")} }
     VALUES ?il { ${ilQ2.map((q) => "wd:" + q).join(" ")} }
-    ?t rdfs:label ?l ; wdt:P625 ?c ; wdt:P131+ ?il .
+    ?t rdfs:label ?l ; wdt:P625 ?c ; wdt:P131+ ?il ; wikibase:sitelinks ?sl .
     OPTIONAL { ?t wdt:P18 ?img } OPTIONAL { ?t wdt:P373 ?cat } OPTIONAL { ?t wdt:P2046 ?alan }
     OPTIONAL { ?trA schema:about ?t ; schema:isPartOf <https://tr.wikipedia.org/> } }`).catch((e) => { rapor("  UYARI eksik ilçe sorgusu:", e.message.slice(0, 80)); return []; });
   for (const e of etiketAra) {
     const r = rows.filter((b) => val(b, "l") === e.ad && qid(val(b, "il")) === e.il.q);
-    r.sort((x, y) => (val(y, "trA") ? 1 : 0) - (val(x, "trA") ? 1 : 0));
+    // Aynı adlı birden çok kayıt olabilir (ör. ilçe merkezi Kemer ile Kaş'taki Kemer köyü): her çalışmada aynı ve doğru
+    // kaydı seçmek için Vikipedi maddesi olan, sonra en çok dilde maddesi olan, sonra en eski Wikidata kaydı öne alınır
+    const qn = (b) => +qid(val(b, "t")).slice(1);
+    r.sort((x, y) => (val(y, "trA") ? 1 : 0) - (val(x, "trA") ? 1 : 0) || (+val(y, "sl") || 0) - (+val(x, "sl") || 0) || qn(x) - qn(y));
     if (!r.length) continue;
     const b = r[0]; const q = qid(val(b, "t"));
-    const imgs = [...new Set(r.map((x) => dosyaAdi(val(x, "img"))).filter(Boolean))];
+    // Fotoğraflar yalnızca seçilen kayıttan (aynı adlı başka yerleşimin fotoğrafı ilçeye düşmesin)
+    const imgs = [...new Set(r.filter((x) => qid(val(x, "t")) === q).map((x) => dosyaAdi(val(x, "img"))).filter(Boolean))];
     if (e.o) {
       e.o.koor = nokta(val(b, "c")); e.o.koorKaynak = "kasaba";
       if (!e.o.trA && makale(val(b, "trA"))) { e.o.trA = makale(val(b, "trA")); e.o.metinKaynak = "merkez"; }

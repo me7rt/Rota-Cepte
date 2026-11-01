@@ -79,6 +79,7 @@ for grup in ["kapak", "one", "ilk", "ilce", "diger", "galeri"]:
     nolar = [n for n, k in enumerate(kayit) if k["g"] == grup]
     with cf.ThreadPoolExecutor(4) as ex: sonuc = dict(ex.map(indir_butce, nolar))
     print(grup, "indirilen", sum(sonuc.values()), "/", len(nolar), "süre", int(time.time() - BASLA))
+    if not nolar: continue
     if not any(sonuc.values()): break
     for s in range(0, len(nolar), KOL * SAT):
         parca = nolar[s:s + KOL * SAT]
