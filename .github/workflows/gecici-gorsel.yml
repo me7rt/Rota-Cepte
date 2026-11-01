@@ -8,22 +8,41 @@ permissions:
 jobs:
   topla:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
-      - name: Commons gorselleri
+      - name: Secilenleri yuksek cozunurlukte indir
         run: |
-          python3 .github/gorsel-topla.py cikti '{
-            "pamukkale": ["Pamukkale travertines", "bitmap", 10],
-            "pamukkale-gun": ["Pamukkale sunset", "bitmap", 6],
-            "hierapolis": ["Hierapolis theatre", "bitmap", 6],
-            "antikhavuz": ["Pamukkale antique pool", "bitmap", 5, 1000],
-            "uzungol": ["Uzungöl", "bitmap", 10],
-            "uzungol-sis": ["Uzungol fog", "bitmap", 5, 1200],
-            "trabzon-yayla": ["Çaykara Trabzon", "bitmap", 5],
-            "anitkabir": ["Anıtkabir", "bitmap", 12],
-            "anitkabir-gece": ["Anıtkabir night", "bitmap", 5, 1200]
+          python3 .github/gorsel-indir.py cikti/hd '{
+            "p1.jpg": "File:Travertine Terraces at Pamukkale - 2014.10 - panoramio.jpg",
+            "p2.jpg": "File:Pamukkale Travertenlerinden bir fotoğraf.jpg",
+            "p3.jpg": "File:Pamukkale deposits.jpg",
+            "p4.jpg": "File:Theatre of Hierapolis 1.jpg",
+            "p5.jpg": "File:Cleopatra Antique pool (15688240214).jpg",
+            "p6.jpg": "File:Pamukkale sunset 1.jpg",
+            "u1.jpg": "File:Uzungöl, Trabzon 2014.jpg",
+            "u2.jpg": "File:Uzungöl, Çaykara, Trabzon.JPG",
+            "u3.jpg": "File:61940 Uzungöl-Çaykara-Trabzon, Turkey - panoramio (5).jpg",
+            "u4.jpg": "File:61940 Uzungöl-Çaykara-Trabzon, Turkey - panoramio (4).jpg",
+            "u5.jpg": "File:61940 Uzungöl-Çaykara-Trabzon, Turkey - panoramio (2).jpg",
+            "a1.jpg": "File:Ataturk's Mausoleum (6225341313).jpg",
+            "a2.jpg": "File:Anıtkabir 2025.jpg",
+            "a3.jpg": "File:Anıtkabir'de Çanakkale'nin 100. yılı anması (4).jpg",
+            "a4.jpg": "File:Anıtkabir Hall of Honor 2024.jpg",
+            "k1.jpg": "File:Mustapha Kemal généralissime des armées Kémalistes (gros plan) - btv1b9053984d.jpg",
+            "k2.jpg": "File:Mustafa Kemal harf devriminde.jpg",
+            "k3.jpg": "File:Ghazi Moustapha Kemal Pasha LCCN2014716853 (cropped).jpg"
           }'
+      - name: Yeni adaylar
+        run: |
+          python3 .github/gorsel-topla.py cikti/aday '{
+            "uzungol": ["Uzungol lake", "bitmap", 8, 1000],
+            "uzungol-tr": ["Uzungöl gölü", "bitmap", 6, 1000],
+            "uzungol-kis": ["Uzungöl winter", "bitmap", 4, 1000],
+            "aslanli": ["Anıtkabir Aslanlı Yol", "bitmap", 6, 1200],
+            "aslanli-en": ["Anitkabir Road of Lions", "bitmap", 6, 1200],
+            "anit-kule": ["Anıtkabir tower", "bitmap", 4, 1200]
+          }' 2400
       - name: video-deneme dalina koy
         run: |
           cd cikti
@@ -31,4 +50,4 @@ jobs:
           git config user.name "Mert Turanlıoğlu"
           git config user.email "me7rtt@gmail.com"
           git add . && git commit -qm "Kısa video görsel adayları"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:video-deneme-4
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:video-deneme-5

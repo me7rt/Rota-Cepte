@@ -6,6 +6,7 @@ UA = "RotaCepte/1.0 (mertturanlioglu.apps@gmail.com)"
 API = "https://commons.wikimedia.org/w/api.php"
 CIKTI = sys.argv[1]
 SORGULAR = json.loads(sys.argv[2])  # {"anahtar": ["arama", "bitmap|video", adet]}
+GENISLIK = sys.argv[3] if len(sys.argv) > 3 else "1600"
 os.makedirs(CIKTI, exist_ok=True)
 
 def get(url):
@@ -33,7 +34,7 @@ for anahtar, deger in SORGULAR.items():
     enaz = deger[3] if len(deger) > 3 else 1800
     q = {"action": "query", "format": "json", "generator": "search",
          "gsrsearch": f"{arama} filetype:{tur}", "gsrnamespace": "6", "gsrlimit": "50",
-         "prop": "imageinfo", "iiprop": "url|size|extmetadata|mime", "iiurlwidth": "1600"}
+         "prop": "imageinfo", "iiprop": "url|size|extmetadata|mime", "iiurlwidth": GENISLIK}
     d = json.loads(get(API + "?" + urllib.parse.urlencode(q)))
     sayfalar = sorted(d.get("query", {}).get("pages", {}).values(), key=lambda p: p.get("index", 0))
     n = 0
