@@ -1,0 +1,14 @@
+name: Gecici sorgu
+on:
+  push:
+    branches: [claude/project-thread-tpajlk]
+    paths: ["scripts/gecici-sorgu.mjs", ".github/workflows/gecici-sorgu.yml"]
+jobs:
+  sorgu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node scripts/gecici-sorgu.mjs
