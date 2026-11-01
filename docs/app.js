@@ -2217,9 +2217,15 @@
       if (g.yas) document.documentElement.classList.add("yas");
       // ana sayfa şeridi
       const b = $("ozelGun");
-      b.innerHTML = `<i>${g.e}</i><span><b>${esc(msj)}</b>${g.bayram ? `<small>${TL("Bayram tatili için hazır rotalara göz at ›", "Browse ready-made routes for the holiday ›")}</small>` : ""}</span>`;
+      // Ramazan gibi dönemlerde yaklaşan bayramın geri sayımı da şeritte görünsün
+      const sonra = g.sayac ? (o.degisken || []).filter((x) => x.ad && x.bas > gun).sort((x, y) => (x.bas < y.bas ? -1 : 1))[0] : null;
+      const kalan = sonra ? Math.round((Date.parse(sonra.bas + "T00:00:00Z") - Date.UTC(n.getFullYear(), n.getMonth(), n.getDate())) / 864e5) : 0;
+      const alt = g.bayram ? TL("Bayram tatili için hazır rotalara göz at ›", "Browse ready-made routes for the holiday ›")
+        : sonra && kalan <= 60 ? TL(`${sonra.ad}'na ${kalan} gün kaldı · 3-4 günlük kaçamak önerilerine bak ›`, `${sonra.adEn || sonra.ad} is ${kalan} day${kalan === 1 ? "" : "s"} away · see 3-4 day getaway ideas ›`) : "";
+      b.innerHTML = `<i>${g.e}</i><span><b>${esc(msj)}</b>${alt ? `<small>${esc(alt)}</small>` : ""}</span>`;
       b.classList.toggle("yas", !!g.yas); b.hidden = false;
       if (g.bayram) b.onclick = () => { const r = $("rotaSec"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); };
+      else if (alt) b.onclick = () => git("#/kacamak/3");
     } catch (e) {}
   }
   // Sayfa başlığı ekrana göre değişsin (sekme, geçmiş, ekran okuyucu)

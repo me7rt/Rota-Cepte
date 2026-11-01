@@ -1,5 +1,5 @@
 {
- "not": "Sabit günler AA-GG. Dini bayram tarihleri her yıl değişir: Diyanet takviminden kontrol edip 'degisken' listesine ekle (bas/bit dahil). 'ad' alanı olan bayramlar için 60 gün kala ana sayfada geri sayım çıkar.",
+ "not": "Sabit günler AA-GG. Dini bayram tarihleri her yıl değişir: Diyanet takviminden kontrol edip 'degisken' listesine ekle (bas/bit dahil). 'ad' alanı olan bayramlar için 60 gün kala ana sayfada geri sayım çıkar. 'sayac': 1 olan dönemlerde (ör. Ramazan) şeritte yaklaşan bayramın geri sayımı da görünür.",
  "sabit": {
   "01-01": {
    "e": "🎉",
@@ -44,6 +44,14 @@
   }
  },
  "degisken": [
+  {
+   "bas": "2027-02-08",
+   "bit": "2027-03-08",
+   "e": "🌙",
+   "tr": "Hayırlı Ramazanlar!",
+   "en": "Ramadan Mubarak!",
+   "sayac": 1
+  },
   {
    "bas": "2027-03-09",
    "bit": "2027-03-11",
