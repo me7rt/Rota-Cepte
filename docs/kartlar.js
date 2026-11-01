@@ -463,7 +463,10 @@ window.RC_KARTLAR = (function () {
     yaziSoz = Promise.race([Promise.all(yt), new Promise((ok) => setTimeout(ok, 4000))]).then(() => true);
     return yaziSoz;
   }
-  const hexA = (h, a) => `rgba(${parseInt(h.slice(1, 3), 16)},${parseInt(h.slice(3, 5), 16)},${parseInt(h.slice(5, 7), 16)},${a})`;
+  const hexA = (h, a) => {
+    if (h.length === 4) h = "#" + h[1] + h[1] + h[2] + h[2] + h[3] + h[3]; // "#fff" gibi kısa yazım
+    return `rgba(${parseInt(h.slice(1, 3), 16)},${parseInt(h.slice(3, 5), 16)},${parseInt(h.slice(5, 7), 16)},${a})`;
+  };
   // Fotoğrafı alana sığdırıp taşanı kırp (cover)
   function kapla(g, img, x, y, w, h, odak) {
     const o = Math.max(w / img.width, h / img.height), iw = img.width * o, ih = img.height * o, f = odak || [0.5, 0.5];
@@ -550,8 +553,8 @@ window.RC_KARTLAR = (function () {
       if (ad === "yilbasi" && o.yil) { const px = b(150); L.push(b(2), { h: Math.round(px * 0.9), ciz: (y) => { g.save(); g.font = SERIF(800, px); const w = g.measureText(String(o.yil)).width; g.fillStyle = dz(g, W / 2 - w / 2, y, W / 2 + w / 2, y + px, ALTIN); g.shadowColor = "rgba(255,200,110,.35)"; g.shadowBlur = 36; g.fillText(String(o.yil), W / 2, y + px * 0.47); g.restore(); } }); }
       if (f.baslik) { const px = b(f.baslikPx || 84); L.push({ h: Math.round(px * 1.05), ciz: (y) => { g.save(); g.font = SERIF(700, px); Y.harfAra(g, 6); g.fillStyle = P.baslik || "#fff"; g.fillText(f.baslik, W / 2, y + px * 0.52); Y.harfAra(g, 0); g.restore(); } }); }
       L.push(b(14), { h: 16, ciz: (y) => ayrac(g, W / 2, y + 8, 300, P.cizgi || P.vurgu) }, b(22));
-      L.push(Y.blok(g, bas, { en: f.yaziEn || 860, font: (px) => SERIF(f.agir || 600, px), px: b(f.basPx || 50), min: b(36), max: 3, lh: 1.22, renk: P.yazi, x: W / 2 }));
-      if (altM) L.push(b(16), Y.blok(g, altM, { en: (f.yaziEn || 860) - 40, font: (px) => SERIF(400, px, true), px: b(36), min: b(28), max: 3, lh: 1.32, renk: P.soluk, x: W / 2 }));
+      L.push(Y.blok(g, bas, { en: 860, font: (px) => SERIF(f.agir || 600, px), px: b(f.basPx || 50), min: b(36), max: 3, lh: 1.22, renk: P.yazi, x: W / 2 }));
+      if (altM) L.push(b(16), Y.blok(g, altM, { en: 820, font: (px) => SERIF(400, px, true), px: b(36), min: b(28), max: 3, lh: 1.32, renk: P.soluk, x: W / 2 }));
       return L;
     };
     let L;
@@ -711,38 +714,6 @@ window.RC_KARTLAR = (function () {
     altImza(g, W, o, P.yazi, P.vurgu, P.soluk);
     kunye(g, f, W / 2, 1302, P.kunye || "rgba(255,255,255,.55)");
   }
-  // Şablon 7, mektup: çizgili kâğıt, bantla yapıştırılmış fotoğraf, el yazısıyla hitap ve imza
-  function mektupSablon(g, W, H, o, f) {
-    const P = f.P, M = en() ? f.mektupEn : f.mektup, r = rastgele(41);
-    g.fillStyle = P.zemin; g.fillRect(0, 0, W, H);
-    for (let i = 0; i < 2600; i++) { g.fillStyle = r() < 0.5 ? "rgba(120,80,50,.04)" : "rgba(255,255,255,.35)"; g.fillRect(r() * W, r() * H, 1 + r() * 2, 1 + r() * 2); }
-    g.fillStyle = rz(g, W / 2, H / 2, 300, 900, [[0, "rgba(0,0,0,0)"], [1, "rgba(120,70,40,.12)"]]); g.fillRect(0, 0, W, H);
-    // tarih (mektup başı gibi sağ üstte)
-    if (o.tarih) { g.save(); g.textAlign = "right"; g.font = Y.PF(800, 22); Y.harfAra(g, 5); g.fillStyle = P.tarih || P.vurgu; g.fillText(o.tarih, W - 96, 70); Y.harfAra(g, 0); g.restore(); }
-    // fotoğraf: anı fotoğrafı gibi beyaz kenarlı, hafif eğik, iki köşesinde bant
-    const fw = 600, fh = 420, fx = W / 2 + 10, fy = 356, a = -0.045;
-    g.save(); g.translate(fx, fy); g.rotate(a);
-    g.shadowColor = "rgba(70,40,30,.35)"; g.shadowBlur = 30; g.shadowOffsetY = 12; g.fillStyle = "#fffdf8"; g.fillRect(-fw / 2 - 22, -fh / 2 - 22, fw + 44, fh + 104); g.shadowColor = "transparent";
-    if (o.foto) kapla(g, o.foto, -fw / 2, -fh / 2, fw, fh, f.odak); else { g.fillStyle = P.vurgu; g.fillRect(-fw / 2, -fh / 2, fw, fh); }
-    g.font = EL(46); g.fillStyle = "#5b4a44"; g.fillText(en() ? f.yerEn || f.yer : f.yer, 0, fh / 2 + 42);
-    for (const k of [-1, 1]) { g.save(); g.translate(k * (fw / 2 - 10), -fh / 2 - 16); g.rotate(k * 0.7); g.fillStyle = "rgba(240,226,190,.85)"; g.fillRect(-58, -16, 116, 32); g.restore(); }
-    g.restore();
-    // kurutulmuş laleler
-    lale(g, 900, 610, 0.4, 0.42, P.lale1 || "#f6a04d", P.lale2 || "#d9541f", P.sap || "#5f8a4c");
-    lale(g, 930, 640, 0.34, 0.12, P.lale1 || "#f6a04d", P.lale2 || "#d9541f", P.sap || "#5f8a4c");
-    // çizgiler ve yazı
-    const sol = 120, sag = W - 120, ara = 62, ilk = 760;
-    g.strokeStyle = hexA(P.cizgi, 0.32); g.lineWidth = 1.4;
-    for (let y = ilk; y <= 1096; y += ara) { g.beginPath(); g.moveTo(sol - 20, y); g.lineTo(sag + 20, y); g.stroke(); }
-    g.save(); g.textAlign = "left"; g.textBaseline = "alphabetic";
-    g.font = EL(92); g.fillStyle = P.el || P.vurgu; g.fillText(M[0], sol, ilk - 6);
-    const rr = Y.satirla(g, M[1], sag - sol, (p) => SERIF(500, p, true), 40, 30, 4), L = rr.s;
-    g.font = SERIF(500, rr.px, true); g.fillStyle = P.yazi; L.forEach((t, i) => g.fillText(t, sol, ilk + ara * (i + 1) - 12));
-    g.textAlign = "right"; g.font = EL(70); g.fillStyle = P.el || P.vurgu; g.fillText(M[2], sag, ilk + ara * (L.length + 1) + 4);
-    g.restore();
-    altImza(g, W, o, P.yazi, P.vurgu, P.soluk);
-    kunye(g, f, W / 2, 1302, P.kunye || "rgba(60,40,35,.55)");
-  }
   // İznik çinisi: beyaz sır üstünde kobalt göbek, turkuaz yapraklar, mercan kırmızısı orta
   function ciniKaro(g, x, y, s, R) {
     g.save(); g.translate(x, y); g.beginPath(); g.rect(0, 0, s, s); g.clip();
@@ -785,8 +756,6 @@ window.RC_KARTLAR = (function () {
     let x = -10; while (x < W + 10) { x += 5 + r() * 9; g.lineTo(x, y0 + Math.sin(x / 150 + tohum) * gen * 0.8 + (r() - 0.5) * gen); }
     g.lineTo(W + 10, H + 10); g.closePath();
   }
-  // Barkod
-  function barkod(g, x, y, w, h, tohum, renk) { const r = rastgele(tohum); g.fillStyle = renk; let i = x; while (i < x + w - 3) { const k = 1 + Math.floor(r() * 3.2); if (r() > 0.38) g.fillRect(i, y, k, h); i += k + 1 + Math.floor(r() * 2); } }
   // El çizimi kalp
   function kalp(g, x, y, s) {
     g.beginPath(); g.moveTo(x, y + s * 0.38);
@@ -795,81 +764,12 @@ window.RC_KARTLAR = (function () {
     g.bezierCurveTo(x + s * 0.04, y - s * 0.56, x + s * 0.44, y - s * 0.62, x + s * 0.53, y - s * 0.28);
     g.bezierCurveTo(x + s * 0.62, y + s * 0.04, x + s * 0.1, y + s * 0.14, x + s * 0.02, y + s * 0.4);
   }
-  // Konum iğnesi: daire ve ucuna inen iki teğet (uç, merkezin d kadar altında)
-  function igneYol(g, cx, cy, R, d) {
-    const fi = Math.acos(R / d), a1 = Math.PI / 2 - fi, a2 = Math.PI / 2 + fi;
-    g.beginPath(); g.moveTo(cx, cy + d); g.lineTo(cx + R * Math.cos(a1), cy + R * Math.sin(a1)); g.arc(cx, cy, R, a1, a2, true); g.closePath();
-  }
-  // Haritadaki eş yükselti eğrileri
-  function esYukselti(g, cx, cy, n, adim, tohum, renk) {
-    const r = rastgele(tohum), f1 = r() * 6, f2 = r() * 6, f3 = r() * 6;
-    g.strokeStyle = renk; g.lineWidth = 1.6;
-    for (let k = 1; k <= n; k++) {
-      const R = k * adim; g.beginPath();
-      for (let i = 0; i <= 140; i++) { const t = (i / 140) * PI2, q = R * (1 + 0.16 * Math.sin(3 * t + f1) + 0.09 * Math.sin(5 * t + f2 + k * 0.25) + 0.06 * Math.sin(2 * t + f3)); g.lineTo(cx + Math.cos(t) * q * 1.3, cy + Math.sin(t) * q); }
-      g.closePath(); g.stroke();
-    }
-  }
-  // Pusula gülü
-  function pusula(g, x, y, R, renk, vurgu) {
-    g.save(); g.translate(x, y); g.strokeStyle = renk; g.lineWidth = 2;
-    g.beginPath(); g.arc(0, 0, R * 0.8, 0, PI2); g.stroke(); g.beginPath(); g.arc(0, 0, R * 0.72, 0, PI2); g.stroke();
-    for (let k = 7; k >= 0; k--) {
-      const a = (k * Math.PI) / 4 - Math.PI / 2, u = k % 2 ? R * 0.58 : R;
-      for (const s of [-1, 1]) { g.beginPath(); g.moveTo(0, 0); g.lineTo(Math.cos(a) * u, Math.sin(a) * u); g.lineTo(Math.cos(a + s * 0.5) * u * 0.2, Math.sin(a + s * 0.5) * u * 0.2); g.closePath(); g.fillStyle = s < 0 ? (k === 0 ? vurgu : renk) : hexA("#ffffff", 0.55); g.fill(); g.strokeStyle = renk; g.lineWidth = 1; g.stroke(); }
-    }
-    g.font = SERIF(700, R * 0.4); g.fillStyle = vurgu; g.fillText(TL("K", "N"), 0, -R - R * 0.3);
-    g.restore();
-  }
   // İki dairenin birleşimi (dürbün görüntüsü), merkezler (c1, cy) ve (c2, cy)
   function durbunYol(g, c1, c2, cy, R) {
     const t = Math.acos((c2 - c1) / 2 / R);
     g.beginPath(); g.arc(c1, cy, R, -t, t, true); g.arc(c2, cy, R, Math.PI - t, Math.PI + t, true); g.closePath();
   }
 
-  // Şablon 7, dergi kapağı: tam sayfa fotoğraf, üstte dergi adı gibi dev harfler, özel sayı ve fiyat satırı, köşede barkod
-  function dergiSablon(g, W, H, o, f) {
-    const P = f.P, e = en();
-    g.fillStyle = P.zemin; g.fillRect(0, 0, W, H);
-    if (o.foto) kapla(g, o.foto, 0, 0, W, f.fotoH || H, f.odak); else zemin(g, W, H, [[0, P.zemin2 || P.vurgu], [1, P.zemin]]);
-    if (f.ton) { g.save(); g.globalCompositeOperation = "soft-light"; g.fillStyle = f.ton; g.fillRect(0, 0, W, H); g.restore(); }
-    g.fillStyle = dz(g, 0, 0, 0, 400, [[0, "rgba(0,0,0,.45)"], [1, "rgba(0,0,0,0)"]]); g.fillRect(0, 0, W, 400);
-    const a0 = f.altBas || 640, a1 = f.altSon || 980;
-    g.fillStyle = dz(g, 0, a0, 0, a1, [[0, hexA(P.zemin, 0)], [0.6, hexA(P.zemin, 0.82)], [1, P.zemin]]); g.fillRect(0, a0, W, a1 - a0);
-    g.fillStyle = P.zemin; g.fillRect(0, a1 - 1, W, H - a1 + 1);
-    // üst satır: özel sayı ve fiyat
-    g.save(); g.font = Y.PF(800, 19); Y.harfAra(g, 4); g.fillStyle = P.yazi; g.textBaseline = "middle";
-    g.textAlign = "left"; g.fillText(e ? f.sayiEn : f.sayi, 60, 56);
-    g.textAlign = "right"; g.fillText(e ? f.fiyatEn : f.fiyat, W - 60, 56);
-    Y.harfAra(g, 0); g.restore();
-    g.fillStyle = hexA(P.yazi, 0.75); g.fillRect(60, 78, W - 120, 2);
-    // dergi adı
-    const ad = e ? f.dergiEn : f.dergi, ara = f.ara || 14;
-    g.save(); g.textBaseline = "alphabetic"; let px = 340;
-    const yaz = () => { g.font = SERIF(900, px); Y.harfAra(g, ara); };
-    yaz(); while (g.measureText(ad).width - ara > W - 120 && px > 120) { px -= 6; yaz(); }
-    const yb = 96 + g.measureText(ad).actualBoundingBoxAscent;
-    g.shadowColor = "rgba(0,0,0,.28)"; g.shadowBlur = 30; g.fillStyle = P.dergi || "#fff"; g.fillText(ad, W / 2 + ara / 2, yb);
-    Y.harfAra(g, 0); g.restore();
-    // kapak konusu
-    if (f.kapak) {
-      const K = e ? f.kapakEn : f.kapak, kx = f.kapakX || 60, ky = f.kapakY || yb + 96;
-      g.save(); g.textAlign = "left"; g.textBaseline = "alphabetic";
-      g.fillStyle = P.vurgu; g.fillRect(kx, ky - 26, 6, 26 + 54 * (K.length - 1) + 14);
-      g.font = Y.PF(800, 18); Y.harfAra(g, 4); g.fillStyle = P.kapakEtiket || P.vurgu; g.fillText(K[0], kx + 22, ky - 6); Y.harfAra(g, 0);
-      g.font = SERIF(700, 46, true); g.fillStyle = "#fff"; g.shadowColor = "rgba(0,0,0,.55)"; g.shadowBlur = 16;
-      K.slice(1).forEach((t, i) => g.fillText(t, kx + 22, ky + 46 + 54 * i));
-      g.restore();
-    }
-    fotoYazi(g, W, o, f, f.yaziUst || 820, 1112);
-    // barkod kutusu: tarih ve barkod
-    const bw = 150, bh = 96, bx = W - 50 - bw, by = 1160;
-    g.fillStyle = "#fff"; g.fillRect(bx, by, bw, bh);
-    barkod(g, bx + 10, by + 10, bw - 20, 52, 905, "#111");
-    g.save(); g.font = Y.PF(800, 13); g.fillStyle = "#111"; Y.harfAra(g, 2); g.fillText(o.tarih || "", bx + bw / 2 + 1, by + 79); Y.harfAra(g, 0); g.restore();
-    altImza(g, W, o, P.yazi, P.vurgu, P.soluk);
-    kunye(g, f, W / 2, 1302, hexA(P.yazi, 0.55));
-  }
   // Şablon 8, yırtık kağıt: fotoğrafın altı yırtılmış kağıtla kapanır, araya renkli bir şerit girer, el çizimi kalpler
   function yirtikSablon(g, W, H, o, f) {
     const P = f.P, r = rastgele(17), yk = f.yirtik || 760;
@@ -887,35 +787,6 @@ window.RC_KARTLAR = (function () {
     kalp(g, W - 160, yk + 120, 56); g.stroke(); g.globalAlpha = 0.55; kalp(g, W - 112, yk + 176, 30); g.stroke(); g.restore();
     altImza(g, W, o, P.yazi, P.vurgu, P.soluk);
     kunye(g, f, W - 36, yk / 2, "rgba(255,255,255,.75)", true);
-  }
-  // Şablon 9, harita: eski harita kağıdı, eş yükselti eğrileri, pusula; fotoğraf büyük bir konum iğnesinin içinde, kesik çizgili rota iğnenin ucuna varır
-  function haritaSablon(g, W, H, o, f) {
-    const P = f.P, r = rastgele(23);
-    g.fillStyle = P.zemin; g.fillRect(0, 0, W, H);
-    for (let i = 0; i < 2600; i++) { g.fillStyle = r() < 0.5 ? "rgba(110,80,40,.045)" : "rgba(255,255,255,.3)"; g.fillRect(r() * W, r() * H, 1 + r() * 2, 1 + r() * 2); }
-    g.strokeStyle = hexA(P.cizgi, 0.1); g.lineWidth = 1;
-    for (let x = 90; x < W; x += 150) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, H); g.stroke(); }
-    for (let y = 75; y < H; y += 150) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
-    esYukselti(g, 140, 1010, 10, 34, 5, hexA(P.cizgi, 0.17)); esYukselti(g, 960, 260, 8, 38, 9, hexA(P.cizgi, 0.15));
-    g.fillStyle = rz(g, W / 2, H / 2, 320, 900, [[0, "rgba(0,0,0,0)"], [1, hexA(P.kenar || "#5a3a1a", 0.2)]]); g.fillRect(0, 0, W, H);
-    pusula(g, 140, 150, 66, hexA(P.cizgi, 0.8), P.vurgu);
-    const cx = W / 2 + 40, cy = 372, Ro = 270, dO = Ro * 1.62, ty = cy + dO;
-    // kesik çizgili rota
-    g.save(); g.setLineDash([2, 18]); g.lineCap = "round"; g.strokeStyle = P.rota || P.vurgu; g.lineWidth = 9;
-    g.beginPath(); g.moveTo(-20, 560); g.bezierCurveTo(150, 540, 90, 760, 250, 800); g.bezierCurveTo(380, 832, 470, ty + 26, cx, ty); g.stroke(); g.restore();
-    g.fillStyle = hexA(P.cizgi, 0.2); g.beginPath(); g.ellipse(cx, ty + 2, 60, 16, 0, 0, PI2); g.fill();
-    // iğne
-    g.save(); g.shadowColor = "rgba(60,30,10,.45)"; g.shadowBlur = 36; g.shadowOffsetY = 18; igneYol(g, cx, cy, Ro, dO); g.fillStyle = P.igne || P.vurgu; g.fill(); g.restore();
-    igneYol(g, cx, cy, Ro, dO); g.fillStyle = dz(g, cx - Ro, cy - Ro, cx + Ro, ty, [[0, hexA("#ffffff", 0.18)], [0.5, "rgba(255,255,255,0)"], [1, "rgba(0,0,0,.18)"]]); g.fill();
-    const Ri = Ro - 26;
-    g.save(); g.beginPath(); g.arc(cx, cy, Ri, 0, PI2); g.clip();
-    if (o.foto) kapla(g, o.foto, cx - Ri, cy - Ri, 2 * Ri, 2 * Ri, f.odak); else { g.fillStyle = P.zemin2 || "#cdb88f"; g.fill(); }
-    g.fillStyle = rz(g, cx, cy, Ri * 0.75, Ri, [[0, "rgba(0,0,0,0)"], [1, "rgba(0,0,0,.25)"]]); g.fillRect(cx - Ri, cy - Ri, 2 * Ri, 2 * Ri);
-    g.restore();
-    g.strokeStyle = "rgba(255,255,255,.9)"; g.lineWidth = 4; g.beginPath(); g.arc(cx, cy, Ri, 0, PI2); g.stroke();
-    kunye(g, f, cx + Ro + 34, cy, hexA(P.yazi, 0.55), true);
-    fotoYazi(g, W, o, f, ty + 34, 1112);
-    altImza(g, W, o, P.yazi, P.vurgu, P.soluk);
   }
   // Şablon 10, dürbün: koyu zemin, fotoğraf dürbünle bakılıyormuş gibi iki yuvarlak merceğin içinde
   function durbunSablon(g, W, H, o, f) {
@@ -939,60 +810,6 @@ window.RC_KARTLAR = (function () {
     fotoYazi(g, W, o, f, cy + R + 92, 1112);
     altImza(g, W, o, P.yazi, P.vurgu, P.soluk);
   }
-  // Şablon 11, takvim yaprağı: duvarda asılı eski usul takvim; bant, büyük gün rakamı, ay ve gün adı, fotoğraf, günün sözü
-  function takvimSablon(g, W, H, o, f) {
-    const P = f.P, e = en(), r = rastgele(31), LC = e ? "en-GB" : "tr-TR";
-    zemin(g, W, H, [[0, P.zemin2 || P.zemin], [1, P.zemin]]);
-    if (P.desen) { g.save(); g.globalAlpha = P.desen; selcuk(g, 0, 0, W, H, 130, { zemin: "rgba(0,0,0,0)", yildiz: P.desenRenk, cizgi: P.desenRenk, ic: P.zemin }); g.restore(); }
-    isik(g, W / 2, 360, 820, hexA(P.isik || "#ffd27a", 0.16));
-    const x0 = 140, x1 = W - 140, y0 = 66, y1 = 1124, bant = 66;
-    // alttaki yaprakların kenarları
-    for (const k of [2, 1]) { g.fillStyle = k === 2 ? "#d9d0bd" : "#e8e0cf"; g.fillRect(x0 + k * 3, y0 + bant, x1 - x0 - k * 6, y1 - y0 - bant + k * 6); }
-    g.save(); g.shadowColor = "rgba(0,0,0,.5)"; g.shadowBlur = 44; g.shadowOffsetY = 20; g.fillStyle = P.kagit; g.fillRect(x0, y0 + bant - 4, x1 - x0, y1 - y0 - bant + 4); g.restore();
-    g.save(); g.beginPath(); g.rect(x0, y0, x1 - x0, y1 - y0); g.clip();
-    for (let i = 0; i < 2400; i++) { g.fillStyle = r() < 0.5 ? "rgba(100,70,40,.04)" : "rgba(255,255,255,.5)"; g.fillRect(x0 + r() * (x1 - x0), y0 + r() * (y1 - y0), 1 + r() * 2, 1 + r() * 2); }
-    g.restore();
-    // koparılan yaprağın bantta kalan dişli parçaları
-    g.fillStyle = "#efe7d6"; g.beginPath(); g.moveTo(x0, y0 + bant);
-    let x = x0; while (x < x1) { x = Math.min(x1, x + 7 + r() * 12); g.lineTo(x, y0 + bant + 5 + r() * 15); }
-    g.lineTo(x1, y0 + bant); g.closePath(); g.fill();
-    g.strokeStyle = "rgba(0,0,0,.08)"; g.lineWidth = 1; g.stroke();
-    // bant
-    g.fillStyle = dz(g, 0, y0, 0, y0 + bant, [[0, P.bant2], [1, P.bant]]); g.fillRect(x0 - 16, y0, x1 - x0 + 32, bant);
-    g.fillStyle = "rgba(255,255,255,.12)"; g.fillRect(x0 - 16, y0, x1 - x0 + 32, 3);
-    for (const hx of [x0 + 120, x1 - 120]) {
-      g.fillStyle = "rgba(0,0,0,.45)"; g.beginPath(); g.arc(hx, y0 + 20, 9, 0, PI2); g.fill();
-      g.strokeStyle = dz(g, hx - 14, 0, hx + 14, 0, [[0, "#8d8a84"], [0.5, "#f2efe8"], [1, "#8d8a84"]]); g.lineWidth = 5; g.beginPath(); g.arc(hx, y0 + 4, 16, Math.PI * 0.05, Math.PI * 0.95, true); g.stroke();
-    }
-    g.font = Y.PF(800, 19); Y.harfAra(g, 6); g.fillStyle = "rgba(255,255,255,.92)"; g.fillText(TL("ROTA CEPTE TAKVİMİ", "ROTA CEPTE CALENDAR"), W / 2 + 3, y0 + bant / 2 + 8); Y.harfAra(g, 0);
-    // tarih
-    const t = o.gun ? new Date(o.gun + "T12:00:00") : null;
-    const gunNo = t ? String(t.getDate()) : String(o.tarih || "").split(" ")[0];
-    const ay = t ? t.toLocaleDateString(LC, { month: "long" }).toLocaleUpperCase(LC) : "", yil = t ? t.getFullYear() : o.yil;
-    const hafta = t ? t.toLocaleDateString(LC, { weekday: "long" }).toLocaleUpperCase(LC) : "";
-    let y = y0 + bant + 74;
-    g.font = SERIF(800, 44); Y.harfAra(g, 12); g.fillStyle = P.vurgu; g.fillText(`${ay}  ${yil}`, W / 2 + 6, y); Y.harfAra(g, 0);
-    g.strokeStyle = hexA(P.vurgu, 0.5); g.lineWidth = 1.5; for (const d of [-1, 1]) { g.beginPath(); g.moveTo(x0 + 60, y + d * 34 + 4); g.lineTo(x1 - 60, y + d * 34 + 4); g.stroke(); }
-    g.save(); g.textBaseline = "alphabetic"; g.font = SERIF(900, 220); g.fillStyle = P.vurgu;
-    const ym = y + 62 + g.measureText(gunNo).actualBoundingBoxAscent; g.fillText(gunNo, W / 2, ym); g.restore();
-    g.font = Y.PF(800, 28); Y.harfAra(g, 14); g.fillStyle = P.yazi; g.fillText(hafta, W / 2 + 7, ym + 44); Y.harfAra(g, 0);
-    // fotoğraf
-    const fx0 = x0 + 48, fx1 = x1 - 48, fy0 = ym + 84, fy1 = fy0 + 256;
-    g.save(); g.beginPath(); g.rect(fx0, fy0, fx1 - fx0, fy1 - fy0); g.clip();
-    if (o.foto) kapla(g, o.foto, fx0, fy0, fx1 - fx0, fy1 - fy0, f.odak); else { g.fillStyle = P.bant; g.fillRect(fx0, fy0, fx1 - fx0, fy1 - fy0); }
-    g.restore();
-    g.strokeStyle = hexA(P.yazi, 0.3); g.lineWidth = 1.5; g.strokeRect(fx0 - 8, fy0 - 8, fx1 - fx0 + 16, fy1 - fy0 + 16);
-    kunye(g, f, fx1 + 8, fy1 + 30, hexA(P.yazi, 0.55), false, "right");
-    // günün sözü
-    const soz = e ? f.ayetEn : f.ayet;
-    fotoYazi(g, W, o, f, fy1 + 40, soz ? y1 - 92 : y1 - 30);
-    if (soz) {
-      g.strokeStyle = hexA(P.yazi, 0.2); g.lineWidth = 1; g.beginPath(); g.moveTo(x0 + 60, y1 - 84); g.lineTo(x1 - 60, y1 - 84); g.stroke();
-      g.font = SERIF(500, 25, true); g.fillStyle = hexA(P.yazi, 0.8); g.fillText(soz[0], W / 2, y1 - 56);
-      g.font = Y.PF(700, 16); Y.harfAra(g, 3); g.fillStyle = hexA(P.yazi, 0.55); g.fillText(soz[1], W / 2 + 2, y1 - 26); Y.harfAra(g, 0);
-    }
-    altImza(g, W, o, P.imza || "#fff", P.imzaVurgu || P.vurgu, P.imzaSoluk || "rgba(255,255,255,.7)");
-  }
   // Şablon 12, yıldız pencere: yıldızlı gece, fotoğraf altın çerçeveli büyük sekiz köşeli yıldızın içinde
   function yildizSablon(g, W, H, o, f) {
     const P = f.P, cx = W / 2, cy = 420, R = 330;
@@ -1012,49 +829,8 @@ window.RC_KARTLAR = (function () {
     fotoYazi(g, W, o, f, cy + R + 66, 1112);
     altImza(g, W, o, P.yazi, P.vurgu, P.soluk);
   }
-  // Şablon 13, bayram bileti: fotoğraflı yolculuk bileti; nereden nereye, tarih, koltuk; delikli çizginin altında kopan parçada bayram mesajı
-  function biletSablon(g, W, H, o, f) {
-    const P = f.P, e = en(), B = e ? f.biletEn : f.bilet;
-    zemin(g, W, H, [[0, P.zemin2], [1, P.zemin]]);
-    if (P.desen) { g.save(); g.globalAlpha = P.desen; selcuk(g, 0, 0, W, H, 120, { zemin: "rgba(0,0,0,0)", yildiz: P.desenRenk, cizgi: P.desenRenk, ic: P.zemin }); g.restore(); }
-    const x0 = 64, x1 = W - 64, y0 = 64, y1 = 1124, ys = 862, cr = 28, rr = 28;
-    const bilet = () => {
-      g.beginPath(); g.moveTo(x0 + rr, y0); g.lineTo(x1 - rr, y0); g.arcTo(x1, y0, x1, y0 + rr, rr); g.lineTo(x1, ys - cr); g.arc(x1, ys, cr, -Math.PI / 2, Math.PI / 2, true);
-      g.lineTo(x1, y1 - rr); g.arcTo(x1, y1, x1 - rr, y1, rr); g.lineTo(x0 + rr, y1); g.arcTo(x0, y1, x0, y1 - rr, rr); g.lineTo(x0, ys + cr); g.arc(x0, ys, cr, Math.PI / 2, -Math.PI / 2, true);
-      g.lineTo(x0, y0 + rr); g.arcTo(x0, y0, x0 + rr, y0, rr); g.closePath();
-    };
-    g.save(); g.shadowColor = "rgba(0,0,0,.45)"; g.shadowBlur = 40; g.shadowOffsetY = 18; bilet(); g.fillStyle = P.bilet; g.fill(); g.restore();
-    g.save(); bilet(); g.clip();
-    g.fillStyle = P.vurgu; g.fillRect(x0, y0, x1 - x0, 78);
-    g.font = Y.PF(800, 21); Y.harfAra(g, 5); g.fillStyle = "#fff"; g.textAlign = "left"; g.fillText("ROTA CEPTE", x0 + 36, y0 + 40); g.textAlign = "right"; g.fillText(B[0], x1 - 36, y0 + 40); Y.harfAra(g, 0); g.textAlign = "center";
-    const fx0 = x0 + 34, fx1 = x1 - 34, fy0 = y0 + 78 + 30, fy1 = fy0 + 330;
-    g.save(); g.beginPath(); g.roundRect(fx0, fy0, fx1 - fx0, fy1 - fy0, 16); g.clip();
-    if (o.foto) kapla(g, o.foto, fx0, fy0, fx1 - fx0, fy1 - fy0, f.odak); else { g.fillStyle = P.zemin2; g.fillRect(fx0, fy0, fx1 - fx0, fy1 - fy0); }
-    g.restore();
-    kunye(g, f, fx1, fy1 + 24, hexA(P.yazi, 0.5), false, "right");
-    // nereden nereye
-    const ry = fy1 + 80, etiket = (t, x, y, hiza) => { g.font = Y.PF(800, 16); Y.harfAra(g, 4); g.fillStyle = P.soluk; g.textAlign = hiza; g.fillText(t, x, y); Y.harfAra(g, 0); };
-    const deger = (t, x, y, hiza, px) => { g.font = SERIF(700, px || 40); g.fillStyle = P.yazi; g.textAlign = hiza; g.fillText(t, x, y); };
-    etiket(B[1], x0 + 40, ry, "left"); deger(B[2], x0 + 40, ry + 44, "left");
-    etiket(B[3], x1 - 40, ry, "right"); deger(B[4], x1 - 40, ry + 44, "right");
-    // ortada yol çizgisi ve kalp
-    g.save(); g.strokeStyle = hexA(P.vurgu, 0.6); g.lineWidth = 3; g.setLineDash([6, 8]); g.beginPath(); g.moveTo(W / 2 - 70, ry + 22); g.lineTo(W / 2 + 70, ry + 22); g.stroke(); g.restore();
-    kalp(g, W / 2, ry + 22, 34); g.fillStyle = P.vurgu; g.fill();
-    // tarih, koltuk, yolcu
-    const iy = ry + 118, hucre = (x1 - x0 - 80) / 3;
-    g.strokeStyle = hexA(P.yazi, 0.15); g.lineWidth = 1.5; g.beginPath(); g.moveTo(x0 + 40, iy - 34); g.lineTo(x1 - 40, iy - 34); g.stroke();
-    [[B[5], o.tarih || ""], [B[6], B[7]], [B[8], B[9]]].forEach(([et, dg], i) => { const x = x0 + 40 + hucre * i + hucre / 2; etiket(et, x, iy, "center"); g.font = Y.PF(800, 24); g.fillStyle = P.yazi; g.textAlign = "center"; let px = 24; while (g.measureText(dg).width > hucre - 16 && px > 16) { px -= 1; g.font = Y.PF(800, px); } g.fillText(dg, x, iy + 36); });
-    g.textAlign = "center";
-    // delikli çizgi
-    g.save(); g.strokeStyle = hexA(P.yazi, 0.35); g.lineWidth = 3; g.setLineDash([3, 12]); g.lineCap = "round"; g.beginPath(); g.moveTo(x0 + cr + 10, ys); g.lineTo(x1 - cr - 10, ys); g.stroke(); g.restore();
-    // kopan parçada barkod (dikey)
-    g.save(); g.translate(x1 - 40, (ys + y1) / 2); g.rotate(-Math.PI / 2); barkod(g, -80, -14, 160, 28, 1605, hexA(P.yazi, 0.8)); g.restore();
-    g.restore();
-    fotoYazi(g, W, o, f, ys + 26, y1 - 18);
-    altImza(g, W, o, P.imza || "#fff", P.imzaVurgu || P.vurgu, P.imzaSoluk || "rgba(255,255,255,.7)");
-  }
-  const SABLON = { tam: tamSablon, kemer: kemerSablon, kolaj: kolajSablon, maske: maskeSablon, madalyon: madalyonSablon, mektup: mektupSablon, cini: ciniSablon,
-    dergi: dergiSablon, yirtik: yirtikSablon, harita: haritaSablon, durbun: durbunSablon, takvim: takvimSablon, yildiz: yildizSablon, bilet: biletSablon };
+  const SABLON = { tam: tamSablon, kemer: kemerSablon, kolaj: kolajSablon, maske: maskeSablon, madalyon: madalyonSablon, cini: ciniSablon,
+    yirtik: yirtikSablon, durbun: durbunSablon, yildiz: yildizSablon };
   // Kar taneleri ve konfeti
   const kar = (g, W, H) => { const r = rastgele(77); g.save(); g.fillStyle = "rgba(255,255,255,.85)"; for (let i = 0; i < 160; i++) { const y = r() * 760, s = 1 + r() * 3.6; g.globalAlpha = 0.35 + r() * 0.6; g.beginPath(); g.arc(r() * W, y, s, 0, PI2); g.fill(); } g.restore(); };
   const kandilIsik = (g, W, H) => { bokeh(g, 0, 30, W, 560, 14, ["#ffcf7a", "#ffe6b0"], 1210, 8, 30); };
@@ -1063,45 +839,26 @@ window.RC_KARTLAR = (function () {
   const GECE = { zemin: "#0a1230", zemin2: "#16224d", vurgu: "#f0c67a", yazi: "#ffffff", soluk: "rgba(255,255,255,.8)", cerceve: "#e7c983" };
   const FK = {
     "kandil-f2": { s: "kemer", kredi: "Jorge Franganillo", lis: "CC BY 4.0", P: { ...GECE, desen: 0.12 }, alem: "hilal" },
-    "kadir-f2": { s: "kemer", kredi: "David Spender", lis: "CC BY 2.0", P: { ...GECE, zemin: "#0b0d26", zemin2: "#1b1d48" }, alem: "hilal" },
     "ramazan-f1": { s: "tam", fotoH: 820, kredi: "Cem Topçu", lis: "CC BY 2.5", P: { ...GECE, zemin: "#0c0a14" }, efekt: kandilIsik },
-    "kurban-f2": { s: "kemer", kredi: "Oumaima Loudini", lis: "CC BY 4.0", P: { zemin: "#0d1733", zemin2: "#1a2a55", vurgu: "#f0c67a", yazi: "#fff", soluk: "rgba(255,255,255,.8)", cerceve: "#e7c983", desen: 0.1 }, alem: "hilal" },
     "yilbasi-f2": { s: "kolaj", kredi: "Alexkom000, CC BY 4.0 · Kadı, CC BY 4.0 · Roc0ast3r, CC0", lis: ["düzenlendi", "edited"], soz: ["Yeni yollar", "Yeni şehirler", "Yeni anılar"], sozEn: ["New roads", "New cities", "New memories"],
       P: { zemin: "#0a1230", zemin2: "#1c2a5c", vurgu: "#f6d58e", yazi: "#fff", soluk: "rgba(255,255,255,.82)", cerceve: "#e7c983" }, elPx: 104, efekt0: (g, W, H) => { bokeh(g, 0, 0, W, 800, 22, ["#7fa8ff", "#ffd98a", "#c9b6ff"], 31, 14, 60); kar(g, W, H); } },
-    "babalar-f1": { s: "tam", fotoH: 820, kredi: "Sanket Mehta", lis: "CC BY 3.0", P: { zemin: "#1a0b08", vurgu: "#ffbe6b", yazi: "#fff", soluk: "rgba(255,255,255,.82)", cerceve: "#f0c48a" } },
     "demokrasi-f3": { s: "maske", kredi: "Huseyinakbas63", lis: "CC BY 4.0", soz: ["15", "TEMMUZ"], sozEn: ["15", "JULY"], elYok: true, tarihYok: true, agir: 700, basPx: 50,
       P: { zemin: "#07080d", vurgu: "#e30a17", yazi: "#fff", soluk: "rgba(255,255,255,.8)", cizgi: "#e30a17", cerceve: "#ffffff" } },
     "rbayram-f3": { s: "madalyon", kredi: "flowcomm", lis: "CC BY 2.0", kurdeleYazi: "RAMAZAN BAYRAMI", kurdeleEn: "EID AL-FITR",
       P: { zemin: "#062a2c", zemin2: "#0d4a4a", halka: "#05201f", vurgu: "#f2c46d", konfeti: "#ff9eb1", yazi: "#fff", soluk: "rgba(255,255,255,.82)", cerceve: "#e7c983", kurdele: "#c0182f", kurdeleKoyu: "#7d0b1f", desen: 0.13 } },
-    "anneler-f3": { s: "mektup", kredi: "Güldem Üstün", lis: "CC BY 2.0", yer: "Emirgan Korusu", yerEn: "Emirgan Park",
-      mektup: ["Canım Annem,", "Anneler Günün kutlu olsun! Bana yolu sen gösterdin, her yolculukta kalbimdesin. İyi ki varsın.", "Sevgiyle"],
-      mektupEn: ["Dear Mom,", "Happy Mother's Day! You showed me the way, and you are in my heart on every journey. I'm so glad you're my mom.", "With love"],
-      P: { zemin: "#f7f0e4", vurgu: "#b8455a", tarih: "#b8455a", el: "#a63a50", yazi: "#3b2a26", soluk: "#7a625a", cizgi: "#7c93b8" } },
-    "anneler-f5": { s: "dergi", kredi: "Shixart1985", lis: "CC BY 2.0", elYok: true, tarihYok: true, dergi: "ANNE", dergiEn: "MOTHER",
-      sayi: "ANNELER GÜNÜ ÖZEL SAYISI", sayiEn: "MOTHER'S DAY SPECIAL ISSUE", fiyat: "FİYATI: PAHA BİÇİLEMEZ", fiyatEn: "PRICE: PRICELESS",
-      kapak: ["KAPAK KONUSU", "Tüm annelere", "sevgiyle"], kapakEn: ["COVER STORY", "To all mothers,", "with love"], ton: "#ff9a5c",
-      P: { zemin: "#2a1218", vurgu: "#ff9fb2", yazi: "#fff", soluk: "rgba(255,255,255,.82)", cizgi: "#ff9fb2", dergi: "#fff" } },
     "anneler-f6": { s: "yirtik", kredi: "Bonnie Kittle", lis: "CC0",
       P: { kagit: "#fbf4ee", serit: "#eaa2b0", vurgu: "#c2416b", el: "#b0365c", elGolgesiz: true, tarih: "#b0365c", yazi: "#3a1d25", soluk: "#7a5961", cizgi: "#c2416b" } },
-    "babalar-f3": { s: "harita", kredi: "L'Orso Sul Monociclo", lis: "CC BY 2.0",
-      P: { zemin: "#efe2c4", zemin2: "#cdb88f", cizgi: "#6b4b22", vurgu: "#c0392b", igne: "#d9472b", rota: "#c0392b", el: "#7a3b12", elGolgesiz: true, tarih: "#a0471f", yazi: "#3b2a17", soluk: "#6e5a40", kenar: "#5a3a1a" } },
     "babalar-f4": { s: "durbun", kredi: "Alexey Komarov", lis: "CC BY 3.0",
       P: { zemin: "#0c1411", zemin2: "#1b2a23", vurgu: "#e0b15a", tarih: "#e0b15a", yazi: "#fff", soluk: "rgba(255,255,255,.8)", govde: "#14181b" } },
-    "kadir-f3": { s: "takvim", kredi: "Jorge Láscar", lis: "CC BY 2.0", tarihYok: true, elPx: 112, yaziEn: 700,
-      ayet: ["Kadir gecesi, bin aydan daha hayırlıdır.", "KADR SURESİ, 3. AYET"], ayetEn: ["The Night of Decree is better than a thousand months.", "SURAH AL-QADR, 97:3"],
-      P: { zemin: "#0b1430", zemin2: "#17244d", desen: 0.07, desenRenk: "#e7c983", isik: "#ffd27a", kagit: "#fbf6ea", bant: "#a8141f", bant2: "#7d0f19", vurgu: "#b3121f", el: "#9c6b1e", elGolgesiz: true, yazi: "#2a2018", soluk: "#6d5f50", cizgi: "#b3121f", imzaVurgu: "#f0c67a" } },
     "kadir-f4": { s: "yildiz", kredi: "Gruen", lis: KM,
       P: { zemin: "#070b1f", zemin2: "#141c45", vurgu: "#f0c67a", halka: "#0b1030", yazi: "#fff", soluk: "rgba(255,255,255,.8)" } },
-    "kurban-f3": { s: "bilet", kredi: "BLM California", lis: KM, tarihYok: true, elPx: 104, yaziEn: 780,
-      bilet: ["BAYRAM SEFERİ", "NEREDEN", "Bulunduğun şehir", "NEREYE", "Sevdiklerinin yanı", "TARİH", "KOLTUK", "Baş köşe", "YOLCU", "Bütün aile"],
-      biletEn: ["HOLIDAY TRIP", "FROM", "Where you are", "TO", "Your loved ones", "DATE", "SEAT", "Seat of honour", "PASSENGERS", "The whole family"],
-      P: { zemin: "#0b2a33", zemin2: "#14424d", desen: 0.07, desenRenk: "#e9c46a", bilet: "#fbf6ec", vurgu: "#c8432b", el: "#c8432b", elGolgesiz: true, yazi: "#1f2a33", soluk: "#7a8590", cizgi: "#c8432b", imzaVurgu: "#e9c46a" } },
     "kurban-f4": { s: "cini", kredi: "Oumaima Loudini", lis: "CC BY 4.0",
       P: { zemin: "#fbf7ee", zemin2: "#f3ecdc", vurgu: "#1d4f9a", tarih: "#c8352b", el: "#1d4f9a", elGolgesiz: true, yazi: "#1d2a44", soluk: "#55607a", cizgi: "#c8352b", kunye: "rgba(29,42,68,.6)",
         cini: { zemin: "#fbf8f0", kobalt: "#1d4f9a", turkuaz: "#1f9e93", kirmizi: "#c8352b" } } }
   };
   for (const k of Object.keys(FK)) FK[k].foto = `kart/${k}.jpg`;
-  const fotoTasarim = (g, W, H, o) => { const f = FK[o.kart]; SABLON[f.s](g, W, H, o, f); };
+  // Fotoğraf yüklenemezse (çevrimdışı) fotoğraf kredisi de yazılmaz
+  const fotoTasarim = (g, W, H, o) => { const f = FK[o.kart]; SABLON[f.s](g, W, H, o, o.foto ? f : { ...f, kredi: "" }); };
   for (const k of Object.keys(FK)) K[k] = fotoTasarim;
 
   return {

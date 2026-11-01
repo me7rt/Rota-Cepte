@@ -168,7 +168,7 @@
    "tr": "Kadir Geceniz mübarek olsun!",
    "en": "Blessed Night of Power (Kadir Gecesi)!",
    "sayac": 1,
-   "kart": "kadir-f2",
+   "kart": "kadir-f4",
    "mahya": {
     "tr": "KADİR GECESİ"
    }
@@ -179,7 +179,11 @@
    "e": "💐",
    "tr": "Anneler Günü kutlu olsun! Bugün annenle bir yere gitmeye ne dersin?",
    "en": "Happy Mother's Day! Why not take your mum somewhere today?",
-   "kart": "anneler-f3"
+   "kart": "anneler-f6",
+   "kartAlt": {
+    "tr": "İlk yol arkadaşımız annelerimize sevgiyle.",
+    "en": "To our mothers, our very first travel companions."
+   }
   },
   {
    "bas": "2027-06-20",
@@ -187,7 +191,11 @@
    "e": "👔",
    "tr": "Babalar Günü kutlu olsun! Bugün babanla bir yere gitmeye ne dersin?",
    "en": "Happy Father's Day! Why not take your dad somewhere today?",
-   "kart": "babalar-f1"
+   "kart": "babalar-f4",
+   "kartAlt": {
+    "tr": "Bize yolu ilk gösteren babalarımıza sevgiyle.",
+    "en": "To our fathers, who first showed us the way."
+   }
   },
   {
    "bas": "2027-02-08",
@@ -221,7 +229,7 @@
    "bayram": 1,
    "ad": "Kurban Bayramı",
    "adEn": "Eid al-Adha",
-   "kart": "kurban-f2"
+   "kart": "kurban-f4"
   }
  ]
 }
