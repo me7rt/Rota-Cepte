@@ -10,10 +10,7 @@ const temiz = (em, k) => (em[k] ? String(em[k].value).replace(/<[^>]+>/g, " ").r
 const out = "out"; fs.mkdirSync(out + "/b", { recursive: true });
 
 // 1) Seçilen dosyaları büyük boy indir (kısa kenar ~1500 px)
-const SECILEN = {
-  "bayrak-27": "Turkish flag waving in the sky.jpg", "cini-01": "Tile - Google Art Project (471020).jpg",
-  "cini-14": "Tile Panel MET LC-17 190 2085.jpg", "bayrak-10": "Turkish Flag through Greenery of Castle Hill, Alanya, Türkiye, 2024.jpg"
-};
+const SECILEN = {};
 const bilgi = {};
 for (const [no, ad] of Object.entries(SECILEN)) {
   const j = await al({ action: "query", titles: "File:" + ad, prop: "imageinfo", iiprop: "url|size|extmetadata", iiextmetadatafilter: EM });
@@ -32,7 +29,12 @@ fs.writeFileSync(`${out}/secilen.json`, JSON.stringify(bilgi, null, 1));
 
 // 2) Ek arama: yeni tasarımlar için aday fotoğraflar
 const QI = ' incategory:"Quality_images"', FP = ' incategory:"Featured_pictures_on_Wikimedia_Commons"';
-const TEMA = {};
+const TEMA = {
+  anne: { kat: ["Mothers and children walking", "Silhouettes of mothers and children", "Hands of mothers and children"], ara: ["mother child walking path back view", "mother daughter holding hands walking", "mother and child silhouette sunset", "mother baby hands close-up", "mother son walking beach behind", "mother child hands holding"] },
+  baba: { kat: ["Fathers and children walking", "Silhouettes of fathers and children"], ara: ["father son fishing pier silhouette", "father child hiking mountain back view", "father daughter walking road behind", "father son walking forest path", "father child shoulders view landscape"] },
+  kadir: { kat: ["Milky Way over mosques"], ara: ["milky way mosque night", "starry sky mosque", "night sky stars mosque minaret", "Cappadocia night stars", "crescent moon mosque night sky", "star trails mosque"] },
+  yol: { kat: ["Roads in Turkey"], ara: ["mountain road Turkey landscape", "winding road Anatolia", "road trip Turkey highway", "country road Turkey sunset", "serpentine road Turkey mountains", "road Kapadokya"] }
+};
 const sonuc = {};
 for (const [tema, t] of Object.entries(TEMA)) {
   const adlar = new Set();
