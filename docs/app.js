@@ -2296,6 +2296,342 @@
     if (navigator.share) navigator.share({ title: adi(p), text: metin, url }).catch(() => {});
     else window.open("https://wa.me/?text=" + encodeURIComponent(metin + " " + url), "_blank");
   }
+  // ---------- v6.5 paylaşım görselleri: özel gün kartı ve fotoğraflı yer kartı (1080x1350) ----------
+  const PF = (w, px) => `${w} ${px}px Manrope, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`;
+  // Manrope iki dosyadır: ğ, ş, İ ayrı parçada. İkisi de yüklenmeden çizilirse bu harfler başka yazı tipiyle çıkar
+  async function yaziTipiHazir() { try { await document.fonts.load("800 40px Manrope", "Rota ĞğŞşİı"); } catch (e) {} }
+  const harfAra = (g, px) => { try { g.letterSpacing = px + "px"; } catch (e) {} };
+  function resimYukle(src, ms, cors) {
+    return new Promise((ok, hata) => {
+      const im = new Image(); if (cors) im.crossOrigin = "anonymous";
+      const t = setTimeout(() => { im.onload = im.onerror = null; hata(new Error("zaman aşımı")); }, ms);
+      im.onload = () => { clearTimeout(t); ok(im); };
+      im.onerror = () => { clearTimeout(t); hata(new Error("yüklenemedi")); };
+      im.src = src;
+    });
+  }
+  function sar(g, metin, en) {
+    const s = [];
+    for (const k of metin.split(/\s+/).filter(Boolean)) {
+      const yeni = s.length ? s[s.length - 1] + " " + k : k;
+      if (s.length && g.measureText(yeni).width <= en) s[s.length - 1] = yeni; else s.push(k);
+    }
+    return s;
+  }
+  // En çok `max` satır: sığmazsa küçült, en küçükte de sığmazsa "…" ile bitir. Ortalı yazıda satır boyları dengelenir (tek kelime kalmasın)
+  function satirla(g, metin, en, font, px, min, max, dengesiz) {
+    let s;
+    for (; ; px -= 2) { g.font = font(px); s = sar(g, metin, en); if ((s.length <= max && s.every((x) => g.measureText(x).width <= en)) || px <= min) break; }
+    if (s.length > max) {
+      s = s.slice(0, max); let x = s[max - 1];
+      while (x.length > 1 && g.measureText(x + "…").width > en) x = x.slice(0, -1);
+      s[max - 1] = x.replace(/[\s,.;:·–-]+$/, "") + "…";
+    } else if (s.length > 1 && !dengesiz) {
+      let a = en / 2, b = en;
+      while (b - a > 3) { const m = (a + b) / 2; if (sar(g, metin, m).length <= s.length) b = m; else a = m; }
+      s = sar(g, metin, b);
+    }
+    return { s, px };
+  }
+  // Yazı bloğu { h, ciz(y) }: y bloğun üst kenarı
+  function blok(g, metin, o) {
+    const r = satirla(g, metin, o.en, o.font, o.px, o.min || o.px, o.max || 3), L = Math.round(r.px * (o.lh || 1.24));
+    return { h: r.s.length * L, ciz: (y) => { g.font = o.font(r.px); g.fillStyle = o.renk; r.s.forEach((t, i) => g.fillText(t, o.x, y + L * i + L / 2)); } };
+  }
+  // Harf aralıklı büyük harf tarih satırı ("29 EKİM 1923 – 2026")
+  const tarihSatiri = (g, W, metin, renk, px) => ({ h: 40, ciz: (y) => { g.font = PF(800, px); g.fillStyle = renk; harfAra(g, 7); g.fillText(metin, W / 2, y + 20); harfAra(g, 0); } });
+  // Blokları alana dikey ortala (sayılar boşluk)
+  function diz(liste, ust, alt) {
+    const top = liste.reduce((a, b) => a + (typeof b === "number" ? b : b.h), 0);
+    let y = ust + Math.max(0, (alt - ust - top) / 2);
+    for (const b of liste) { if (typeof b === "number") y += b; else { b.ciz(y); y += b.h; } }
+  }
+  // "Başlık! Devamı." -> ["Başlık!", "Devamı."] ("103. yılı" gibi sayıdan sonraki nokta cümle sonu sayılmaz)
+  const bol = (m) => { const x = /^(.+?[^\d\s][.!?])\s+(.+)$/.exec(m); return x ? [x[1], x[2]] : [m, ""]; };
+  const buyuk = (s) => s.toLocaleUpperCase(DIL === "en" ? "en" : "tr");
+  const LOC = () => (DIL === "en" ? "en-GB" : "tr-TR");
+  // Alt imza: ikon + Rota Cepte, slogan, adres
+  function imza(g, W, y, ikon, renk, vurgu, soluk) {
+    const IK = ikon ? 60 : 0, ARA = IK ? 18 : 0;
+    g.font = PF(800, 36); const w = g.measureText("Rota Cepte").width, x0 = (W - IK - ARA - w) / 2;
+    if (IK) { g.save(); g.beginPath(); g.roundRect(x0, y - IK / 2, IK, IK, 15); g.clip(); g.drawImage(ikon, x0, y - IK / 2, IK, IK); g.restore(); }
+    g.textAlign = "left"; g.fillStyle = renk; g.fillText("Rota Cepte", x0 + IK + ARA, y + 1);
+    g.textAlign = "center"; g.fillStyle = vurgu; sigdir(g, T("Yol senin, rotan cepte!"), W / 2, y + 56, W - 200, (px) => PF(700, px), 29);
+    g.fillStyle = soluk; g.font = PF(600, 25); g.fillText("me7rt.github.io/Rota-Cepte", W / 2, y + 93);
+  }
+  // Ay-yıldız, Türk Bayrağı Kanunu oranlarıyla (G: bayrak eni). Ayın dış dairesi 0,5G, iç dairesi 0,4G çaplı ve 1/16G içeride;
+  // yıldız 0,25G çaplı daireye çizilir, bu daire ayın iç dairesinden 1/3G uzaktadır, bir ucu aya bakar. (x, y): grubun ortası
+  function ayYildiz(g, x, y, G, renk) {
+    const r1 = G / 4, r2 = G / 5, d = G / 16, R = G / 8, ys = d - r2 + G / 3 + R;
+    const cx = x - (ys + R - r1) / 2;
+    const ix = (d * d + r1 * r1 - r2 * r2) / (2 * d), iy = Math.sqrt(r1 * r1 - ix * ix), a1 = Math.atan2(iy, ix), a2 = Math.atan2(iy, ix - d);
+    g.fillStyle = renk; g.beginPath();
+    g.arc(cx, y, r1, -a1, a1, true); g.arc(cx + d, y, r2, a2, -a2, false); g.closePath();
+    const sx = cx + ys; g.moveTo(sx - R, y);
+    for (let i = 1; i < 10; i++) { const a = Math.PI + (i * Math.PI) / 5, r = i % 2 ? R * 0.381966 : R; g.lineTo(sx + Math.cos(a) * r, y + Math.sin(a) * r); }
+    g.closePath(); g.fill();
+  }
+  // İnce hilal: altın degrade, fener ışığı gibi parıltı
+  function hilal(g, x, y, r) {
+    const o = document.createElement("canvas"); o.width = o.height = Math.ceil(r * 2 + 8);
+    const h = o.getContext("2d"), m = o.width / 2, gr = h.createLinearGradient(0, 0, o.width, o.height);
+    gr.addColorStop(0, "#fff3d1"); gr.addColorStop(1, "#e3ac52");
+    h.fillStyle = gr; h.beginPath(); h.arc(m, m, r, 0, Math.PI * 2); h.fill();
+    h.globalCompositeOperation = "destination-out"; h.beginPath(); h.arc(m + r * 0.4, m - r * 0.24, r * 0.84, 0, Math.PI * 2); h.fill();
+    g.save(); g.shadowColor = "rgba(255,210,140,.6)"; g.shadowBlur = 56; g.drawImage(o, x - m, y - m); g.restore();
+  }
+  function parilti(g, x, y, s, renk) {
+    g.fillStyle = renk; g.beginPath(); g.moveTo(x, y - s);
+    g.quadraticCurveTo(x, y, x + s, y); g.quadraticCurveTo(x, y, x, y + s); g.quadraticCurveTo(x, y, x - s, y); g.quadraticCurveTo(x, y, x, y - s); g.fill();
+  }
+  // Millî bayram: bayrak kırmızısı, ay-yıldız, "1923 – 2026", büyük "103. yıl"
+  function kartMilli(g, W, H, o) {
+    const z = g.createRadialGradient(W / 2, 420, 80, W / 2, 560, 1050);
+    z.addColorStop(0, "#f2232e"); z.addColorStop(0.55, "#e30a17"); z.addColorStop(1, "#a3040f");
+    g.fillStyle = z; g.fillRect(0, 0, W, H);
+    g.strokeStyle = "rgba(255,255,255,.32)"; g.lineWidth = 2; g.strokeRect(44, 44, W - 88, H - 88);
+    const [bas, alt] = bol(o.msj), liste = [];
+    liste.push({ h: 250, ciz: (y) => { g.save(); g.shadowColor = "rgba(80,0,8,.35)"; g.shadowBlur = 40; g.shadowOffsetY = 10; ayYildiz(g, W / 2, y + 125, 500, "#fff"); g.restore(); } }, 72);
+    liste.push(tarihSatiri(g, W, o.tarih, "rgba(255,255,255,.9)", 32), o.sayi ? 44 : 56);
+    if (o.sayi) liste.push({ h: 172, ciz: (y) => {
+      const s = DIL === "en" ? String(o.sayi) : o.sayi + ".", e = DIL === "en" ? (o.sayi === 1 ? "year" : "years") : "yıl", ara = DIL === "en" ? 26 : 14;
+      g.font = PF(800, 200); const w1 = g.measureText(s).width; g.font = PF(700, 80); const w2 = g.measureText(e).width, x0 = (W - w1 - ara - w2) / 2;
+      g.textAlign = "left"; g.textBaseline = "alphabetic"; g.fillStyle = "#fff";
+      g.font = PF(800, 200); g.fillText(s, x0, y + 158); g.font = PF(700, 80); g.fillStyle = "rgba(255,255,255,.86)"; g.fillText(e, x0 + w1 + ara, y + 158);
+      g.textAlign = "center"; g.textBaseline = "middle";
+    } }, 30);
+    liste.push(blok(g, bas, { en: 900, font: (px) => PF(800, px), px: 60, min: 44, max: 3, renk: "#fff", x: W / 2 }));
+    if (alt) liste.push(20, blok(g, alt, { en: 860, font: (px) => PF(600, px), px: 38, min: 30, max: 3, lh: 1.35, renk: "rgba(255,255,255,.88)", x: W / 2 }));
+    diz(liste, 96, 1090);
+    g.fillStyle = "rgba(255,255,255,.35)"; g.fillRect(W / 2 - 60, 1118, 120, 2);
+    imza(g, W, 1172, o.ikon, "#fff", "#fff", "rgba(255,255,255,.78)");
+  }
+  // Dinî gün: gece mavisi, hilal ve yıldızlar
+  function kartDini(g, W, H, o) {
+    const z = g.createLinearGradient(0, 0, 0, H);
+    z.addColorStop(0, "#060d26"); z.addColorStop(0.55, "#11214f"); z.addColorStop(1, o.bayram ? "#2f3b7c" : "#1a2c66");
+    g.fillStyle = z; g.fillRect(0, 0, W, H);
+    // ayın çevresinde yumuşak ışık (screen: laciverdi bulandırmadan aydınlatır)
+    const r = g.createRadialGradient(W / 2, 320, 0, W / 2, 320, 460); r.addColorStop(0, "rgba(255,222,170,.22)"); r.addColorStop(1, "rgba(255,222,170,0)");
+    g.save(); g.globalCompositeOperation = "screen"; g.fillStyle = r; g.fillRect(0, 0, W, H); g.restore();
+    // yıldızlar: yazıların ve ayın üstüne düşmesin
+    let t = 20261210; const rnd = () => ((t = (t * 16807) % 2147483647) / 2147483647);
+    g.fillStyle = "#fff";
+    for (let i = 0; i < 260; i++) {
+      const x = rnd() * W, y = rnd() * H, k = rnd();
+      if ((y > 560 && x > 130 && x < W - 130) || y > 1120 || Math.hypot(x - W / 2, y - 320) < 230) continue;
+      g.globalAlpha = 0.12 + k * 0.5; g.beginPath(); g.arc(x, y, 0.8 + k * 1.7, 0, Math.PI * 2); g.fill();
+    }
+    g.globalAlpha = 1;
+    for (const [x, y, s] of [[200, 190, 20], [880, 150, 15], [860, 450, 11], [215, 500, 13], [990, 760, 10], [92, 880, 11]]) parilti(g, x, y, s, "rgba(255,226,166,.9)");
+    g.strokeStyle = "rgba(236,196,120,.38)"; g.lineWidth = 2; g.strokeRect(44, 44, W - 88, H - 88);
+    g.strokeStyle = "rgba(236,196,120,.18)"; g.strokeRect(56, 56, W - 112, H - 112);
+    hilal(g, W / 2 - 18, 310, 145);
+    const [bas, alt] = bol(o.msj), liste = [];
+    liste.push(tarihSatiri(g, W, o.tarih, "#f0c67a", 30), 30);
+    liste.push({ h: 12, ciz: (y) => { g.fillStyle = "rgba(240,198,122,.6)"; g.fillRect(W / 2 - 90, y + 5, 64, 2); g.fillRect(W / 2 + 26, y + 5, 64, 2); g.save(); g.translate(W / 2, y + 6); g.rotate(Math.PI / 4); g.fillRect(-6, -6, 12, 12); g.restore(); } }, 40);
+    liste.push(blok(g, bas, { en: 860, font: (px) => PF(800, px), px: 74, min: 50, max: 4, lh: 1.2, renk: "#fff", x: W / 2 }));
+    if (alt) liste.push(24, blok(g, alt, { en: 840, font: (px) => PF(600, px), px: 38, min: 30, max: 3, lh: 1.35, renk: "rgba(255,255,255,.85)", x: W / 2 }));
+    diz(liste, 540, 1100);
+    imza(g, W, 1172, o.ikon, "#fff", "#f0c67a", "rgba(255,255,255,.7)");
+  }
+  // Diğer günler: uygulamanın gün batımı renkleri (kum, turuncu, lacivert), dağların ardında güneş
+  function kartGenel(g, W, H, o) {
+    let z = g.createLinearGradient(0, 0, 0, 640); z.addColorStop(0, "#f6eee7"); z.addColorStop(0.55, "#f8d6bd"); z.addColorStop(1, "#f4a77e");
+    g.fillStyle = z; g.fillRect(0, 0, W, H);
+    const gx = W / 2, gy = 500, gr = 170;
+    const r = g.createRadialGradient(gx, gy, gr * 0.7, gx, gy, gr * 2.6); r.addColorStop(0, "rgba(255,150,90,.45)"); r.addColorStop(1, "rgba(255,150,90,0)");
+    g.fillStyle = r; g.fillRect(0, 0, W, 700);
+    z = g.createLinearGradient(0, gy - gr, 0, gy + gr); z.addColorStop(0, "#ffb878"); z.addColorStop(0.7, "#e2522a"); z.addColorStop(1, "#d13415");
+    g.fillStyle = z; g.beginPath(); g.arc(gx, gy, gr, 0, Math.PI * 2); g.fill();
+    // dağlar: uzaktakiler puslu ve sivri, öndekiler yumuşak tepe, en önde lacivert (uygulama ikonundaki gibi)
+    const sirt = (renk, n, yumusak) => {
+      g.fillStyle = renk; g.beginPath(); g.moveTo(-10, H); g.lineTo(n[0][0], n[0][1]);
+      for (let i = 1; i < n.length - 1; i++) {
+        if (yumusak) g.quadraticCurveTo(n[i][0], n[i][1], (n[i][0] + n[i + 1][0]) / 2, (n[i][1] + n[i + 1][1]) / 2); else g.lineTo(n[i][0], n[i][1]);
+      }
+      const s = n[n.length - 1]; g.lineTo(s[0], s[1]); g.lineTo(W + 10, H); g.closePath(); g.fill();
+    };
+    sirt("#eba68b", [[-20, 520], [90, 452], [170, 500], [300, 410], [430, 488], [520, 458], [640, 505], [760, 430], [860, 470], [980, 400], [1100, 470]]);
+    sirt("#b98c9f", [[-20, 590], [120, 530], [250, 575], [380, 515], [540, 585], [690, 540], [820, 580], [960, 520], [1100, 570]]);
+    sirt("#56609a", [[-40, 650], [170, 605], [380, 662], [580, 618], [790, 668], [980, 612], [1120, 640]], true);
+    sirt("#1f2d5c", [[-40, 718], [220, 684], [480, 716], [700, 690], [920, 718], [1120, 694]], true);
+    const [bas, alt] = bol(o.msj), liste = [];
+    liste.push(tarihSatiri(g, W, o.tarih, "#ffc53d", 30), 30);
+    liste.push(blok(g, bas, { en: 900, font: (px) => PF(800, px), px: 66, min: 46, max: 3, lh: 1.2, renk: "#fff", x: W / 2 }));
+    if (alt) liste.push(22, blok(g, alt, { en: 860, font: (px) => PF(600, px), px: 36, min: 28, max: 4, lh: 1.38, renk: "rgba(255,255,255,.84)", x: W / 2 }));
+    diz(liste, 750, 1110);
+    imza(g, W, 1180, o.ikon, "#fff", "#ff9a6b", "rgba(255,255,255,.7)");
+  }
+  // 10 Kasım: siyah zemin, ince kırmızı çizgi, söz. Neşeli slogan ve renkli ikon yok
+  function kartYas(g, W, H, o) {
+    const z = g.createLinearGradient(0, 0, 0, H); z.addColorStop(0, "#0f1114"); z.addColorStop(1, "#23272e");
+    g.fillStyle = z; g.fillRect(0, 0, W, H);
+    g.fillStyle = "#e30a17"; g.fillRect(0, 0, W, 8);
+    const liste = [];
+    liste.push(tarihSatiri(g, W, o.tarih, "#b9c0c9", 30), 26);
+    liste.push({ h: 4, ciz: (y) => { g.fillStyle = "#e30a17"; g.fillRect(W / 2 - 40, y, 80, 3); } }, 46);
+    liste.push(blok(g, o.bas, { en: 920, font: (px) => PF(800, px), px: 78, min: 50, max: 2, lh: 1.16, renk: "#fff", x: W / 2 }), 28);
+    liste.push(blok(g, o.alt, { en: 880, font: (px) => PF(500, px), px: 42, min: 32, max: 4, lh: 1.42, renk: "#c9ced6", x: W / 2 }));
+    if (o.soz) {
+      // söz kesilmesin: önce 3 dengeli satır dene, olmazsa daha çok satır; kutu yazıya göre daralır ve ortalanır
+      const f = (px) => PF(500, px), en = W - 312;
+      let s = satirla(g, o.soz, en, f, 42, 38, 3);
+      if (s.s.join(" ") !== o.soz) s = satirla(g, o.soz, en, f, 42, 32, 6);
+      g.font = f(s.px); let mw = Math.max(...s.s.map((t) => g.measureText(t).width));
+      g.font = PF(800, 30); mw = Math.max(mw, g.measureText(o.kim).width);
+      const se = Math.round(mw + 120), sx = (W - se) / 2, L = Math.round(s.px * 1.42), sh = s.s.length * L + 150;
+      liste.push(64, { h: sh, ciz: (y) => {
+        g.fillStyle = "rgba(255,255,255,.055)"; g.beginPath(); g.roundRect(sx, y, se, sh, 24); g.fill();
+        g.fillStyle = "#e30a17"; g.beginPath(); g.roundRect(sx, y, 6, sh, [24, 0, 0, 24]); g.fill();
+        g.textAlign = "left"; g.font = PF(500, s.px); g.fillStyle = "#f3f4f6";
+        s.s.forEach((t, i) => g.fillText(t, sx + 60, y + 48 + L * i + L / 2));
+        g.font = PF(800, 30); g.fillStyle = "#aab1bb"; g.fillText(o.kim, sx + 60, y + sh - 56);
+        g.textAlign = "center";
+      } });
+    }
+    diz(liste, 80, 1180);
+    g.font = PF(700, 26); g.fillStyle = "#858d97"; g.fillText("Rota Cepte · me7rt.github.io/Rota-Cepte", W / 2, 1272);
+  }
+  // Önizleme ve paylaş
+  function gorselOnizle(url, ad, metin) {
+    const d = document.createElement("div"); d.className = "tanit";
+    d.innerHTML = `<div class="tkart karnek"><img src="${url}" alt="${esc(TL("Paylaşılacak görsel", "Image to share"))}"><div class="tbtn"><button class="linkbtn" data-k="kapat">${T("Kapat")}</button><button class="btn primary" data-k="paylas">${ik("share-2", 18)} ${TL("Paylaş", "Share")}</button></div></div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    d.addEventListener("click", (e) => {
+      if (e.target === d || e.target.closest("[data-k=kapat]")) return kapat();
+      if (e.target.closest("[data-k=paylas]")) gorselPaylas(url, ad, metin);
+    });
+    document.body.appendChild(d);
+  }
+  // Özel gün şeridine "Kartı paylaş" düğmesi. 6 Şubat gibi afet anma günlerinde paylaşım kartı yok (yalnızca şerit)
+  function ozelKartDugme(b, og, n, msj) {
+    if (og.yas && !og.saygi) return;
+    const d = document.createElement("button"); d.type = "button"; d.className = "ogpay";
+    d.innerHTML = `${ik("share-2", 15)}<span>${TL("Kartı paylaş", "Share card")}</span>`;
+    d.addEventListener("click", (e) => { e.stopPropagation(); ozelKart(og, n, msj, d); });
+    b.querySelector("span").appendChild(d);
+  }
+  async function ozelKart(og, n, msj, dugme) {
+    if (dugme.disabled) return;
+    dugme.disabled = true;
+    try {
+      await yaziTipiHazir();
+      const ikon = await resimYukle("icon-192.png", 4000).catch(() => null);
+      const W = 1080, H = 1350, c = document.createElement("canvas"); c.width = W; c.height = H;
+      const g = c.getContext("2d"); g.textAlign = "center"; g.textBaseline = "middle";
+      const yil = n.getFullYear(), gunAy = n.toLocaleDateString(LOC(), { day: "numeric", month: "long" });
+      const tarihAraligi = (a, b) => {
+        const A = new Date(a + "T12:00:00"), B = new Date(b + "T12:00:00"), uzun = { day: "numeric", month: "long", year: "numeric" };
+        if (a === b) return A.toLocaleDateString(LOC(), uzun);
+        return (A.getMonth() === B.getMonth() ? A.getDate() + "–" : A.toLocaleDateString(LOC(), { day: "numeric", month: "long" }) + " – ") + B.toLocaleDateString(LOC(), uzun);
+      };
+      const o = { msj, ikon };
+      if (og.yas) {
+        o.tarih = buyuk(`${gunAy} ${og.yil || yil}`) + (og.saygi ? TL(" · 09.05", " · 09:05") : "");
+        if (og.saygi) {
+          o.bas = TL(`Ebediyete intikalinin ${yil - og.yil}. yılında`, `${yil - og.yil} years since his passing`);
+          o.alt = TL("Cumhuriyetimizin kurucusu Gazi Mustafa Kemal Atatürk'ü saygı, sevgi ve özlemle anıyoruz.", "We remember Mustafa Kemal Atatürk, founder of the Republic of Türkiye, with respect and longing.");
+          o.soz = TL("“Benim naçiz vücudum elbet bir gün toprak olacaktır, fakat Türkiye Cumhuriyeti ilelebet payidar kalacaktır.”", "“My humble body will one day turn to dust, but the Republic of Türkiye will stand forever.”");
+          o.kim = "Mustafa Kemal Atatürk";
+        } else [o.bas, o.alt] = bol(msj);
+        kartYas(g, W, H, o);
+      } else if (og.yil || og.e === "🇹🇷") {
+        o.tarih = buyuk(og.yil ? `${gunAy} ${og.yil} – ${yil}` : `${gunAy} ${yil}`); o.sayi = og.yil ? yil - og.yil : 0;
+        kartMilli(g, W, H, o);
+      } else if (/🌙|🐑/.test(og.e)) {
+        o.tarih = buyuk(og.bas ? tarihAraligi(og.bas, og.bit) : `${gunAy} ${yil}`); o.bayram = !!og.bayram;
+        kartDini(g, W, H, o);
+      } else {
+        o.tarih = buyuk(`${gunAy} ${yil}`);
+        kartGenel(g, W, H, o);
+      }
+      const iki = (x) => String(x).padStart(2, "0");
+      gorselOnizle(c.toDataURL("image/png"), `rota-cepte-${yil}-${iki(n.getMonth() + 1)}-${iki(n.getDate())}.png`, `${og.e} ${msj}\n\nRota Cepte: ${SITE}`);
+    } catch (e) {
+      toast(TL("Kart hazırlanamadı, biraz sonra tekrar dene.", "Couldn't make the card, please try again."));
+    } finally { dugme.disabled = false; }
+  }
+  // Fotoğraflı yer kartı: fotoğraf üstte, ad, il/ilçe, imza ve fotoğraf atfı (CC BY / BY-SA atıf ister)
+  const KAT_RENK = { t: "#3a5bc7", d: "#2a7e3b", m: "#008573", c: "#cc4e00", s: "#953ea3" };
+  const PIN = "M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0";
+  function fotoKartCiz(p, f, im, ikon, yer) {
+    const W = 1080, H = 1350, ZEMIN = "#111a33";
+    const c = document.createElement("canvas"); c.width = W; c.height = H;
+    const g = c.getContext("2d"); g.textBaseline = "middle";
+    // ad ve yer: alttan hizalı; ad kısaysa fotoğraf biraz daha uzun kalır
+    g.textAlign = "left";
+    const ad = blok(g, adi(p), { en: W - 128, font: (px) => PF(800, px), px: 84, min: 52, max: 3, lh: 1.12, renk: "#fff", x: 64 });
+    const konum = { h: 50, ciz: (y) => {
+      g.save(); g.translate(64, y + 3); g.scale(1.75, 1.75); g.strokeStyle = "#ff8a5c"; g.lineWidth = 2.2; g.lineJoin = g.lineCap = "round";
+      g.stroke(new Path2D(PIN)); g.beginPath(); g.arc(12, 10, 3, 0, Math.PI * 2); g.stroke(); g.restore();
+      g.textAlign = "left"; g.fillStyle = "rgba(255,255,255,.86)"; sigdir(g, yer + TL("", ", Türkiye"), 122, y + 25, W - 186, (px) => PF(600, px), 38);
+    } };
+    const mUst = 1104 - (ad.h + 20 + konum.h), PH = Math.min(940, mUst + 60);
+    g.fillStyle = ZEMIN; g.fillRect(0, 0, W, H);
+    // fotoğraf üst kısmı doldurur (taşan yer kırpılır)
+    const sw = im.naturalWidth, sh = im.naturalHeight, o = Math.max(W / sw, PH / sh), cw = W / o, ch = PH / o;
+    g.drawImage(im, (sw - cw) / 2, (sh - ch) * 0.45, cw, ch, 0, 0, W, PH);
+    let z = g.createLinearGradient(0, 0, 0, 230); z.addColorStop(0, "rgba(8,12,28,.5)"); z.addColorStop(1, "rgba(8,12,28,0)");
+    g.fillStyle = z; g.fillRect(0, 0, W, 230);
+    // alta doğru yumuşak geçiş (yavaş başlar, sonda zemine karışır)
+    const GY = PH - 460;
+    z = g.createLinearGradient(0, GY, 0, PH);
+    for (const [d, a] of [[0, 0], [0.25, 0.1], [0.5, 0.36], [0.72, 0.7], [0.88, 0.92], [1, 1]]) z.addColorStop(d, `rgba(17,26,51,${a})`);
+    g.fillStyle = z; g.fillRect(0, GY, W, PH - GY + 1);
+    // kategori ve UNESCO etiketleri
+    const etiket = (x, yazi, renk) => {
+      g.font = PF(800, 28); const w = g.measureText(yazi).width + 44;
+      g.fillStyle = renk; g.beginPath(); g.roundRect(x, 56, w, 58, 29); g.fill();
+      g.fillStyle = "#fff"; g.textAlign = "left"; g.fillText(yazi, x + 22, 86); return x + w + 12;
+    };
+    let ex = 56;
+    if (CATS[p.k]) ex = etiket(ex, CATS[p.k].ad, KAT_RENK[p.k]);
+    if (p.un) etiket(ex, T("UNESCO Dünya Mirası"), "#a8760a");
+    g.textAlign = "left"; g.save(); g.shadowColor = "rgba(5,8,20,.45)"; g.shadowBlur = 24; ad.ciz(mUst); g.restore(); konum.ciz(mUst + ad.h + 20);
+    // imza: ikon, Rota Cepte · slogan, adres
+    g.fillStyle = "rgba(255,255,255,.14)"; g.fillRect(64, 1140, W - 128, 2);
+    const IK = ikon ? 72 : 0, tx = 64 + (IK ? IK + 22 : 0);
+    if (IK) { g.save(); g.beginPath(); g.roundRect(64, 1170, IK, IK, 18); g.clip(); g.drawImage(ikon, 64, 1170, IK, IK); g.restore(); }
+    g.textAlign = "left"; g.fillStyle = "#fff"; g.font = PF(800, 34); g.fillText("Rota Cepte", tx, 1190);
+    const wad = g.measureText("Rota Cepte").width;
+    g.fillStyle = "#f5b544"; sigdir(g, T("Yol senin, rotan cepte!"), tx + wad + 18, 1191, W - 64 - tx - wad - 18, (px) => PF(700, px), 28);
+    g.fillStyle = "rgba(255,255,255,.72)"; g.font = PF(600, 27); g.fillText("me7rt.github.io/Rota-Cepte", tx, 1228);
+    // fotoğraf atfı (fotoAtif ile aynı metin)
+    const atif = T("Fotoğraf:") + " " + (f.a ? atifYaz(f.a) + " · " : "") + "Wikimedia Commons";
+    const at = satirla(g, atif, W - 128, (px) => PF(500, px), 23, 20, 2, true);
+    g.font = PF(500, at.px); g.fillStyle = "rgba(255,255,255,.55)";
+    at.s.forEach((t, i) => g.fillText(t, 64, H - 40 - (at.s.length - 1 - i) * Math.round(at.px * 1.3)));
+    return c.toDataURL("image/png"); // fotoğraf CORS'suz geldiyse burada hata verir
+  }
+  async function fotoKart(p, dugme) {
+    if (dugme.disabled || !p.f || !p.f.p) return;
+    // galeride başka fotoğraf seçildiyse o
+    const gal = [p.f, ...(p.g || [])], sec = $("dGaleri").querySelector(".gk.on"), f = (sec && gal[+sec.dataset.i]) || p.f;
+    const yer = [...new Set([p.ilce, p.il].filter(Boolean))].join(", "), link = `${SITE}#/il/${p.ilS}/yer/${p.q}`;
+    const metin = TL(`${p.ad} (${yer}) çok güzel bir yer, Rota Cepte uygulamasında buldum: ${link}`, `${adi(p)} (${yer}, Türkiye) is a beautiful place, I found it on Rota Cepte: ${link}`);
+    dugme.disabled = true; dugme.classList.add("yukleniyor"); dugme.setAttribute("aria-busy", "true");
+    let url;
+    try {
+      await yaziTipiHazir();
+      let im = null;
+      for (const u of new Set([foto(f, 1280), foto(f, 960)])) { try { im = await resimYukle(u, 9000, true); break; } catch (e) {} }
+      if (!im) throw new Error("fotoğraf yüklenemedi");
+      const ikon = await resimYukle("icon-192.png", 4000).catch(() => null);
+      url = fotoKartCiz(p, f, im, ikon, yer);
+    } catch (e) {
+      toast(TL("Fotoğraf yüklenemedi, bağlantı olarak paylaşılıyor.", "Couldn't load the photo, sharing the link instead."));
+      paylas(p);
+      return;
+    } finally { dugme.disabled = false; dugme.classList.remove("yukleniyor"); dugme.removeAttribute("aria-busy"); }
+    gorselOnizle(url, `rota-cepte-${p.q}.png`, metin);
+  }
+  // Detay kartında "Gönder"in yanına "Fotoğraflı paylaş"
+  const fotoPayBtn = document.createElement("button");
+  fotoPayBtn.className = "ey"; fotoPayBtn.id = "dFotoPay"; fotoPayBtn.hidden = true;
+  fotoPayBtn.innerHTML = `${ik("camera", 22)}<span>${TL("Fotoğraflı paylaş", "Share photo")}</span>`;
+  $("dShare").after(fotoPayBtn);
+  fotoPayBtn.addEventListener("click", () => { if (open) fotoKart(open, fotoPayBtn); });
 
   function renderHome() {
     if (!IDX) return;
@@ -2562,6 +2898,7 @@
     $("dGaleri").innerHTML = gal.map((f, i) => `<button class="gk${i ? "" : " on"}" data-i="${i}" aria-label="${TL("Fotoğraf", "Photo")} ${i + 1}"><img src="${foto(f, 250)}" alt="" loading="lazy" onerror="this.parentNode.remove()"></button>`).join("");
     renderFacts(p);
     favBtn(p); gitBtn(p); $("dFav").hidden = $("dShare").hidden = $("dGit").hidden = !p.q;
+    $("dFotoPay").hidden = !p.q || !foto(p.f, 1280);
     dinleDurdur(); $("dDinle").hidden = !sesVar;
     const ip = DIL === "en" ? p.ipe : p.ip;
     $("dTip").hidden = !ip; $("dTip").innerHTML = ip ? `<b>${TL("İpucu:", "Tip:")}</b> ` + esc(ip) : "";
@@ -2960,6 +3297,7 @@
         : sonra && kalan <= 60 ? TL(`${sonra.ad}'na ${kalan} gün kaldı · 3-4 günlük kaçamak önerilerine bak ›`, `${sonra.adEn || sonra.ad} is ${kalan} day${kalan === 1 ? "" : "s"} away · see 3-4 day getaway ideas ›`) : "";
       b.innerHTML = `<i>${g.e}</i><span><b>${esc(msj)}</b>${ek ? `<small>${esc(dg.e + " " + ek)}</small>` : ""}${alt ? `<small>${esc(alt)}</small>` : ""}</span>`;
       b.classList.toggle("yas", !!g.yas); b.hidden = false;
+      ozelKartDugme(b, g, n, msj);
       if (g.bayram) b.onclick = () => { const r = $("rotaSec"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); };
       else if (g.git) b.onclick = () => git(g.git);
       else if (alt) b.onclick = () => git("#/kacamak/3");
