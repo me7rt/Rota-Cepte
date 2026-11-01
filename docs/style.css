@@ -602,6 +602,7 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 .ylist i{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:var(--pri-soft);color:var(--pri-ink)}
 .ylist b{display:block;font-size:15px}
 .ylist small{display:block;color:var(--muted);font-size:13.5px;line-height:1.45;margin-top:2px}
+.ylist li.yara{display:block;margin-top:6px;padding-top:12px;border-top:1px solid var(--line, rgba(0,0,0,.08));font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 
 /* v6.5 havaya göre öneri ve gün batımı */
 .gunes{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}

@@ -3,7 +3,9 @@
    Veri docs/data altında; GitHub Actions'ta Wikidata, Vikipedi ve Commons'tan hazırlanır (scripts/uret.mjs). */
 (function () {
   "use strict";
-  const SURUM = "6.5";
+  const SURUM = "6.5.1";
+  // "6.5.1'de", "6.5'te", "6.6'da": sürüm numarasına Türkçe bulunma eki
+  const surumEk = (v) => ({ 0: "da", 1: "de", 2: "de", 3: "te", 4: "te", 5: "te", 6: "da", 7: "de", 8: "de", 9: "da" })[String(v).slice(-1)] || "de";
   if (window.ikDoldur) ikDoldur();
   // MapTiler harita anahtarı (boşsa OpenStreetMap kullanılır)
   const HARITA_ANAHTAR = "pI5pMuHAI4gLw3aqy35G";
@@ -2086,8 +2088,15 @@
       if (document.querySelector(".tanit") || !$("sheet").hidden) { if ((dene || 0) < 5) setTimeout(() => yenilikler((dene || 0) + 1), 15000); return; }
     }
     let son = "istanbul"; try { son = localStorage.getItem("gezi-son-il") || son; } catch (e) {}
+    // Bu sürümde yeni: her sürümde güncellenir (yeni, iyileşen, çıkarılan)
+    const yeni = [
+      ["shield-check", TL("Daha güvenli", "Safer"), TL("Uygulamanın güvenliği baştan sona gözden geçirildi ve sıkılaştırıldı.", "The app's security was reviewed end to end and tightened.")],
+      ["list-checks", TL("Küçük düzeltmeler", "Small fixes"), TL("Geri dönünce açık kalan pencereler artık kapanıyor; bazı yer açıklamalarında kalan kod parçaları temizlendi.", "Pop-ups now close when you go back, and leftover code bits were cleaned from some place descriptions.")],
+    ];
+    // Önceki sürümü (6.5) görmemiş olanlara onun yenilikleri de gösterilir.
     // Her madde bir öğretici: dokununca o özellik açılır. Rotası olmayan madde yalnızca bilgi.
-    const s = [
+    let gordu = ""; try { gordu = localStorage.getItem("gezi-yenilik") || ""; } catch (e) {}
+    const s65 = [
       ["footprints", TL("Atatürk'ün izinde", "In Atatürk's footsteps"), TL("1915 Çanakkale'den Anıtkabir'e 16 durak: Millî Mücadele'nin ve Cumhuriyet'in yerlerini tarih sırasıyla gez.", "16 stops from Gallipoli 1915 to Anıtkabir: visit the places of the War of Independence and the Republic in order."), "#/ataturk"],
       ["stamp", TL("Yeni gezi pasaportu", "New travel passport"), TL("Her il için bir damga, bölge bölge sayfalar ve Yeni yolcu'dan Evliya Çelebi'ye unvanlar. Bir yerde \"Buraya gittim\" de, damgan basılsın.", "A stamp for every province, region pages and titles from New traveller to Evliya Çelebi. Tap \"I've been here\" on a place to get your stamp."), "#/rozetler"],
       ["binoculars", TL("Hangi ilde?", "Which province?"), TL("Fotoğrafa bak, hangi ilde olduğunu tahmin et. 10 soruda kaç puan alacaksın?", "Look at a photo and guess the province. How many of 10 can you get?"), "#/oyun"],
@@ -2103,8 +2112,9 @@
       ["share-2", TL("Listeni linkle paylaş", "Share your list"), TL("Listem sekmesinde \"Listeyi linkle paylaş\": arkadaşın tek dokunuşla kendi listesine ekler.", "In My list, tap \"Share list as a link\": friends add it to theirs in one tap."), "#/listem"],
       ["mountain", TL("Daha güzel fotoğraflar", "Better photos"), TL("İl kapakları yenilendi; yanlış fotoğraflar ve gezilecek bir şeyi olmayan yerler çıkarıldı.", "New province covers; wrong photos and places with nothing to see were removed."), ""],
     ];
+    const s = gordu === "6.5" && !zorla ? yeni : [...yeni, ["", TL("Sürüm 6.5 ile gelenler", "Added in version 6.5")], ...s65];
     const d = document.createElement("div"); d.className = "tanit";
-    d.innerHTML = `<div class="tkart yenilik"><div class="temo altin">${ik("sparkles", 36)}</div><h2>${TL(`Sürüm ${SURUM}'te yeni`, `New in version ${SURUM}`)}</h2><p class="yalt">${TL("Denemek için birine dokun.", "Tap one to try it.")}</p><ul class="ylist">${s.map((x) => x[3] ? `<li><button class="ybtn" data-r="${x[3]}"><i>${ik(x[0], 22)}</i><span><b>${x[1]}</b><small>${x[2]}</small></span>${ik("chevron-right", 18)}</button></li>` : `<li><i>${ik(x[0], 22)}</i><span><b>${x[1]}</b><small>${x[2]}</small></span></li>`).join("")}</ul><div class="tbtn"><button class="linkbtn" data-k="kapat">${T("Kapat")}</button><button class="btn primary" data-k="dene">${ik("car-front", 18)} ${TL("Yol üstü keşfi dene", "Try Along the way")}</button></div></div>`;
+    d.innerHTML = `<div class="tkart yenilik"><div class="temo altin">${ik("sparkles", 36)}</div><h2>${TL(`Sürüm ${SURUM}'${surumEk(SURUM)} yeni`, `New in version ${SURUM}`)}</h2>${s.some((x) => x[3]) ? `<p class="yalt">${TL("Denemek için birine dokun.", "Tap one to try it.")}</p>` : ""}<ul class="ylist">${s.map((x) => !x[0] ? `<li class="yara">${x[1]}</li>` : x[3] ? `<li><button class="ybtn" data-r="${x[3]}"><i>${ik(x[0], 22)}</i><span><b>${x[1]}</b><small>${x[2]}</small></span>${ik("chevron-right", 18)}</button></li>` : `<li><i>${ik(x[0], 22)}</i><span><b>${x[1]}</b><small>${x[2]}</small></span></li>`).join("")}</ul><div class="tbtn">${s.some((x) => x[3]) ? `<button class="linkbtn" data-k="kapat">${T("Kapat")}</button><button class="btn primary" data-k="dene">${ik("car-front", 18)} ${TL("Yol üstü keşfi dene", "Try Along the way")}</button>` : `<button class="btn primary" data-k="kapat" style="margin-inline:auto">${TL("Tamam", "OK")}</button>`}</div></div>`;
     const kapat = () => { try { localStorage.setItem("gezi-yenilik", SURUM); } catch (e) {} d.classList.add("out"); setTimeout(() => d.remove(), 300); };
     d.addEventListener("click", (e) => {
       const k = e.target.closest("[data-k]"), r = e.target.closest("[data-r]"); if (e.target !== d && !k && !r) return;
@@ -3183,10 +3193,18 @@
   });
   // Açılan pencereleri (tanıtım, öneri, rozet) ekran okuyucuya pencere olarak bildir
   new MutationObserver((l) => l.forEach((m) => m.addedNodes.forEach((n) => {
-    if (n.classList && n.classList.contains("tanit")) { const k = n.querySelector(".tkart"); if (k) { k.setAttribute("role", "dialog"); k.setAttribute("aria-modal", "true"); const h = k.querySelector("h2"); if (h) { h.id = h.id || "tanitBaslik"; k.setAttribute("aria-labelledby", h.id); } } }
+    if (n.classList && n.classList.contains("tanit")) { n.acilis = Date.now(); const k = n.querySelector(".tkart"); if (k) { k.setAttribute("role", "dialog"); k.setAttribute("aria-modal", "true"); const h = k.querySelector("h2"); if (h) { h.id = h.id || "tanitBaslik"; k.setAttribute("aria-labelledby", h.id); } } }
   }))).observe(document.body, { childList: true });
   window.addEventListener("popstate", () => { if (!$("sheet").hidden) hideSheet(); });
-  window.addEventListener("hashchange", route);
+  // Tarayıcının geri/ileri tuşuyla sayfa değişince açık kalan pencereyi (çark sonucu, damga, rozet…) kapat.
+  // Tanıtım (data-t) ve sayfa değişimiyle birlikte yeni açılan pencereler kalır.
+  window.addEventListener("hashchange", () => {
+    document.querySelectorAll(".tanit").forEach((m) => {
+      if (m.querySelector("[data-t]") || Date.now() - (m.acilis || 0) < 400) return;
+      m.classList.add("out"); setTimeout(() => m.remove(), 300);
+    });
+    route();
+  });
 
   // ---------- Android geri tuşu (yalnızca uygulama içinde) ----------
   const CapApp = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App;
