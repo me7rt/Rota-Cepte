@@ -53,15 +53,20 @@ def indir(n):
             r = urllib.request.urlopen(urllib.request.Request(url(k), headers={"User-Agent": UA}), timeout=40)
             open(yol, "wb").write(r.read()); return n, True
         except urllib.error.HTTPError as e:
-            if e.code in (429, 503): time.sleep(3 * (deneme + 1)); continue
+            if e.code in (429, 503): SAY["429"] = SAY.get("429", 0) + 1; time.sleep(min(20, float(e.headers.get("Retry-After") or 0) or 3 * (deneme + 1))); continue
             return n, False
         except Exception:
             time.sleep(2)
     return n, False
 
-with cf.ThreadPoolExecutor(6) as ex:
-    sonuc = dict(ex.map(indir, range(len(kayit))))
-print("indirilen", sum(sonuc.values()), "/", len(kayit))
+BASLA = time.time(); BUTCE = float(os.environ.get("BUTCE", "1500"))
+SAY = {"ok": 0, "hata": 0, "429": 0}
+def indir_butce(n):
+    if time.time() - BASLA > BUTCE: return n, False
+    r = indir(n); SAY["ok" if r[1] else "hata"] += 1
+    t = SAY["ok"] + SAY["hata"]
+    if t % 200 == 0: print("ilerleme", t, SAY, int(time.time() - BASLA), "sn", flush=True)
+    return r
 
 try: FONT = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 13); FB = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 15)
 except Exception: FONT = FB = ImageFont.load_default()
@@ -69,6 +74,9 @@ except Exception: FONT = FB = ImageFont.load_default()
 CW, CH, IH, KOL, SAT = 200, 190, 150, 8, 6
 for grup in ["kapak", "one", "ilk", "ilce", "diger", "galeri"]:
     nolar = [n for n, k in enumerate(kayit) if k["g"] == grup]
+    with cf.ThreadPoolExecutor(4) as ex: sonuc = dict(ex.map(indir_butce, nolar))
+    print(grup, "indirilen", sum(sonuc.values()), "/", len(nolar), "süre", int(time.time() - BASLA))
+    if not any(sonuc.values()): break
     for s in range(0, len(nolar), KOL * SAT):
         parca = nolar[s:s + KOL * SAT]
         pf = Image.new("RGB", (CW * KOL, CH * ((len(parca) + KOL - 1) // KOL)), "white"); dr = ImageDraw.Draw(pf)

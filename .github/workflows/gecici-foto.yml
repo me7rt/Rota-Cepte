@@ -12,7 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: pip install -q pillow
-      - run: python3 scripts/foto-kontrol.py
+      - run: python3 -u scripts/foto-kontrol.py
+        env:
+          BUTCE: "1200"
       - name: Sonucu veri-deneme dalina yukle
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
