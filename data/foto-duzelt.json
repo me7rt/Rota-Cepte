@@ -1,5 +1,5 @@
 {
-  "_aciklama": "yasak: kullanılmayacak fotoğraf dosyaları (kontrol sayfalarından) | zorla: Wikidata no -> dosya adı | cikar: listeden çıkarılacak Wikidata no (artık var olmayan, baraj altında kalan, askerî/kapalı alan olan yerler, aynı yerin ikinci kaydı, gezilecek bir şeyi olmayan sıradan semt, cadde, mahalle parkı, salon ve küçük heykeller ve gezilecek yer olmayan yerleşim mahalleleri, görülecek kalıntısı olmayan antik kent ve höyükler, tarihî bölge adları)",
+  "_aciklama": "yasak: kullanılmayacak fotoğraf dosyaları (kontrol sayfalarından) | yasakOn: adı bununla başlayan dosyalar da kullanılmaz (aynı serinin kardeş fotoğrafları) | zorla: Wikidata no -> dosya adı | cikar: listeden çıkarılacak Wikidata no (artık var olmayan, baraj altında kalan, askerî/kapalı alan olan yerler, aynı yerin ikinci kaydı, gezilecek bir şeyi olmayan sıradan semt, cadde, mahalle parkı, salon ve küçük heykeller ve gezilecek yer olmayan yerleşim mahalleleri, görülecek kalıntısı olmayan antik kent ve höyükler, tarihî bölge adları)",
   "yasak": [
     "16400 Kulaca-İnegöl-Bursa, Turkey - panoramio.jpg",
     "38800 Akköy-Yeşilhisar-Kayseri, Turkey - panoramio.jpg",
@@ -96,11 +96,21 @@
     "32850 Yenişarbademli-Isparta Province, Turkey - panoramio.jpg",
     "Kayseri Archaeological Museum Felahiye finds in 2023 5134.jpg",
     "DPÜ Şaphane Meslek Yüksekokulu-2.jpg",
-    "Meta-eclogite (Arguvan District, Malatya Province, Turkey) 12 - 53326566450.jpg"
+    "Meta-eclogite (Arguvan District, Malatya Province, Turkey) 12 - 53326566450.jpg",
+    "Yesilyurt istanbul.jpg",
+    "Lac Tuz (3).jpg",
+    "Istanbul Rum Mehmet Paşa Mosque 3327.jpg",
+    "Uçhisar Kalesi - Nevşehir 22.08.2026.jpg",
+    "Hasanağa Bahçesi station 1.jpg"
+  ],
+  "yasakOn": [
+    "Meta-eclogite (Arguvan District",
+    "Kayseri Archaeological Museum Felahiye finds",
+    "DPÜ Şaphane Meslek Yüksekokulu"
   ],
   "zorla": {
     "Q139437289": "Çankırı Salt Cave.jpg",
-    "Q211823": "Lake Tuz.jpg"
+    "Q211823": "Lake Tuz, Turkey (Unsplash O0uCm1WLnA0).jpg"
   },
   "cikar": [
     "Q12824780",
@@ -259,6 +269,10 @@
     "Q6104243",
     "Q105959570",
     "Q25212994",
-    "Q108929136"
+    "Q108929136",
+    "Q6039014",
+    "Q6016009",
+    "Q118188189",
+    "Q6028430"
   ]
 }

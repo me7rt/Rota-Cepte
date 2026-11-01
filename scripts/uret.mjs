@@ -12,6 +12,8 @@ const okuJSON = (p, d) => (fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, "utf
 // Elle düzeltmeler: kontrol sırasında bulunan kötü fotoğraflar vb.
 const DUZ = okuJSON("data/foto-duzelt.json", {});
 const YASAK = new Set((DUZ.yasak || []).map((s) => s.replace(/_/g, " ")));
+// Aynı serinin numarası değişen kardeş dosyaları da tutmasın diye ad başlangıcıyla yasak ("... finds in 2023 5134" yasaksa 5135 de)
+const YASAK_ON = (DUZ.yasakOn || []).map((s) => s.replace(/_/g, " "));
 const ZORLA = DUZ.zorla || {};
 const CIKAR = new Set(DUZ.cikar || []);
 // Önceki veride her yerin fotoğrafı. Yedek fotoğraf aramaları bütçeyle sınırlı ve sırası her çalışmada değişiyor;
@@ -72,7 +74,7 @@ const KOTU_PARCA = ["coat of arms", "location map", "harita", "locator", "landsa
   "miniature", "manuscript", "nusretname", "folio", "план", "карта", "схема"];
 const ascii = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i");
 function dosyaKotu(name) {
-  const n = ascii(name.replace(/\.[A-Za-z0-9]+$/, "")).replace(/_/g, " ");
+  const n = ascii(name.replace(/\.[A-Za-z0-9]+$/, "")).replace(/_/g, " ").trim();
   if (/\biss\d|\bsts-\d/.test(n)) return true;
   if (/map$|map\s|map\d/.test(n)) return true;
   // Eski kitap ve gravür taramaları ("Başlık - Yazar - 1882", "118 of 'Karamania...'"), müze maketleri,
@@ -430,11 +432,16 @@ rapor("Türkiye geneli aday yer:", HAM.size);
 const MADDESIZ = "Q34038 Q23397 Q35509 Q150784 Q40080 Q23442 Q39816 Q46169 Q179049 Q177380 Q23413 Q839954 Q15661340 Q12280 Q12518 Q33506 Q8502".split(" ");
 {
   const ek = new Map(); const trD = new Map();
-  async function maddesizSorgu(grup, tekrar = 0) {
+  // kutu: [batı, güney, doğu, kuzey]. Tek sınıf bile zaman aşımına uğrarsa (göller, Q23397) Türkiye boylamına göre dört kutuya bölünür
+  async function maddesizSorgu(grup, tekrar = 0, kutu = null) {
     try {
+      const konum = kutu
+        ? `SERVICE wikibase:box { ?p wdt:P625 ?coord . bd:serviceParam wikibase:cornerSouthWest "Point(${kutu[0]} ${kutu[1]})"^^geo:wktLiteral . bd:serviceParam wikibase:cornerNorthEast "Point(${kutu[2]} ${kutu[3]})"^^geo:wktLiteral . }`
+        : "";
       const rows = await sparql(`SELECT ${SECIM} ?trD WHERE {
         VALUES ?cls { ${grup.map((q) => "wd:" + q).join(" ")} }
-        ?p wdt:P31 ?cls ; wdt:P17 wd:Q43 ; wdt:P18 ?img ; wdt:P625 ?coord ; wikibase:sitelinks ?sl ; rdfs:label ?trL . FILTER(LANG(?trL) = "tr")
+        ${konum}
+        ?p wdt:P31 ?cls ; wdt:P17 wd:Q43 ; wdt:P18 ?img ;${kutu ? "" : " wdt:P625 ?coord ;"} wikibase:sitelinks ?sl ; rdfs:label ?trL . FILTER(LANG(?trL) = "tr")
         FILTER NOT EXISTS { ?a1 schema:about ?p ; schema:isPartOf <https://tr.wikipedia.org/> }
         FILTER NOT EXISTS { ?a2 schema:about ?p ; schema:isPartOf <https://en.wikipedia.org/> }
         FILTER NOT EXISTS { ?p wdt:P576 [] }
@@ -444,8 +451,14 @@ const MADDESIZ = "Q34038 Q23397 Q35509 Q150784 Q40080 Q23442 Q39816 Q46169 Q1790
       satirlariTopla(rows, ek);
       for (const b of rows) if (val(b, "trD")) trD.set(qid(val(b, "p")), val(b, "trD"));
     } catch (e) {
-      if (e.zaman && grup.length === 1 && tekrar < 2) { await sleep(20000); return maddesizSorgu(grup, tekrar + 1); }
-      if (!e.zaman || grup.length === 1) { rapor("  UYARI maddesiz yer sorgusu:", grup.join(","), e.message.slice(0, 80)); return; }
+      if (e.zaman && grup.length === 1 && !kutu && tekrar < 1) { await sleep(20000); return maddesizSorgu(grup, tekrar + 1); }
+      if (e.zaman && grup.length === 1 && !kutu) {
+        rapor("  maddesiz yer sorgusu kutulara bölündü:", grup[0]);
+        for (const k of [[25.5, 35.7, 30.5, 42.3], [30.5, 35.7, 35.5, 42.3], [35.5, 35.7, 40.5, 42.3], [40.5, 35.7, 45, 42.3]]) await maddesizSorgu(grup, 0, k);
+        return;
+      }
+      if (e.zaman && kutu && tekrar < 2) { await sleep(15000); return maddesizSorgu(grup, tekrar + 1, kutu); }
+      if (!e.zaman || grup.length === 1) { rapor("  UYARI maddesiz yer sorgusu:", grup.join(","), kutu ? "kutu " + kutu.join(",") : "", e.message.slice(0, 80)); return; }
       const y = Math.ceil(grup.length / 2);
       await maddesizSorgu(grup.slice(0, y)); await maddesizSorgu(grup.slice(y));
     }
@@ -672,8 +685,10 @@ for (const il of iller.values()) {
     if (ZORLA[o.q]) o.imgs = [ZORLA[o.q]];
     liste.push(o);
   }
-  // İlçe başına sınır (fazlası: ünlülüğe göre ele)
-  liste.sort((a, b) => (b.one || 0) - (a.one || 0) || b.sl - a.sl);
+  // İlçe başına sınır (fazlası: ünlülüğe göre ele). Önceki veride gösterilen yerler önce gelir; yoksa eşit ünlülükteki
+  // yerler çalışmadan çalışmaya yer değiştiriyor (İstanbul'da Binbirdirek Sarnıcı gidip yerine küçük çeşmeler geliyordu)
+  const onceki = (o) => (ONCEKI_FOTO.has(o.q) ? 1 : 0);
+  liste.sort((a, b) => (b.one || 0) - (a.one || 0) || onceki(b) - onceki(a) || b.sl - a.sl || (+String(a.q).slice(1) || 0) - (+String(b.q).slice(1) || 0));
   const say = new Map(); const kalan = [];
   for (const o of liste) {
     if (o.one) { kalan.push(o); continue; }
@@ -709,7 +724,7 @@ function fotoKaydi(a, ii) {
 }
 function fotoUygun(a) {
   const f = FOTO.get(a);
-  if (!f || !f.p || YASAK.has(a)) return false;
+  if (!f || !f.p || YASAK.has(a) || YASAK_ON.some((o) => a.startsWith(o))) return false;
   if (f.mime !== "image/jpeg") return false;
   // Yalnızca GFDL lisanslı fotoğraflar: lisansın tam metnini her kopyayla vermek gerekir, mobil uygulamada pratik değil
   if (/^GFDL/i.test(f.lis || "")) return false;
