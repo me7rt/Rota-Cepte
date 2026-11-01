@@ -2537,7 +2537,9 @@
       await yaziTipiHazir();
       const ikon = await resimYukle("icon-192.png", 4000).catch(() => null);
       const cizim = og.kart && !og.yas ? await kartYukle() : false;
-      const foto = cizim && og.foto ? await resimYukle(og.foto, 6000).catch(() => null) : null;
+      const K = window.RC_KARTLAR, fyol = cizim ? og.foto || (K.fotoYolu && K.fotoYolu(og.kart)) : null;
+      if (cizim && K.hazir) await K.hazir(og.kart);
+      const foto = fyol ? await resimYukle(fyol, 6000).catch(() => null) : null;
       const W = 1080, H = 1350, c = document.createElement("canvas"); c.width = W; c.height = H;
       const g = c.getContext("2d"); g.textAlign = "center"; g.textBaseline = "middle";
       const yil = n.getFullYear(), gunAy = n.toLocaleDateString(LOC(), { day: "numeric", month: "long" });

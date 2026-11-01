@@ -1,5 +1,7 @@
-/* Rota Cepte · © 2026 Mert Turanlıoğlu · Özel gün kartları: tüm resimler bu dosyada kodla çizilir, dışarıdan fotoğraf yoktur.
-   Atatürk'ün imzası kamu malıdır (Wikimedia Commons, "Signature of Mustafa Kemal Atatürk.svg", PD-old). */
+/* Rota Cepte · © 2026 Mert Turanlıoğlu · Özel gün kartları: çizimler bu dosyada kodla yapılır.
+   Fotoğraflı kartlardaki fotoğraflar Wikimedia Commons'tan, yalnızca kamu malı, CC0 ya da CC BY lisanslıdır (kaynak ve lisanslar: lisanslar.html).
+   Atatürk'ün imzası kamu malıdır (Wikimedia Commons, "Signature of Mustafa Kemal Atatürk.svg", PD-old).
+   Yazı tipleri: Playfair Display ve Great Vibes (SIL Open Font License 1.1, vendor/font). */
 window.RC_KARTLAR = (function () {
   "use strict";
   let Y; // app.js'ten gelen yardımcılar (yazı tipi, yazı blokları, ay-yıldız, alt imza)
@@ -871,9 +873,239 @@ window.RC_KARTLAR = (function () {
     altImza(g, W, o, "#fff", "#ffc36b", "rgba(255,255,255,.66)");
   };
 
+  // ===== Fotoğraflı tasarım kartları (-f1, -f2) =====
+  // Serbest lisanslı fotoğraf + renk ayarı + çerçeve, süsleme ve yazı. Fotoğraflar önceden kırpılmıştır (kart/<ad>.jpg)
+  const SERIF = (w, px, it) => `${it ? "italic " : ""}${w} ${px}px "Playfair Display", Georgia, "Times New Roman", serif`;
+  const EL = (px) => `${px}px "Great Vibes", "Playfair Display", Georgia, cursive`;
+  const ALTIN = [[0, "#b8893d"], [0.25, "#f7e7b0"], [0.5, "#cfa253"], [0.75, "#fbefc4"], [1, "#b8893d"]];
+  let yaziSoz = null;
+  // Yazı tipleri yalnızca fotoğraflı kart çizilecekken yüklenir; 4 saniyede gelmezse yedek yazı tipiyle devam
+  function yaziTipleri() {
+    if (yaziSoz) return yaziSoz;
+    const yol = "vendor/font/", LAT = "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD",
+      EXT = "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF";
+    const yt = [];
+    try {
+      for (const [ad, dosya, o] of [["Playfair Display", "playfair-display-latin-wght-normal", { weight: "400 900", unicodeRange: LAT }], ["Playfair Display", "playfair-display-latin-ext-wght-normal", { weight: "400 900", unicodeRange: EXT }],
+        ["Playfair Display", "playfair-display-latin-wght-italic", { weight: "400 900", style: "italic", unicodeRange: LAT }], ["Playfair Display", "playfair-display-latin-ext-wght-italic", { weight: "400 900", style: "italic", unicodeRange: EXT }],
+        ["Great Vibes", "great-vibes-latin-400-normal", { unicodeRange: LAT }], ["Great Vibes", "great-vibes-latin-ext-400-normal", { unicodeRange: EXT }]]) {
+        const f = new FontFace(ad, `url(${yol}${dosya}.woff2) format("woff2")`, o); document.fonts.add(f); yt.push(f.load().catch(() => null));
+      }
+    } catch (e) {}
+    yaziSoz = Promise.race([Promise.all(yt), new Promise((ok) => setTimeout(ok, 4000))]).then(() => true);
+    return yaziSoz;
+  }
+  const hexA = (h, a) => `rgba(${parseInt(h.slice(1, 3), 16)},${parseInt(h.slice(3, 5), 16)},${parseInt(h.slice(5, 7), 16)},${a})`;
+  // Fotoğrafı alana sığdırıp taşanı kırp (cover)
+  function kapla(g, img, x, y, w, h, odak) {
+    const o = Math.max(w / img.width, h / img.height), iw = img.width * o, ih = img.height * o, f = odak || [0.5, 0.5];
+    g.drawImage(img, x + (w - iw) * f[0], y + (h - ih) * f[1], iw, ih);
+  }
+  // Sekiz köşeli yıldız (Selçuklu yıldızı)
+  function yildiz8(g, x, y, R, ic) {
+    g.beginPath();
+    for (let i = 0; i < 16; i++) { const t = (i * Math.PI) / 8 - Math.PI / 2, r = i % 2 ? R * (ic || 0.62) : R; g.lineTo(x + Math.cos(t) * r, y + Math.sin(t) * r); }
+    g.closePath();
+  }
+  function baklava(g, x, y, s) { g.beginPath(); g.moveTo(x, y - s); g.lineTo(x + s, y); g.lineTo(x, y + s); g.lineTo(x - s, y); g.closePath(); }
+  // Çizgi, ortada baklava ve iki küçük nokta
+  function ayrac(g, x, y, en, renk) {
+    g.save(); g.fillStyle = renk; g.strokeStyle = renk; g.lineWidth = 1.6;
+    g.beginPath(); g.moveTo(x - en / 2, y); g.lineTo(x - 22, y); g.moveTo(x + 22, y); g.lineTo(x + en / 2, y); g.stroke();
+    baklava(g, x, y, 8); g.fill(); baklava(g, x - 30, y, 3.5); g.fill(); baklava(g, x + 30, y, 3.5); g.fill();
+    g.restore();
+  }
+  // Çift çizgili çerçeve, köşelerde yıldız
+  function cerceve(g, W, H, m, renk) {
+    g.save(); g.strokeStyle = renk; g.lineWidth = 2; g.strokeRect(m, m, W - 2 * m, H - 2 * m);
+    g.lineWidth = 1; g.globalAlpha = 0.7; g.strokeRect(m + 10, m + 10, W - 2 * m - 20, H - 2 * m - 20); g.globalAlpha = 1;
+    g.fillStyle = renk;
+    for (const [x, y] of [[m + 5, m + 5], [W - m - 5, m + 5], [m + 5, H - m - 5], [W - m - 5, H - m - 5]]) { yildiz8(g, x, y, 15, 0.5); g.fill(); }
+    g.restore();
+  }
+  // Sivri kemer (iki merkezli, Osmanlı pencere kemeri). k: kemerin sivriliği
+  function kemerYol(g, x0, x1, ys, yb, k) {
+    const w = x1 - x0, R = (1 - (k || 0.4)) * w, h = Math.sqrt(R * R - (R - w / 2) * (R - w / 2));
+    g.beginPath(); g.moveTo(x0, yb); g.lineTo(x0, ys);
+    g.arc(x0 + R, ys, R, Math.PI, Math.atan2(-h, w / 2 - R) + PI2);
+    g.arc(x1 - R, ys, R, Math.atan2(-h, R - w / 2) + PI2, PI2);
+    g.lineTo(x1, yb); g.closePath();
+    return ys - h;
+  }
+  // Işık topları (bokeh)
+  function bokeh(g, x0, y0, w, h, n, renkler, tohum, rmin, rmax) {
+    const r = rastgele(tohum); g.save(); g.globalCompositeOperation = "screen";
+    for (let i = 0; i < n; i++) {
+      const x = x0 + r() * w, y = y0 + r() * h, R = rmin + r() * (rmax - rmin), c = renkler[i % renkler.length];
+      g.fillStyle = rz(g, x, y, 0, R, [[0, hexA(c, 0.55)], [0.62, hexA(c, 0.32)], [0.86, hexA(c, 0.12)], [1, hexA(c, 0)]]);
+      g.beginPath(); g.arc(x, y, R, 0, PI2); g.fill();
+    }
+    g.restore();
+  }
+  // Altın yaldızlı el yazısı satırı (sığmazsa küçülür)
+  function elYazisi(g, W, metin, px, renk) {
+    g.font = EL(px); while (px > 60 && g.measureText(metin).width > W - 190) { px -= 4; g.font = EL(px); }
+    const h = Math.round(px * 1.05);
+    return { h, ciz: (y) => {
+      g.save(); g.font = EL(px); const w = g.measureText(metin).width, cy = y + h / 2 + px * 0.06;
+      g.shadowColor = "rgba(0,0,0,.45)"; g.shadowBlur = 18; g.shadowOffsetY = 3;
+      g.fillStyle = renk || dz(g, W / 2 - w / 2, cy - px / 2, W / 2 + w / 2, cy + px / 2, ALTIN); g.fillText(metin, W / 2, cy);
+      g.restore();
+    } };
+  }
+  // Fotoğraf künyesi: CC BY fotoğrafçının adını ister; dikey (sağ kenar) ya da yatay
+  function kunye(g, f, x, y, renk, dikey, hiza) {
+    if (!f.kredi) return;
+    const lis = Array.isArray(f.lis) ? TL(f.lis[0], f.lis[1]) : f.lis;
+    const t = TL("Fotoğraf: ", "Photo: ") + f.kredi + (lis ? " · " + lis + (/^CC BY/.test(lis) ? TL(", düzenlendi", ", edited") : "") : "") + " · Wikimedia Commons";
+    g.save(); g.font = Y.PF(600, 17); g.fillStyle = renk; g.textAlign = hiza || "center";
+    if (dikey) { g.translate(x, y); g.rotate(-Math.PI / 2); g.fillText(t, 0, 0); } else g.fillText(t, x, y);
+    g.restore();
+  }
+  const ilkBuyuk = (s) => s.toLocaleLowerCase("tr").split(" ").map((k) => k.charAt(0).toLocaleUpperCase("tr") + k.slice(1)).join(" ");
+  // El yazısı satırı: güne göre (kandillerde mahyadaki ad)
+  function baslikEl(o, ad) {
+    const e = en();
+    if (ad === "kandil") return e ? "Blessed Night" : o.mahya ? ilkBuyuk(o.mahya) : "Hayırlı Kandiller";
+    return ({ kadir: ["Kadir Gecesi", "Night of Power"], ramazan: ["Hoş geldin Ramazan", "Welcome, Ramadan"], rbayram: ["Nice Bayramlara", "Eid Mubarak"], kurban: ["Nice Bayramlara", "Eid Mubarak"],
+      yilbasi: ["Mutlu Yıllar", "Happy New Year"], anneler: ["Canım Annem", "Dear Mom"], babalar: ["Canım Babam", "Dear Dad"] }[ad] || ["", ""])[e ? 1 : 0];
+  }
+  // Yazı düzeni: tarih, el yazısı başlık, (yıl), ayraç, mesaj, alt mesaj
+  function fotoYazi(g, W, o, f, ust, alt) {
+    const ad = o.kart.split("-")[0], P = f.P, el = f.elYok ? "" : baslikEl(o, ad);
+    let bas = o.bas, altM = o.alt;
+    if (ad === "yilbasi") { bas = altM || bas; altM = ""; }
+    const kur = (k) => {
+      const L = [], b = (n) => Math.round(n * k);
+      if (o.tarih) L.push(Y.tarihSatiri(g, W, o.tarih, P.tarih || P.vurgu, 26), b(el ? 6 : 26));
+      if (el) L.push(elYazisi(g, W, el, b(f.elPx || 128), P.el));
+      if (ad === "yilbasi" && o.yil) { const px = b(150); L.push(b(2), { h: Math.round(px * 0.9), ciz: (y) => { g.save(); g.font = SERIF(800, px); const w = g.measureText(String(o.yil)).width; g.fillStyle = dz(g, W / 2 - w / 2, y, W / 2 + w / 2, y + px, ALTIN); g.shadowColor = "rgba(255,200,110,.35)"; g.shadowBlur = 36; g.fillText(String(o.yil), W / 2, y + px * 0.47); g.restore(); } }); }
+      if (f.baslik) { const px = b(f.baslikPx || 84); L.push({ h: Math.round(px * 1.05), ciz: (y) => { g.save(); g.font = SERIF(700, px); Y.harfAra(g, 6); g.fillStyle = P.baslik || "#fff"; g.fillText(f.baslik, W / 2, y + px * 0.52); Y.harfAra(g, 0); g.restore(); } }); }
+      L.push(b(14), { h: 16, ciz: (y) => ayrac(g, W / 2, y + 8, 300, P.cizgi || P.vurgu) }, b(22));
+      L.push(Y.blok(g, bas, { en: 860, font: (px) => SERIF(f.agir || 600, px), px: b(f.basPx || 50), min: b(36), max: 3, lh: 1.22, renk: P.yazi, x: W / 2 }));
+      if (altM) L.push(b(16), Y.blok(g, altM, { en: 820, font: (px) => SERIF(400, px, true), px: b(36), min: b(28), max: 3, lh: 1.32, renk: P.soluk, x: W / 2 }));
+      return L;
+    };
+    let L;
+    for (let k = 1; k >= 0.72; k -= 0.04) { L = kur(k); if (L.reduce((a, x) => a + (typeof x === "number" ? x : x.h), 0) <= alt - ust) break; }
+    Y.diz(L, ust, alt);
+  }
+  // Şablon 1, tam sayfa: fotoğraf bütün kartı kaplar, alt yarı güne özel renge erir, altın çerçeve
+  function tamSablon(g, W, H, o, f) {
+    const P = f.P, fh = f.fotoH || H, yu = f.yaziUst || (f.fotoH ? fh - 44 : 720);
+    g.fillStyle = P.zemin; g.fillRect(0, 0, W, H);
+    if (o.foto) kapla(g, o.foto, 0, 0, W, fh, f.odak);
+    else { zemin(g, W, H, [[0, P.zemin2 || P.zemin], [1, P.zemin]]); g.save(); g.globalAlpha = 0.16; selcuk(g, 0, 0, W, 780, 130, { zemin: "rgba(0,0,0,0)", yildiz: P.vurgu, cizgi: P.vurgu, ic: P.zemin }); g.restore(); }
+    if (f.ton) { g.save(); g.globalCompositeOperation = f.tonMod || "soft-light"; g.fillStyle = f.ton; g.fillRect(0, 0, W, fh); g.restore(); }
+    g.fillStyle = dz(g, 0, 0, 0, 200, [[0, "rgba(0,0,0,.32)"], [1, "rgba(0,0,0,0)"]]); g.fillRect(0, 0, W, 200);
+    // fotoğraf alta doğru günün rengine erir
+    const g0 = f.fotoH ? fh - 300 : yu - 340, g1 = f.fotoH ? fh : yu + 150;
+    g.fillStyle = dz(g, 0, g0, 0, g1, [[0, hexA(P.zemin, 0)], [0.5, hexA(P.zemin, 0.62)], [1, P.zemin]]); g.fillRect(0, g0, W, g1 - g0);
+    g.fillStyle = P.zemin; g.fillRect(0, g1 - 1, W, H - g1 + 1);
+    g.save(); g.globalCompositeOperation = "multiply"; g.fillStyle = rz(g, W / 2, fh * 0.4, W * 0.32, W * 0.95, [[0, "rgba(255,255,255,1)"], [1, hexA(P.golge || "#000000", 0.55)]]); g.fillRect(0, 0, W, H); g.restore();
+    if (f.efekt) f.efekt(g, W, H, o);
+    cerceve(g, W, H, 26, hexA(P.cerceve || "#e7c983", 0.8));
+    fotoYazi(g, W, o, f, yu, 1110);
+    altImza(g, W, o, P.yazi, P.vurgu, P.soluk);
+    kunye(g, f, W - 52, Math.min(fh, 780) / 2 + 30, "rgba(255,255,255,.6)", true);
+  }
+  // Şablon 2, kemer: koyu ya da açık zemin, Selçuklu deseni, fotoğraf sivri kemerli pencerenin içinde
+  function kemerSablon(g, W, H, o, f) {
+    const P = f.P, x0 = 170, x1 = W - 170, ys = 552, yb = 722;
+    zemin(g, W, H, [[0, P.zemin2 || P.zemin], [1, P.zemin]]);
+    g.save(); g.globalAlpha = P.desen || 0.1; selcuk(g, 0, 0, W, H, 120, { zemin: "rgba(0,0,0,0)", yildiz: P.vurgu, cizgi: P.vurgu, ic: P.zemin }); g.restore();
+    g.fillStyle = rz(g, W / 2, 420, 120, 760, [[0, hexA(P.zemin, 0)], [1, hexA(P.zemin, 0.9)]]); g.fillRect(0, 0, W, H);
+    // gölge ve dış kemer
+    g.save(); g.shadowColor = "rgba(0,0,0,.45)"; g.shadowBlur = 40; g.shadowOffsetY = 12; kemerYol(g, x0 - 18, x1 + 18, ys, yb + 18, 0.4); g.fillStyle = P.cerceveZemin || P.zemin; g.fill(); g.restore();
+    const tepe = kemerYol(g, x0 - 18, x1 + 18, ys, yb + 18, 0.4);
+    g.lineWidth = 2; g.strokeStyle = dz(g, x0, tepe, x1, yb, ALTIN); g.stroke();
+    // fotoğraf
+    g.save(); const ic = kemerYol(g, x0, x1, ys, yb, 0.4); g.clip();
+    if (o.foto) kapla(g, o.foto, x0, ic, x1 - x0, yb - ic, f.odak);
+    else { g.fillStyle = dz(g, 0, ic, 0, yb, [[0, P.zemin2 || P.zemin], [1, P.vurgu]]); g.fillRect(x0, ic, x1 - x0, yb - ic); }
+    if (f.ton) { g.globalCompositeOperation = f.tonMod || "soft-light"; g.fillStyle = f.ton; g.fillRect(x0, ic, x1 - x0, yb - ic); g.globalCompositeOperation = "source-over"; }
+    g.fillStyle = rz(g, W / 2, (ic + yb) / 2, 200, 520, [[0, "rgba(0,0,0,0)"], [1, "rgba(0,0,0,.35)"]]); g.fillRect(x0, ic, x1 - x0, yb - ic);
+    if (f.efekt) f.efekt(g, W, H, o);
+    g.restore();
+    kemerYol(g, x0, x1, ys, yb, 0.4); g.lineWidth = 5; g.strokeStyle = dz(g, x0, ic, x1, yb, ALTIN); g.stroke();
+    // kemer tepesinde süs: hilal ya da yıldız
+    g.save(); g.fillStyle = dz(g, W / 2 - 20, tepe - 60, W / 2 + 20, tepe, ALTIN);
+    if (f.alem === "hilal") { g.fillRect(W / 2 - 2, tepe - 26, 4, 24); g.beginPath(); g.arc(W / 2, tepe - 26, 5, 0, PI2); g.fill(); Y.hilal(g, W / 2 + 3, tepe - 44, 13); }
+    else { yildiz8(g, W / 2, tepe - 22, 15, 0.55); g.fill(); }
+    g.restore();
+    // kemerin iki yanında ince sütun çizgileri
+    g.strokeStyle = hexA(P.cerceve || "#e7c983", 0.45); g.lineWidth = 1.2;
+    for (const x of [x0 - 40, x1 + 40]) { g.beginPath(); g.moveTo(x, ys - 60); g.lineTo(x, yb + 18); g.stroke(); baklava(g, x, ys - 72, 6); g.fillStyle = hexA(P.cerceve || "#e7c983", 0.6); g.fill(); }
+    kunye(g, f, x1 + 18, yb + 42, P.kunye || hexA("#ffffff", 0.55), false, "right");
+    cerceve(g, W, H, 26, hexA(P.cerceve || "#e7c983", 0.55));
+    fotoYazi(g, W, o, f, 780, 1112);
+    altImza(g, W, o, P.yazi, P.vurgu, P.soluk);
+  }
+  // Şablon 3, kolaj: üç fotoğraf anı fotoğrafı gibi bantla yapıştırılmış, altlarında el yazısıyla birer söz.
+  // Üç fotoğraf tek dosyada yan yana durur (tek indirme)
+  function kolajSablon(g, W, H, o, f) {
+    const P = f.P;
+    zemin(g, W, H, [[0, P.zemin2 || P.zemin], [1, P.zemin]]);
+    if (f.efekt0) f.efekt0(g, W, H, o);
+    const parca = (i, x, y, w, h, a, yazi) => {
+      g.save(); g.translate(x, y); g.rotate(a);
+      g.shadowColor = "rgba(0,0,0,.5)"; g.shadowBlur = 30; g.shadowOffsetY = 12; g.fillStyle = "#fbf8f1"; g.fillRect(-w / 2 - 16, -h / 2 - 16, w + 32, h + 92); g.shadowColor = "transparent";
+      if (o.foto) { const sw = o.foto.width / 3; g.drawImage(o.foto, i * sw, 0, sw, o.foto.height, -w / 2, -h / 2, w, h); }
+      else { g.fillStyle = dz(g, 0, -h / 2, 0, h / 2, [[0, P.zemin2 || P.zemin], [1, P.vurgu]]); g.fillRect(-w / 2, -h / 2, w, h); }
+      g.strokeStyle = "rgba(0,0,0,.08)"; g.lineWidth = 1; g.strokeRect(-w / 2, -h / 2, w, h);
+      g.font = EL(44); g.fillStyle = "#2b2f3a"; g.fillText(yazi, 0, h / 2 + 40);
+      g.save(); g.translate(0, -h / 2 - 14); g.rotate(-a * 1.8 + 0.05); g.fillStyle = "rgba(244,232,200,.82)"; g.fillRect(-62, -17, 124, 34); g.restore();
+      g.restore();
+    };
+    const R = en() ? f.sozEn : f.soz;
+    parca(1, 214, 470, 360, 270, -0.09, R[1]);
+    parca(2, 866, 470, 360, 270, 0.09, R[2]);
+    parca(0, 540, 420, 384, 288, -0.015, R[0]);
+    if (f.efekt) f.efekt(g, W, H, o);
+    cerceve(g, W, H, 26, hexA(P.cerceve || "#e7c983", 0.55));
+    fotoYazi(g, W, o, f, 724, 1112);
+    altImza(g, W, o, P.yazi, P.vurgu, P.soluk);
+    kunye(g, f, W / 2, 1300, "rgba(255,255,255,.55)");
+  }
+  const SABLON = { tam: tamSablon, kemer: kemerSablon, kolaj: kolajSablon };
+  // Kar taneleri ve konfeti
+  const kar = (g, W, H) => { const r = rastgele(77); g.save(); g.fillStyle = "rgba(255,255,255,.85)"; for (let i = 0; i < 160; i++) { const y = r() * 760, s = 1 + r() * 3.6; g.globalAlpha = 0.35 + r() * 0.6; g.beginPath(); g.arc(r() * W, y, s, 0, PI2); g.fill(); } g.restore(); };
+  const yaldiz = (g, W, H) => { bokeh(g, 0, 40, W, 640, 26, ["#ffd98a", "#ffb35c", "#fff1c9"], 2027, 10, 46); const r = rastgele(9); for (let i = 0; i < 20; i++) parilti(g, 60 + r() * (W - 120), 60 + r() * 640, 6 + r() * 12, "rgba(255,240,200,.9)"); };
+  const kandilIsik = (g, W, H) => { bokeh(g, 0, 30, W, 560, 14, ["#ffcf7a", "#ffe6b0"], 1210, 8, 30); };
+  // Her seçenek: şablon, fotoğraf dosyası, fotoğraf sahibi ve lisansı, renkler
+  const KM = ["Kamu malı", "Public domain"];
+  const GECE = { zemin: "#0a1230", zemin2: "#16224d", vurgu: "#f0c67a", yazi: "#ffffff", soluk: "rgba(255,255,255,.8)", cerceve: "#e7c983" };
+  const FK = {
+    "kandil-f1": { s: "tam", fotoH: 820, kredi: "Joseolgon", lis: "CC BY 4.0", P: GECE, efekt: kandilIsik },
+    "kandil-f2": { s: "kemer", kredi: "Jorge Franganillo", lis: "CC BY 4.0", P: { ...GECE, desen: 0.12 }, alem: "hilal" },
+    "kadir-f1": { s: "tam", kredi: "Mikel Iturbe Urretxa", lis: "CC BY 3.0", P: { ...GECE, zemin: "#000000" }, yaziUst: 760 },
+    "kadir-f2": { s: "kemer", kredi: "David Spender", lis: "CC BY 2.0", P: { ...GECE, zemin: "#0b0d26", zemin2: "#1b1d48" }, alem: "hilal" },
+    "ramazan-f1": { s: "tam", fotoH: 820, kredi: "Cem Topçu", lis: "CC BY 2.5", P: { ...GECE, zemin: "#0c0a14" }, efekt: kandilIsik },
+    "ramazan-f2": { s: "kemer", kredi: "Alexander Cook", lis: KM, P: { zemin: "#13241f", zemin2: "#1f3b33", vurgu: "#e9c47a", yazi: "#fff", soluk: "rgba(255,255,255,.8)", cerceve: "#e9c47a", desen: 0.12 }, alem: "hilal" },
+    "rbayram-f1": { s: "tam", fotoH: 820, kredi: "flowcomm", lis: "CC BY 2.0", P: { zemin: "#24100f", vurgu: "#f2c27b", yazi: "#fff", soluk: "rgba(255,255,255,.82)", cerceve: "#e9c47a" } },
+    "rbayram-f2": { s: "kemer", kredi: "Jorge Láscar", lis: "CC BY 2.0", P: { zemin: "#f6efe2", zemin2: "#fbf7ef", vurgu: "#a8283a", yazi: "#2a1a1d", soluk: "#6b5559", el: "#a8283a", tarih: "#a8283a", cerceve: "#c39a4e", cerceveZemin: "#f6efe2", kunye: "rgba(42,26,29,.6)", desen: 0.07 }, alem: "hilal" },
+    "kurban-f1": { s: "tam", kredi: "Jakub Hałun", lis: "CC BY 4.0", P: { zemin: "#062a3a", vurgu: "#f2d28b", yazi: "#fff", soluk: "rgba(255,255,255,.84)", cerceve: "#f2d28b" }, yaziUst: 760 },
+    "kurban-f2": { s: "kemer", kredi: "Oumaima Loudini", lis: "CC BY 4.0", P: { zemin: "#0d1733", zemin2: "#1a2a55", vurgu: "#f0c67a", yazi: "#fff", soluk: "rgba(255,255,255,.8)", cerceve: "#e7c983", desen: 0.1 }, alem: "hilal" },
+    "yilbasi-f1": { s: "tam", fotoH: 820, kredi: "freestocks.org", lis: "CC0", P: { zemin: "#120c0a", vurgu: "#f6d58e", yazi: "#fff", soluk: "rgba(255,255,255,.84)", cerceve: "#f1d08f" }, elPx: 116, efekt: yaldiz },
+    "yilbasi-f2": { s: "kolaj", kredi: "Alexkom000, CC BY 4.0 · Kadı, CC BY 4.0 · Roc0ast3r, CC0", lis: ["düzenlendi", "edited"], soz: ["Yeni yollar", "Yeni şehirler", "Yeni anılar"], sozEn: ["New roads", "New cities", "New memories"],
+      P: { zemin: "#0a1230", zemin2: "#1c2a5c", vurgu: "#f6d58e", yazi: "#fff", soluk: "rgba(255,255,255,.82)", cerceve: "#e7c983" }, elPx: 104, efekt0: (g, W, H) => { bokeh(g, 0, 0, W, 800, 22, ["#7fa8ff", "#ffd98a", "#c9b6ff"], 31, 14, 60); kar(g, W, H); } },
+    "anneler-f1": { s: "tam", kredi: "Jacob van Hulsdonck", lis: KM, P: { zemin: "#17110e", vurgu: "#f1b9a6", yazi: "#fff", soluk: "rgba(255,255,255,.82)", cerceve: "#e2b48f" }, yaziUst: 740 },
+    "anneler-f2": { s: "kemer", kredi: "Güldem Üstün", lis: "CC BY 2.0", P: { zemin: "#f7e8e2", zemin2: "#fdf6f2", vurgu: "#b04a5a", yazi: "#3a1d25", soluk: "#7a5961", el: "#b04a5a", tarih: "#b04a5a", cerceve: "#c99a72", cerceveZemin: "#f7e8e2", kunye: "rgba(58,29,37,.6)", desen: 0.07 } },
+    "babalar-f1": { s: "tam", fotoH: 820, kredi: "Sanket Mehta", lis: "CC BY 3.0", P: { zemin: "#1a0b08", vurgu: "#ffbe6b", yazi: "#fff", soluk: "rgba(255,255,255,.82)", cerceve: "#f0c48a" } },
+    "babalar-f2": { s: "kemer", kredi: "Raicem", lis: "CC0", P: { zemin: "#13233a", zemin2: "#22395a", vurgu: "#f2c27b", yazi: "#fff", soluk: "rgba(255,255,255,.8)", cerceve: "#e7c983", desen: 0.08 } },
+    "demokrasi-f1": { s: "tam", fotoH: 820, kredi: "Ninara", lis: "CC BY 2.0", elYok: true, agir: 700, basPx: 54, P: { zemin: "#07090f", vurgu: "#e30a17", tarih: "#ff5a5f", yazi: "#fff", soluk: "rgba(255,255,255,.82)", cizgi: "#e30a17", cerceve: "#ffffff" } },
+    "demokrasi-f2": { s: "kemer", kredi: "Julian Lupyan", lis: "CC0", elYok: true, agir: 700, basPx: 54, P: { zemin: "#0b0d14", zemin2: "#151a28", vurgu: "#e30a17", tarih: "#ff5a5f", yazi: "#fff", soluk: "rgba(255,255,255,.82)", cizgi: "#e30a17", cerceve: "#d9dde5", desen: 0.06 } }
+  };
+  for (const k of Object.keys(FK)) FK[k].foto = `kart/${k}.jpg`;
+  const fotoTasarim = (g, W, H, o) => { const f = FK[o.kart]; SABLON[f.s](g, W, H, o, f); };
+  for (const k of Object.keys(FK)) K[k] = fotoTasarim;
+
   return {
     ciz(ad, g, W, H, o, yard) { Y = yard; const f = K[ad]; if (!f) return false; g.textAlign = "center"; g.textBaseline = "middle"; f(g, W, H, o); return true; },
     var: (ad) => !!K[ad],
-    adlar: () => Object.keys(K)
+    adlar: () => Object.keys(K),
+    // Fotoğraflı tasarım kartının fotoğrafı ve yazı tipleri (çizimden önce yüklenir)
+    fotoYolu: (ad) => (FK[ad] ? FK[ad].foto : null),
+    hazir: (ad) => (FK[ad] ? yaziTipleri() : Promise.resolve(true))
   };
 })();
