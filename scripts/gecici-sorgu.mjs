@@ -1,30 +1,28 @@
-// Geçici: Atatürk günleri kartları için kamu malı Atatürk fotoğraflarını Commons'ta arar (1915-1930 yılı kategorileri ve konu aramaları),
-// küçük hallerini ve lisans bilgisini kart-foto dalına koyar
+// Geçici: kartlardaki sözlerin tam metnini doğrulamak için Vikikaynak, Vikisöz ve Vikipedi'den ilgili sayfaların metnini alır
 import fs from "node:fs";
 const UA = "RotaCepte/6.5 (mertturanlioglu.apps@gmail.com)";
 const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
-const api = async (p) => { const u = "https://commons.wikimedia.org/w/api.php?" + new URLSearchParams({ format: "json", formatversion: "2", ...p }); for (let i = 0; i < 4; i++) { try { const r = await fetch(u, { headers: { "User-Agent": UA } }); if (r.ok) return r.json(); } catch (e) {} await bekle(2000 * (i + 1)); } return {}; };
-const ORT = { prop: "imageinfo|templates|categories", iiprop: "url|size|mime|extmetadata", iiurlwidth: "420", iiextmetadatafilter: "LicenseShortName|License|Artist|DateTimeOriginal|ImageDescription|Restrictions|Credit", tlnamespace: "10", tllimit: "max", cllimit: "max", clshow: "!hidden" };
-const KAYNAK = [];
-for (let y = 1915; y <= 1930; y++) KAYNAK.push(["yil" + y, { generator: "categorymembers", gcmtitle: `Category:Mustafa Kemal Atatürk in ${y}`, gcmtype: "file", gcmlimit: "60" }]);
-for (const [ad, q] of [["cocuk", "Atatürk children"], ["cocuk", "Atatürk çocuklar"], ["harf", "Atatürk alphabet"], ["harf", "Atatürk harf inkılabı"], ["harf", "Atatürk blackboard"], ["portre", "Mustafa Kemal portrait 1923"], ["portre", "Mustafa Kemal Pasha portrait"], ["samsun", "Mustafa Kemal 1919 Sivas Kongresi"], ["zafer", "Mustafa Kemal Paşa 1922 Başkomutan"], ["canakkale", "Mustafa Kemal Bey 1915 Anafartalar"]])
-  KAYNAK.push([ad, { generator: "search", gsrsearch: q + " filetype:bitmap", gsrnamespace: "6", gsrlimit: "30" }]);
-const out = "out"; fs.mkdirSync(out + "/k", { recursive: true });
-const sonuc = [], gor = new Set();
-for (const [grup, p] of KAYNAK) {
-  const j = await api({ action: "query", ...p, ...ORT });
-  let say = 0;
-  for (const pg of (j.query && j.query.pages) || []) {
-    const ii = pg.imageinfo && pg.imageinfo[0]; if (!ii || gor.has(pg.title)) continue;
-    const em = ii.extmetadata || {}, v = (k) => (em[k] ? String(em[k].value).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim() : "");
-    const lis = v("LicenseShortName"), tpl = (pg.templates || []).map((t) => t.title.replace("Template:", "")).filter((t) => /^PD|^Cc-zero|^CC0|^Cc-by|^CC-BY/i.test(t));
-    if (!/jpeg|png|tiff/.test(ii.mime) || ii.width < 600) continue;
-    gor.add(pg.title); say++;
-    const dosya = `k/${String(sonuc.length).padStart(3, "0")}.jpg`;
-    try { const r = await fetch(ii.thumburl || ii.url, { headers: { "User-Agent": UA } }); if (r.ok) fs.writeFileSync(`${out}/${dosya}`, Buffer.from(await r.arrayBuffer())); } catch (e) {}
-    sonuc.push({ grup, dosya, title: pg.title, lis, tpl, kat: (pg.categories || []).map((c) => c.title.replace("Category:", "")).slice(0, 12), artist: v("Artist").slice(0, 160), tarih: v("DateTimeOriginal").slice(0, 60), aciklama: v("ImageDescription").slice(0, 240), kisit: v("Restrictions"), w: ii.width, h: ii.height, url: ii.url, sayfa: ii.descriptionurl });
-    await bekle(250);
+const api = async (site, p) => { const u = `https://${site}/w/api.php?` + new URLSearchParams({ format: "json", formatversion: "2", ...p }); for (let i = 0; i < 4; i++) { try { const r = await fetch(u, { headers: { "User-Agent": UA } }); if (r.ok) return r.json(); } catch (e) {} await bekle(2000 * (i + 1)); } return {}; };
+const out = "out/metin"; fs.mkdirSync(out, { recursive: true });
+const ARA = ["Gençliğe Hitabe", "İstiklâl Marşı", "Çanakkale Şehitlerine", "Onuncu Yıl Nutku", "Nutuk", "en hakiki mürşit", "fikri hür, vicdanı hür, irfanı hür", "Küçük hanımlar, küçük beyler", "İlk hedefiniz Akdeniz", "Yeni nesil sizin eseriniz", "Muallimler Birliği", "Yurtta sulh, cihanda sulh"];
+const SAYFA = new Map();
+for (const site of ["tr.wikisource.org", "tr.wikiquote.org"]) {
+  for (const q of ARA) {
+    const j = await api(site, { action: "query", list: "search", srsearch: `"${q}"`, srlimit: "8", srwhat: "text" });
+    const s = ((j.query && j.query.search) || []).map((x) => ({ t: x.title, snip: x.snippet.replace(/<[^>]+>/g, "") }));
+    fs.appendFileSync(`${out}/arama.txt`, `\n### ${site} :: ${q}\n` + s.map((x) => `- ${x.t} :: ${x.snip}`).join("\n") + "\n");
+    for (const x of s.slice(0, 4)) SAYFA.set(site + "|" + x.t, 1);
+    await bekle(300);
   }
-  console.log(grup, say);
 }
-fs.writeFileSync(`${out}/liste.json`, JSON.stringify(sonuc, null, 1));
+for (const t of ["Gençliğe Hitabe", "İstiklal Marşı", "Onuncu Yıl Nutku", "Çanakkale Şehitlerine", "Nutuk", "Mustafa Kemal Atatürk"]) SAYFA.set("tr.wikipedia.org|" + t, 1);
+SAYFA.set("tr.wikiquote.org|Mustafa Kemal Atatürk", 1);
+let no = 0;
+for (const k of SAYFA.keys()) {
+  const [site, t] = k.split("|");
+  const j = await api(site, { action: "parse", page: t, prop: "wikitext", redirects: "1" });
+  const w = j.parse && j.parse.wikitext; if (!w) continue;
+  fs.writeFileSync(`${out}/${String(no++).padStart(2, "0")}-${site.split(".")[1]}-${t.replace(/[^\p{L}\p{N}]+/gu, "_").slice(0, 60)}.txt`, `# ${site} :: ${t}\n\n` + w);
+  await bekle(300);
+}
+console.log("sayfa", no);
