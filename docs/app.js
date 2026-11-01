@@ -686,7 +686,7 @@
     const il = IDX.ilBy.get(d.s), x = damgalar().get(d.s), no = +il.plaka || 1;
     k.style.setProperty("--d", DAMGA_RENK[IL_BOLGE.get(d.s)] || "#888"); k.style.setProperty("--r", ((no * 37) % 13) - 6 + "deg");
     k.classList.toggle("on", !!x);
-    k.innerHTML = `<span class="pmini"><b>${esc(il.plaka)}</b>${x && x.t ? `<small>${esc(ayYil(x.t))}</small>` : ""}</span><span class="rt"><b>${x ? TL(`${il.ad} damgası pasaportunda`, `${il.ad} stamp collected`) : TL(`${il.ad} damgası seni bekliyor`, `The ${il.ad} stamp is waiting for you`)}</b><small>${x ? TL(`${x.n} yere gittin · büyütmek için dokun`, `${x.n} place${x.n === 1 ? "" : "s"} visited · tap to open`) : TL("Bu ilde bir yerin sayfasında \"Buraya gittim\" de, damga pasaportuna basılsın.", "Tap \"I've been here\" on any place in this province to get the stamp.")}</small></span>${x ? ik("chevron-right", 18) : ""}`;
+    k.innerHTML = `<span class="pmini"><b>${esc(il.plaka)}</b>${x && x.t ? `<small>${esc(ayYil(x.t))}</small>` : ""}</span><span class="rt"><b>${x ? TL(`${esc(il.ad)} damgası pasaportunda`, `${esc(il.ad)} stamp collected`) : TL(`${esc(il.ad)} damgası seni bekliyor`, `The ${esc(il.ad)} stamp is waiting for you`)}</b><small>${x ? TL(`${x.n} yere gittin · büyütmek için dokun`, `${x.n} place${x.n === 1 ? "" : "s"} visited · tap to open`) : TL("Bu ilde bir yerin sayfasında \"Buraya gittim\" de, damga pasaportuna basılsın.", "Tap \"I've been here\" on any place in this province to get the stamp.")}</small></span>${x ? ik("chevron-right", 18) : ""}`;
     k.hidden = false;
   }
   // Tüm pasaportu tek görselde paylaş (hikâye boyutu)

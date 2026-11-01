@@ -165,6 +165,10 @@ function tarih(v, p) {
 }
 function temizMetin(s) {
   if (!s) return "";
+  // Vikipedi düz metninde bazen kalan kaynak işaretleri: <ref>...</ref>, <ref ... />, {{şablon}}
+  s = s.replace(/<ref\b[^>]*\/>/gi, "").replace(/<ref\b[^>]*>[\s\S]*?<\/ref>/gi, "").replace(/<ref\b[^>]*>[^\n]*/gi, "");
+  for (let i = 0; i < 3; i++) s = s.replace(/\{\{[^{}]*\}\}/g, "");
+  s = s.replace(/<\/?ref[^>]*>/gi, "").replace(/\{\{|\}\}/g, "");
   s = s.replace(/\s*\((?:[^()]|\([^()]*\))*?(?:Yunanca|İngilizce|Latince|Ermenice|Rumca|Arapça|Farsça|Kürtçe|Gürcüce|Süryanice|Osmanlıca|Lazca|Zazaca|Bulgarca|telaffuz|okunuşu|dinle|Greek|Armenian|Latin)(?:[^()]|\([^()]*\))*?\)/g, "");
   s = s.replace(/\s*\(\s*\)/g, "").replace(/[ \t]+/g, " ").replace(/\n{2,}/g, "\n").replace(/\s+([,.;:])/g, "$1").trim();
   if (s.length > 1600) { const cut = s.lastIndexOf(". ", 1600); s = cut > 700 ? s.slice(0, cut + 1) : s.slice(0, 1600) + "…"; }
