@@ -30,10 +30,9 @@ fs.writeFileSync(`${out}/secilen.json`, JSON.stringify(bilgi, null, 1));
 // 2) Ek arama: yeni tasarımlar için aday fotoğraflar
 const QI = ' incategory:"Quality_images"', FP = ' incategory:"Featured_pictures_on_Wikimedia_Commons"';
 const TEMA = {
-  anne: { kat: ["Mothers and children walking", "Silhouettes of mothers and children", "Hands of mothers and children"], ara: ["mother child walking path back view", "mother daughter holding hands walking", "mother and child silhouette sunset", "mother baby hands close-up", "mother son walking beach behind", "mother child hands holding"] },
-  baba: { kat: ["Fathers and children walking", "Silhouettes of fathers and children"], ara: ["father son fishing pier silhouette", "father child hiking mountain back view", "father daughter walking road behind", "father son walking forest path", "father child shoulders view landscape"] },
-  kadir: { kat: ["Milky Way over mosques"], ara: ["milky way mosque night", "starry sky mosque", "night sky stars mosque minaret", "Cappadocia night stars", "crescent moon mosque night sky", "star trails mosque"] },
-  yol: { kat: ["Roads in Turkey"], ara: ["mountain road Turkey landscape", "winding road Anatolia", "road trip Turkey highway", "country road Turkey sunset", "serpentine road Turkey mountains", "road Kapadokya"] }
+  baba: { kat: [], ara: ["father son silhouette sunset", "father and son fishing", "father daughter walking beach", "father child shoulders", "father son hiking", "dad and son walking", "father son silhouette"] },
+  gece: { kat: [], ara: ["mosque night stars", "mosque crescent moon night", "Süleymaniye Mosque night", "Selimiye Mosque night", "mosque milky way", "Ortaköy Mosque night", "mosque night sky"] },
+  yolt: { kat: [], ara: ["road Turkey summer", "Anatolia road landscape", "Cappadocia road", "Turkey country road", "highway Turkey landscape", "Turkey mountain road green", "Erzurum road", "road Kars Turkey"] }
 };
 const sonuc = {};
 for (const [tema, t] of Object.entries(TEMA)) {
