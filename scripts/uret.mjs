@@ -14,6 +14,14 @@ const DUZ = okuJSON("data/foto-duzelt.json", {});
 const YASAK = new Set((DUZ.yasak || []).map((s) => s.replace(/_/g, " ")));
 const ZORLA = DUZ.zorla || {};
 const CIKAR = new Set(DUZ.cikar || []);
+// Önceki veride her yerin fotoğrafı. Yedek fotoğraf aramaları bütçeyle sınırlı ve sırası her çalışmada değişiyor;
+// önceki fotoğraf hâlâ uygunsa yeniden kullanılır, böylece yerler çalışmadan çalışmaya rastgele kaybolmaz.
+const ONCEKI_FOTO = new Map();
+for (const f of fs.existsSync(OUT + "/il") ? fs.readdirSync(OUT + "/il") : []) {
+  for (const y of okuJSON(`${OUT}/il/${f}`, {}).yerler || []) {
+    if (y.q && y.f && y.f.p) { try { ONCEKI_FOTO.set(y.q, decodeURIComponent(y.f.p.split("/").pop()).replace(/_/g, " ")); } catch {} }
+  }
+}
 const SECKIN = okuJSON("data/yerler-ham.json", {});
 // Vikipedi'de maddesi olmayan popüler yerler (elle eklenir)
 const ELLE = okuJSON("data/elle-yerler.json", {});
@@ -706,7 +714,7 @@ const ilkAday = [];
 for (const il of iller.values()) {
   ilkAday.push(...il.imgs, ...il.basImgs);
   for (const d of il.ilceler) ilkAday.push(...d.imgs, d.sayfaFoto || "");
-  for (const o of il.adaylar) { o.ilAd = il.ad; ilkAday.push(...o.imgs, o.trSayfaFoto || ""); }
+  for (const o of il.adaylar) { o.ilAd = il.ad; ilkAday.push(...o.imgs, o.trSayfaFoto || "", ONCEKI_FOTO.get(o.q) || ""); }
 }
 await fotoBilgi(ilkAday);
 rapor("fotoğraf bilgisi alınan dosya:", FOTO.size, "| uygun:", [...FOTO.keys()].filter(fotoUygun).length);
@@ -781,9 +789,9 @@ for (const il of iller.values()) for (const o of il.adaylar) tumYer.push(o);
 tumYer.sort((a, b) => (b.one || 0) - (a.one || 0) || (a.seckinSira ?? 0) - (b.seckinSira ?? 0) || b.sl - a.sl);
 let yedekKat = 0, yedekYakin = 0, yedekAra = 0, fotosuzSeckin = 0, yedekHak = 4000, araHak = 1500;
 for (const o of tumYer) {
-  const adaylar = [...o.imgs, o.trSayfaFoto].filter(Boolean);
+  const adaylar = [...o.imgs, o.trSayfaFoto, ONCEKI_FOTO.get(o.q)].filter(Boolean);
   let sec = adaylar.find((a) => fotoUygun(a) && !KULLANILAN.has(a));
-  if (sec) o.fotoKaynak = o.imgs.includes(sec) ? "wikidata" : "vikipedi";
+  if (sec) o.fotoKaynak = o.imgs.includes(sec) ? "wikidata" : sec === o.trSayfaFoto ? "vikipedi" : "önceki";
   if (!sec && !o.one && o.cat && yedekHak > 0) {
     yedekHak--;
     for (const a of await kategoriFoto(o.cat, o.ad)) if (!KULLANILAN.has(a)) { sec = a; o.fotoKaynak = "kategori"; yedekKat++; break; }
@@ -809,6 +817,7 @@ for (const o of tumYer) {
   if (ek.length >= 2) { o.galeri = ek; galeriSay++; }
 }
 rapor("galerili öne çıkan yer:", galeriSay);
+rapor("önceki veriden korunan foto:", tumYer.filter((o) => o.fotoKaynak === "önceki").length);
 rapor("yedek foto: kategori", yedekKat, "| yakın", yedekYakin, "| Commons araması", yedekAra, "| hiç bulunamayan seçkin", fotosuzSeckin);
 
 // İl ve ilçe kapak fotoğrafları
