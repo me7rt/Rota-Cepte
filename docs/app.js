@@ -417,7 +417,9 @@
     if (!vardi) {
       const iller = new Set(a.map((x) => x.s)).size;
       const yeni = rozetler().find((r) => r.tamam && !onceki.has(r.ad));
+      const yeniIl = a.filter((x) => x.s === p.ilS).length === 1;
       if (hedefKontrol(oncekiIl)) { /* yıllık hedef kutlandı */ }
+      else if (yeniIl && IDX && IDX.ilBy.has(p.ilS)) pasAc(p.ilS, true, yeni);
       else if (yeni) rozetKutla(yeni);
       else toast(TL(`Harika! Gezdiğin il: ${iller}/81 · Gittiğin yer: ${a.length}`, `Great! Provinces visited: ${iller}/81 · Places: ${a.length}`));
     }
@@ -428,7 +430,7 @@
   }
   function renderGez() {
     const a = gittiklerim();
-    $("gezSec").hidden = false; renderHarita(); renderRozet(); renderHedef();
+    $("gezSec").hidden = false; renderHarita(); renderRozet(); renderHedef(); renderPasaport();
     $("gezBtn").hidden = $("karneBtn").hidden = !a.length;
     if (!a.length) { $("gezList").hidden = true; return; }
     const iller = new Set(a.map((x) => x.s)).size;
@@ -522,6 +524,117 @@
     $("rozetSay").textContent = `${k} / ${R.length}`;
     $("rozetList").innerHTML = R.sort((x, y) => (y.tamam - x.tamam) || (y.n / y.hedef - x.n / x.hedef)).map((r) =>
       `<li class="rozet${r.tamam ? " on" : ""}" title="${esc(r.acik)}"><i>${ik(r.ikon, 26)}</i><b>${esc(r.ad)}</b><small>${r.tamam ? T("Kazandın") : `${r.n}/${r.hedef}`}</small><span class="rbar"><span style="width:${Math.round((r.n / r.hedef) * 100)}%"></span></span></li>`).join("");
+  }
+  // ---------- gezi pasaportu: gidilen her il için bir damga ----------
+  const DAMGA_RENK = { "Marmara": "#2c4fa3", "Ege": "#0b7a83", "Akdeniz": "#c4441b", "İç Anadolu": "#8b5a24", "Karadeniz": "#2f7a35", "Doğu Anadolu": "#6b3fa0", "Güneydoğu": "#b3243c" };
+  const IL_BOLGE = new Map(Object.entries(BOLGE).flatMap(([b, l]) => l.split(" ").map((s) => [s, b])));
+  const tarihYaz = (t, ay) => new Date(t).toLocaleDateString(DIL === "en" ? "en-GB" : "tr-TR", { day: "numeric", month: ay || "long", year: "numeric" });
+  // Her il için ilk ziyaret tarihi ve gidilen yer sayısı
+  function damgalar() {
+    const m = new Map();
+    for (const x of gittiklerim()) {
+      const d = m.get(x.s) || { t: Infinity, n: 0 };
+      d.n++; if (x.t && x.t < d.t) d.t = x.t;
+      m.set(x.s, d);
+    }
+    for (const d of m.values()) if (d.t === Infinity) d.t = null;
+    return m;
+  }
+  // Damga çizimi (SVG): bölge rengi, ilin adı, plaka, ilk ziyaret tarihi; mürekkep dokusu SVG filtresiyle
+  function damgaSvg(s, t, font) {
+    const il = IDX.ilBy.get(s), r = DAMGA_RENK[IL_BOLGE.get(s)] || DAMGA_RENK.Marmara, no = +il.plaka || 1;
+    const don = ((no * 37) % 13) - 6, ad = il.ad.toLocaleUpperCase("tr"), id = "dm" + s;
+    const gun = t ? tarihYaz(t, "short").toLocaleUpperCase(DIL === "en" ? "en" : "tr") : "";
+    const ff = font ? ` font-family="${font}"` : "";
+    return `<svg class="damga" viewBox="0 0 240 240" width="240" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${esc(il.ad)}" style="transform:rotate(${don}deg)">
+      <defs><filter id="${id}f" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" seed="${no}" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -3 0 0 0 2.75" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
+      <path id="${id}u" d="M 40 120 A 80 80 0 0 1 200 120"/><path id="${id}a" d="M 31 120 A 89 89 0 0 0 209 120"/></defs>
+      <g filter="url(#${id}f)" fill="${r}" stroke="${r}"${ff}>
+        <circle cx="120" cy="120" r="113" fill="none" stroke-width="5"/><circle cx="120" cy="120" r="103" fill="none" stroke-width="1.6"/>
+        <circle cx="120" cy="120" r="66" fill="none" stroke-width="1.6" stroke-dasharray="3 4"/>
+        <text font-size="${ad.length > 11 ? 17 : 20}" font-weight="800" letter-spacing="2.5" stroke="none" text-anchor="middle"><textPath href="#${id}u" startOffset="50%">${esc(ad)}</textPath></text>
+        <text font-size="12.5" font-weight="800" letter-spacing="3" stroke="none" text-anchor="middle"><textPath href="#${id}a" startOffset="50%">ROTA CEPTE${t ? " · " + new Date(t).getFullYear() : ""}</textPath></text>
+        <text x="120" y="139" font-size="58" font-weight="800" text-anchor="middle" stroke="none">${esc(il.plaka)}</text>
+        <text x="120" y="161" font-size="10.5" font-weight="800" letter-spacing="1.2" text-anchor="middle" stroke="none">${esc(gun)}</text>
+        <text x="73" y="127" font-size="15" text-anchor="middle" stroke="none">★</text><text x="167" y="127" font-size="15" text-anchor="middle" stroke="none">★</text>
+      </g></svg>`;
+  }
+  function renderPasaport() {
+    const D = damgalar(), iller = IDX.iller.slice().sort((a, b) => (+a.plaka) - (+b.plaka));
+    $("pasSay").textContent = `${D.size} / 81`;
+    $("pasBolge").innerHTML = Object.entries(BOLGE).map(([b, l]) => {
+      const x = l.split(" "), n = x.filter((s) => D.has(s)).length;
+      return `<span class="pbolge${n === x.length ? " tam" : ""}" style="--d:${DAMGA_RENK[b]}"><i></i>${esc(T(b))} <b>${n}/${x.length}</b></span>`;
+    }).join("");
+    $("pasGrid").innerHTML = iller.map((il) => {
+      const ok = D.has(il.s), no = +il.plaka || 1;
+      return `<li><button class="pas${ok ? " on" : ""}" data-pas="${il.s}" style="--d:${DAMGA_RENK[IL_BOLGE.get(il.s)] || "#888"};--r:${((no * 37) % 13) - 6}deg" aria-label="${esc(il.ad)}${ok ? " · " + T("damga var") : ""}" title="${esc(il.ad)}">${esc(il.plaka)}</button></li>`;
+    }).join("");
+  }
+  // Paylaşılan görsel için damgayı tuvale çiz (SVG resmi içinde yazı tipi geç yüklendiği için yazılar kayboluyordu)
+  function damgaCiz(s, t, R) {
+    const il = IDX.ilBy.get(s), renk = DAMGA_RENK[IL_BOLGE.get(s)] || DAMGA_RENK.Marmara, no = +il.plaka || 1, k = R / 113;
+    const o = document.createElement("canvas"); o.width = o.height = Math.ceil(244 * k);
+    const h = o.getContext("2d"), F = (px) => `800 ${px}px Manrope, system-ui, sans-serif`;
+    h.translate(o.width / 2, o.height / 2); h.scale(k, k);
+    h.strokeStyle = h.fillStyle = renk; h.textAlign = "center";
+    const halka = (r, w, kesik) => { h.beginPath(); h.setLineDash(kesik || []); h.lineWidth = w; h.arc(0, 0, r, 0, Math.PI * 2); h.stroke(); };
+    halka(113, 5); halka(103, 1.6); halka(66, 1.6, [3, 4]); h.setLineDash([]);
+    const yay = (yazi, r, px, ara, ust) => {
+      h.font = F(px); const w = [...yazi].map((c) => h.measureText(c).width + ara), top = w.reduce((a, b) => a + b, 0) - ara;
+      let say = 0;
+      [...yazi].forEach((c, i) => {
+        const a = ust ? -Math.PI / 2 - top / 2 / r + (say + w[i] / 2) / r : Math.PI / 2 + top / 2 / r - (say + w[i] / 2) / r;
+        h.save(); h.rotate(ust ? a + Math.PI / 2 : a - Math.PI / 2); h.fillText(c, 0, ust ? -r : r); h.restore();
+        say += w[i];
+      });
+    };
+    const ad = il.ad.toLocaleUpperCase("tr");
+    yay(ad, 80, ad.length > 11 ? 17 : 20, 2.5, true);
+    yay("ROTA CEPTE" + (t ? " · " + new Date(t).getFullYear() : ""), 89, 12.5, 3, false);
+    h.font = F(58); h.fillText(il.plaka, 0, 19);
+    if (t) { h.font = F(10.5); try { h.letterSpacing = "1.2px"; } catch (e) {} h.fillText(tarihYaz(t, "short").toLocaleUpperCase(DIL === "en" ? "en" : "tr"), 0, 41); try { h.letterSpacing = "0px"; } catch (e) {} }
+    h.font = F(15); h.fillText("★", -47, 7); h.fillText("★", 47, 7);
+    // mürekkep dokusu: ile özgü (plakaya göre sabit) küçük boşluklar
+    let tohum = no * 9301 + 49297; const rnd = () => ((tohum = (tohum * 16807) % 2147483647) / 2147483647);
+    h.globalCompositeOperation = "destination-out";
+    for (let i = 0; i < 1100; i++) { const a = rnd() * Math.PI * 2, r = Math.sqrt(rnd()) * 118; h.globalAlpha = 0.35 + rnd() * 0.65; h.beginPath(); h.arc(Math.cos(a) * r, Math.sin(a) * r, 0.3 + rnd() * 1.3, 0, Math.PI * 2); h.fill(); }
+    return o;
+  }
+  async function damgaPaylas(s) {
+    const il = IDX.ilBy.get(s), D = damgalar(), d = D.get(s); if (!d) return;
+    try { await document.fonts.load("800 40px Manrope"); } catch (e) {}
+    const img = damgaCiz(s, d.t, 370);
+    const W = 1080, H = 1350, c = document.createElement("canvas"); c.width = W; c.height = H;
+    const g = c.getContext("2d"), F = (w, px) => `${w} ${px}px Manrope, system-ui, sans-serif`;
+    g.fillStyle = "#f7f0e3"; g.fillRect(0, 0, W, H);
+    // pasaport sayfası çizgileri
+    g.strokeStyle = "rgba(120,90,60,.10)"; g.lineWidth = 2;
+    for (let y = 120; y < H; y += 48) { g.beginPath(); g.moveTo(60, y); g.lineTo(W - 60, y); g.stroke(); }
+    g.strokeStyle = "rgba(120,90,60,.35)"; g.lineWidth = 3; g.strokeRect(36, 36, W - 72, H - 72);
+    g.textAlign = "center"; g.fillStyle = "#5b4636"; g.font = F(800, 34);
+    g.fillText(TL("GEZİ PASAPORTUM", "MY TRAVEL PASSPORT"), W / 2, 112);
+    const don = ((+il.plaka * 37) % 13 - 6) * Math.PI / 180;
+    g.save(); g.translate(W / 2, 560); g.rotate(don); g.globalAlpha = 0.92; g.drawImage(img, -img.width / 2, -img.height / 2); g.restore();
+    g.fillStyle = "#2a211b"; g.font = F(800, 72); g.fillText(il.ad, W / 2, 1060);
+    g.fillStyle = "#5b4636"; g.font = F(600, 36);
+    g.fillText(TL(`${d.n} yer gördüm${d.t ? " · " + tarihYaz(d.t) : ""}`, `${d.n} place${d.n === 1 ? "" : "s"} seen${d.t ? " · " + tarihYaz(d.t) : ""}`), W / 2, 1120);
+    g.fillText(TL(`Pasaportumda ${D.size} / 81 il damgası var`, `${D.size} of 81 province stamps collected`), W / 2, 1172);
+    g.fillStyle = "#c4441b"; g.font = F(800, 40); g.fillText(T("Yol senin, rotan cepte!"), W / 2, 1250);
+    g.fillStyle = "#5b4636"; g.font = F(600, 28); g.fillText("Rota Cepte · me7rt.github.io/Rota-Cepte", W / 2, 1294);
+    gorselPaylas(c.toDataURL("image/png"), `damga-${s}.png`, TL(`${il.ad} damgası pasaportumda! Türkiye'nin ${D.size} ilini gezdim. Rota Cepte: https://me7rt.github.io/Rota-Cepte/`, `${il.ad} stamp collected! I've visited ${D.size} provinces of Türkiye. Rota Cepte: https://me7rt.github.io/Rota-Cepte/`));
+  }
+  function pasAc(s, yeni, rozet) {
+    const il = IDX.ilBy.get(s), d = damgalar().get(s);
+    if (!d) { git(`#/il/${s}`); return; }
+    const m = document.createElement("div"); m.className = "tanit";
+    m.innerHTML = `<div class="tkart pkart${yeni ? " yeni" : ""}"><small>${yeni ? T("Pasaportuna yeni damga!") : T("Gezi pasaportum")}</small><div class="psayfa">${damgaSvg(s, d.t)}</div><h2>${esc(il.ad)}</h2><p>${TL(`${d.n} yere gittin${d.t ? " · ilk ziyaret " + tarihYaz(d.t) : ""}`, `${d.n} place${d.n === 1 ? "" : "s"} visited${d.t ? " · first visit " + tarihYaz(d.t) : ""}`)}</p>${rozet ? `<p class="prozet">${ik(rozet.ikon, 18)} ${T("Yeni rozet")}: <b>${esc(rozet.ad)}</b></p>` : ""}<div class="tbtn"><button class="linkbtn" data-k="kapat">${T("Kapat")}</button><button class="btn primary" data-k="dpay">${ik("share-2", 18)} ${TL("Paylaş", "Share")}</button></div></div>`;
+    const kapat = () => { m.classList.add("out"); setTimeout(() => m.remove(), 300); };
+    m.addEventListener("click", (e) => {
+      if (e.target === m || e.target.closest("[data-k=kapat]")) return kapat();
+      if (e.target.closest("[data-k=dpay]")) damgaPaylas(s);
+    });
+    document.body.appendChild(m);
   }
   // ---------- hava durumu ----------
   const HAVA = { 0: ["sun", T("Açık")], 1: ["cloud-sun", T("Az bulutlu")], 2: ["cloud-sun", T("Parçalı bulutlu")], 3: ["cloud", T("Kapalı")], 45: ["cloud-fog", T("Sisli")], 48: ["cloud-fog", T("Sisli")],
@@ -1168,20 +1281,24 @@
       if (e.target === d || e.target.closest("[data-k=kapat]")) return kapat();
       if (!e.target.closest("[data-k=paylas]")) return;
       const metin = TL(`Türkiye'nin ${iller} ilini gezdim! Sen kaç ili gezdin? Rota Cepte ile bak: https://me7rt.github.io/Rota-Cepte/`, `I've visited ${iller} of Türkiye's 81 provinces! How many have you? https://me7rt.github.io/Rota-Cepte/`);
-      const P = window.Capacitor && window.Capacitor.Plugins;
-      try {
-        if (P && P.Share && P.Filesystem) {
-          const yaz = await P.Filesystem.writeFile({ path: "gezi-karnem.png", data: url.split(",")[1], directory: "CACHE" });
-          await P.Share.share({ title: "Rota Cepte", text: metin, files: [yaz.uri] });
-          return;
-        }
-        const blob = await (await fetch(url)).blob(), dosya = new File([blob], "gezi-karnem.png", { type: "image/png" });
-        if (navigator.canShare && navigator.canShare({ files: [dosya] })) { await navigator.share({ files: [dosya], text: metin }); return; }
-        const l = document.createElement("a"); l.href = url; l.download = "gezi-karnem.png"; document.body.appendChild(l); l.click(); l.remove();
-        toast(TL("Görsel indirildi. Galeriden paylaşabilirsin.", "Image saved. You can share it from your gallery."));
-      } catch (err) { if (err && err.name !== "AbortError") toast(TL("Paylaşılamadı. Görsele basılı tutup kaydedebilirsin.", "Couldn't share. Long-press the image to save it.")); }
+      gorselPaylas(url, "gezi-karnem.png", metin);
     });
     document.body.appendChild(d);
+  }
+  // Görseli paylaş: uygulamada Android paylaşım menüsü, tarayıcıda Web Share, olmazsa indir
+  async function gorselPaylas(url, ad, metin) {
+    const P = window.Capacitor && window.Capacitor.Plugins;
+    try {
+      if (P && P.Share && P.Filesystem) {
+        const yaz = await P.Filesystem.writeFile({ path: ad, data: url.split(",")[1], directory: "CACHE" });
+        await P.Share.share({ title: "Rota Cepte", text: metin, files: [yaz.uri] });
+        return;
+      }
+      const blob = await (await fetch(url)).blob(), dosya = new File([blob], ad, { type: "image/png" });
+      if (navigator.canShare && navigator.canShare({ files: [dosya] })) { await navigator.share({ files: [dosya], text: metin }); return; }
+      const l = document.createElement("a"); l.href = url; l.download = ad; document.body.appendChild(l); l.click(); l.remove();
+      toast(TL("Görsel indirildi. Galeriden paylaşabilirsin.", "Image saved. You can share it from your gallery."));
+    } catch (err) { if (err && err.name !== "AbortError") toast(TL("Paylaşılamadı. Görsele basılı tutup kaydedebilirsin.", "Couldn't share. Long-press the image to save it.")); }
   }
   // ---------- paylaş ----------
   function paylas(p) {
@@ -1634,6 +1751,7 @@
   $("dDinle").addEventListener("click", dinle);
   $("gezBtn").addEventListener("click", () => { $("gezList").hidden = !$("gezList").hidden; });
   $("karneBtn").addEventListener("click", karne);
+  $("pasGrid").addEventListener("click", (e) => { const b = e.target.closest("[data-pas]"); if (b) pasAc(b.dataset.pas); });
   $("hedefSec").addEventListener("click", (e) => {
     const b = e.target.closest("[data-hedef]"); if (!b) return;
     const n = +b.dataset.hedef;

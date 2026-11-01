@@ -7,6 +7,8 @@
   if (dil !== "tr" && dil !== "en") dil = /^tr/i.test(navigator.language || "tr") ? "tr" : "en";
   const EN = {
     // v6.5
+    "Gezi pasaportum": "My travel passport", "Gittiğin her ilin damgası pasaportuna basılır. Renkli damgaya dokun, büyüt ve paylaş.": "Every province you visit gets a stamp in your passport. Tap a coloured stamp to enlarge and share it.",
+    "Pasaportuna yeni damga!": "New passport stamp!", "Yeni rozet": "New badge", "damga var": "stamped",
     "Yol üstü keşif": "Along the way", "Yola mı çıkıyorsun? İki il seç, yol boyunca mola yerlerini bulalım": "Road trip? Pick two provinces and we'll find stops along the way",
     "Nereden": "From", "Nereye": "To", "Yönü değiştir": "Swap direction", "Yoldan en fazla": "Max. distance off the road", "Yolculuk planı": "Trip planner",
     "Yol tarifini Google Haritalar'da aç": "Open directions in Google Maps", "Nereden ve nereye için iki farklı il seç.": "Pick two different provinces.",
