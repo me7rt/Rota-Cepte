@@ -391,7 +391,7 @@ function satirlariTopla(rows, harita) {
 }
 rapor("== Yerler");
 const HAM = new Map();
-async function sinifSorgu(grup) {
+async function sinifSorgu(grup, tekrar = 0) {
   try {
     satirlariTopla(await sparql(`SELECT ${SECIM} WHERE {
       VALUES ?cls { ${grup.map((q) => "wd:" + q).join(" ")} }
@@ -401,6 +401,8 @@ async function sinifSorgu(grup) {
       FILTER NOT EXISTS { ?p wdt:P576 [] }
       ${YER_EK} }`, 0, true), HAM);
   } catch (e) {
+    // tek sınıf zaman aşımına uğrarsa birkaç kez daha dene (yoksa o türdeki yerler bu çalışmada kaybolur)
+    if (e.zaman && grup.length === 1 && tekrar < 2) { await sleep(20000); return sinifSorgu(grup, tekrar + 1); }
     if (!e.zaman || grup.length === 1) { rapor("  UYARI sınıf sorgusu başarısız:", grup.join(","), e.message.slice(0, 100)); return; }
     const y = Math.ceil(grup.length / 2);
     await sinifSorgu(grup.slice(0, y)); await sinifSorgu(grup.slice(y));
@@ -413,7 +415,7 @@ rapor("Türkiye geneli aday yer:", HAM.size);
 const MADDESIZ = "Q34038 Q23397 Q35509 Q150784 Q40080 Q23442 Q39816 Q46169 Q179049 Q177380 Q23413 Q839954 Q15661340 Q12280 Q12518 Q33506 Q8502".split(" ");
 {
   const ek = new Map(); const trD = new Map();
-  async function maddesizSorgu(grup) {
+  async function maddesizSorgu(grup, tekrar = 0) {
     try {
       const rows = await sparql(`SELECT ${SECIM} ?trD WHERE {
         VALUES ?cls { ${grup.map((q) => "wd:" + q).join(" ")} }
@@ -427,6 +429,7 @@ const MADDESIZ = "Q34038 Q23397 Q35509 Q150784 Q40080 Q23442 Q39816 Q46169 Q1790
       satirlariTopla(rows, ek);
       for (const b of rows) if (val(b, "trD")) trD.set(qid(val(b, "p")), val(b, "trD"));
     } catch (e) {
+      if (e.zaman && grup.length === 1 && tekrar < 2) { await sleep(20000); return maddesizSorgu(grup, tekrar + 1); }
       if (!e.zaman || grup.length === 1) { rapor("  UYARI maddesiz yer sorgusu:", grup.join(","), e.message.slice(0, 80)); return; }
       const y = Math.ceil(grup.length / 2);
       await maddesizSorgu(grup.slice(0, y)); await maddesizSorgu(grup.slice(y));
