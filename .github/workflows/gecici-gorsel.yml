@@ -11,18 +11,20 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
-      - name: Secilenleri yuksek cozunurlukte indir
-        run: |
-          python3 .github/gorsel-indir.py cikti/hd "$(cat .github/gorsel-secim.json)"
       - name: Yeni adaylar
         run: |
-          python3 .github/gorsel-topla.py cikti/aday '{
-            "uzungol": ["Uzungol lake", "bitmap", 8, 1000],
-            "uzungol-tr": ["Uzungöl gölü", "bitmap", 6, 1000],
-            "uzungol-kis": ["Uzungöl winter", "bitmap", 4, 1000],
-            "aslanli": ["Anıtkabir Aslanlı Yol", "bitmap", 6, 1200],
-            "aslanli-en": ["Anitkabir Road of Lions", "bitmap", 6, 1200],
-            "anit-kule": ["Anıtkabir tower", "bitmap", 4, 1200]
+          python3 .github/gorsel-topla.py cikti '{
+            "efes-celsus": ["Library of Celsus Ephesus", "bitmap", 8],
+            "efes-tiyatro": ["Great Theatre Ephesus", "bitmap", 6],
+            "efes-sokak": ["Curetes Street Ephesus", "bitmap", 6],
+            "efes-yamac": ["Terrace Houses Ephesus", "bitmap", 6, 1200],
+            "nemrut": ["Mount Nemrut statues heads", "bitmap", 8],
+            "nemrut-gun": ["Nemrut sunrise", "bitmap", 6, 1200],
+            "nemrut-tr": ["Nemrut Dağı", "bitmap", 6],
+            "safranbolu": ["Safranbolu houses", "bitmap", 8],
+            "safranbolu-tepe": ["Safranbolu Hıdırlık", "bitmap", 5, 1200],
+            "cinci": ["Cinci Han Safranbolu", "bitmap", 5, 1200],
+            "safranbolu-genel": ["Safranbolu", "bitmap", 8]
           }' 2400
       - name: video-deneme dalina koy
         run: |
@@ -31,4 +33,4 @@ jobs:
           git config user.name "Mert Turanlıoğlu"
           git config user.email "me7rtt@gmail.com"
           git add . && git commit -qm "Kısa video görsel adayları"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:video-deneme-5
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:video-deneme-6
