@@ -1774,7 +1774,7 @@
     $("eyebrow").textContent = T("Kısa tatil önerisi"); $("title").textContent = kacGun === 3 ? T("Bayram kaçamağı") : T("Hafta sonu kaçamağı");
     renderKacamak();
   }
-  const sureYaz = (saat) => { const s = Math.floor(saat), d = Math.round((saat - s) * 6) * 10; return TL(`~${s ? s + " sa" : ""}${d ? " " + d + " dk" : ""}`, `~${s ? s + " h" : ""}${d ? " " + d + " min" : ""}`).replace("~ ", "~"); };
+  const sureYaz = (saat) => { const t = Math.round(saat * 6) * 10, s = Math.floor(t / 60), d = t % 60; return TL(`~${s ? s + " sa" : ""}${d ? " " + d + " dk" : ""}`, `~${s ? s + " h" : ""}${d ? " " + d + " min" : ""}`).replace("~ ", "~"); };
   function renderKacamak() {
     if (!view || view.mode !== "kacamak") return;
     document.querySelectorAll("#kacSure [data-g]").forEach((b) => b.setAttribute("aria-pressed", +b.dataset.g === kacGun));
