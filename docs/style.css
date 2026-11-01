@@ -102,6 +102,26 @@
     --sh-1:0 1px 2px rgba(0,0,0,.4); --sh-2:0 8px 24px rgba(0,0,0,.45)}
 }
 
+/* D · Yas: yalnızca 10 Kasım günü kendiliğinden açılır (Radix gray). Kategori renkleri anlam taşıdığı için kalır. */
+:root[data-tema="yas"]{
+  --bg:#f0f0f0; --surface:#fcfcfc; --surface2:#e8e8e8; --line:#e0e0e0;  /* gray 3,1,4,5 */
+  --fg:#202020; --muted:#646464;                                         /* gray 12, 11 */
+  --pri:#2b2b2b; --on-pri:#fff; --pri-ink:#202020; --pri-soft:#e8e8e8;
+  --k-y:#646464;
+  --rk1a:#5a5a5a; --rk1b:#1a1a1a; --rk2a:#3a3a3a; --rk2b:#111; --rk3a:#6f6f6f; --rk3b:#202020;
+  --gunun-a:#4a4a4a; --gunun-b:#161616; --ilk-a:#8d8d8d; --ilk-b:#202020;
+  --hbos:#e0e0e0; --harita-zemin:#e8e8e8;
+  --sh-1:0 1px 2px rgba(0,0,0,.07),0 1px 3px rgba(0,0,0,.07);
+  --sh-2:0 2px 6px rgba(0,0,0,.07),0 10px 24px rgba(0,0,0,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root[data-tema="yas"]{
+    --bg:#111; --surface:#191919; --surface2:#222; --line:#3a3a3a;  /* gray-dark 1,2,3,6 */
+    --fg:#eee; --muted:#b4b4b4; --pri:#e0e0e0; --on-pri:#111; --pri-ink:#eee; --pri-soft:#2a2a2a;
+    --hbos:#2a2a2a; --harita-zemin:#222;
+    --sh-1:0 1px 2px rgba(0,0,0,.4); --sh-2:0 8px 24px rgba(0,0,0,.45)}
+}
+
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 html,body{margin:0}

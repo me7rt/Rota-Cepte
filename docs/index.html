@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6eee7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#11131f" media="(prefers-color-scheme: dark)">
-<script>try{var t=localStorage.getItem("gezi-tema");if(t==="ege"||t==="karadeniz")document.documentElement.setAttribute("data-tema",t);if(localStorage.getItem("gezi-acilis-gordu"))document.documentElement.classList.add("sp-hizli")}catch(e){}</script>
+<script>try{var t=localStorage.getItem("gezi-tema"),g=new Date();if(g.getMonth()===10&&g.getDate()===10)t="yas";if(t==="ege"||t==="karadeniz"||t==="yas")document.documentElement.setAttribute("data-tema",t);if(localStorage.getItem("gezi-acilis-gordu"))document.documentElement.classList.add("sp-hizli")}catch(e){}</script>
 <title>Rota Cepte · Türkiye Gezi Rehberi</title>
 <meta name="author" content="Mert Turanlıoğlu">
 <meta name="copyright" content="© 2026 Mert Turanlıoğlu. Tüm hakları saklıdır.">
@@ -162,6 +162,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
     <button class="grow" id="dilBtn"><i data-ik="languages"></i><span id="dilYazi"></span></button>
     <button class="grow" id="temaBtn"><i data-ik="palette"></i><span id="temaYazi"></span></button>
     <button class="grow" id="bildirimBtn" hidden><i data-ik="bell"></i><span id="bildirimYazi"></span></button>
+    <button class="grow" id="anmaBtn" hidden><i data-ik="bell"></i><span id="anmaYazi"></span></button>
     <a class="grow" href="gizlilik.html"><i data-ik="shield-check"></i><span>Gizlilik</span></a>
     <a class="grow" href="lisanslar.html"><i data-ik="copyright"></i><span>Kaynaklar ve lisanslar</span></a>
     <a class="grow" href="kosullar.html"><i data-ik="scale"></i><span>Kullanım koşulları</span></a>

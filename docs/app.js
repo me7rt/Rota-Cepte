@@ -2090,7 +2090,7 @@
       ["star", TL("Puan ve not", "Ratings and notes"), TL("Gittiğin yerlere yıldız ver, kendine not bırak; en sevdiklerin Gezilerim'de toplanır.", "Rate the places you visited and leave yourself a note; your favourites gather in My trips."), "#/rozetler"],
       ["cloud-sun", TL("Canlı hava ve altın saat", "Live weather and golden hour"), TL("Hava durumu anlık güncellenir. Fotoğraf için en güzel ışığın saati, gün batımı ve havaya göre öneriler il sayfasında.", "The weather updates live. The best light for photos, sunset times and weather-smart tips are on each province page."), `#/il/${son}`],
       ["camera", TL("Fotoğraflı paylaşım", "Photo sharing"), TL("Bir yeri fotoğraflı kartla paylaş; bayramlarda ve özel günlerde tebrik kartı gönder.", "Share a place as a photo card, and send greeting cards on holidays and special days."), ""],
-      ["flag", TL("Özel günler", "Special days"), TL("Millî bayramlarda kaçıncı yıl olduğunu, kandillerde ve bayramlarda tebrik mesajını ana sayfada görürsün. 10 Kasım'da saygı kartı açılır.", "National days show their anniversary, and religious holidays a greeting, on the home screen. On 10 November a remembrance card opens."), ""],
+      ["flag", TL("Özel günler", "Special days"), TL("Millî bayramlarda kaçıncı yıl olduğunu, kandillerde ve bayramlarda tebrik mesajını ana sayfada görürsün. 10 Kasım'da saygı kartı açılır, uygulama gün boyu yas renklerine bürünür ve saat 09.05'te anma bildirimi gelir.", "National days show their anniversary, and religious holidays a greeting, on the home screen. On 10 November a remembrance card opens, the app turns to mourning colours for the day and a notification arrives at 9:05 am."), ""],
       ["car-front", TL("Yol üstü keşif", "Along the way"), TL("Yola çıkarken iki il seç; yol boyunca uğrayabileceğin yerleri ve mola önerilerini sırayla gösterelim.", "Pick two provinces before a road trip; we'll list the stops along the way and suggest breaks."), "#/yol"],
       ["shuffle", T("Nereye gitsem?"), TL("Fotoğraflı kartları kaydır: sağa kaydırdığın yer listene girer, sola kaydırdığını geçeriz.", "Swipe photo cards: right to save a place, left to skip."), "#/kartlar"],
       ["calendar-days", T("Hafta sonu kaçamağı"), TL("Arabayla birkaç saatlik illeri öneririz; bayramda 3-4 günlük rotalar.", "Provinces a few hours' drive away; longer trips for holidays."), "#/kacamak"],
@@ -3015,12 +3015,21 @@
   ];
   let tema = "gunbatimi";
   try { const t = localStorage.getItem("gezi-tema"); if (TEMALAR.some((x) => x.k === t)) tema = t; } catch (e) {}
+  // 10 Kasım günü bütün gün yas teması: kullanıcının seçtiği tema kaydedilir, ertesi gün geri gelir
+  const YAS_GUNU = (() => { const g = new Date(); return g.getMonth() === 10 && g.getDate() === 10; })();
   function temaUygula(k) {
     const t = TEMALAR.find((x) => x.k === k) || TEMALAR[0];
     tema = t.k;
+    const m = document.querySelectorAll('meta[name="theme-color"]');
+    if (YAS_GUNU) {
+      document.documentElement.setAttribute("data-tema", "yas");
+      if (m[0]) m[0].content = "#f0f0f0";
+      if (m[1]) m[1].content = "#111111";
+      $("temaYazi").innerHTML = `${TL("Tema", "Theme")}: <b>${TL("Yas (10 Kasım)", "Mourning (10 November)")}</b>`;
+      return;
+    }
     if (t.k === "gunbatimi") document.documentElement.removeAttribute("data-tema");
     else document.documentElement.setAttribute("data-tema", t.k);
-    const m = document.querySelectorAll('meta[name="theme-color"]');
     if (m[0]) m[0].content = t.r[0];
     if (m[1]) m[1].content = t.koyu;
     $("temaYazi").innerHTML = `${TL("Tema", "Theme")}: <b>${esc(t.ad)}</b>`;
@@ -3028,7 +3037,8 @@
   function temaSec() {
     const d = document.createElement("div"); d.className = "tanit";
     const secenek = (t) => `<button class="tsec" role="radio" aria-checked="${t.k === tema}" data-tema="${t.k}"><span class="tornek" aria-hidden="true"><i class="tz" style="--sw-a:${t.r[0]};--sw-k:${t.koyu}"></i><i style="background:${t.r[1]}"></i><i style="background:${t.r[2]}"></i></span><span class="tad"><b>${esc(t.ad)}</b><small>${esc(t.not)}</small></span><i class="tisaret" aria-hidden="true">${ik("check", 16)}</i></button>`;
-    d.innerHTML = `<div class="tkart"><div class="temo">${ik("palette", 36)}</div><h2>${TL("Tema", "Theme")}</h2><p>${TL("Uygulamanın renklerini seç. Karanlık mod telefonunun ayarına göre açılır.", "Pick the app colours. Dark mode follows your phone's setting.")}</p>
+    const yasNot = YAS_GUNU ? TL(" Bugün 10 Kasım: uygulama gün boyunca yas renklerinde. Seçtiğin tema yarın gelir.", " Today is 10 November: the app stays in mourning colours all day. Your theme returns tomorrow.") : "";
+    d.innerHTML = `<div class="tkart"><div class="temo">${ik("palette", 36)}</div><h2>${TL("Tema", "Theme")}</h2><p>${TL("Uygulamanın renklerini seç. Karanlık mod telefonunun ayarına göre açılır.", "Pick the app colours. Dark mode follows your phone's setting.")}${yasNot}</p>
       <div class="temalar" role="radiogroup" aria-label="${TL("Tema", "Theme")}">${TEMALAR.map(secenek).join("")}</div>
       <div class="tbtn" style="justify-content:center"><button class="btn primary" data-k="kapat">${TL("Tamam", "Done")}</button></div></div>`;
     const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); $("temaBtn").focus(); };
@@ -3233,6 +3243,72 @@
     });
     document.body.appendChild(d);
   }
+  // ---------- 10 Kasım anma bildirimi: saat 09.05'te, saygı duruşu anında (telefonda kurulur, hiçbir bilgi bize gelmez) ----------
+  const ANMA = "gezi-anma", ANMA_SORU = "gezi-anma-soru", ANMA_ID = 7100;
+  const anmaAcik = () => { try { return localStorage.getItem(ANMA) !== "0"; } catch (e) { return true; } };
+  const siraEn = (n) => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th");
+  // Önümüzdeki üç 10 Kasım için tek seferlik bildirimler; her açılışta yeniden kurulur
+  async function anmaKur() {
+    if (!LN) return;
+    try {
+      await LN.cancel({ notifications: [0, 1, 2].map((i) => ({ id: ANMA_ID + i })) });
+      if (!anmaAcik() || (await LN.checkPermissions()).display !== "granted") return;
+      const simdi = new Date(), n = [];
+      for (let y = simdi.getFullYear(); n.length < 3; y++) {
+        const t = new Date(y, 10, 10, 9, 5, 0);
+        if (t <= simdi) continue;
+        const yil = y - 1938;
+        n.push({
+          id: ANMA_ID + n.length,
+          title: TL("Saygıyla ve özlemle ∞", "With respect and longing ∞"),
+          body: TL(`10 Kasım, saat 09.05. Gazi Mustafa Kemal Atatürk'ü ebediyete intikalinin ${yil}. yılında saygı, sevgi ve özlemle anıyoruz.`, `10 November, 9:05 am. We remember Mustafa Kemal Atatürk, founder of the Republic of Türkiye, on the ${siraEn(yil)} anniversary of his passing.`),
+          schedule: { at: t, allowWhileIdle: true },
+          extra: { git: "#/ataturk" }
+        });
+      }
+      await LN.schedule({ notifications: n });
+    } catch (e) {}
+  }
+  function anmaYazi() {
+    const b = $("anmaBtn"); if (!b) return;
+    b.hidden = !LN;
+    $("anmaYazi").textContent = anmaAcik() ? TL("10 Kasım 09.05 anma bildirimi: Açık", "10 November 9:05 am remembrance: On") : TL("10 Kasım 09.05 anma bildirimi: Kapalı", "10 November 9:05 am remembrance: Off");
+  }
+  async function anmaAc(ac) {
+    if (!LN) return;
+    if (ac) {
+      let izin = "denied";
+      try { izin = (await LN.requestPermissions()).display; } catch (e) {}
+      if (izin !== "granted") { toast(TL("Bildirim izni verilmedi. Telefonunun ayarlarından açabilirsin.", "Notifications aren't allowed. You can turn them on in your phone settings.")); return; }
+    }
+    try { localStorage.setItem(ANMA, ac ? "1" : "0"); } catch (e) {}
+    anmaYazi(); await anmaKur();
+    toast(ac ? TL("Tamam. 10 Kasım'da saat 09.05'te hatırlatacağız.", "Done. We'll remind you on 10 November at 9:05 am.") : TL("Anma bildirimi kapatıldı.", "Remembrance notification turned off."));
+  }
+  // 1-9 Kasım arasında, bildirim izni yoksa bir kez sorulur
+  async function anmaTeklif() {
+    if (!LN || !anmaAcik()) return;
+    const g = new Date(); if (g.getMonth() !== 10 || g.getDate() > 9) return;
+    try { if (localStorage.getItem(ANMA_SORU)) return; } catch (e) { return; }
+    try { if ((await LN.checkPermissions()).display === "granted") return; } catch (e) { return; }
+    if (document.querySelector(".tanit") || (location.hash && location.hash !== "#/")) return;
+    try { localStorage.setItem(ANMA_SORU, "1"); } catch (e) {}
+    const d = document.createElement("div"); d.className = "tanit";
+    d.innerHTML = `<div class="tkart"><div class="temo">${ik("bell", 36)}</div><h2>${TL("10 Kasım'da hatırlatalım mı?", "Remind you on 10 November?")}</h2><p>${TL("Atatürk'ü anmak için 10 Kasım sabahı saat 09.05'te, saygı duruşu anında telefonuna bir bildirim gelsin. Bildirim telefonunda kurulur, hiçbir bilgi bize gelmez.", "Get a notification at 9:05 am on 10 November, the minute of silence for Atatürk. It's set up on your phone and nothing is sent to us.")}</p><div class="tbtn"><button class="linkbtn" data-k="sonra">${TL("Şimdi değil", "Not now")}</button><button class="btn primary" data-k="evet">${TL("Evet, hatırlat", "Yes, remind me")}</button></div></div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    d.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-k]");
+      if (e.target === d || (b && b.dataset.k === "sonra")) kapat();
+      else if (b && b.dataset.k === "evet") { kapat(); anmaAc(true); }
+    });
+    document.body.appendChild(d);
+  }
+  if (LN) {
+    $("anmaBtn").addEventListener("click", () => anmaAc(!anmaAcik()));
+    anmaYazi();
+    setTimeout(anmaKur, 4500);
+    setTimeout(anmaTeklif, 7000);
+  }
   if (LN) {
     $("bildirimBtn").addEventListener("click", () => bildirimAc(!bildirimAcik()));
     if (LN.addListener) LN.addListener("localNotificationActionPerformed", (a) => { const g = a && a.notification && a.notification.extra && a.notification.extra.git; if (g) git(g); });
@@ -3276,13 +3352,16 @@
   // ---------- v6.5 küçük sevinçler: saate göre selam, konfeti, şans çarkı, mola planı ----------
   // Ana sayfa üst yazısı: saate göre selam (05-11, 11-17, 17-22, 22-05)
   function selam(t) {
-    const s = (t || new Date()).getHours();
+    const g = t || new Date();
+    if (g.getMonth() === 10 && g.getDate() === 10) return TL("10 Kasım · Saygıyla anıyoruz", "10 November · In remembrance");
+    const s = g.getHours();
     const i = s >= 5 && s < 11 ? 0 : s >= 11 && s < 17 ? 1 : s >= 17 && s < 22 ? 2 : 3;
     return TL(["Günaydın", "İyi günler", "İyi akşamlar", "İyi geceler"][i], ["Good morning", "Good afternoon", "Good evening", "Good night"][i]);
   }
   // Konfeti: yeni rozet, yıllık hedef ve yeni damgada kısa kutlama. Kütüphanesiz, 1,5 sn; hareket azaltma açıksa hiç çalışmaz.
   function konfeti() {
     try { if (matchMedia("(prefers-reduced-motion: reduce)").matches) return; } catch (e) { return; }
+    if (document.documentElement.getAttribute("data-tema") === "yas") return; // 10 Kasım: kutlama efekti yok
     const c = document.createElement("canvas"), g = c.getContext && c.getContext("2d"); if (!g) return;
     const W = innerWidth, H = innerHeight, dpr = Math.min(2, devicePixelRatio || 1);
     c.className = "konfeti"; c.setAttribute("aria-hidden", "true"); c.width = W * dpr; c.height = H * dpr;
