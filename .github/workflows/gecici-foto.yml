@@ -2,7 +2,7 @@ name: Gecici foto kontrol paftalari
 on:
   push:
     branches: [claude/project-thread-tpajlk]
-    paths: ["scripts/foto-kontrol.py", ".github/workflows/gecici-foto.yml"]
+    paths: ["scripts/foto-kontrol.py", "scripts/gecici-fark.json", ".github/workflows/gecici-foto.yml"]
 permissions:
   contents: write
 jobs:
