@@ -644,3 +644,15 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 .ylist .ybtn>svg{flex:none;color:var(--muted)}
 .ylist .ybtn:active{background:var(--surface2)}
 .ylist .ybtn:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+/* 10 Kasım saygı kartı */
+.tanit.saygi{background:rgba(6,7,9,.86);align-items:center}
+.tkart.skart{position:relative;overflow:hidden;background:linear-gradient(170deg,#14171c,#272c34);color:#eef0f2;border:1px solid rgba(255,255,255,.08);padding-top:30px}
+.skart .sbant{position:absolute;inset:0 0 auto 0;height:5px;background:#e30a17}
+.skart small{display:block;letter-spacing:.16em;font-weight:800;font-size:12px;color:#b9c0c9;text-transform:uppercase}
+.tkart.skart h2{color:#fff;margin:12px 0 8px}
+.tkart.skart p{color:#c9ced6}
+.skart blockquote{margin:18px 0 2px;padding:14px 16px;border-left:3px solid #e30a17;background:rgba(255,255,255,.05);border-radius:12px;text-align:left;font-style:italic;font-size:15px;line-height:1.55;color:#f3f4f6}
+.skart cite{display:block;margin-top:8px;font-style:normal;font-weight:800;font-size:13px;color:#aab1bb}
+.skart .linkbtn{color:#c9ced6}
+.skart .btn.primary{background:#e30a17;color:#fff}
+.ozelgun small+small{margin-top:2px}

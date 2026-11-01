@@ -1338,6 +1338,7 @@
   // ---------- ilk açılış rehberi ----------
   function tanitim() {
     try { if (localStorage.getItem("gezi-tanitim")) return; } catch (e) { return; }
+    if (document.querySelector(".tanit")) { setTimeout(tanitim, 4000); return; }
     const s = [
       ["map", T("81 ili keşfet"), T("Her ilde ve ilçede gezilecek yerler, fotoğraflar ve kısa bilgiler seni bekliyor.")],
       ["navigation", T("Yakınındakileri bul"), T("Konumunu açarsan sana en yakın şelaleleri, kaleleri, müzeleri sıralarız.")],
@@ -2213,9 +2214,11 @@
       const o = await getJSON(`ozel-gunler.json?v=${SURUM}`);
       const n = new Date(), iki = (x) => String(x).padStart(2, "0");
       const gun = `${n.getFullYear()}-${iki(n.getMonth() + 1)}-${iki(n.getDate())}`;
-      const g = o.sabit[gun.slice(5)] || (o.degisken || []).find((x) => gun >= x.bas && gun <= x.bit);
+      // Sabit gün (ör. 19 Mayıs) ile değişken gün (ör. Kurban Bayramı) aynı güne denk gelirse ikisi de görünsün
+      const sb = o.sabit[gun.slice(5)], dg = (o.degisken || []).find((x) => gun >= x.bas && gun <= x.bit), g = sb || dg;
       if (!g) { bayramSayac(o, n); return; }
-      const msj = TL(g.tr, g.en || g.tr);
+      const yaz = (x) => TL(x.tr, x.en || x.tr).replace("{n}", x.yil ? n.getFullYear() - x.yil : "");
+      const msj = yaz(g), ek = sb && dg ? yaz(dg) : "";
       // açılış ekranı
       const t2 = document.querySelector(".sp-tag2"); if (t2) { t2.textContent = `${g.e} ${msj}`; t2.classList.add("sp-ozel"); }
       if (g.yas) document.documentElement.classList.add("yas");
@@ -2225,12 +2228,40 @@
       const sonra = g.sayac ? (o.degisken || []).filter((x) => x.ad && x.bas > gun).sort((x, y) => (x.bas < y.bas ? -1 : 1))[0] : null;
       const kalan = sonra ? Math.round((Date.parse(sonra.bas + "T00:00:00Z") - Date.UTC(n.getFullYear(), n.getMonth(), n.getDate())) / 864e5) : 0;
       const alt = g.bayram ? TL("Bayram tatili için hazır rotalara göz at ›", "Browse ready-made routes for the holiday ›")
+        : g.git === "#/ataturk" ? TL("Atatürk'ün izinde: 1915'ten Anıtkabir'e ›", "In Atatürk's footsteps: from 1915 to Anıtkabir ›")
         : sonra && kalan <= 60 ? TL(`${sonra.ad}'na ${kalan} gün kaldı · 3-4 günlük kaçamak önerilerine bak ›`, `${sonra.adEn || sonra.ad} is ${kalan} day${kalan === 1 ? "" : "s"} away · see 3-4 day getaway ideas ›`) : "";
-      b.innerHTML = `<i>${g.e}</i><span><b>${esc(msj)}</b>${alt ? `<small>${esc(alt)}</small>` : ""}</span>`;
+      b.innerHTML = `<i>${g.e}</i><span><b>${esc(msj)}</b>${ek ? `<small>${esc(dg.e + " " + ek)}</small>` : ""}${alt ? `<small>${esc(alt)}</small>` : ""}</span>`;
       b.classList.toggle("yas", !!g.yas); b.hidden = false;
       if (g.bayram) b.onclick = () => { const r = $("rotaSec"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); };
+      else if (g.git) b.onclick = () => git(g.git);
       else if (alt) b.onclick = () => git("#/kacamak/3");
+      if (g.saygi) saygiKart(n, g);
     } catch (e) {}
+  }
+  // 10 Kasım: uygulama o gün ilk açıldığında bir kez saygı kartı (açılış ekranı kapandıktan sonra)
+  function saygiKart(n, g) {
+    const yil = n.getFullYear();
+    try { if (localStorage.getItem("gezi-saygi") === String(yil)) return; } catch (e) { return; }
+    let say = 0;
+    const bekle = () => {
+      if (document.getElementById("splash") || document.querySelector(".tanit")) { if (++say < 40) setTimeout(bekle, 400); return; }
+      try { localStorage.setItem("gezi-saygi", String(yil)); } catch (e) {}
+      const d = document.createElement("div"); d.className = "tanit saygi";
+      d.innerHTML = `<div class="tkart skart" role="dialog" aria-label="${esc(TL("10 Kasım", "10 November"))}">
+        <span class="sbant" aria-hidden="true"></span>
+        <small>10 ${TL("Kasım", "November")} 1938 · 09.05</small>
+        <h2>${esc(TL(`Ebediyete intikalinin ${yil - g.yil}. yılında`, `${yil - g.yil} years since his passing`))}</h2>
+        <p>${esc(TL("Cumhuriyetimizin kurucusu Gazi Mustafa Kemal Atatürk'ü saygı, sevgi ve özlemle anıyoruz.", "We remember Mustafa Kemal Atatürk, founder of the Republic of Türkiye, with respect and longing."))}</p>
+        <blockquote>${esc(TL("“Benim naçiz vücudum elbet bir gün toprak olacaktır, fakat Türkiye Cumhuriyeti ilelebet payidar kalacaktır.”", "“My humble body will one day turn to dust, but the Republic of Türkiye will stand forever.”"))}<cite>Mustafa Kemal Atatürk</cite></blockquote>
+        <div class="tbtn"><button class="linkbtn" data-k="kapat">${T("Kapat")}</button><button class="btn primary" data-k="iz">${ik("footprints", 18)} ${TL("Atatürk'ün izinde", "In his footsteps")}</button></div></div>`;
+      const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+      d.addEventListener("click", (e) => {
+        const k = e.target.closest("[data-k]"); if (e.target !== d && !k) return;
+        kapat(); if (k && k.dataset.k === "iz") git("#/ataturk");
+      });
+      document.body.appendChild(d);
+    };
+    setTimeout(bekle, 600);
   }
   // Sayfa başlığı ekrana göre değişsin (sekme, geçmiş, ekran okuyucu)
   new MutationObserver(() => { const t = $("title").textContent; document.title = t && view.mode !== "home" ? `${t} · Rota Cepte` : TL("Rota Cepte · Türkiye Gezi Rehberi", "Rota Cepte · Türkiye Travel Guide"); }).observe($("title"), { childList: true, characterData: true, subtree: true });

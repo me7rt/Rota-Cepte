@@ -1,25 +1,48 @@
 {
- "not": "Sabit günler AA-GG. Dini bayram tarihleri her yıl değişir: Diyanet takviminden kontrol edip 'degisken' listesine ekle (bas/bit dahil). 'ad' alanı olan bayramlar için 60 gün kala ana sayfada geri sayım çıkar. 'sayac': 1 olan dönemlerde (ör. Ramazan) şeritte yaklaşan bayramın geri sayımı da görünür.",
+ "not": "Sabit günler AA-GG. Dini bayram, kandil, Anneler/Babalar Günü tarihleri her yıl değişir: Diyanet takviminden kontrol edip 'degisken' listesine ekle (bas/bit dahil); tek günlükler listede önce gelir. 'ad' alanı olan bayramlar için 60 gün kala ana sayfada geri sayım çıkar. 'sayac': 1 olan günlerde (ör. Ramazan) şeritte yaklaşan bayramın geri sayımı da görünür. 'yil' varsa metindeki {n} yerine kaçıncı yıl olduğu yazılır. 'git' şeride dokununca açılacak sayfa. 'saygi': 1 olan günde (10 Kasım) bir kez saygı kartı açılır.",
  "sabit": {
   "01-01": {
    "e": "🎉",
    "tr": "Mutlu yıllar! Yeni yılda yeni rotalar seni bekliyor.",
    "en": "Happy New Year! New routes are waiting for you."
   },
+  "02-06": {
+   "e": "🖤",
+   "tr": "6 Şubat depremlerinde hayatını kaybeden canlarımızı rahmetle anıyoruz. Unutmadık, unutmayacağız.",
+   "en": "Remembering the lives we lost in the 6 February earthquakes. We will never forget.",
+   "yas": 1
+  },
+  "03-12": {
+   "e": "🇹🇷",
+   "tr": "İstiklal Marşı'nın kabulünün {n}. yılında Mehmet Akif Ersoy'u rahmetle anıyoruz.",
+   "en": "{n} years since the Turkish National Anthem was adopted: remembering its poet Mehmet Akif Ersoy.",
+   "yil": 1921
+  },
   "03-18": {
    "e": "🇹🇷",
-   "tr": "18 Mart Çanakkale Zaferi'nin yıl dönümünde şehitlerimizi rahmetle anıyoruz.",
-   "en": "Remembering the fallen on the anniversary of the Çanakkale Victory."
+   "tr": "18 Mart Çanakkale Zaferi'nin {n}. yılında şehitlerimizi rahmetle anıyoruz.",
+   "en": "{n} years since the Çanakkale Victory: remembering the fallen.",
+   "yil": 1915,
+   "git": "#/ataturk"
   },
   "04-23": {
    "e": "🎈",
-   "tr": "23 Nisan Ulusal Egemenlik ve Çocuk Bayramı kutlu olsun!",
-   "en": "Happy National Sovereignty and Children's Day!"
+   "tr": "23 Nisan Ulusal Egemenlik ve Çocuk Bayramı kutlu olsun! Meclisimiz {n} yaşında.",
+   "en": "Happy National Sovereignty and Children's Day! Our Grand National Assembly is {n} years old.",
+   "yil": 1920,
+   "git": "#/ataturk"
+  },
+  "05-01": {
+   "e": "🤝",
+   "tr": "1 Mayıs Emek ve Dayanışma Günü kutlu olsun!",
+   "en": "Happy Labour and Solidarity Day!"
   },
   "05-19": {
    "e": "🇹🇷",
-   "tr": "19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı kutlu olsun!",
-   "en": "Happy Commemoration of Atatürk, Youth and Sports Day!"
+   "tr": "19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı kutlu olsun! Millî Mücadele'nin {n}. yılı.",
+   "en": "Happy Commemoration of Atatürk, Youth and Sports Day! {n} years since the War of Independence began.",
+   "yil": 1919,
+   "git": "#/ataturk"
   },
   "07-15": {
    "e": "🇹🇷",
@@ -28,22 +51,77 @@
   },
   "08-30": {
    "e": "🇹🇷",
-   "tr": "30 Ağustos Zafer Bayramı kutlu olsun!",
-   "en": "Happy Victory Day!"
+   "tr": "30 Ağustos Zafer Bayramı'nın {n}. yılı kutlu olsun!",
+   "en": "Happy Victory Day! {n} years since the Great Victory.",
+   "yil": 1922,
+   "git": "#/ataturk"
   },
   "10-29": {
    "e": "🇹🇷",
-   "tr": "Cumhuriyet Bayramımız kutlu olsun! Nice yıllara Türkiye.",
-   "en": "Happy Republic Day, Türkiye!"
+   "tr": "Cumhuriyetimizin {n}. yılı kutlu olsun! Nice yıllara Türkiye.",
+   "en": "Happy Republic Day! The Republic of Türkiye is {n} years old.",
+   "yil": 1923,
+   "git": "#/ataturk"
   },
   "11-10": {
    "e": "🖤",
-   "tr": "Cumhuriyetimizin kurucusu Gazi Mustafa Kemal Atatürk'ü saygı, sevgi ve özlemle anıyoruz.",
-   "en": "Remembering Mustafa Kemal Atatürk, founder of the Republic, with respect and longing.",
-   "yas": 1
+   "tr": "Ebediyete intikalinin {n}. yılında Cumhuriyetimizin kurucusu Gazi Mustafa Kemal Atatürk'ü saygı, sevgi ve özlemle anıyoruz.",
+   "en": "{n} years since his passing, we remember Mustafa Kemal Atatürk, founder of the Republic, with respect and longing.",
+   "yas": 1,
+   "yil": 1938,
+   "git": "#/ataturk",
+   "saygi": 1
+  },
+  "11-24": {
+   "e": "📚",
+   "tr": "24 Kasım Öğretmenler Günü kutlu olsun! Başöğretmen Atatürk başta olmak üzere bize yol gösteren tüm öğretmenlerimize teşekkürler.",
+   "en": "Happy Teachers' Day! Thank you to every teacher who showed us the way, starting with Atatürk, our Head Teacher."
   }
  },
  "degisken": [
+  {
+   "bas": "2026-12-10",
+   "bit": "2026-12-10",
+   "e": "🌙",
+   "tr": "Üç Aylarınız ve Regaip Kandiliniz mübarek olsun!",
+   "en": "Blessed Regaip Kandil and the Three Holy Months!"
+  },
+  {
+   "bas": "2027-01-04",
+   "bit": "2027-01-04",
+   "e": "🌙",
+   "tr": "Miraç Kandiliniz mübarek olsun!",
+   "en": "Blessed Miraç Kandil!"
+  },
+  {
+   "bas": "2027-01-22",
+   "bit": "2027-01-22",
+   "e": "🌙",
+   "tr": "Berat Kandiliniz mübarek olsun!",
+   "en": "Blessed Berat Kandil!"
+  },
+  {
+   "bas": "2027-03-05",
+   "bit": "2027-03-05",
+   "e": "🌙",
+   "tr": "Kadir Geceniz mübarek olsun!",
+   "en": "Blessed Night of Power (Kadir Gecesi)!",
+   "sayac": 1
+  },
+  {
+   "bas": "2027-05-09",
+   "bit": "2027-05-09",
+   "e": "💐",
+   "tr": "Anneler Günü kutlu olsun! Bugün annenle bir yere gitmeye ne dersin?",
+   "en": "Happy Mother's Day! Why not take your mum somewhere today?"
+  },
+  {
+   "bas": "2027-06-20",
+   "bit": "2027-06-20",
+   "e": "👔",
+   "tr": "Babalar Günü kutlu olsun! Bugün babanla bir yere gitmeye ne dersin?",
+   "en": "Happy Father's Day! Why not take your dad somewhere today?"
+  },
   {
    "bas": "2027-02-08",
    "bit": "2027-03-08",
