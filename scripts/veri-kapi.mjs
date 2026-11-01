@@ -16,6 +16,18 @@ try {
 
 const sayilar = (d) => new Map(d.iller.map((i) => [i.s, i.n || 0]));
 const E = sayilar(eski), Y = sayilar(yeni);
+// Elle çıkarılan yerler (data/foto-duzelt.json "cikar") bilerek yapılan azaltmadır: önceki sayıdan düşülür
+let CIKAR = new Set();
+try { CIKAR = new Set(JSON.parse(fs.readFileSync("data/foto-duzelt.json", "utf8")).cikar || []); } catch (e) {}
+let bilerek = 0;
+for (const [s, n] of E) {
+  try {
+    const d = JSON.parse(execSync(`git show HEAD:docs/data/il/${s}.json`, { encoding: "utf8", maxBuffer: 1e8 }));
+    const c = d.yerler.filter((y) => CIKAR.has(y.q)).length;
+    if (c) { E.set(s, n - c); bilerek += c; }
+  } catch (e) {}
+}
+if (bilerek) console.log(`Elle çıkarılan ${bilerek} yer hesaba katıldı.`);
 const toplam = (m) => [...m.values()].reduce((a, b) => a + b, 0);
 const te = toplam(E), ty = toplam(Y);
 const hatalar = [];

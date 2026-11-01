@@ -557,3 +557,82 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 @keyframes damgaBas{0%{opacity:0;scale:1.9}55%{opacity:1;scale:.94}100%{opacity:1;scale:1}}
 .prozet{margin-top:10px!important;display:flex;align-items:center;justify-content:center;gap:6px;color:var(--fg)!important;font-size:14px!important}
 @media (prefers-reduced-motion:reduce){.pkart.yeni .psayfa .damga{animation:none}}
+
+/* v6.5 sürüm yenilikleri kartı */
+.ylist{list-style:none;margin:14px 0 0;padding:0;text-align:left;display:grid;gap:12px}
+.ylist li{display:flex;gap:12px;align-items:flex-start}
+.ylist i{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:var(--pri-soft);color:var(--pri-ink)}
+.ylist b{display:block;font-size:15px}
+.ylist small{display:block;color:var(--muted);font-size:13.5px;line-height:1.45;margin-top:2px}
+
+/* v6.5 havaya göre öneri ve gün batımı */
+.gunes{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+.hava>.gunes:first-child{margin-top:0;padding-top:0;border-top:0}
+.gunes span{display:inline-flex;align-items:center;gap:5px}
+.gunes svg{color:var(--altin-b,#e0a10b)}
+.gunes b{color:var(--fg);font-variant-numeric:tabular-nums}
+.honer{display:flex;align-items:center;gap:8px;width:100%;margin-top:8px;padding:9px 10px;border:0;border-radius:12px;background:var(--pri-soft);color:var(--fg);font:inherit;font-size:13.5px;text-align:left;cursor:pointer}
+.honer>span{flex:1;line-height:1.35}
+.honer svg{flex:none;color:var(--pri-ink)}
+.hnot{margin:6px 0 0;font-size:13px;color:var(--muted)}
+.honerk{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.honerk>small{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:var(--fg)}
+.honerk>small svg{color:var(--pri-ink);flex:none}
+.honerl{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.hyer{display:flex;flex-direction:column;gap:5px;padding:0;border:0;background:none;color:var(--fg);font:inherit;font-size:12.5px;font-weight:700;text-align:left;cursor:pointer;min-width:0}
+.hyer .thumb{width:100%;height:auto;aspect-ratio:4/3;border-radius:12px}
+.hyer span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
+
+/* v6.5 ana sayfa: Nereye gitsem? ve Hafta sonu kaçamağı */
+.ikili{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.mini{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;border:1px solid var(--line);border-radius:var(--r-l);padding:12px;background:var(--surface);color:var(--fg);box-shadow:var(--sh-1);font:inherit;cursor:pointer;transition:transform .15s}
+.mini:active{transform:scale(.98)}
+.miniik{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:var(--pri-soft);color:var(--pri-ink);margin-bottom:6px}
+.mini b{font-size:15px;line-height:1.25}
+.mini small{color:var(--muted);font-size:12.5px;line-height:1.35}
+/* listeyi paylaş ve paylaşılan liste */
+.favpay{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;padding:12px;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
+#plEkle{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:12px}
+#plEkle[hidden]{display:none}
+#plEkle:disabled{opacity:.6}
+/* kaçamak */
+.kacseg{margin:4px 0 10px;width:max-content;max-width:100%}
+.kaclist{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.kackart{display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden;background:var(--surface);color:var(--fg);text-align:left;font:inherit;cursor:pointer;box-shadow:var(--sh-1)}
+.kackart .cover{aspect-ratio:16/8;background:linear-gradient(160deg,var(--ilk-a),var(--ilk-b))}
+.kacb{display:flex;flex-direction:column;gap:3px;padding:10px 14px 13px}
+.kacb b{font-size:18px}
+.kacb small{display:flex;align-items:center;gap:5px;color:var(--muted);font-size:13px;font-weight:700}
+.kacb em{font-style:normal;color:var(--muted);font-size:13px;line-height:1.4}
+/* Nereye gitsem? kartları */
+.kipucu{text-align:center;margin:0 0 10px}
+.kdeste{position:relative;width:100%;height:min(58vh,520px);margin:0 auto;max-width:440px}
+.kkart{position:absolute;inset:0;display:grid;place-items:center;border-radius:24px;overflow:hidden;background:var(--c,var(--k-y));color:#fff;box-shadow:0 14px 34px rgba(0,0,0,.22);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;transition:transform .3s ease}
+.kkart.alt{transform:scale(.94) translateY(14px);filter:brightness(.92);pointer-events:none}
+.kkart>.ik{opacity:.5}
+.kkart img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.kkart::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.72));pointer-events:none}
+.kalt{position:absolute;left:0;right:0;bottom:0;z-index:1;display:flex;flex-direction:column;gap:3px;padding:18px 18px 20px}
+.kalt small{font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;opacity:.9}
+.kalt b{font-size:24px;line-height:1.2;letter-spacing:-.01em}
+.kalt span{display:flex;align-items:center;gap:5px;font-size:14px;opacity:.92}
+.kdamga{position:absolute;top:22px;z-index:2;padding:6px 12px;border:3px solid;border-radius:10px;font-weight:900;font-size:22px;letter-spacing:.06em;background:rgba(0,0,0,.15);pointer-events:none}
+.kev{left:18px;color:#3ddc84;transform:rotate(-12deg);opacity:var(--ev,0)}
+.khayir{right:18px;color:#ff5a5a;transform:rotate(12deg);opacity:var(--hayir,0)}
+.kbtnler{display:flex;justify-content:center;align-items:center;gap:22px;margin:16px 0 4px}
+.kbtnler[hidden]{display:none}
+.kb{display:grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:var(--surface);box-shadow:var(--sh-1);cursor:pointer;transition:transform .15s}
+.kb:active{transform:scale(.92)}
+.kgec,.kbeg{width:64px;height:64px}
+.kgec{color:#e5484d}
+.kbeg{color:var(--kalp)}
+.kbeg svg{fill:currentColor}
+.kbil{width:48px;height:48px;color:var(--muted)}
+.ksay{text-align:center;min-height:1.2em}
+.kbitti{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;height:100%;text-align:center;padding:24px;border:1px solid var(--line);border-radius:24px;background:var(--surface)}
+.kbitti b{font-size:20px}
+.kbitti p{margin:0;color:var(--muted)}
+.kbitti .tbtn{width:100%;max-width:320px}
+/* yılın özeti düğmesi */
+.ozetbtn{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;border:0;color:#fff;background:linear-gradient(120deg,#2a1650,#7a2346 55%,#d0551f)}
+.ozetbtn[hidden]{display:none}

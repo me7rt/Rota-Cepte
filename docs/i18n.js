@@ -122,6 +122,16 @@
     "Rakım": "Elevation", "UNESCO Dünya Mirası": "UNESCO World Heritage", "İpucu:": "Tip:", "Fotoğraf:": "Photo:",
     "Vikipedi (İngilizce)": "Wikipedia", "Vikipedi'de oku": "Read on Wikipedia", "Vikipedi'de (İngilizce) oku": "Read more on Wikipedia",
     "Gitmedin": "Not yet", "Başladın": "Started", "Tüm ilçeler": "All districts", "İlçe bilgisi": "District info",
+    "Gezi pasaportu": "Travel passport", "Çocuklarla gezi": "Family days out", "Çocuklarla": "With kids",
+    "Nereye gitsem?": "Where should I go?", "Kartları kaydır, beğendiğini listene at": "Swipe the cards, save the ones you like",
+    "Hafta sonu kaçamağı": "Weekend getaway", "Arabayla birkaç saatlik iller": "Provinces a few hours' drive away",
+    "Listeyi linkle paylaş": "Share list as a link", "Hepsini listeme ekle": "Add all to my list", "Hepsi listende": "All in your list",
+    "Paylaşılan liste": "Shared list", "Bu listedeki yerler bulunamadı.": "The places in this list could not be found.",
+    "Hafta sonu": "Weekend", "3-4 günlük tatil": "3-4 day holiday", "Konumumu kullan": "Use my location", "Kısa tatil önerisi": "Short break ideas",
+    "Bayram kaçamağı": "Holiday getaway", "Nereden yola çıkacağını bilmemiz gerek: konumunu aç ya da önce bir ilin sayfasına gir.": "We need a starting point: turn on location or open a province page first.",
+    "Bu mesafede il bulunamadı.": "No provinces found at this distance.", "Sağa kaydır: listene ekle · Sola kaydır: geç · Dokun: ayrıntı": "Swipe right: save · Swipe left: skip · Tap: details",
+    "Ayrıntı": "Details", "Listeme ekle": "Add to my list", "LİSTEME": "SAVE", "GEÇ": "SKIP", "Bu turluk bu kadar!": "That's all for this round!",
+    "Listeme git": "Go to my list", "Yeni kartlar": "New cards",
     "Hazır rota": "Ready-made route", "📸 Gezi karnemi paylaş": "📸 Share my travel card", "Bugün keşfet": "Today's discovery", "Yakınında keşfet": "Discover nearby"
   };
   window.DIL = dil;

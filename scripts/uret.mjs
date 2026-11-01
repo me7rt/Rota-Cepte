@@ -841,7 +841,9 @@ for (const il of iller.values()) {
 rapor("az yerli illere eklenen fotoğrafsız (metinli) yer:", azIlEk);
 // İl kapağı: en bilinen yerlerin güncel (2016 ve sonrası), yatay, büyük fotoğrafı
 const GUNCEL = 2016;
-const kapakUygun = (a) => { const f = a && FOTO.get(a); return !!f && fotoUygun(a) && f.w >= 1200 && f.w > f.h * 1.15 && f.y >= GUNCEL; };
+// İl kapağı ilk izlenimdir: bilimsel çizim, deprem/hasar, cezaevi, iç mekân ve mezar fotoğrafları kapak olmaz
+const KAPAK_KOTU = /level|paleo|figure|\bfig\b|\bgraph|chart|earthquake|deprem|damage|hasar|enkaz|rubble|collaps|cezaev|prison|hapishane|geolog|sediment|interior|inside|\bic\b|tomb|turbe|mezar|grave|cemetery|mihrab|minber|ceiling|tavan|detail|detay/;
+const kapakUygun = (a) => { const f = a && FOTO.get(a); return !!f && fotoUygun(a) && !KAPAK_KOTU.test(ascii(a).replace(/_/g, " ")) && f.w >= 1200 && f.w > f.h * 1.15 && f.y >= GUNCEL; };
 let kapakGuncel = 0, kapakKat = 0;
 for (const il of iller.values()) {
   if (KAPAK[il.s]) continue;
@@ -854,7 +856,7 @@ for (const il of iller.values()) {
     for (const pg of (j.query && j.query.pages) || []) {
       const a = pg.title.replace(/^File:/, ""); const ii = pg.imageinfo && pg.imageinfo[0];
       if (!ii) continue; if (!FOTO.has(a)) FOTO.set(a, fotoKaydi(a, ii));
-      if (kapakUygun(a) && FOTO.get(a).w >= 1600) ok.push(a);
+      if (kapakUygun(a) && FOTO.get(a).w >= 1600 && adPuan(a, o.ad) >= 2) ok.push(a); // kategoriden gelen dosyanın adında yerin adı geçmeli
     }
     ok.sort((x, y) => adPuan(y, o.ad) - adPuan(x, o.ad) || FOTO.get(y).y - FOTO.get(x).y);
     if (ok.length) { il.kapakO = o; il.kapakFoto = ok[0]; kapakKat++; break; }
@@ -1014,7 +1016,8 @@ for (const il of ilSirali) {
   index.iller.push({ ad: il.ad, s: il.s, q: il.q, lat: dosya.lat, lng: dosya.lng, plaka: dosya.plaka, f: dosya.f, n: yerler.length, ilceler: ilceCikti.map((d) => [d.ad, d.lat, d.lng, d.n]) });
   // Arama/tema listesi: [ad, il, sıra, enlem, boylam, kategori, fotoğraf var mı, fotoğraf yolu (varsa; tema listesinde küçük resim), İngilizce ad (varsa)]
   // 9. alan (varsa): İngilizce Vikipedi adı (İngilizce modda arama ve listeler için; fotoğraf yoksa 8. alan 0)
-  yerler.forEach((y, j) => { const r = [y.ad, il.s, j, Math.round(y.lat * 1e3) / 1e3, Math.round(y.lng * 1e3) / 1e3, y.k, y.f ? 1 : 0]; if (y.f) r.push(y.f.p); const ae = en.y[y.q] && en.y[y.q][0]; if (ae) { if (!y.f) r.push(0); r.push(ae); } ara.push(r); });
+  // 10. alan (varsa): öne çıkan yer ise 1 (boş alanlar 0)
+  yerler.forEach((y, j) => { const ae = en.y[y.q] && en.y[y.q][0]; const r = [y.ad, il.s, j, Math.round(y.lat * 1e3) / 1e3, Math.round(y.lng * 1e3) / 1e3, y.k, y.f ? 1 : 0, y.f ? y.f.p : 0, ae || 0, y.one ? 1 : 0]; while (r.length > 7 && r[r.length - 1] === 0) r.pop(); ara.push(r); });
   // Kontrol listesi: il kapağı, ilçe kapakları, seçkin yerler ve her ilin en ünlü 8 yeri
   const kk = (tur, ad, a, kaynak) => a && kontrol.push({ tur, il: il.ad, ad, dosya: a, p: FOTO.get(a).p, w: FOTO.get(a).w, kaynak });
   kk("il", il.ad, il.foto, il.fotoKaynak);
