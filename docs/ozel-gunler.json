@@ -5,7 +5,7 @@
    "e": "🎉",
    "tr": "Mutlu yıllar! Yeni yılda yeni rotalar seni bekliyor.",
    "en": "Happy New Year! New routes are waiting for you.",
-   "kart": "yilbasi-a"
+   "kart": "yilbasi-f2"
   },
   "02-06": {
    "e": "🖤",
@@ -31,7 +31,7 @@
    "en": "{n} years since the Çanakkale Victory: remembering the fallen.",
    "yil": 1915,
    "git": "#/ataturk",
-   "kart": "canakkale-a",
+   "kart": "canakkale-c",
    "soz": {
     "tr": "Bir hilâl uğruna, yâ Rab, ne güneşler batıyor!",
     "en": "For a crescent, O Lord, how many suns are setting!",
@@ -45,7 +45,7 @@
    "en": "Happy National Sovereignty and Children's Day! Our Grand National Assembly is {n} years old.",
    "yil": 1920,
    "git": "#/ataturk",
-   "kart": "cocuk-a",
+   "kart": "cocuk-c",
    "imza": 1,
    "foto": "kart/cocuk.jpg"
   },
@@ -53,7 +53,7 @@
    "e": "🤝",
    "tr": "1 Mayıs Emek ve Dayanışma Günü kutlu olsun!",
    "en": "Happy Labour and Solidarity Day!",
-   "kart": "emek-a"
+   "kart": "emek-b"
   },
   "05-19": {
    "e": "🇹🇷",
@@ -61,7 +61,7 @@
    "en": "Happy Commemoration of Atatürk, Youth and Sports Day! {n} years since the War of Independence began.",
    "yil": 1919,
    "git": "#/ataturk",
-   "kart": "genclik-a",
+   "kart": "genclik-c",
    "imza": 1,
    "soz": {
     "tr": "Ey Türk gençliği! Birinci vazifen, Türk istiklâlini, Türk Cumhuriyetini, ilelebet muhafaza ve müdafaa etmektir.",
@@ -73,7 +73,7 @@
   },
   "07-15": {
    "e": "🇹🇷",
-   "tr": "15 Temmuz Demokrasi ve Milli Birlik Günü. Şehitlerimizi rahmetle anıyoruz.",
+   "tr": "15 Temmuz Demokrasi ve Millî Birlik Günü. Şehitlerimizi rahmetle anıyoruz.",
    "en": "July 15 Democracy and National Unity Day.",
    "kart": "demokrasi-a"
   },
@@ -83,7 +83,7 @@
    "en": "Happy Victory Day! {n} years since the Great Victory.",
    "yil": 1922,
    "git": "#/ataturk",
-   "kart": "zafer-a",
+   "kart": "zafer-c",
    "imza": 1,
    "soz": {
     "tr": "Ordular, ilk hedefiniz Akdeniz'dir. İleri!",
@@ -99,7 +99,7 @@
    "en": "Happy Republic Day! The Republic of Türkiye is {n} years old.",
    "yil": 1923,
    "git": "#/ataturk",
-   "kart": "cumhuriyet-a",
+   "kart": "cumhuriyet-c",
    "imza": 1,
    "soz": {
     "tr": "Ne mutlu Türk'üm diyene!",
@@ -122,7 +122,7 @@
    "e": "📚",
    "tr": "24 Kasım Öğretmenler Günü kutlu olsun! Başöğretmen Atatürk başta olmak üzere bize yol gösteren tüm öğretmenlerimize teşekkürler.",
    "en": "Happy Teachers' Day! Thank you to every teacher who showed us the way, starting with Atatürk, our Head Teacher.",
-   "kart": "ogretmen-a",
+   "kart": "ogretmen-c",
    "imza": 1,
    "foto": "kart/ogretmen.jpg"
   }
@@ -134,7 +134,7 @@
    "e": "🌙",
    "tr": "Üç Aylarınız ve Regaip Kandiliniz mübarek olsun!",
    "en": "Blessed Regaip Kandil and the Three Holy Months!",
-   "kart": "kandil-a",
+   "kart": "kandil-f2",
    "mahya": {
     "tr": "REGAİP KANDİLİ"
    }
@@ -145,7 +145,7 @@
    "e": "🌙",
    "tr": "Miraç Kandiliniz mübarek olsun!",
    "en": "Blessed Miraç Kandil!",
-   "kart": "kandil-a",
+   "kart": "kandil-f2",
    "mahya": {
     "tr": "MİRAÇ KANDİLİ"
    }
@@ -156,7 +156,7 @@
    "e": "🌙",
    "tr": "Berat Kandiliniz mübarek olsun!",
    "en": "Blessed Berat Kandil!",
-   "kart": "kandil-a",
+   "kart": "kandil-f2",
    "mahya": {
     "tr": "BERAT KANDİLİ"
    }
@@ -168,7 +168,7 @@
    "tr": "Kadir Geceniz mübarek olsun!",
    "en": "Blessed Night of Power (Kadir Gecesi)!",
    "sayac": 1,
-   "kart": "kadir-a",
+   "kart": "kadir-f2",
    "mahya": {
     "tr": "KADİR GECESİ"
    }
@@ -187,7 +187,7 @@
    "e": "👔",
    "tr": "Babalar Günü kutlu olsun! Bugün babanla bir yere gitmeye ne dersin?",
    "en": "Happy Father's Day! Why not take your dad somewhere today?",
-   "kart": "babalar-a"
+   "kart": "babalar-f1"
   },
   {
    "bas": "2027-02-08",
@@ -196,7 +196,7 @@
    "tr": "Hayırlı Ramazanlar!",
    "en": "Ramadan Mubarak!",
    "sayac": 1,
-   "kart": "ramazan-a",
+   "kart": "ramazan-f1",
    "mahya": {
     "tr": "HOŞ GELDİN RAMAZAN"
    }
@@ -221,7 +221,7 @@
    "bayram": 1,
    "ad": "Kurban Bayramı",
    "adEn": "Eid al-Adha",
-   "kart": "kurban-a"
+   "kart": "kurban-f2"
   }
  ]
 }
