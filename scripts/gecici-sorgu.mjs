@@ -11,10 +11,8 @@ const out = "out"; fs.mkdirSync(out + "/b", { recursive: true });
 
 // 1) Seçilen dosyaları büyük boy indir (kısa kenar ~1500 px)
 const SECILEN = {
-  "dem-24": "Bosphorus Dinner Cruise (52126075421).jpg", "dem-33": "Türkiye - The July 15 Martyr's Bridge at night in Istanbul.jpg",
-  "dem-22": "Bosphorus Dinner Cruise (52126075661).jpg", "bay-42": "Istanbul, Turkey (10582793774).jpg",
-  "bay-27": "PikiWiki Israel 39668 Art of Israel.JPG", "ann-21": "Carnation (119735835).jpg",
-  "ann-04": "Pink carnation bouquets (Unsplash).jpg", "ram-23": "Istanbul.Sultanahmet.BlueMosque.Ramazan.01.jpg"
+  "bayrak-27": "Turkish flag waving in the sky.jpg", "cini-01": "Tile - Google Art Project (471020).jpg",
+  "cini-14": "Tile Panel MET LC-17 190 2085.jpg", "bayrak-10": "Turkish Flag through Greenery of Castle Hill, Alanya, Türkiye, 2024.jpg"
 };
 const bilgi = {};
 for (const [no, ad] of Object.entries(SECILEN)) {
@@ -34,12 +32,7 @@ fs.writeFileSync(`${out}/secilen.json`, JSON.stringify(bilgi, null, 1));
 
 // 2) Ek arama: yeni tasarımlar için aday fotoğraflar
 const QI = ' incategory:"Quality_images"', FP = ' incategory:"Featured_pictures_on_Wikimedia_Commons"';
-const TEMA = {
-  bayrak: { kat: ["Flags of Turkey in Istanbul", "Waving flags of Turkey"], ara: ["Turkish flag waving", "flag of Turkey waving sky", "Türk bayrağı dalgalanıyor", "Turkish flag close up", "Turkish flag sunset", "Turkish flags street", "Turkish flag" + QI] },
-  cini: { kat: ["Iznik tiles in the Rüstem Pasha Mosque", "Tiles in the Rüstem Pasha Mosque", "Iznik tiles in Topkapı Palace"], ara: ["Iznik tiles" + QI, "Rüstem Pasha Mosque tiles", "İznik çinisi", "Topkapı Palace tiles", "Iznik tiles tulip", "Ottoman tiles panel"] },
-  mahya: { kat: ["Mahya", "Mahyas in Istanbul"], ara: ["mahya Ramazan", "Ramazan mahyası", "mahya Sultanahmet", "mahya Süleymaniye", "mahya Istanbul night", "mahya Eyüp", "mahya cami"] },
-  temmuz: { kat: ["15 July Martyrs Bridge", "15 July Democracy Museum"], ara: ["15 Temmuz Şehitler Köprüsü", "July 15 Martyrs Bridge", "15 Temmuz Şehitler Anıtı", "15 July Martyrs Monument", "Grand National Assembly of Turkey building", "TBMM binası"] }
-};
+const TEMA = {};
 const sonuc = {};
 for (const [tema, t] of Object.entries(TEMA)) {
   const adlar = new Set();
