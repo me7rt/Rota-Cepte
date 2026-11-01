@@ -11,10 +11,10 @@ const out = "out"; fs.mkdirSync(out + "/b", { recursive: true });
 
 // 1) Seçilen dosyaları büyük boy indir (kısa kenar ~1500 px)
 const SECILEN = {
-  "yilbasi2-26": "Sparkler and bokeh (31179984783).jpg", "yilbasi2-29": "Fireworks in Sevierville, Tennessee on 4th of July - 1.jpg",
-  "yilbasi2-24": "2024-02-25 View of mountains near Ayder 8.jpg", "yilbasi2-19": "2024-02-25 Road between Ayder Yaylası and Ĥuser Yaylası in February 2.jpg",
-  "kurban2-15": "Ortaköy Mosque from the Bosporus, Istanbul, 20260606 1425 1509.jpg", "kurban2-08": "Süleymaniye Mosque, Istanbul, 20260606 0805 1307.jpg",
-  "kurban2-22": "Grand Çamlıca Mosque (99490).jpg", "kurban2-19": "Grand Çamlıca Mosque.jpg", "yilbasi-02": "Fındıkzade'de kar (21022025) 02.jpg"
+  "dem-24": "Bosphorus Dinner Cruise (52126075421).jpg", "dem-33": "Türkiye - The July 15 Martyr's Bridge at night in Istanbul.jpg",
+  "dem-22": "Bosphorus Dinner Cruise (52126075661).jpg", "bay-42": "Istanbul, Turkey (10582793774).jpg",
+  "bay-27": "PikiWiki Israel 39668 Art of Israel.JPG", "ann-21": "Carnation (119735835).jpg",
+  "ann-04": "Pink carnation bouquets (Unsplash).jpg", "ram-23": "Istanbul.Sultanahmet.BlueMosque.Ramazan.01.jpg"
 };
 const bilgi = {};
 for (const [no, ad] of Object.entries(SECILEN)) {
@@ -32,9 +32,14 @@ for (const [no, ad] of Object.entries(SECILEN)) {
 }
 fs.writeFileSync(`${out}/secilen.json`, JSON.stringify(bilgi, null, 1));
 
-// 2) Ek arama: yılbaşı ve kurban için daha iyi adaylar
+// 2) Ek arama: yeni tasarımlar için aday fotoğraflar
 const QI = ' incategory:"Quality_images"', FP = ' incategory:"Featured_pictures_on_Wikimedia_Commons"';
-const TEMA = {};
+const TEMA = {
+  bayrak: { kat: ["Flags of Turkey in Istanbul", "Waving flags of Turkey"], ara: ["Turkish flag waving", "flag of Turkey waving sky", "Türk bayrağı dalgalanıyor", "Turkish flag close up", "Turkish flag sunset", "Turkish flags street", "Turkish flag" + QI] },
+  cini: { kat: ["Iznik tiles in the Rüstem Pasha Mosque", "Tiles in the Rüstem Pasha Mosque", "Iznik tiles in Topkapı Palace"], ara: ["Iznik tiles" + QI, "Rüstem Pasha Mosque tiles", "İznik çinisi", "Topkapı Palace tiles", "Iznik tiles tulip", "Ottoman tiles panel"] },
+  mahya: { kat: ["Mahya", "Mahyas in Istanbul"], ara: ["mahya Ramazan", "Ramazan mahyası", "mahya Sultanahmet", "mahya Süleymaniye", "mahya Istanbul night", "mahya Eyüp", "mahya cami"] },
+  temmuz: { kat: ["15 July Martyrs Bridge", "15 July Democracy Museum"], ara: ["15 Temmuz Şehitler Köprüsü", "July 15 Martyrs Bridge", "15 Temmuz Şehitler Anıtı", "15 July Martyrs Monument", "Grand National Assembly of Turkey building", "TBMM binası"] }
+};
 const sonuc = {};
 for (const [tema, t] of Object.entries(TEMA)) {
   const adlar = new Set();
