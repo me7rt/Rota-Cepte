@@ -38,6 +38,9 @@ for i in idx["iller"]:
     for y in d["yerler"]:
         for g in y.get("g") or []: ekle("galeri", i["ad"], y["ad"] + " (galeri)", g)
 
+# Yalnızca yeni ve değişen fotoğraflar (deneme verisinden çıkarılan liste)
+if os.path.exists("scripts/gecici-fark.json"): kayit = json.load(open("scripts/gecici-fark.json"))
+
 def url(k):
     p = k["p"].split("?")[0]
     if k["w"] and k["w"] <= 250: return COM + p
