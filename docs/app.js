@@ -1075,20 +1075,73 @@
     han: { ad: T("Han ve kervansaraylar"), e: "store", k: ["kervansaray", " hani", "bedesten"] },
     muze: { ad: T("Müzeler"), e: "landmark", k: ["muze"] }
   };
-  // Mevsime göre öneri: ayına göre 4 tema
-  const MEVSIM = [
-    { ay: [12, 1, 2], e: "snowflake", ad: TL("Kış önerisi", "Winter picks"), not: TL("Soğukta içeride gezmelik: mağaralar, müzeler, saraylar ve kervansaraylar", "Indoor gems for cold days: caves, museums, palaces and caravanserais"), t: ["magara", "muze", "saray", "han"] },
-    { ay: [3, 4, 5], e: "flower-2", ad: TL("İlkbahar önerisi", "Spring picks"), not: TL("Karlar eridi, şelaleler coştu, vadiler yeşerdi", "Snow has melted: waterfalls at full flow, green valleys"), t: ["selale", "kanyon", "park", "kopru"] },
-    { ay: [6, 7, 8], e: "sun", ad: TL("Yaz önerisi", "Summer picks"), not: TL("Denize, göle ya da serin yaylalara kaç", "Head for the sea, a lake or the cool highlands"), t: ["ada", "gol", "dag", "kanyon"] },
-    { ay: [9, 10, 11], e: "leaf", ad: TL("Sonbahar önerisi", "Autumn picks"), not: TL("Ormanlar renk renk, hava tam yürüyüşlük", "Colourful forests and perfect walking weather"), t: ["park", "gol", "selale", "kale"] }
+  const temaUyar = (t, x) => t.k.some((w) => (" " + x[0] + " ").includes(w)) && (!t.d || x[6] === "d");
+  // Aylık öneri: "Kasım'da nereye?" başlığı, kısa not, 3-4 tema ve fotoğraflı yer şeridi
+  const AYLAR = [
+    { e: "snowflake", ad: TL("Ocak'ta nereye?", "Where to go in January?"), not: TL("Kısa, soğuk günler içeride gezmelik: müzeler, saraylar, kervansaraylar. Mağaraların içi yaz kış hemen hemen aynı ısıda.", "Short, cold days suit indoor sights: museums, palaces and caravanserais. Caves stay about the same temperature all year."), t: ["muze", "saray", "han", "magara"] },
+    { e: "cloud-snow", ad: TL("Şubat'ta nereye?", "Where to go in February?"), not: TL("Kar yağınca kaleler ve tarihi köprüler kartpostala dönüşür; soğuk günler müze günü.", "After snowfall, castles and old bridges look like postcards; cold days are museum days."), t: ["kale", "kopru", "muze", "han"] },
+    { e: "cloud-sun", ad: TL("Mart'ta nereye?", "Where to go in March?"), not: TL("Eriyen karlarla şelaleler canlanıyor, sahillerde bahar erken başlıyor. 18 Mart'ta Çanakkale şehitleri anılıyor.", "Melting snow brings waterfalls to life and spring comes early on the coasts. On 18 March, Türkiye remembers the fallen of Çanakkale."), t: ["selale", "park", "kale", "muze"] },
+    { e: "flower-2", ad: TL("Nisan'da nereye?", "Where to go in April?"), not: TL("Vadiler yeşeriyor, şelaleler gürleşiyor; ılık hava yürüyüşe birebir. 23 Nisan'da Ulusal Egemenlik ve Çocuk Bayramı kutlanıyor.", "Valleys turn green and waterfalls swell; mild weather is perfect for walking. 23 April is National Sovereignty and Children's Day."), t: ["selale", "kanyon", "park", "kopru"] },
+    { e: "trees", ad: TL("Mayıs'ta nereye?", "Where to go in May?"), not: TL("Kırlar çiçekte, günler uzun ve ılık: milli parklar ve göl kıyıları en güzel halinde. 19 Mayıs 1919'da Atatürk Samsun'a çıktı.", "Meadows in bloom, long mild days: national parks and lakesides at their best. On 19 May 1919, Atatürk landed at Samsun."), t: ["park", "gol", "kanyon", "ada"] },
+    { e: "sun", ad: TL("Haziran'da nereye?", "Where to go in June?"), not: TL("Deniz ısınıyor, yaylalar yemyeşil, günler yılın en uzunu: bir koya ya da serin bir yaylaya kaç.", "The sea is warming up, the highlands are lush and the days are the longest of the year: escape to a cove or a cool plateau."), t: ["ada", "dag", "gol", "kanyon"] },
+    { e: "sun", ad: TL("Temmuz'da nereye?", "Where to go in July?"), not: TL("Sıcaklar bastırdı; serinlik denizde, göl kıyısında, şelale başında ya da yüksek yaylalarda.", "The heat is on: cool off by the sea, at a lake, beside a waterfall or up in the highlands."), t: ["ada", "gol", "selale", "dag"] },
+    { e: "sun", ad: TL("Ağustos'ta nereye?", "Where to go in August?"), not: TL("Deniz en sıcak halinde, yaylalar serin; kanyon yürüyüşleri için de güzel bir ay. 30 Ağustos'ta Zafer Bayramı kutlanıyor.", "The sea is at its warmest and the highlands stay cool; a good month for canyon walks too. 30 August is Victory Day."), t: ["ada", "dag", "kanyon", "gol"] },
+    { e: "cloud-sun", ad: TL("Eylül'de nereye?", "Where to go in September?"), not: TL("Sıcaklar kırılıyor, kalabalık azalıyor, deniz hâlâ ılık. Kaleler ve tarihi köprüler için en rahat günler.", "The heat eases and the crowds thin out, while the sea stays warm. Comfortable days for castles and old bridges."), t: ["ada", "kale", "kopru", "gol"] },
+    { e: "leaf", ad: TL("Ekim'de nereye?", "Where to go in October?"), not: TL("Ormanlar sararıp kızarıyor, hava tam yürüyüşlük; milli parklar ve göller en renkli halinde. 29 Ekim'de Cumhuriyet Bayramı kutlanıyor.", "Forests turn gold and red and the weather is perfect for walking; national parks and lakes are at their most colourful. 29 October is Republic Day."), t: ["park", "gol", "kanyon", "kale"] },
+    { e: "leaf", ad: TL("Kasım'da nereye?", "Where to go in November?"), not: TL("Ormanlar sonbahar renginde, yağmurlarla şelaleler coşuyor; serin günlerde müzeler de güzel. 10 Kasım'da Atatürk'ü saygıyla anıyoruz.", "Forests wear their autumn colours and the rains bring waterfalls to life; on cool days, museums are lovely too. On 10 November we remember Atatürk."), t: ["park", "selale", "muze"], ata: 1 },
+    { e: "snowflake", ad: TL("Aralık'ta nereye?", "Where to go in December?"), not: TL("Yılın en kısa günleri: müzeler ve saraylar sıcacık bir mola. Yükseklerde karlı manzaralar başlıyor.", "The shortest days of the year: museums and palaces make a cosy break. Snowy views begin up in the mountains."), t: ["muze", "saray", "magara", "dag"] }
   ];
-  function mevsimKart() {
-    const m = MEVSIM.find((x) => x.ay.includes(new Date().getMonth() + 1));
-    $("mevsim").innerHTML = `<div class="mvust"><span class="mvik">${ik(m.e, 22)}</span><span><b>${esc(m.ad)}</b><small>${esc(m.not)}</small></span></div><div class="mvchips">${m.t.map((k) =>
-      `<button class="tchip" data-go="#/tema/${k}"><i>${ik(TEMA[k].e, 20)}</i><span>${esc(TEMA[k].ad)}</span></button>`).join("")}</div>`;
+  // Günün tohumu: aynı gün aynı sıra, ertesi gün yeni sıra (FNV-1a)
+  function tohum(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  let ayAnahtar = "", ayBekle = false;
+  function ayKart() {
+    const n = new Date(), ay = n.getMonth(), m = AYLAR[ay], el = $("mevsim");
+    if (el.dataset.ay !== String(ay)) {
+      el.dataset.ay = ay; ayAnahtar = "";
+      const chip = (go, e, ad, cls) => `<button class="tchip${cls || ""}" data-go="${go}"><i>${ik(e, 20)}</i><span>${esc(ad)}</span></button>`;
+      // Çok dar ekranda uzun kelimeli tema adı ("kervansaraylar") varsa çipler tek sütun olur
+      const uzun = m.t.some((k) => TEMA[k].ad.split(" ").some((w) => w.length > 11));
+      el.innerHTML = `<div class="mvust"><span class="mvik">${ik(m.e, 22)}</span><span><b>${esc(m.ad)}</b><small>${esc(m.not)}</small></span></div>` +
+        `<ul class="mvserit" id="aySerit" aria-label="${TL("Bu ay için öneriler", "Picks for this month")}">${'<li><span class="mvf yuk"></span></li>'.repeat(8)}</ul>` +
+        `<div class="mvchips${uzun ? " uzun" : ""}">${(m.ata ? chip("#/ataturk", "footprints", TL("Atatürk'ün izinde", "In Atatürk's footsteps"), " ata") : "") + m.t.map((k) => chip(`#/tema/${k}`, TEMA[k].e, TEMA[k].ad)).join("")}</div>`;
+    }
+    const ul = $("aySerit");
+    // Arama listesi gelmeden ana sayfayı bekletme: gelince şeridi doldur
+    if (!ARA) {
+      if (IDX && !ayBekle) { ayBekle = true; loadAra().then(() => { ayBekle = false; if (ARA) ayKart(); else ul.hidden = true; }); }
+      return;
+    }
+    const gun = `${n.getFullYear()}-${ay + 1}-${n.getDate()}`;
+    const anahtar = gun + (me ? `|${me.lat.toFixed(2)},${me.lng.toFixed(2)}` : "");
+    if (anahtar === ayAnahtar) return;
+    ayAnahtar = anahtar;
+    // Aday sırası: konum açıksa önce 250 km içi; sonra öne çıkan (x[11]), ilin ilk 8 yeri, kalanlar; uzaktakiler yakından uzağa
+    const gruplar = m.t.map((k) => ARA.filter((x) => x[7] === 1 && x[8] && temaUyar(TEMA[k], x)).map((x) => {
+      const d = me ? km(me, { lat: x[4], lng: x[5] }) : 0, o = x[11] ? 0 : x[3] < 8 ? 1 : 2;
+      return me && d > 250 ? { x, k, d, g: o < 2 ? 3 : 4, s: d } : { x, k, d, g: o, s: tohum(gun + "|" + x[2] + "|" + x[3]) };
+    }));
+    // Temalar sırayla birer yer verir, her ilden en fazla bir yer
+    const secilen = [], iller = new Set(), bas = tohum(gun) % gruplar.length;
+    for (let g = 0; g <= 4 && secilen.length < 8; g++) {
+      const kuyruk = gruplar.map((l) => l.filter((c) => c.g === g).sort((a, b) => a.s - b.s));
+      for (let ilerle = true; ilerle && secilen.length < 8;) {
+        ilerle = false;
+        for (let i = 0; i < kuyruk.length && secilen.length < 8; i++) {
+          const q = kuyruk[(bas + i) % kuyruk.length];
+          while (q.length) { const c = q.shift(); if (iller.has(c.x[2])) continue; secilen.push(c); iller.add(c.x[2]); ilerle = true; break; }
+        }
+      }
+    }
+    if (me) secilen.sort((a, b) => a.d - b.d);
+    const sol = ul.scrollLeft;
+    ul.innerHTML = secilen.map(({ x, k, d }) => {
+      const il = (IDX.ilBy.get(x[2]) || {}).ad || "";
+      return `<li><button class="mvf" data-yer="${x[2]}|${x[3]}" style="--c:${(CATS[x[6]] || CATS.t).renk}">${ik(TEMA[k].e, 30)}<img src="${esc(foto({ p: x[8], w: 1e5 }, 500))}" alt="" loading="lazy" decoding="async" onerror="fotoHata(this)">${me ? `<span class="mvkm">${ik("navigation", 12)}${fmt(d)}</span>` : ""}<span class="mvft"><b>${esc(araAd(x))}</b><small>${esc(il)}</small></span></button></li>`;
+    }).join("");
+    ul.hidden = !secilen.length; ul.scrollLeft = sol;
   }
   function temaChips() {
-    mevsimKart();
+    ayKart();
     $("temaChips").innerHTML = `<button class="tchip tata" data-go="#/ataturk"><i>${ik("footprints", 20)}</i><span>${TL("Atatürk'ün izinde", "In Atatürk's footsteps")}</span></button>` + Object.entries(TEMA).map(([k, t]) =>
       `<button class="tchip" data-go="#/tema/${k}"><i>${ik(t.e, 20)}</i><span>${esc(t.ad)}</span></button>`).join("");
   }
@@ -1102,7 +1155,7 @@
     const t = TEMA[view.k];
     $("temaLoc").hidden = !!me;
     if (!ARA) { $("temaList").innerHTML = `<li class="empty">${T("Yükleniyor…")}</li>`; loadAra(); return; }
-    let r = ARA.filter((x) => t.k.some((w) => (" " + x[0] + " ").includes(w)) && (!t.d || x[6] === "d"));
+    let r = ARA.filter((x) => temaUyar(t, x));
     if (me) r = r.map((x) => [km(me, { lat: x[4], lng: x[5] }), x]).sort((a, b) => a[0] - b[0]).map((x) => x[1]);
     else r.sort((a, b) => b[7] - a[7] || a[1].localeCompare(b[1], "tr"));
     $("temaSay").textContent = TL(`${r.length} yer` + (me ? " · sana en yakından uzağa" : " · konumunu açarsan yakından uzağa sıralarız"), `${r.length} places` + (me ? " · nearest first" : " · turn on location to sort by distance"));
@@ -2002,7 +2055,7 @@
     if (!IDX) return;
     const q = $("search").value.trim();
     if (q.length >= 2) return renderSearch(q);
-    gununKesfi(); renderPasOzet();
+    gununKesfi(); ayKart(); renderPasOzet();
     $("results").hidden = true; $("homeMain").hidden = false;
     const iller = IDX.iller.slice();
     if (me) iller.sort((a, b) => km(me, a) - km(me, b));
