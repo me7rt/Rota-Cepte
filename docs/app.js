@@ -21,7 +21,7 @@
   };
   const BOLGE_RENK = "var(--k-y)";
   const $ = (id) => document.getElementById(id);
-  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const sade = (s) => String(s).toLocaleLowerCase("tr").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i");
   const nf = (n) => Number(n).toLocaleString(DIL === "en" ? "en-US" : "tr-TR");
   // İngilizce modda İngilizce Vikipedi adı yoksa Türkçe adın genel kelimesini çevir: "Erzurum Kalesi" -> "Erzurum Castle"
@@ -86,6 +86,11 @@
   window.fotoHata = (img) => {
     if (!img.dataset.y && img.src.includes("/thumb/")) { img.dataset.y = 1; img.src = img.src.replace("/thumb/", "/").replace(/\/[^/]+$/, ""); }
     else img.remove();
+  };
+  // Günün yeri: büyük foto yüklenmezse küçüğünü dene, o da olmazsa kaldır
+  window.fotoYedek = (img) => {
+    const y = img.dataset.y2;
+    if (y && !img.dataset.y) { img.dataset.y = 1; img.src = y; } else img.remove();
   };
   function foto(f, W) {
     if (!f || !f.p) return "";
@@ -1724,7 +1729,7 @@
         const c = CATS[x[6]] || CATS.t, ok = g.some((y) => y.s === x[2] && y.ad === x[1]);
         return `<li><button class="row res" data-yer="${x[2]}|${x[3]}">${x[8] ? thumb({ p: x[8], w: 1e5 }, x[6] || "t") : `<span class="thumb" style="--c:${c.renk}">${icon(x[6] || "t", 20)}</span>`}<span class="rt"><b>${x[11] ? `<i class="star" title="${T("Öne çıkan")}">${ik("star", 14)}</i>` : ""}${esc(araAd(x))}</b><small>${esc(c.ad)} · ${TL(`yoldan ~${fmt(sap)}`, `~${fmt(sap)} off the road`)}</small></span><span class="km${ok ? " ok" : ""}">${ok ? ik("circle-check", 20) : OKIK}</span></button></li>`;
       }).join("");
-      if (l.length > goster.length) html += `<li><button class="linkbtn yolfazla" data-yolil="${s}">${TL(`${ilAd(s)}: ${l.length - goster.length} yer daha göster`, `Show ${l.length - goster.length} more in ${ilAd(s)}`)}</button></li>`;
+      if (l.length > goster.length) html += `<li><button class="linkbtn yolfazla" data-yolil="${s}">${TL(`${esc(ilAd(s))}: ${l.length - goster.length} yer daha göster`, `Show ${l.length - goster.length} more in ${esc(ilAd(s))}`)}</button></li>`;
     }
     molaGoster(yol, r, toplam);
     $("yolList").innerHTML = html || `<li class="empty">${TL("Bu yolun yakınında kayıtlı yer bulamadık. Yoldan sapma mesafesini artırmayı dene.", "No places found near this road. Try a wider distance.")}</li>`;
@@ -2127,7 +2132,7 @@
       const d = await loadIl(x[2]); const p = d.yerler[x[3]]; if (!p) return;
       const k = foto(p.f, 960), k2 = foto(p.f, 500);
       const yer = esc([...new Set([p.ilce, p.il].filter(Boolean))].join(", "));
-      $("gunun").innerHTML = `<button class="gunun" data-go="#/il/${d.s}/yer/${p.q}">${k ? `<img src="${k}" alt="" onerror="if(this.dataset.y){this.remove()}else{this.dataset.y=1;this.src='${k2}'}">` : ""}<span class="gtxt"><small>${me ? T("Yakınında keşfet") + " · " + fmt(km(me, p)) : T("Bugün keşfet")}</small><b>${esc(adi(p))}</b><span>${yer}</span></span></button>`;
+      $("gunun").innerHTML = `<button class="gunun" data-go="#/il/${d.s}/yer/${p.q}">${k ? `<img src="${esc(k)}" alt="" data-y2="${esc(k2)}" onerror="fotoYedek(this)">` : ""}<span class="gtxt"><small>${me ? T("Yakınında keşfet") + " · " + fmt(km(me, p)) : T("Bugün keşfet")}</small><b>${esc(adi(p))}</b><span>${yer}</span></span></button>`;
     } catch (e) { kesifYuk = false; }
   }
   // ---------- gezi haritası: ilçelerini gezdikçe il boyanır ----------
