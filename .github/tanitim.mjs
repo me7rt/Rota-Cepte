@@ -68,7 +68,7 @@ body.dikey .tel{right:auto;left:50%;top:auto;bottom:80px;transform:translateX(-5
 <div class="tel"><iframe id="app" src="${BASE}"></iframe></div>
 <div class="son" id="son"><img src="${BASE}icon-512.png"><h2>Rota Cepte</h2><p>${t("Yol senin, rotan cepte!", "The road is yours, the route is in your pocket!")}</p><div class="rozet">${t("Ücretsiz · Reklamsız · Google Play'de", "Free · No ads · On Google Play")}</div></div>
 </body></html>`);
-const Z = []; const isaret = (ad) => Z.push({ ad, t: Date.now() / 1000 });
+const Z = []; let kareSay = 0; const isaret = (ad) => Z.push({ ad, t: Date.now() / 1000, n: kareSay });
 const yaz = (h, s) => { isaret("sahne"); return p.evaluate(([h, s]) => { document.getElementById("yazi").innerHTML = `<h1 class="gir">${h}</h1><p class="gir">${s}</p>`; }, [h, s]); };
 const app = () => p.frames().find((f) => f.url().startsWith(BASE));
 const A = (fn, arg) => app().evaluate(fn, arg);
@@ -101,7 +101,7 @@ const cdp = await ctx.newCDPSession(p);
 const kareler = [];
 cdp.on("Page.screencastFrame", async (f) => {
   const n = kareler.length; fs.writeFileSync(`${OUT}/kare/${String(n).padStart(5, "0")}.jpg`, Buffer.from(f.data, "base64"));
-  kareler.push(f.metadata.timestamp);
+  kareler.push(f.metadata.timestamp); kareSay = kareler.length;
   cdp.send("Page.screencastFrameAck", { sessionId: f.sessionId }).catch(() => {});
 });
 await cdp.send("Page.startScreencast", { format: "jpeg", quality: 92, maxWidth: W, maxHeight: H, everyNthFrame: 1 });
@@ -180,14 +180,15 @@ await cdp.send("Page.stopScreencast");
 await b.close();
 
 // kareleri süreleriyle birleştir
-const satir = [];
+const satir = [], filmde = []; let akan = 0;
 for (let i = 0; i < kareler.length; i++) {
   const sure = i + 1 < kareler.length ? Math.max(0.001, kareler[i + 1] - kareler[i]) : 0.5;
+  filmde.push(akan); akan += sure;
   satir.push(`file 'kare/${String(i).padStart(5, "0")}.jpg'`, `duration ${sure.toFixed(4)}`);
 }
 satir.push(`file 'kare/${String(kareler.length - 1).padStart(5, "0")}.jpg'`);
 fs.writeFileSync(`${OUT}/liste.txt`, satir.join("\n"));
-fs.writeFileSync(`${OUT}/zaman${EN ? "-en" : ""}${DIKEY ? "-dikey" : ""}.json`, JSON.stringify({ toplam: kareler.at(-1) - kareler[0], isaret: Z.map((z) => ({ ad: z.ad, t: +(z.t - kareler[0]).toFixed(3) })) }));
+fs.writeFileSync(`${OUT}/zaman${EN ? "-en" : ""}${DIKEY ? "-dikey" : ""}.json`, JSON.stringify({ toplam: +akan.toFixed(3), isaret: Z.map((z) => ({ ad: z.ad, t: +filmde[Math.min(z.n, filmde.length - 1)].toFixed(3) })) }));
 const ad = `rota-cepte-tanitim${EN ? "-en" : ""}${DIKEY ? "-dikey" : ""}.mp4`;
 execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", `${OUT}/liste.txt`, "-vf", `fps=30,scale=${W}:${H},format=yuv420p`, "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-movflags", "+faststart", `${OUT}/${ad}`]);
 console.log("bitti", kareler.length, "kare", ((kareler.at(-1) - kareler[0]) | 0) + " sn");
