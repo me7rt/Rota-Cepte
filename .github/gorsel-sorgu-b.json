@@ -1,16 +1,10 @@
 {
- "palandoken": ["Palandöken", "bitmap", 8, 1600],
- "palandoken2": ["Palandoken ski Erzurum", "bitmap", 6, 1600],
- "ciftemin": ["Çifte Minareli Medrese Erzurum", "bitmap", 6, 1600],
- "ciftemin2": ["Double Minaret Madrasa Erzurum", "bitmap", 6, 1600],
- "kumbet": ["Üç Kümbetler", "bitmap", 4, 1600],
- "kumbet2": ["Erzurum tombs kümbet", "bitmap", 4, 1600],
- "tortum": ["Tortum Waterfall", "bitmap", 8, 1600],
- "tortum2": ["Tortum Şelalesi", "bitmap", 6, 1600],
- "yakutiye": ["Yakutiye Madrasa", "bitmap", 5, 1600],
- "cag": ["cağ kebabı", "bitmap", 4, 1000],
- "erzurum": ["Erzurum snow", "bitmap", 6, 1600],
- "erzurum2": ["Erzurum winter city", "bitmap", 6, 1600],
- "erzkale": ["Erzurum Castle", "bitmap", 4, 1600],
- "erzurum3": ["Erzurum Turkey", "bitmap", 8, 1600]
+ "ciftemin3": ["Twin Minaret Madrasa Erzurum", "bitmap", 6, 1400],
+ "ciftemin4": ["Cifte Minareli Erzurum", "bitmap", 6, 1400],
+ "ciftemin5": ["Erzurum medrese minare", "bitmap", 6, 1400],
+ "yakutiye2": ["Yakutiye Medresesi", "bitmap", 4, 1400],
+ "erzkis": ["Erzurum kış kar", "bitmap", 6, 1600],
+ "palandoken3": ["Palandöken kayak merkezi", "bitmap", 6, 1600],
+ "kayak": ["Palandoken skiing", "bitmap", 6, 1600],
+ "oltu": ["Oltu taşı", "bitmap", 3, 800]
 }
