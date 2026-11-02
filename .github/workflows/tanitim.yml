@@ -17,11 +17,11 @@ jobs:
           npm install --no-save --no-audit --no-fund playwright@1.48.2
           npx playwright install --with-deps chromium
       - name: Türkçe film
-        run: DIL=tr node .github/tanitim.mjs && mkdir -p cikti && mv tanitim/*.mp4 cikti/
+        run: DIL=tr node .github/tanitim.mjs && mkdir -p cikti && mv tanitim/*.mp4 tanitim/*.json cikti/
       - name: İngilizce film
-        run: DIL=en node .github/tanitim.mjs && mv tanitim/*.mp4 cikti/
+        run: DIL=en node .github/tanitim.mjs && mv tanitim/*.mp4 tanitim/*.json cikti/
       - name: Dikey kısa film (Instagram/TikTok)
-        run: DIL=tr DIKEY=1 node .github/tanitim.mjs && mv tanitim/*.mp4 cikti/
+        run: DIL=tr DIKEY=1 node .github/tanitim.mjs && mv tanitim/*.mp4 tanitim/*.json cikti/
       - name: tanitim-video dalina koy
         run: |
           cd cikti

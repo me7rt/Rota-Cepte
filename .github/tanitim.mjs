@@ -29,6 +29,8 @@ await ctx.addInitScript(([g, dil]) => {
   localStorage.setItem("gezi-tanitim", "1"); localStorage.setItem("gezi-konum-kapali", "1");
   localStorage.setItem("gezi-gittim", g); localStorage.setItem("gezi-puan", JSON.stringify({ bitti: 1 }));
   localStorage.setItem("gezi-dil", dil);
+  // filmde açılır pencere (yenilikler, ipuçları) çıkmasın
+  document.addEventListener("DOMContentLoaded", () => { new MutationObserver(() => document.querySelectorAll(".tanit").forEach((e) => e.remove())).observe(document.body, { childList: true, subtree: true }); });
 }, [JSON.stringify(git), DIL]);
 
 const EN = DIL === "en";
@@ -66,7 +68,8 @@ body.dikey .tel{right:auto;left:50%;top:auto;bottom:80px;transform:translateX(-5
 <div class="tel"><iframe id="app" src="${BASE}"></iframe></div>
 <div class="son" id="son"><img src="${BASE}icon-512.png"><h2>Rota Cepte</h2><p>${t("Yol senin, rotan cepte!", "The road is yours, the route is in your pocket!")}</p><div class="rozet">${t("Ücretsiz · Reklamsız · Google Play'de", "Free · No ads · On Google Play")}</div></div>
 </body></html>`);
-const yaz = (h, s) => p.evaluate(([h, s]) => { document.getElementById("yazi").innerHTML = `<h1 class="gir">${h}</h1><p class="gir">${s}</p>`; }, [h, s]);
+const Z = []; const isaret = (ad) => Z.push({ ad, t: Date.now() / 1000 });
+const yaz = (h, s) => { isaret("sahne"); return p.evaluate(([h, s]) => { document.getElementById("yazi").innerHTML = `<h1 class="gir">${h}</h1><p class="gir">${s}</p>`; }, [h, s]); };
 const app = () => p.frames().find((f) => f.url().startsWith(BASE));
 const A = (fn, arg) => app().evaluate(fn, arg);
 const resimler = () => A(async () => { await Promise.all([...document.images].filter((i) => !i.complete).map((i) => new Promise((r) => { i.onload = i.onerror = r; setTimeout(r, 4000); }))); });
@@ -83,6 +86,7 @@ const dokun = async (sel) => {
     document.body.appendChild(d); setTimeout(() => { d.style.transform = "scale(1.6)"; d.style.opacity = "0"; }, 350); setTimeout(() => d.remove(), 900);
   }, sel);
   await bekle(450);
+  isaret("dokun");
   await app().click(sel);
 };
 const git2 = (h) => A((h) => { location.hash = h; }, h);
@@ -114,7 +118,7 @@ await kayEl(".kesfet", 1800); await bekle(1200);
 // 3) mevsim + keşfet
 await yaz(t("Mevsime göre öneriler", "Seasonal picks"), t("Şelaleler, göller, kaleler, mağaralar… Türkiye genelinde keşif listeleri.", "Waterfalls, lakes, castles, caves… curated lists across Türkiye."));
 await bekle(2200);
-await dokun("#mevsim .tchip"); await bekle(2600);
+await dokun("#mevsim .tchip:not(.ata)"); await bekle(2600);
 await kay(500, 2200); await bekle(800);
 // 4) il sayfası
 await yaz(t("Her ilin en güzel yerleri", "The best of every province"), t("Fotoğraflar, bilgiler, hava durumu ve yöresel lezzetler.", "Photos, stories, weather and local food."));
@@ -132,7 +136,7 @@ await dokun("#list .row"); await bekle(1500); await resimler(); await bekle(2500
 await kayDetay(520, 2600); await bekle(2200);
 await A(() => { const c = document.getElementById("dClose"); if (c) c.click(); }); await bekle(900);
 // 7) hazır rotalar
-await yaz(t("14 hazır gezi rotası", "14 ready-made routes"), t("Kapadokya, İstanbul, Efes, Likya, Karadeniz… Durakları sırayla gez.", "Cappadocia, Istanbul, Ephesus, the Lycian coast… stop by stop."));
+await yaz(t("15 hazır gezi rotası", "15 ready-made routes"), t("Kapadokya, İstanbul, Efes, Likya, Karadeniz… Durakları sırayla gez.", "Cappadocia, Istanbul, Ephesus, the Lycian coast… stop by stop."));
 await git2("#/rota/kapadokya"); await bekle(1500); await resimler(); await bekle(3500);
 await kay(400, 1800); await bekle(1500);
 // 8) gezi haritası ve rozetler
@@ -140,6 +144,14 @@ await yaz(t("Gezdiğin illeri boya", "Colour in your travels"), t("Gittiğin yer
 await git2("#/"); await bekle(2500); await resimler(); await bekle(800);
 await kayEl("#gezSec", 1800); await bekle(3500);
 await git2("#/rozetler"); await bekle(1500); await bekle(3000);
+// 8b) Atatürk'ün izinde
+await yaz(t("Atatürk'ün izinde", "In Atatürk's footsteps"), t("Çanakkale'den Anıtkabir'e 16 durak. Millî Mücadele'nin yerlerini tarih sırasıyla gez.", "16 stops from Gallipoli to Anıtkabir, in the order history happened."));
+await git2("#/ataturk"); await bekle(1500); await resimler(); await bekle(2200);
+await kay(700, 2400); await bekle(1500);
+// 8c) Hangi ilde?
+await yaz(t("Hangi ilde?", "Which province?"), t("Fotoğrafa bak, ili tahmin et. 10 soruda kaç puan alacaksın?", "Look at a photo and guess the province. How many of 10 can you get?"));
+await git2("#/oyun"); await bekle(1500); await resimler(); await bekle(2500);
+await dokun(".osecenek .osik"); await bekle(2800);
 // 9) internetsiz
 await yaz(t("Çekmeyen yerde bile", "Even with no signal"), t("İli telefonuna indir, dağda bayırda internetsiz aç.", "Download a province and use it offline in the mountains."));
 await git2("#/il/antalya"); await bekle(2000); await resimler(); await bekle(1000);
@@ -160,6 +172,7 @@ await A(() => {
 });
 await bekle(6500);
 // 10) kapanış
+isaret("son");
 await p.evaluate(() => { document.getElementById("son").classList.add("ac"); });
 await bekle(6500);
 
@@ -174,6 +187,7 @@ for (let i = 0; i < kareler.length; i++) {
 }
 satir.push(`file 'kare/${String(kareler.length - 1).padStart(5, "0")}.jpg'`);
 fs.writeFileSync(`${OUT}/liste.txt`, satir.join("\n"));
+fs.writeFileSync(`${OUT}/zaman${EN ? "-en" : ""}${DIKEY ? "-dikey" : ""}.json`, JSON.stringify({ toplam: kareler.at(-1) - kareler[0], isaret: Z.map((z) => ({ ad: z.ad, t: +(z.t - kareler[0]).toFixed(3) })) }));
 const ad = `rota-cepte-tanitim${EN ? "-en" : ""}${DIKEY ? "-dikey" : ""}.mp4`;
 execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", `${OUT}/liste.txt`, "-vf", `fps=30,scale=${W}:${H},format=yuv420p`, "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-movflags", "+faststart", `${OUT}/${ad}`]);
 console.log("bitti", kareler.length, "kare", ((kareler.at(-1) - kareler[0]) | 0) + " sn");
