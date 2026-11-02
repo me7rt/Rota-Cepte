@@ -498,6 +498,11 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 .rno.on{background:var(--ok);color:#fff}
 .rlist .row{grid-template-columns:56px 1fr auto}
 .rotaac{display:flex;margin:10px 0 4px}
+.yolsatir{display:flex;align-items:center;gap:8px}
+.yolsatir .row{flex:1;min-width:0}
+.yolek{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--pri-ink);display:grid;place-items:center}
+.yolek[aria-pressed="true"]{background:var(--pri);border-color:var(--pri);color:var(--on-pri)}
+.yolipucu{margin-top:2px}
 .favrota{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:10px;text-align:center}
 .favrota span{display:inline-flex;align-items:center;gap:8px}
 .favrota small{font-weight:600;font-size:12.5px;opacity:.9}

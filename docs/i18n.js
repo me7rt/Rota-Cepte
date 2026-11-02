@@ -15,7 +15,7 @@
     "Pasaportuna yeni damga!": "New passport stamp!", "Yeni rozet": "New badge", "damga var": "stamped",
     "Yol üstü keşif": "Along the way", "Yola mı çıkıyorsun? İki il seç, yol boyunca mola yerlerini bulalım": "Road trip? Pick two provinces and we'll find stops along the way",
     "Nereden": "From", "Nereye": "To", "Yönü değiştir": "Swap direction", "Yoldan en fazla": "Max. distance off the road", "Yolculuk planı": "Trip planner",
-    "Yol tarifini Google Haritalar'da aç": "Open directions in Google Maps", "Nereden ve nereye için iki farklı il seç.": "Pick two different provinces.",
+    "Yol tarifini Google Haritalar'da aç": "Open directions in Google Maps", "Aşağıdaki yerlerin yanındaki + ile mola ekle, yol tarifine durak olarak girsin.": "Tap + next to a place below to add it as a stop in the directions.", "Nereden ve nereye için iki farklı il seç.": "Pick two different provinces.",
     "Yol, illerin merkezlerinden geçen yaklaşık bir hattır. Gerçek güzergâh farklı olabilir, mesafeler yaklaşıktır. Başlangıç ve varış illerindeki yerler o illerin kendi sayfasında.": "The road is an approximate line through province centres. The actual route may differ and distances are approximate. Places in the start and destination provinces are on their own pages.",
     "Yol bilgisi yüklenemedi. İnternet bağlantını kontrol et.": "Couldn't load route data. Check your connection.", "Bu iki il arasında yol bulunamadı.": "No route found between these provinces.",
     // v6.5 küçük sevinçler: şans çarkı
