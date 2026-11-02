@@ -1629,7 +1629,7 @@
   // Yol, komşu illerin merkezlerinden geçen en kısa hattır (il-komsu.json, Natural Earth sınırlarından).
   // Gerçek karayoluna yakın bir tahmindir; ekranda da "yaklaşık" diye yazılır.
   const YOL = "gezi-yol", YOL_GENIS = [5, 15, 30], YOL_ILK = 6;
-  let KOMSU = null, yolGenis = 15, yolAcik = new Set(), yolSec = new Map(), yolR = [];
+  let KOMSU = null, yolGenis = 15, yolAcik = new Set(), yolSec = new Map(), yolR = [], yolKat = "";
   const YOL_MOLA_EN_COK = 9; // Google Haritalar bağlantısı en fazla 9 ara durak kabul ediyor
   try { const g = JSON.parse(localStorage.getItem(YOL) || "{}").g; if (YOL_GENIS.includes(g)) yolGenis = g; } catch (e) {}
   function loadKomsu() {
@@ -1704,7 +1704,7 @@
     try { localStorage.setItem(YOL, JSON.stringify({ a, b, g: yolGenis })); } catch (e) {}
     if (location.hash !== `#/yol/${a}/${b}`) history.replaceState(null, "", `#/yol/${a}/${b}`);
     for (const x of $("yolGenis").children) x.setAttribute("aria-pressed", String(+x.dataset.g === yolGenis));
-    $("yolAc").hidden = true; $("yolIpucu").hidden = true; $("yolMola").hidden = true;
+    $("yolAc").hidden = true; $("yolIpucu").hidden = true; $("yolMola").hidden = true; $("yolKat").innerHTML = "";
     if (a === b) { $("yolSay").textContent = ""; $("yolHat").innerHTML = ""; $("yolList").innerHTML = `<li class="empty">${T("Nereden ve nereye için iki farklı il seç.")}</li>`; return; }
     if (!ARA || !KOMSU || typeof KOMSU.then === "function") {
       $("yolList").innerHTML = `<li class="empty">${T("Yükleniyor…")}</li>`;
@@ -1718,8 +1718,14 @@
     const { r, toplam } = yolYerleri(yol);
     r.sort((p, q) => p.konum - q.konum);
     yolR = r;
+    // Kategori çipleri: listeyi kısaltmak için; mola planı ve toplam sayı tüm yerlere göre kalır
+    const kSay = {}; for (const y of r) { const k = CATS[y.x[6]] ? y.x[6] : "t"; kSay[k] = (kSay[k] || 0) + 1; }
+    if (yolKat && !kSay[yolKat]) yolKat = "";
+    const kList = Object.keys(CATS).filter((k) => kSay[k]);
+    $("yolKat").innerHTML = kList.length > 1 ? [`<button data-yk="" aria-pressed="${!yolKat}">${T("Hepsi")} <small>${r.length}</small></button>`, ...kList.map((k) => `<button data-yk="${k}" aria-pressed="${yolKat === k}"><span class="dot" style="background:${CATS[k].renk}"></span>${CATS[k].ad} <small>${kSay[k]}</small></button>`)].join("") : "";
+    const rL = yolKat ? r.filter((y) => (CATS[y.x[6]] ? y.x[6] : "t") === yolKat) : r;
     const grup = new Map();
-    for (const y of r) { if (!grup.has(y.x[2])) grup.set(y.x[2], { konum: y.konum, l: [] }); grup.get(y.x[2]).l.push(y); }
+    for (const y of rL) { if (!grup.has(y.x[2])) grup.set(y.x[2], { konum: y.konum, l: [] }); grup.get(y.x[2]).l.push(y); }
     $("yolSay").textContent = TL(`Yaklaşık ${fmt(toplam * YOL_CARPAN)} yol · ${r.length} mola yeri · ${grup.size} ilde`, `About ${fmt(toplam * YOL_CARPAN)} of driving · ${r.length} stops · in ${grup.size} provinces`);
     $("yolHat").innerHTML = yol.map((s, i) => `<button class="yhil${i === 0 || i === yol.length - 1 ? " uc" : ""}" data-go="#/il/${s}">${esc(ilAd(s))}</button>`).join(`<i>${ik("chevron-right", 14)}</i>`);
     const g = gittiklerim();
@@ -1732,7 +1738,7 @@
       html += goster.map(({ x, sap }) => {
         const c = CATS[x[6]] || CATS.t, ok = g.some((y) => y.s === x[2] && y.ad === x[1]);
         const anah = `${x[2]}|${x[3]}`, secili = yolSec.has(anah);
-        return `<li class="yolsatir"><button class="row res" data-yer="${x[2]}|${x[3]}">${x[8] ? thumb({ p: x[8], w: 1e5 }, x[6] || "t") : `<span class="thumb" style="--c:${c.renk}">${icon(x[6] || "t", 20)}</span>`}<span class="rt"><b>${x[11] ? `<i class="star" title="${T("Öne çıkan")}">${ik("star", 14)}</i>` : ""}${esc(araAd(x))}</b><small>${esc(c.ad)} · ${TL(`yoldan ~${fmt(sap)}`, `~${fmt(sap)} off the road`)}</small></span><span class="km${ok ? " ok" : ""}">${ok ? ik("circle-check", 20) : OKIK}</span></button><button class="yolek" data-yolek="${anah}" aria-pressed="${secili}" aria-label="${esc(secili ? TL(`${araAd(x)}: moladan çıkar`, `${araAd(x)}: remove stop`) : TL(`${araAd(x)}: mola olarak ekle`, `${araAd(x)}: add as a stop`))}">${ik(secili ? "check" : "plus", 20)}</button></li>`;
+        return `<li class="yolsatir"><button class="row res" data-yer="${x[2]}|${x[3]}">${x[8] ? thumb({ p: x[8], w: 1e5 }, x[6] || "t") : `<span class="thumb" style="--c:${c.renk}">${icon(x[6] || "t", 20)}</span>`}<span class="rt"><b>${x[11] ? `<i class="star" title="${T("Öne çıkan")}">${ik("star", 14)}</i>` : ""}${esc(araAd(x))}</b><small>${TL(`yoldan ~${fmt(sap)}`, `~${fmt(sap)} off the road`)} · ${esc(c.ad)}</small></span><span class="km${ok ? " ok" : ""}">${ok ? ik("circle-check", 20) : OKIK}</span></button><button class="yolek" data-yolek="${anah}" aria-pressed="${secili}" aria-label="${esc(secili ? TL(`${araAd(x)}: moladan çıkar`, `${araAd(x)}: remove stop`) : TL(`${araAd(x)}: mola olarak ekle`, `${araAd(x)}: add as a stop`))}">${ik(secili ? "check" : "plus", 20)}</button></li>`;
       }).join("");
       if (l.length > goster.length) html += `<li><button class="linkbtn yolfazla" data-yolil="${s}">${TL(`${esc(ilAd(s))}: ${l.length - goster.length} yer daha göster`, `Show ${l.length - goster.length} more in ${esc(ilAd(s))}`)}</button></li>`;
     }
@@ -2100,7 +2106,7 @@
     let son = "istanbul"; try { son = localStorage.getItem("gezi-son-il") || son; } catch (e) {}
     // Bu sürümde yeni: her sürümde güncellenir (yeni, iyileşen, çıkarılan)
     const yeni = [
-      ["car-front", TL("Yol üstü keşifte mola ekle", "Add stops along the way"), TL("Yol üstündeki yerlerin yanındaki + ile mola ekle; Google Haritalar'da yol tarifi o duraklardan geçsin. Yol tarifi düğmesi artık en üstte.", "Tap + next to places along the way to add stops; the Google Maps directions will pass through them. The directions button is now at the top."), "#/yol"],
+      ["car-front", TL("Yol üstü keşifte mola ekle", "Add stops along the way"), TL("Yol üstündeki yerleri türüne göre süz, beğendiklerini + ile mola ekle; Google Haritalar'da yol tarifi o duraklardan geçsin. Yol tarifi düğmesi artık en üstte.", "Filter places along the way by type and tap + to add stops; the Google Maps directions will pass through them. The directions button is now at the top."), "#/yol"],
       ["shield-check", TL("Daha güvenli", "Safer"), TL("Uygulamanın güvenliği baştan sona gözden geçirildi ve sıkılaştırıldı.", "The app's security was reviewed end to end and tightened.")],
       ["list-checks", TL("Küçük düzeltmeler", "Small fixes"), TL("Geri dönünce açık kalan pencereler artık kapanıyor; bazı yer açıklamalarında kalan kod parçaları temizlendi.", "Pop-ups now close when you go back, and leftover code bits were cleaned from some place descriptions.")],
     ];
@@ -3049,7 +3055,8 @@
     else if (k.dataset.k === "tekrar") { oyun = null; showOyun(); window.scrollTo(0, 0); }
   });
   oyunRekorYaz();
-  const yolYeni = () => { yolAcik = new Set(); yolSec = new Map(); renderYol(); };
+  const yolYeni = () => { yolAcik = new Set(); yolSec = new Map(); yolKat = ""; renderYol(); };
+  $("yolKat").addEventListener("click", (e) => { const b = e.target.closest("[data-yk]"); if (!b) return; yolKat = b.dataset.yk; renderYol(); });
   $("yolA").addEventListener("change", yolYeni);
   $("yolB").addEventListener("change", yolYeni);
   $("yolTers").addEventListener("click", () => { const a = $("yolA").value; $("yolA").value = $("yolB").value; $("yolB").value = a; yolYeni(); });
