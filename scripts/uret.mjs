@@ -846,7 +846,7 @@ rapor("önceki veriden korunan foto:", tumYer.filter((o) => o.fotoKaynak === "ö
 rapor("yedek foto: kategori", yedekKat, "| yakın", yedekYakin, "| Commons araması", yedekAra, "| hiç bulunamayan seçkin", fotosuzSeckin);
 
 // İl ve ilçe kapak fotoğrafları
-const YAPI_ADI = /cami|mescit|kale|köprü|kule|medrese|han\b|hanı|hamam|türbe|kilise|manastır|çeşme|bedesten|saray|konak|kervansaray|külliye|sinagog|tekke|imaret|kümbet|kemer/i;
+const YAPI_ADI = /cami|mescit|kale|köprü|kule|medrese|han\b|hanı|hamam|türbe|kilise|manastır|çeşme|bedesten|saray|konak|kervansaray|külliye|sinagog|tekke|imaret|kümbet|kemer|yeraltı/i;
 let azIlEk = 0;
 for (const il of iller.values()) {
   il.yerler = il.adaylar.filter((o) => o.foto);
