@@ -846,12 +846,14 @@ rapor("önceki veriden korunan foto:", tumYer.filter((o) => o.fotoKaynak === "ö
 rapor("yedek foto: kategori", yedekKat, "| yakın", yedekYakin, "| Commons araması", yedekAra, "| hiç bulunamayan seçkin", fotosuzSeckin);
 
 // İl ve ilçe kapak fotoğrafları
+const YAPI_ADI = /cami|mescit|kale|köprü|kule|medrese|han\b|hanı|hamam|türbe|kilise|manastır|çeşme|bedesten|saray|konak|kervansaray|külliye|sinagog|tekke|imaret|kümbet|kemer/i;
 let azIlEk = 0;
 for (const il of iller.values()) {
   il.yerler = il.adaylar.filter((o) => o.foto);
   // Az yeri olan illerde (15'ten az) fotoğrafı bulunamayan ama Vikipedi maddesi olan yerler de eklenir (metinleri var)
   if (il.yerler.length < 15) {
-    const ek = il.adaylar.filter((o) => !o.foto && o.trA && !o.wd).sort((a, b) => b.sl - a.sl).slice(0, 15 - il.yerler.length);
+    // Fotoğrafsız tarihî yerlerden yalnızca ayakta bir yapısı olanlar (cami, kale, köprü...) eklenir; kalıntısı görülmeyen antik kent adları ve höyükler eklenmez
+    const ek = il.adaylar.filter((o) => !o.foto && o.trA && !o.wd && (o.k !== "t" || YAPI_ADI.test(o.ad))).sort((a, b) => b.sl - a.sl).slice(0, 15 - il.yerler.length);
     if (ek.length) { il.yerler.push(...ek); azIlEk += ek.length; }
   }
   // Son sınır: ilçe başına 35, ilçesiz 40, il başına 400
