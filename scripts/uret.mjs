@@ -1001,7 +1001,8 @@ for (const il of ilSirali) {
   const ilceSira = il.ilceler.filter((d) => d.koor).sort((a, b) => a.ad.localeCompare(b.ad, "tr"));
   const ilceNo = new Map(ilceSira.map((d, i) => [d.q, i]));
   const yerler = il.yerler.map((o) => {
-    const trMetin = (o.trA && trM.get(o.trA)) || TR_CEVIRI[o.q];
+    // Elle çeviri varsa Türkçe Vikipedi taslağının (çok kısa madde) yerine geçer
+    const trMetin = (o.enA && TR_CEVIRI[o.q]) || (o.trA && trM.get(o.trA)) || TR_CEVIRI[o.q];
     const metin = trMetin || enM.get(o.enA);
     const y = { ad: AD_DUZ[o.q] || temizAd(o.ad), q: o.q, lat: o.koor[0], lng: o.koor[1], k: o.k, i: ilceNo.has(o.ilce) ? ilceNo.get(o.ilce) : -1, f: fotoCikti(o.foto) };
     if (o.one) y.one = 1;
@@ -1010,7 +1011,7 @@ for (const il of ilSirali) {
     if (o.ipe) y.ipe = o.ipe;
     if (metin) y.m = metin; if (!trMetin && metin) { y.en = 1; rapor(`  Türkçe metni yok (çevirisi data/icerik-duzelt.json "tr" içine eklenmeli): ${il.ad} / ${o.ad} (${o.q})`); }
     // Türkçe Vikipedi maddesi yoksa İngilizce maddenin elle yapılmış çevirisi kullanılır (lisans satırında belirtilir)
-    const ceviri = !(o.trA && trM.get(o.trA)) && TR_CEVIRI[o.q];
+    const ceviri = TR_CEVIRI[o.q] && (o.enA || !(o.trA && trM.get(o.trA)));
     // Wikidata kısa açıklaması Türkçe yoksa İngilizcesi geliyor: Türkçe modda İngilizce cümle göstermemek için at
     if (o.aciklama && !INGILIZCE_ACK.test(o.aciklama)) y.ac = o.aciklama;
     y.w = o.trA ? "tr:" + o.trA : o.enA ? "en:" + o.enA : "";
