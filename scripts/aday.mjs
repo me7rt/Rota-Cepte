@@ -8,8 +8,10 @@ async function api(host, params, d = 0) {
   try {
     const r = await fetch(`https://${host}/w/api.php`, { method: "POST", headers: { "User-Agent": UA, "Api-User-Agent": UA, "Content-Type": "application/x-www-form-urlencoded" }, body });
     if (r.ok) { const j = await r.json(); if (!j.error) return j; }
-  } catch (e) {}
-  if (d < 4) { await sleep(2000 * (d + 1)); return api(host, params, d + 1); }
+    else console.log("HTTP", r.status, host, (await r.text()).slice(0, 200));
+  } catch (e) { console.log("HATA", host, String(e).slice(0, 200)); }
+  if (d < 6) { await sleep(4000 * (d + 1)); return api(host, params, d + 1); }
+  console.log("VAZGECILDI", host, JSON.stringify(params).slice(0, 200));
   return {};
 }
 const parca = (a, n) => { const o = []; for (let i = 0; i < a.length; i += n) o.push(a.slice(i, i + n)); return o; };
@@ -17,13 +19,15 @@ const L = JSON.parse(fs.readFileSync("aday-liste.json", "utf8"));
 const hepsi = new Map(); for (const x of [...L.foto, ...L.kisa]) hepsi.set(x.q, x);
 // 1. Wikidata
 const WD = new Map();
-for (const p of parca([...hepsi.keys()], 50)) {
+for (const p of parca([...hepsi.keys()].filter((q) => /^Q\d+$/.test(q)), 40)) {
+  await sleep(1500);
   const j = await api("www.wikidata.org", { action: "wbgetentities", ids: p.join("|"), props: "sitelinks|claims|descriptions|labels", languages: "tr|en|de" });
   for (const [q, e] of Object.entries(j.entities || {})) {
     const c = e.claims || {}; const v = (k) => (c[k] || []).map((s) => s.mainsnak && s.mainsnak.datavalue && s.mainsnak.datavalue.value).filter(Boolean);
     WD.set(q, { sl: Object.fromEntries(Object.entries(e.sitelinks || {}).map(([k, s]) => [k, s.title])), p18: v("P18"), cat: v("P373")[0] || "", p31: v("P31").map((x) => x.id), ack: Object.fromEntries(Object.entries(e.descriptions || {}).map(([k, s]) => [k, s.value])) });
   }
 }
+console.log("WD", WD.size);
 const sinif = new Set(); for (const w of WD.values()) w.p31.forEach((x) => sinif.add(x));
 const SINIF = {};
 for (const p of parca([...sinif], 50)) { const j = await api("www.wikidata.org", { action: "wbgetentities", ids: p.join("|"), props: "labels", languages: "tr|en" }); for (const [q, e] of Object.entries(j.entities || {})) SINIF[q] = (e.labels.tr || e.labels.en || {}).value || q; }
