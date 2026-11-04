@@ -150,6 +150,7 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 .back:active{background:var(--surface2)}
 .loc{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:40px;max-width:46%;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:0 14px 0 11px;font-size:13px;font-weight:700;box-shadow:var(--sh-1);transition:background-color .15s,color .15s,transform .15s}
 .loc:active{transform:scale(.96)}
+.dilhizli{max-width:none;padding:0 12px 0 10px;color:var(--fg);letter-spacing:.04em}
 .loc span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .locik{display:inline-flex}
 .loc.on{color:var(--pri-ink);border-color:color-mix(in srgb,var(--pri) 35%,var(--line));background:var(--pri-soft)}

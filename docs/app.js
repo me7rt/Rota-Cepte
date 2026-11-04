@@ -303,6 +303,7 @@
     $("indirSec").hidden = true;
     $("plan").hidden = true;
     $("back").hidden = v === "home" || v === "listem" || v === "rozet" || (view && view.mode === "near");
+    $("dilHizli").hidden = v !== "home";
     if (degisti || v === "city") window.scrollTo(0, 0);
     navAktif();
   }
@@ -2107,6 +2108,8 @@
     // Bu sürümde yeni: her sürümde güncellenir (yeni, iyileşen, çıkarılan)
     const yeni = [
       ["car-front", TL("Yol üstü keşifte mola ekle", "Add stops along the way"), TL("Yol üstündeki yerleri türüne göre süz, beğendiklerini + ile mola ekle; Google Haritalar'da yol tarifi o duraklardan geçsin. Yol tarifi düğmesi artık en üstte.", "Filter places along the way by type and tap + to add stops; the Google Maps directions will pass through them. The directions button is now at the top."), "#/yol"],
+      ["languages", TL("Dil düğmesi en üstte", "Language button at the top"), TL("Türkçe ve İngilizce arasında geçmek için ana ekranın sağ üstündeki dil düğmesine dokunman yeterli.", "To switch between Turkish and English, just tap the language button at the top right of the home screen.")],
+      ["camera", TL("Daha temiz bilgiler", "Cleaner information"), TL("Gezilecek bir yanı olmayan yerler çıkarıldı, iki kez görünen yerler teke indi; birçok yere yeni fotoğraf ve daha uzun açıklama geldi.", "Places with nothing to see were removed and duplicates merged; many places got new photos and longer descriptions.")],
       ["shield-check", TL("Daha güvenli", "Safer"), TL("Uygulamanın güvenliği baştan sona gözden geçirildi ve sıkılaştırıldı.", "The app's security was reviewed end to end and tightened.")],
       ["list-checks", TL("Küçük düzeltmeler", "Small fixes"), TL("Geri dönünce açık kalan pencereler artık kapanıyor; bazı yer açıklamalarında kalan kod parçaları temizlendi.", "Pop-ups now close when you go back, and leftover code bits were cleaned from some place descriptions.")],
     ];
@@ -3082,6 +3085,8 @@
   });
   $("dilYazi").textContent = TL("Language: English", "Dil: Türkçe");
   $("dilBtn").addEventListener("click", () => dilDegistir(TL("en", "tr")));
+  $("dilHizli").querySelector("span").textContent = TL("TR", "EN");
+  $("dilHizli").addEventListener("click", () => dilDegistir(TL("en", "tr")));
   // ---------- tema (renk paleti): varsayılan Gün Batımı, Ayarlar'dan değişir ----------
   const TEMALAR = [
     { k: "gunbatimi", ad: TL("Gün Batımı", "Sunset"), not: TL("Kum, gün batımı turuncusu, dağ laciverdi", "Sand, sunset orange, mountain navy"), r: ["#f6eee7", "#d13415", "#1f2d5c"], koyu: "#11131f" },
