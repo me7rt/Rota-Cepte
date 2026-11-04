@@ -1,0 +1,28 @@
+name: Gecici sorgu
+on:
+  push:
+    branches: [claude/project-thread-iyhxd3]
+    paths: ["scripts/gecici-sorgu.mjs", ".github/workflows/gecici-sorgu.yml"]
+permissions:
+  contents: write
+jobs:
+  sorgu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with: { node-version: 22 }
+      - run: node scripts/gecici-sorgu.mjs
+      - name: Sonucu veri-deneme dalina yukle
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd out
+          git init -q -b veri-deneme
+          git config user.name "Mert Turanlıoğlu"
+          git config user.email "me7rtt@gmail.com"
+          git add -A
+          git commit -q -m "Sorgu sonucu (gecici)"
+          git push -f "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git" veri-deneme
