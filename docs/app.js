@@ -3304,12 +3304,13 @@
       while (aday.length && sec.length < 3) sec.push(aday.splice(Math.floor(Math.random() * aday.length), 1)[0]);
       if (!sec.length) return;
       const adlar = sec.map((x) => (DIL === "en" ? x[9] : x[1])).join(", ");
+      const oneri = TL(`${merkez ? "Sana yakın" : "Senin için"} 3 öneri: ${adlar}`, `3 ideas ${merkez ? "near you" : "for you"}: ${adlar}`);
       let hedef = "#/yakin";
       try { const d = await loadIl(sec[0][2]); const p = d.yerler[sec[0][3]]; if (p && p.q) hedef = `#/il/${d.s}/yer/${p.q}`; } catch (e) {}
       await LN.schedule({ notifications: [{
         id: HS_ID,
         title: TL("Bu hafta sonu nereye?", "Where to this weekend?"),
-        body: TL(`${merkez ? "Sana yakın" : "Senin için"} 3 öneri: ${adlar}`, `3 ideas ${merkez ? "near you" : "for you"}: ${adlar}`),
+        body: oneri, largeBody: oneri,
         schedule: { on: { weekday: 6, hour: 18, minute: 0 }, allowWhileIdle: true },
         extra: { git: hedef }
       }] });
@@ -3364,10 +3365,11 @@
         const t = new Date(y, 10, 10, 9, 5, 0);
         if (t <= simdi) continue;
         const yil = y - 1938;
+        const metin = TL(`10 Kasım, saat 09.05. Gazi Mustafa Kemal Atatürk'ü ebediyete intikalinin ${yil}. yılında saygı, sevgi ve özlemle anıyoruz.`, `10 November, 9:05 am. We remember Mustafa Kemal Atatürk, founder of the Republic of Türkiye, on the ${siraEn(yil)} anniversary of his passing.`);
         n.push({
           id: ANMA_ID + n.length,
           title: TL("Saygıyla ve özlemle ∞", "With respect and longing ∞"),
-          body: TL(`10 Kasım, saat 09.05. Gazi Mustafa Kemal Atatürk'ü ebediyete intikalinin ${yil}. yılında saygı, sevgi ve özlemle anıyoruz.`, `10 November, 9:05 am. We remember Mustafa Kemal Atatürk, founder of the Republic of Türkiye, on the ${siraEn(yil)} anniversary of his passing.`),
+          body: metin, largeBody: metin,
           schedule: { at: t, allowWhileIdle: true },
           extra: { git: "#/ataturk" }
         });
