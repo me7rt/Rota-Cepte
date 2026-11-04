@@ -1,0 +1,37 @@
+name: Gecici ekran
+on:
+  push:
+    branches: [claude/project-thread-iyhxd3]
+    paths: [".github/gecici-ekran.js", ".github/workflows/gecici-ekran.yml"]
+permissions:
+  contents: write
+jobs:
+  ekran:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with: { node-version: 22 }
+      - name: Playwright kur
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.48.2
+          npx playwright install --with-deps chromium
+      - name: Cek
+        run: |
+          (cd docs && python3 -m http.server 8765 >/dev/null 2>&1 &)
+          sleep 2
+          mkdir -p out
+          OUT=$PWD/out/ DSF=2 URL=http://localhost:8765/ node .github/gecici-ekran.js
+      - name: Sonucu veri-deneme dalina yukle
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd out
+          git init -q -b veri-deneme
+          git config user.name "Mert Turanlıoğlu"
+          git config user.email "me7rtt@gmail.com"
+          git add -A
+          git commit -q -m "Ekran (gecici)"
+          git push -f "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git" veri-deneme
