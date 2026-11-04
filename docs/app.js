@@ -69,6 +69,9 @@
     if (m[3] === "'ler") return n + "s" + mo;
     return n + mo;
   }
+  // Çok duraklı Google Haritalar rotası: bulunduğun yerden başlar, durakları sırayla gezer.
+  // ?api=1 bağlantısında telefon uygulaması ara durakları atlayabildiği için duraklar yol olarak yazılır (en fazla 10).
+  const yolLink = (noktalar) => "https://www.google.com/maps/dir//" + noktalar.slice(0, 10).join("/") + "/data=!4m2!4m1!3e0";
   function km(a, b) {
     const R = 6371, r = (x) => (x * Math.PI) / 180;
     const dLa = r(b.lat - a.lat), dLo = r(b.lng - a.lng);
@@ -421,8 +424,8 @@
       }
     }
     top = yolUz(sira);
-    const nk = (x) => x.lat + "," + x.lng, son = sira[sira.length - 1], ara = sira.slice(0, -1).map(nk).join("|");
-    b.href = `https://www.google.com/maps/dir/?api=1&destination=${nk(son)}${ara ? "&waypoints=" + encodeURIComponent(ara) : ""}&travelmode=driving`;
+    const nk = (x) => x.lat + "," + x.lng;
+    b.href = yolLink(sira.map(nk));
     b.innerHTML = TL(`<span>${ik("route", 18)} Listemden rota yap</span><small>${sira.length} durak · ~${fmt(top * 1.3)} · en kısa sırayla</small>`, `<span>${ik("route", 18)} Make a route from my list</span><small>${sira.length} stops · ~${fmt(top * 1.3)} · shortest order</small>`);
     b.hidden = false;
   }
@@ -1560,11 +1563,11 @@
     const yemek = YEMEK && YEMEK[d.s] && YEMEK[d.s][0];
     let top = 0; for (let i = 1; i < s.length; i++) top += km(s[i - 1], s[i]);
     const saat = ["09:00", "11:00", "14:00", "16:00", "18:00"];
-    const nk = (x) => x.lat + "," + x.lng, son = s[s.length - 1], ara = s.slice(0, -1).map(nk).join("|");
+    const nk = (x) => x.lat + "," + x.lng;
     kutu.innerHTML = `<div class="plust"><h3>${ik("calendar-days", 20)} ${TL(esc(d.ad) + ekDe(d.ad) + " 1 günlük plan", "A day in " + esc(d.ad))}</h3><button class="linkbtn" id="planYeni">${ik("shuffle", 16)} ${TL("Başka plan", "Another plan")}</button></div>
       <small class="plalt">${TL(`${s.length} durak · aralarda toplam ~${fmt(top * 1.3)} yol`, `${s.length} stops · ~${fmt(top * 1.3)} of driving in between`)}</small>
       <ol class="plist">${s.map((p, i) => `${i === 2 ? `<li class="plyemek"><time>13:00</time><span>${ik("utensils", 16)} ${TL("Öğle arası", "Lunch break")}${yemek ? `: <b>${esc(yemekAd(yemek))}</b>${TL(" dene", "")}` : ""}</span></li>` : ""}<li><button class="row" data-s="${p.ilS}" data-j="${p.j}"><time>${saat[i]}</time>${thumb(p.f, p.k)}<span class="rt"><b>${esc(adi(p))}</b><small>${i ? fmt(km(s[i - 1], p) * 1.3) + TL(" yol", " drive") : esc(p.ilce || d.ad)}</small></span></button></li>`).join("")}</ol>
-      <a class="btn primary rotaac" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${nk(son)}&waypoints=${encodeURIComponent(ara)}&travelmode=driving">${ik("navigation", 18)} ${TL("Planı Google Maps'te aç", "Open plan in Google Maps")}</a>`;
+      <a class="btn primary rotaac" target="_blank" rel="noopener" href="${yolLink(s.map(nk))}">${ik("navigation", 18)} ${TL("Planı Google Maps'te aç", "Open plan in Google Maps")}</a>`;
     kutu.hidden = false;
   }
   // ---------- uygulamayı paylaş + beğeni sorusu ----------
@@ -1652,8 +1655,7 @@
       return `<li>${ara}<button class="row res" data-yer="${x[2]}|${x[3]}"><span class="rno${ok ? " on" : ""}">${ok ? ik("check", 18) : i + 1}</span><span class="rt"><b>${esc(araAd(x))}</b><small>${esc(il)}</small></span><span class="km">${me ? fmt(km(me, { lat: x[4], lng: x[5] })) : OKIK}</span></button></li>`;
     }).join("");
     const nk = (x) => x[4] + "," + x[5];
-    const son = ds[ds.length - 1], ara = ds.slice(0, -1).map(nk).join("|");
-    $("rotaAc").href = `https://www.google.com/maps/dir/?api=1&destination=${nk(son)}${ara ? "&waypoints=" + encodeURIComponent(ara) : ""}&travelmode=driving`;
+    $("rotaAc").href = yolLink(ds.map(nk));
     $("rotaAc").hidden = !ds.length;
   }
   // ---------- yol üstü keşif: iki il arasındaki yolda mola verilecek yerler ----------
@@ -3057,7 +3059,7 @@
   const yerKayit = (p) => ({ q: p.q, s: p.ilS, ad: p.ad, il: [...new Set([p.ilce, p.il].filter(Boolean))].join(", "), k: p.k, f: p.f, lat: p.lat, lng: p.lng });
   const planSay = (p) => p.g.reduce((t, g) => t + g.length, 0);
   const gunKm = (g) => g.reduce((t, x, i) => t + (i ? km(g[i - 1], x) : 0), 0);
-  const gunHarita = (g) => { const nk = (x) => x.lat + "," + x.lng, son = g[g.length - 1], ara = g.slice(0, -1).slice(0, 9).map(nk).join("|"); return `https://www.google.com/maps/dir/?api=1&destination=${nk(son)}${ara ? "&waypoints=" + encodeURIComponent(ara) : ""}&travelmode=driving`; };
+  const gunHarita = (g) => yolLink(g.map((x) => x.lat + "," + x.lng));
   const gunAd = (i) => TL(`${i + 1}. Gün`, `Day ${i + 1}`);
   // Günün nerede geçeceği: il, ilçe ya da tek bir yer olabilir. {ad, alt, s (il), lat, lng}
   const konAnah = (k) => (k ? k.s + "|" + k.ad : "");
@@ -3161,7 +3163,8 @@
     kutu.innerHTML = `<div class="plust"><button class="chipbtn" data-p="ad">${ik("pencil", 16)} ${TL("Adını değiştir", "Rename")}</button><button class="chipbtn" data-p="paylas">${ik("share-2", 16)} ${TL("Paylaş", "Share")}</button><button class="chipbtn" data-p="sil">${ik("trash", 16)} ${TL("Planı sil", "Delete plan")}</button></div>
       ${gunler}
       ${p.g.length < PLAN_GUN_UST ? `<button class="btn plgunekle" data-p="gunekle">${ik("calendar-plus", 18)} ${TL("Gün ekle", "Add a day")}</button>` : ""}
-      <p class="tsay">${TL("Mesafeler kuş uçuşu ve yaklaşıktır. Rotayı aç, o günün duraklarını sırasıyla Google Haritalar'da yol tarifine çevirir.", "Distances are approximate, as the crow flies. Open route turns that day's stops into Google Maps directions, in order.")}</p>`;
+      <button class="btn primary plkaydet" data-p="kaydet">${ik("circle-check", 18)} ${TL("Planı kaydet", "Save plan")}</button>
+      <p class="tsay">${TL("Planın her değişiklikte bu telefona kendiliğinden de kaydedilir. Rotayı aç, bulunduğun yerden başlayıp o günün duraklarını sırasıyla Google Haritalar'da açar. Mesafeler kuş uçuşu ve yaklaşıktır.", "Your plan is also saved on this phone after every change. Open route starts from where you are and opens that day's stops in order in Google Maps. Distances are approximate, as the crow flies.")}</p>`;
   }
   function planTik(e) {
     const b = e.target.closest("[data-p]"); if (!b) return;
@@ -3172,6 +3175,7 @@
     if (k === "yukari" || k === "asagi") { planDegis(id, (p) => { const g = p.g[gi], j = k === "yukari" ? i - 1 : i + 1; if (g[j]) [g[i], g[j]] = [g[j], g[i]]; }); return renderPlan(); }
     if (k === "cikar") { planDegis(id, (p) => p.g[gi].splice(i, 1)); return renderPlan(); }
     if (k === "kur") return gunKurAc(id, gi);
+    if (k === "kaydet") { planDegis(id, () => {}); toast(TL("Plan kaydedildi. Tatil planlarım'da seni bekliyor.", "Plan saved. It's waiting in My holiday plans."), 4000); git("#/plan"); return; }
     if (k === "kon") return konumSecAc((kon) => { planDegis(id, (p) => { p.kon = p.kon || []; p.kon[gi] = kon; }); renderPlan(); });
     if (k === "gunekle") { planDegis(id, (p) => { p.kon = p.kon || []; p.kon[p.g.length] = p.kon[p.g.length - 1] || null; p.g.push([]); }); renderPlan(); setTimeout(() => { const s = document.querySelectorAll(".plgun"); s[s.length - 1].scrollIntoView({ behavior: "smooth", block: "center" }); }, 50); return; }
     if (k === "gunsil") {
@@ -3283,7 +3287,7 @@
       d.querySelector("#gkUst").innerHTML = `<div class="gkbas"><b>${gunAd(gi)}${il ? " · " + esc(il.ad) : ""}</b><small>${TL(`${p.g.length} günlük planın ${gi + 1}. günü`, `Day ${gi + 1} of ${p.g.length}`)}</small></div>
         ${g.length ? `<ol class="gkzincir">${g.map((x, i) => `<li><span>${i + 1}</span>${esc(kayitAd(x))}</li>`).join("")}</ol><button class="linkbtn gkgeri" data-k="geri">${ik("undo-2", 15)} ${TL("Son durağı geri al", "Undo last stop")}</button>` : ""}`;
       const govde = d.querySelector("#gkGovde"), alt = d.querySelector("#gkAlt");
-      alt.innerHTML = `<button class="linkbtn" data-k="kapat">${TL("Kapat", "Close")}</button>${g.length ? `<button class="btn primary" data-k="bitir">${sonGun ? TL("Planı bitir", "Finish plan") : TL(`Günü bitir, ${gi + 2}. güne geç`, `Finish day, go to day ${gi + 2}`)}</button>` : ""}`;
+      alt.innerHTML = `<button class="linkbtn" data-k="kapat">${TL("Kaydet ve çık", "Save and exit")}</button>${g.length ? `<button class="btn primary" data-k="bitir">${sonGun ? TL("Planı bitir", "Finish plan") : TL(`Günü bitir, ${gi + 2}. güne geç`, `Finish day, go to day ${gi + 2}`)}</button>` : ""}`;
       if (adim === "il") {
         govde.innerHTML = `<h2>${TL("Bu gün hangi şehirdesin?", "Which city is this day in?")}</h2><div class="gkiller">${IDX.iller.slice().sort((a, b) => a.ad.localeCompare(b.ad, "tr")).map((x) => `<button data-il="${x.s}">${esc(x.ad)}</button>`).join("")}</div>`;
         return;
@@ -3309,7 +3313,7 @@
       if (e.target === d) return kapat();
       const b = e.target.closest("button"); if (!b) return;
       const k = b.dataset.k;
-      if (k === "kapat") return kapat();
+      if (k === "kapat") { kapat(); if (plan() && planSay(plan())) toast(TL("Plan kaydedildi.", "Plan saved.")); return; }
       if (b.dataset.il) { const x = IDX.ilBy.get(b.dataset.il); planDegis(id, (p) => { p.kon = p.kon || []; p.kon[gi] = { ad: x.ad, alt: "", s: x.s, lat: x.lat, lng: x.lng, t: "il" }; }); return gunHazirla(); }
       if (b.dataset.ilce != null) { ilce = +b.dataset.ilce; mod = "ilce"; adim = "yer"; goster = 20; ciz(); d.querySelector(".tkart").scrollTop = 0; return; }
       if (b.dataset.mod) { mod = b.dataset.mod; goster = 20; return ciz(); }
