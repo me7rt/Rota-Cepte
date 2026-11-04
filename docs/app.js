@@ -3136,12 +3136,13 @@
       let bant = "";
       if (kon && (onceki === undefined || konAnah(kon) !== konAnah(onceki))) {
         let bas = 0; const n = planSehir(p).find((x) => { const ok = bas === gi; bas += x[1]; return ok; });
-        bant = `<div class="plsehir">${ik("map-pin", 18)}<span><b>${esc(kon.ad)}</b>${kon.alt ? `<small>${esc(kon.alt)}</small>` : ""}</span><em>${n && n[1] > 1 ? TL(`${gi + 1}-${gi + n[1]}. gün`, `Days ${gi + 1}-${gi + n[1]}`) : gunAd(gi)}</em></div><button class="prbtn" data-p="program" data-b="${gi}">${ik("sparkles", 16)} ${TL(`${esc(kon.ad)} için yer seç, programı ben yapayım`, `Pick places in ${esc(kon.ad)}, I'll plan the days`)}</button>`;
+        bant = `<div class="plsehir">${ik("map-pin", 18)}<span><b>${esc(kon.ad)}</b>${kon.alt ? `<small>${esc(kon.alt)}</small>` : ""}</span><em>${n && n[1] > 1 ? TL(`${gi + 1}-${gi + n[1]}. gün`, `Days ${gi + 1}-${gi + n[1]}`) : gunAd(gi)}</em></div>`;
       }
       return `${bant}<section class="plgun"><div class="plbas"><b>${gunAd(gi)}</b><small>${ozet}</small>${p.g.length > 1 ? `<button class="plsil" data-p="gunsil" data-g="${gi}" aria-label="${TL(`${gi + 1}. günü sil`, `Delete day ${gi + 1}`)}">${ik("trash", 16)}</button>` : ""}</div>
         ${konDugme(kon, `data-p="kon" data-g="${gi}" aria-label="${TL(`${gi + 1}. gün nerede?`, `Where on day ${gi + 1}?`)}"`)}
         ${uzun ? `<p class="pluyari">${ik("info", 15)} ${TL("Bu günün durakları birbirine uzak. Bir yeri başka güne taşımayı düşünebilirsin.", "This day's stops are far apart. You might move one to another day.")}</p>` : ""}
         ${g.length ? `<ol class="pllist">${durak}</ol>` : ""}
+        <button class="prbtn" data-p="kur" data-g="${gi}">${ik("route", 16)} ${g.length ? TL(`${gi + 1}. günü durak durak sürdür`, `Continue day ${gi + 1} stop by stop`) : TL(`${gi + 1}. günü durak durak kur`, `Build day ${gi + 1} stop by stop`)}</button>
         <div class="plalt"><button class="btn plekle" data-p="ekle" data-g="${gi}" ${g.length >= PLAN_DURAK_UST ? "disabled" : ""}>${ik("plus", 18)} ${TL("Yer ekle", "Add a place")}</button>${g.length ? `<a class="btn primary" href="${gunHarita(g)}" target="_blank" rel="noopener">${ik("navigation", 18)} ${TL("Rotayı aç", "Open route")}</a>` : ""}</div></section>`;
     }).join("");
     kutu.innerHTML = `<div class="plust"><button class="chipbtn" data-p="ad">${ik("pencil", 16)} ${TL("Adını değiştir", "Rename")}</button><button class="chipbtn" data-p="paylas">${ik("share-2", 16)} ${TL("Paylaş", "Share")}</button><button class="chipbtn" data-p="sil">${ik("trash", 16)} ${TL("Planı sil", "Delete plan")}</button></div>
@@ -3157,7 +3158,7 @@
     if (k === "ekle") return yerSecAc(id, gi);
     if (k === "yukari" || k === "asagi") { planDegis(id, (p) => { const g = p.g[gi], j = k === "yukari" ? i - 1 : i + 1; if (g[j]) [g[i], g[j]] = [g[j], g[i]]; }); return renderPlan(); }
     if (k === "cikar") { planDegis(id, (p) => p.g[gi].splice(i, 1)); return renderPlan(); }
-    if (k === "program") return programAc(id, +b.dataset.b);
+    if (k === "kur") return gunKurAc(id, gi);
     if (k === "kon") return konumSecAc((kon) => { planDegis(id, (p) => { p.kon = p.kon || []; p.kon[gi] = kon; }); renderPlan(); });
     if (k === "gunekle") { planDegis(id, (p) => { p.kon = p.kon || []; p.kon[p.g.length] = p.kon[p.g.length - 1] || null; p.g.push([]); }); renderPlan(); setTimeout(() => { const s = document.querySelectorAll(".plgun"); s[s.length - 1].scrollIntoView({ behavior: "smooth", block: "center" }); }, 50); return; }
     if (k === "gunsil") {
@@ -3216,7 +3217,7 @@
       planYaz([p, ...planlar()]); kapat();
       if (yer) { toast(TL(`${adi(yer)}, "${ad}" planının 1. gününe eklendi.`, `${adi(yer)} added to day 1 of "${ad}".`)); return; }
       git("#/plan/" + p.id);
-      setTimeout(() => programZinciri(p.id), 700);
+      setTimeout(() => { if (view && view.mode === "plan" && view.id === p.id) gunKurAc(p.id, 0); }, 700);
     });
     d.querySelector("#plAd").addEventListener("keydown", (e) => { if (e.key === "Enter") d.querySelector("[data-k=tamam]").click(); });
     document.body.appendChild(d);
@@ -3273,109 +3274,101 @@
     document.body.appendChild(d);
     yaz();
   }
-  // ---------- v6.6 otomatik program: seçilen yerleri yakınlığa göre günlere dağıt ----------
-  // "İzmir'de", "Konya'da", "Kars'ta": bulunma eki
-  // Çok kelimeli ve iyelik ekiyle biten adlarda araya n girer: "Kaputaş Plajı'nda", "Kelebekler Vadisi'nde"
+  // ---------- v6.6 günü adım adım kur: ilçe seç, yer seç, sonra o yerin yakınından devam et ----------
+  // "İzmir'de", "Konya'da", "Kars'ta"; çok kelimeli ve iyelik ekiyle biten adlarda araya n girer: "Kaputaş Plajı'nda"
   const ekDa = (ad) => { const k = ad.toLocaleLowerCase("tr"), v = (k.match(/[aıoueiöü]/g) || ["a"]).pop(), n = /\s/.test(k.trim()) && /[ıiuü]$/.test(k) ? "n" : ""; return ad + "'" + n + (!n && /[çfhkpsşt]$/.test(k) ? "t" : "d") + ("aıou".includes(v) ? "a" : "e"); };
-  // Planın parçaları: art arda aynı yerde geçen günler {bas, n, kon}
-  const planParca = (p) => { const r = []; let bas = 0; for (const [kon, n] of planSehir(p)) { r.push({ bas, n, kon }); bas += n; } return r; };
-  const PROG_YARICAP = 30;
-  // Bir konumun çevresindeki gezilecek yerler, önem sırasıyla (öne çıkan, sonra Vikipedi'de çok dilde maddesi olan)
-  async function programAday(kon) {
-    const ilMi = kon.t === "il" || (IDX.ilBy.get(kon.s) || {}).ad === kon.ad;
-    const iller = new Set([kon.s]);
-    if (!ilMi) { await loadAra(); if (ARA) for (const x of ARA) if (x[2] !== kon.s && km(kon, { lat: x[4], lng: x[5] }) <= PROG_YARICAP) iller.add(x[2]); }
-    const r = [];
-    for (const s of [...iller].slice(0, 4)) {
-      let d; try { d = await loadIl(s); } catch (e) { continue; }
-      const genel = new Set([d.ad, "Kapadokya", ...d.ilceler.map((z) => z.ad)]);
-      for (const y of d.yerler) {
-        if (y.lat == null || y.k === "s" || genel.has(y.ad)) continue;
-        const uz = km(kon, y);
-        if (!ilMi && uz > PROG_YARICAP) continue;
-        r.push({ y, uz, puan: (y.one ? 1000 : 0) + (y.sl || 0) + (y.f ? 5 : 0) });
-      }
-    }
-    return r.sort((a, b) => b.puan - a.puan || a.uz - b.uz);
-  }
-  // En yakın komşu sırası + 2-opt düzeltme, sonra günlere eşit sayıda ve sırayı bozmadan bölme
-  function programDagit(bas, yerler, n) {
-    const kalan = yerler.slice(), sira = [];
-    let cur = bas;
-    while (kalan.length) { let bi = 0; kalan.forEach((x, i) => { if (km(cur, x) < km(cur, kalan[bi])) bi = i; }); cur = kalan.splice(bi, 1)[0]; sira.push(cur); }
-    const yol = (a) => a.reduce((t, x, i) => t + km(i ? a[i - 1] : bas, x), 0);
-    for (let iyi = true, tur = 0; iyi && tur < 50; tur++) {
-      iyi = false;
-      for (let i = 0; i < sira.length - 1; i++) for (let j = i + 1; j < sira.length; j++) {
-        const yeni = [...sira.slice(0, i), ...sira.slice(i, j + 1).reverse(), ...sira.slice(j + 1)];
-        if (yol(yeni) + 0.01 < yol(sira)) { sira.splice(0, sira.length, ...yeni); iyi = true; }
-      }
-    }
-    // Sırayı n güne böl: gün içi yol en kısa olsun, günlerdeki yer sayısı birbirine yakın kalsın
-    const m = sira.length, ort = m / n, ic = (i, j) => { let t = 0; for (let x = i + 1; x < j; x++) t += km(sira[x - 1], sira[x]); return t; };
-    const D = Array.from({ length: n + 1 }, () => Array(m + 1).fill(Infinity)), K = Array.from({ length: n + 1 }, () => Array(m + 1).fill(0));
-    D[0][0] = 0;
-    for (let g = 1; g <= n; g++) for (let j = 0; j <= m; j++) for (let i = 0; i <= j; i++) {
-      if (D[g - 1][i] === Infinity) continue;
-      const v = D[g - 1][i] + ic(i, j) + 25 * Math.abs(j - i - ort) ** 2;
-      if (v < D[g][j]) { D[g][j] = v; K[g][j] = i; }
-    }
-    const gunler = Array(n);
-    for (let g = n, j = m; g > 0; g--) { const i = K[g][j]; gunler[g - 1] = sira.slice(i, j); j = i; }
-    return gunler;
-  }
-  async function programAc(id, bas, sonra) {
-    const p0 = planlar().find((x) => x.id === id); if (!p0) return;
-    const parca = planParca(p0).find((x) => x.bas === bas); if (!parca || !parca.kon) return;
-    const { kon, n } = parca;
-    const d = document.createElement("div"); d.className = "tanit";
-    d.innerHTML = `<div class="tkart plsec"><div class="temo">${ik("sparkles", 34)}</div><h2>${TL(`${esc(ekDa(kon.ad))} neleri görmek istersin?`, `What do you want to see in ${esc(kon.ad)}?`)}</h2>
-      <p>${TL(`En önemli yerler en üstte. Seçtiklerini ${n} güne yakınlıklarına göre ben dağıtayım.`, `The most important places are at the top. Pick what you like and I'll spread them over ${n} day${n === 1 ? "" : "s"} by distance.`)}</p>
-      <ul class="list plsonuc" id="prList"><li class="empty">${T("Yükleniyor…")}</li></ul><button class="morebtn" id="prMore" hidden>${T("Daha fazla göster")}</button>
-      <p class="tsay prsay" id="prSay"></p>
-      <div class="tbtn"><button class="linkbtn" data-k="kapat">${sonra ? TL("Atla", "Skip") : TL("Vazgeç", "Cancel")}</button><button class="btn primary" data-k="yap" disabled>${ik("sparkles", 18)} ${TL("Programı oluştur", "Build my plan")}</button></div></div>`;
+  const ekDan = (ad) => { const k = ad.toLocaleLowerCase("tr"), v = (k.match(/[aıoueiöü]/g) || ["a"]).pop(), n = /\s/.test(k.trim()) && /[ıiuü]$/.test(k) ? "n" : ""; return ad + "'" + n + (!n && /[çfhkpsşt]$/.test(k) ? "t" : "d") + ("aıou".includes(v) ? "an" : "en"); };
+  const yerPuan = (y) => (y.one ? 1000 : 0) + (y.sl || 0) + (y.f ? 5 : 0);
+  // Son duraktan sonra: yakın olan önde, popüler yer biraz öne çekilir (en fazla 20 km kadar)
+  const yakinPuan = (son, y) => km(son, y) - Math.min(20, (y.one ? 12 : 0) + Math.log2(1 + (y.sl || 0)) * 2.5);
+  async function gunKurAc(id, gi0) {
+    let gi = gi0, il = null, ilce = -1, mod = "ilce", goster = 20, adim = "ilce";
+    const plan = () => planlar().find((x) => x.id === id);
+    const d = document.createElement("div"); d.className = "tanit tam";
+    d.innerHTML = `<div class="tkart plsec gkur"><div id="gkUst"></div><div id="gkGovde"></div><div class="tbtn gkalt" id="gkAlt"></div></div>`;
     document.body.appendChild(d);
-    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
-    const aday = await programAday(kon);
-    // Bu günlerde zaten olan yerler seçili gelir
-    const secili = new Map();
-    for (let g = bas; g < bas + n; g++) for (const x of p0.g[g] || []) secili.set(x.s + "|" + x.q, x);
-    let goster = 25;
-    const yaz = () => {
-      d.querySelector("#prList").innerHTML = aday.slice(0, goster).map(({ y, uz }, i) => `<li><button class="row plsatir" data-i="${i}" aria-pressed="${secili.has(y.ilS + "|" + y.q)}">${thumb(y.f, y.k)}<span class="rt"><b>${y.one ? `<i class="prone">${ik("star", 12)}</i>` : ""}${esc(adi(y))}</b><small>${esc(y.ilce || y.il)} · ${fmt(uz)}</small></span><span class="plek">${ik("plus", 18)}${ik("check", 18)}</span></button></li>`).join("") || `<li class="empty">${TL("Bu çevrede gezilecek yer bulunamadı.", "No places found around here.")}</li>`;
-      d.querySelector("#prMore").hidden = aday.length <= goster;
-      say();
-    };
-    const say = () => {
-      const m = secili.size, gunde = m / n;
-      d.querySelector("[data-k=yap]").disabled = !m;
-      d.querySelector("#prSay").textContent = !m ? TL("Görmek istediğin yerlere dokun.", "Tap the places you want to see.") : TL(`${m} yer seçildi · günde ${gunde < 1 ? "1 ya da hiç" : "yaklaşık " + Math.round(gunde)}`, `${m} selected · about ${Math.max(1, Math.round(gunde))} a day`) + (gunde > 6 ? TL(" · biraz yorucu olabilir", " · might be tiring") : "");
-    };
-    d.addEventListener("click", (e) => {
-      if (e.target === d || e.target.closest("[data-k=kapat]")) { kapat(); if (sonra) sonra(); return; }
-      if (e.target.closest("#prMore")) { goster += 25; yaz(); return; }
-      const b = e.target.closest(".plsatir");
-      if (b) {
-        const { y } = aday[+b.dataset.i], a = y.ilS + "|" + y.q;
-        if (secili.has(a)) secili.delete(a); else secili.set(a, yerKayit(y));
-        b.setAttribute("aria-pressed", secili.has(a)); say(); return;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); renderPlan(); };
+    async function gunHazirla() {
+      const p = plan(); if (!p) return kapat();
+      const kon = (p.kon || [])[gi];
+      if (!kon) { il = null; adim = "il"; return ciz(); }
+      try { il = await loadIl(kon.s); } catch (e) { toast(TL("Veriler yüklenemedi. İnternet bağlantını kontrol et.", "Couldn't load data. Check your connection.")); return kapat(); }
+      const g = p.g[gi] || [];
+      // Konum bir ilçeyse o ilçeden başla; günde durak varsa sonuncunun yakınından devam et
+      ilce = il.ilceler.findIndex((z) => z.ad === kon.ad);
+      if (g.length) { mod = "yakin"; adim = "yer"; } else if (ilce >= 0) { mod = "ilce"; adim = "yer"; } else { mod = "ilce"; adim = "ilce"; }
+      goster = 20; ciz();
+    }
+    function aday() {
+      const p = plan(), g = p.g[gi] || [], son = g[g.length - 1];
+      const genel = new Set([il.ad, "Kapadokya", ...il.ilceler.map((z) => z.ad)]);
+      const baska = new Map(); p.g.forEach((x, j) => { if (j !== gi) x.forEach((y) => baska.set(y.s + "|" + y.q, j)); });
+      const bugun = new Set(g.map((y) => y.s + "|" + y.q));
+      let r = il.yerler.filter((y) => y.lat != null && y.k !== "s" && !genel.has(y.ad) && !bugun.has(y.ilS + "|" + y.q));
+      if (mod === "ilce" && ilce >= 0) r = r.filter((y) => y.i === ilce);
+      if (mod === "yakin" && son) r = r.filter((y) => km(son, y) <= 60);
+      const merkez = son || (ilce >= 0 ? il.ilceler[ilce] : il);
+      r = r.map((y) => ({ y, uz: km(merkez, y), j: baska.get(y.ilS + "|" + y.q) }));
+      if (son) r.sort((a, b) => (a.j != null) - (b.j != null) || yakinPuan(son, a.y) - yakinPuan(son, b.y));
+      else r.sort((a, b) => (a.j != null) - (b.j != null) || yerPuan(b.y) - yerPuan(a.y) || a.uz - b.uz);
+      return { r, son };
+    }
+    function ciz() {
+      const p = plan(); if (!p) return kapat();
+      const g = p.g[gi] || [], son = g[g.length - 1], sonGun = gi === p.g.length - 1;
+      // Üst: gün başlığı ve bugünün durakları
+      d.querySelector("#gkUst").innerHTML = `<div class="gkbas"><b>${gunAd(gi)}${il ? " · " + esc(il.ad) : ""}</b><small>${TL(`${p.g.length} günlük planın ${gi + 1}. günü`, `Day ${gi + 1} of ${p.g.length}`)}</small></div>
+        ${g.length ? `<ol class="gkzincir">${g.map((x, i) => `<li><span>${i + 1}</span>${esc(kayitAd(x))}</li>`).join("")}</ol><button class="linkbtn gkgeri" data-k="geri">${ik("undo-2", 15)} ${TL("Son durağı geri al", "Undo last stop")}</button>` : ""}`;
+      const govde = d.querySelector("#gkGovde"), alt = d.querySelector("#gkAlt");
+      alt.innerHTML = `<button class="linkbtn" data-k="kapat">${TL("Kapat", "Close")}</button>${g.length ? `<button class="btn primary" data-k="bitir">${sonGun ? TL("Planı bitir", "Finish plan") : TL(`Günü bitir, ${gi + 2}. güne geç`, `Finish day, go to day ${gi + 2}`)}</button>` : ""}`;
+      if (adim === "il") {
+        govde.innerHTML = `<h2>${TL("Bu gün hangi şehirdesin?", "Which city is this day in?")}</h2><div class="gkiller">${IDX.iller.slice().sort((a, b) => a.ad.localeCompare(b.ad, "tr")).map((x) => `<button data-il="${x.s}">${esc(x.ad)}</button>`).join("")}</div>`;
+        return;
       }
-      if (!e.target.closest("[data-k=yap]") || !secili.size) return;
-      const gunler = programDagit(kon, [...secili.values()], n);
-      planDegis(id, (p) => { for (let g = 0; g < n; g++) p.g[bas + g] = gunler[g].slice(0, PLAN_DURAK_UST); });
-      kapat(); renderPlan();
-      toast(TL(`${kon.ad} programı hazır: ${secili.size} yer, ${n} güne yakınlığa göre dağıtıldı. Sırayı istersen değiştirebilirsin.`, `${kon.ad} plan ready: ${secili.size} places spread over ${n} day${n === 1 ? "" : "s"} by distance. You can still reorder them.`), 5000);
-      setTimeout(() => { const s = document.querySelectorAll(".plsehir")[planParca(planlar().find((x) => x.id === id)).filter((x) => x.kon && x.bas < bas).length]; if (s) s.scrollIntoView({ behavior: "smooth", block: "start" }); }, 100);
-      if (sonra) setTimeout(sonra, 900);
+      if (adim === "ilce") {
+        const sira = il.ilceler.map((z, i) => ({ z, i })).filter((x) => x.z.n > 0).sort((a, b) => (son ? km(son, a.z) - km(son, b.z) : b.z.n - a.z.n));
+        govde.innerHTML = `<h2>${son ? TL(`${esc(ekDan(kayitAd(son)))} sonra hangi ilçeye?`, `Which district after ${esc(kayitAd(son))}?`) : TL(`${esc(ekDa(il.ad))} hangi ilçeden başlayalım?`, `Which district of ${esc(il.ad)} first?`)}</h2>
+          <p>${son ? TL("Yakından uzağa sıralı. Yanında yer sayısı ve uzaklık yazıyor.", "Nearest first, with the number of places and distance.") : TL("Yanında o ilçedeki gezilecek yer sayısı yazıyor.", "The number shows how many places each district has.")}</p>
+          <div class="gkilce"><button data-ilce="-1"><b>${TL(`Tüm ${esc(il.ad)}`, `All of ${esc(il.ad)}`)}</b><small>${il.yerler.length}</small></button>${sira.map(({ z, i }) => `<button data-ilce="${i}"${i === ilce ? ' aria-pressed="true"' : ""}><b>${esc(z.ad)}</b><small>${z.n}${son ? " · " + fmt(km(son, z)) : ""}</small></button>`).join("")}</div>
+          ${son ? `<button class="morebtn gkyakinbtn" data-k="yakin">${ik("navigation", 16)} ${TL(`${esc(ekDa(kayitAd(son)))} yakınındakileri göster`, `Show places near ${esc(kayitAd(son))}`)}</button>` : ""}`;
+        return;
+      }
+      const { r } = aday();
+      const ilceAd = ilce >= 0 ? il.ilceler[ilce].ad : il.ad;
+      const baslik = son ? TL(`${esc(ekDan(kayitAd(son)))} sonra nereye?`, `Where after ${esc(kayitAd(son))}?`) : TL(`${esc(ekDa(ilceAd))} ilk durağın neresi olsun?`, `First stop in ${esc(ilceAd)}?`);
+      const alt2 = son ? (mod === "yakin" ? TL("Yakından uzağa; popüler yerler biraz öne alınır.", "Nearest first; popular places get a small boost.") : TL(`${esc(ilceAd)} içinde, sana yakından uzağa.`, `In ${esc(ilceAd)}, nearest first.`)) : TL("En popüler yerler en üstte.", "Most popular places first.");
+      govde.innerHTML = `<h2>${baslik}</h2><p>${alt2}</p>
+        <div class="chips gksec">${son ? `<button data-mod="yakin" aria-pressed="${mod === "yakin"}">${ik("navigation", 14)} ${TL("Yakınındakiler", "Nearby")}</button>` : ""}<button data-mod="ilce" aria-pressed="${mod === "ilce"}">${ik("map-pin", 14)} ${esc(ilceAd)}</button><button data-k="ilcesec">${ik("map", 14)} ${TL("Başka ilçe", "Other district")}</button></div>
+        <ul class="list plsonuc gkliste">${r.slice(0, goster).map(({ y, uz, j }, i) => `<li><button class="row plsatir gkyer" data-j="${y.j}">${thumb(y.f, y.k)}<span class="rt"><b>${y.one ? `<i class="prone">${ik("star", 12)}</i>` : ""}${esc(adi(y))}</b><small>${esc(y.ilce || il.ad)} · ${son ? TL(`${fmt(uz)} uzakta`, `${fmt(uz)} away`) : fmt(uz)}${j != null ? " · " + TL(`${j + 1}. günde var`, `in day ${j + 1}`) : ""}</small></span><span class="plek">${ik("plus", 18)}</span></button></li>`).join("") || `<li class="empty">${TL("Burada başka yer kalmadı. Başka bir ilçe seçebilirsin.", "No more places here. Try another district.")}</li>`}</ul>
+        ${r.length > goster ? `<button class="morebtn" data-k="daha">${T("Daha fazla göster")}</button>` : ""}`;
+    }
+    d.addEventListener("click", async (e) => {
+      if (e.target === d) return kapat();
+      const b = e.target.closest("button"); if (!b) return;
+      const k = b.dataset.k;
+      if (k === "kapat") return kapat();
+      if (b.dataset.il) { const x = IDX.ilBy.get(b.dataset.il); planDegis(id, (p) => { p.kon = p.kon || []; p.kon[gi] = { ad: x.ad, alt: "", s: x.s, lat: x.lat, lng: x.lng, t: "il" }; }); return gunHazirla(); }
+      if (b.dataset.ilce != null) { ilce = +b.dataset.ilce; mod = "ilce"; adim = "yer"; goster = 20; ciz(); d.querySelector(".tkart").scrollTop = 0; return; }
+      if (b.dataset.mod) { mod = b.dataset.mod; goster = 20; return ciz(); }
+      if (k === "ilcesec") { adim = "ilce"; ciz(); d.querySelector(".tkart").scrollTop = 0; return; }
+      if (k === "yakin") { mod = "yakin"; adim = "yer"; goster = 20; return ciz(); }
+      if (k === "daha") { goster += 20; return ciz(); }
+      if (k === "geri") { planDegis(id, (p) => p.g[gi].pop()); const g = plan().g[gi]; if (!g.length) mod = "ilce"; return ciz(); }
+      if (b.classList.contains("gkyer")) {
+        const y = il.yerler[+b.dataset.j]; if (!y) return;
+        let dolu = false;
+        planDegis(id, (p) => { if (p.g[gi].length >= PLAN_DURAK_UST) dolu = true; else p.g[gi].push(yerKayit(y)); });
+        if (dolu) { toast(TL(`Bir güne en fazla ${PLAN_DURAK_UST} yer eklenebilir.`, `A day can hold up to ${PLAN_DURAK_UST} places.`)); return; }
+        // Seçilen yerin ilçesi yeni varsayılan; liste artık o yerin yakınından
+        ilce = y.i; mod = "yakin"; adim = "yer"; goster = 20; ciz(); d.querySelector(".tkart").scrollTop = 0; return;
+      }
+      if (k === "bitir") {
+        const p = plan();
+        if (gi >= p.g.length - 1) { kapat(); toast(TL("Planın hazır! Her günün rotasını \"Rotayı aç\" ile haritada başlatabilirsin.", "Your plan is ready! Start each day's route with \"Open route\"."), 5000); return; }
+        gi++; await gunHazirla(); d.querySelector(".tkart").scrollTop = 0;
+      }
     });
-    yaz();
-  }
-  // Yeni planda konumu seçilmiş her parça için sırayla yer seçtir
-  function programZinciri(id) {
-    const p = planlar().find((x) => x.id === id); if (!p) return;
-    const parcalar = planParca(p).filter((x) => x.kon);
-    const sonraki = (i) => { if (i < parcalar.length && view && view.mode === "plan" && view.id === id) programAc(id, parcalar[i].bas, () => sonraki(i + 1)); };
-    sonraki(0);
+    gunHazirla();
   }
   // Yer kartındaki "Plana ekle": plan yoksa yeni plan, varsa plan ve gün seçimi
   function planaEkleAc(yer) {

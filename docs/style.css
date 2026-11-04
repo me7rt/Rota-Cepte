@@ -1225,3 +1225,28 @@ button.mrow:active{background:var(--surface2)}
 .prone{display:inline-grid;place-items:center;flex:none;width:18px;height:18px;border-radius:50%;background:#f5b544;color:#fff;font-style:normal}
 .prsay{text-align:center;margin:8px 0 0}
 .pluyari{display:flex;align-items:flex-start;gap:6px;margin:8px 0 0;padding:8px 10px;border-radius:var(--r-s);background:color-mix(in srgb,#f5b544 18%,var(--surface));color:var(--fg);font-size:13px;line-height:1.4}
+/* v6.6 günü durak durak kur */
+.tanit.tam{align-items:stretch}
+.gkur{display:flex;flex-direction:column;height:calc(100dvh - 32px);padding:16px 16px 12px;text-align:left}
+.gkur #gkGovde{flex:1;overflow-y:auto;margin:0 -4px;padding:0 4px}
+.gkur h2{margin:12px 0 4px;font-size:20px;text-align:left}
+.gkur #gkGovde > p{text-align:left;font-size:14px}
+.gkbas{display:flex;flex-direction:column;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.gkbas b{font-size:17px}
+.gkbas small{color:var(--muted);font-size:12.5px}
+.gkzincir{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0;padding:0}
+.gkzincir li{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 5px;border-radius:999px;background:var(--ok-soft);color:var(--fg);font-size:13px;font-weight:700}
+.gkzincir li span{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--ok);color:#fff;font-size:11.5px}
+.gkgeri{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:13px}
+.gkilce,.gkiller{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.gkiller{grid-template-columns:1fr 1fr 1fr}
+.gkilce button,.gkiller button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:52px;padding:8px 12px;border:1px solid var(--line);border-radius:var(--r-m);background:var(--surface);color:var(--fg);text-align:left;font:inherit;cursor:pointer}
+.gkiller button{min-height:42px;justify-content:center;font-weight:700;font-size:14px}
+.gkilce button b{font-size:14.5px}
+.gkilce button small{color:var(--muted);font-size:12px}
+.gkilce button[aria-pressed="true"]{border-color:var(--pri);background:var(--pri-soft)}
+.gkyakinbtn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:10px}
+.gksec{margin:10px -16px 0;padding:2px 16px}
+.gkliste{max-height:none}
+.gkalt{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.gkalt .btn{flex:1;max-width:280px}
