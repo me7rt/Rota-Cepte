@@ -165,6 +165,10 @@ function tarih(v, p) {
 }
 function temizMetin(s) {
   if (!s) return "";
+  // Vikipedi düz metninde bazen kalan kaynak işaretleri: <ref>...</ref>, <ref ... />, {{şablon}}
+  s = s.replace(/<ref\b[^>]*\/>/gi, "").replace(/<ref\b[^>]*>[\s\S]*?<\/ref>/gi, "").replace(/<ref\b[^>]*>[^\n]*/gi, "");
+  for (let i = 0; i < 3; i++) s = s.replace(/\{\{[^{}]*\}\}/g, "");
+  s = s.replace(/<\/?ref[^>]*>/gi, "").replace(/\{\{|\}\}/g, "");
   s = s.replace(/\s*\((?:[^()]|\([^()]*\))*?(?:Yunanca|İngilizce|Latince|Ermenice|Rumca|Arapça|Farsça|Kürtçe|Gürcüce|Süryanice|Osmanlıca|Lazca|Zazaca|Bulgarca|telaffuz|okunuşu|dinle|Greek|Armenian|Latin)(?:[^()]|\([^()]*\))*?\)/g, "");
   s = s.replace(/\s*\(\s*\)/g, "").replace(/[ \t]+/g, " ").replace(/\n{2,}/g, "\n").replace(/\s+([,.;:])/g, "$1").trim();
   if (s.length > 1600) { const cut = s.lastIndexOf(". ", 1600); s = cut > 700 ? s.slice(0, cut + 1) : s.slice(0, 1600) + "…"; }
@@ -842,12 +846,14 @@ rapor("önceki veriden korunan foto:", tumYer.filter((o) => o.fotoKaynak === "ö
 rapor("yedek foto: kategori", yedekKat, "| yakın", yedekYakin, "| Commons araması", yedekAra, "| hiç bulunamayan seçkin", fotosuzSeckin);
 
 // İl ve ilçe kapak fotoğrafları
+const YAPI_ADI = /cami|mescit|kale|köprü|kule|medrese|han\b|hanı|hamam|türbe|kilise|manastır|çeşme|bedesten|saray|konak|kervansaray|külliye|sinagog|tekke|imaret|kümbet|kemer|yeraltı/i;
 let azIlEk = 0;
 for (const il of iller.values()) {
   il.yerler = il.adaylar.filter((o) => o.foto);
   // Az yeri olan illerde (15'ten az) fotoğrafı bulunamayan ama Vikipedi maddesi olan yerler de eklenir (metinleri var)
   if (il.yerler.length < 15) {
-    const ek = il.adaylar.filter((o) => !o.foto && o.trA && !o.wd).sort((a, b) => b.sl - a.sl).slice(0, 15 - il.yerler.length);
+    // Fotoğrafsız tarihî yerlerden yalnızca ayakta bir yapısı olanlar (cami, kale, köprü...) eklenir; kalıntısı görülmeyen antik kent adları ve höyükler eklenmez
+    const ek = il.adaylar.filter((o) => !o.foto && o.trA && !o.wd && (o.k !== "t" || YAPI_ADI.test(o.ad))).sort((a, b) => b.sl - a.sl).slice(0, 15 - il.yerler.length);
     if (ek.length) { il.yerler.push(...ek); azIlEk += ek.length; }
   }
   // Son sınır: ilçe başına 35, ilçesiz 40, il başına 400
@@ -997,7 +1003,8 @@ for (const il of ilSirali) {
   const ilceSira = il.ilceler.filter((d) => d.koor).sort((a, b) => a.ad.localeCompare(b.ad, "tr"));
   const ilceNo = new Map(ilceSira.map((d, i) => [d.q, i]));
   const yerler = il.yerler.map((o) => {
-    const trMetin = (o.trA && trM.get(o.trA)) || TR_CEVIRI[o.q];
+    // Elle çeviri varsa Türkçe Vikipedi taslağının (çok kısa madde) yerine geçer
+    const trMetin = (o.enA && TR_CEVIRI[o.q]) || (o.trA && trM.get(o.trA)) || TR_CEVIRI[o.q];
     const metin = trMetin || enM.get(o.enA);
     const y = { ad: AD_DUZ[o.q] || temizAd(o.ad), q: o.q, lat: o.koor[0], lng: o.koor[1], k: o.k, i: ilceNo.has(o.ilce) ? ilceNo.get(o.ilce) : -1, f: fotoCikti(o.foto) };
     if (o.one) y.one = 1;
@@ -1006,7 +1013,7 @@ for (const il of ilSirali) {
     if (o.ipe) y.ipe = o.ipe;
     if (metin) y.m = metin; if (!trMetin && metin) { y.en = 1; rapor(`  Türkçe metni yok (çevirisi data/icerik-duzelt.json "tr" içine eklenmeli): ${il.ad} / ${o.ad} (${o.q})`); }
     // Türkçe Vikipedi maddesi yoksa İngilizce maddenin elle yapılmış çevirisi kullanılır (lisans satırında belirtilir)
-    const ceviri = !(o.trA && trM.get(o.trA)) && TR_CEVIRI[o.q];
+    const ceviri = TR_CEVIRI[o.q] && (o.enA || !(o.trA && trM.get(o.trA)));
     // Wikidata kısa açıklaması Türkçe yoksa İngilizcesi geliyor: Türkçe modda İngilizce cümle göstermemek için at
     if (o.aciklama && !INGILIZCE_ACK.test(o.aciklama)) y.ac = o.aciklama;
     y.w = o.trA ? "tr:" + o.trA : o.enA ? "en:" + o.enA : "";

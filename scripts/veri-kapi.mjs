@@ -1,5 +1,6 @@
 // Rota Cepte · © 2026 Mert Turanlıoğlu
 // Veri kalite kapısı: yeni üretilen veri öncekinden belirgin şekilde azaldıysa main'e yazmayı durdurur.
+// Ayrıca HTML etiketi ya da Vikipedi şablonu artığı kalan metinleri de durdurur.
 // Vikipedi/Wikidata geçici olarak hata verirse yüzlerce yer sessizce kaybolmasın diye.
 // Bilerek yapılan büyük bir azaltma için workflow'u elle "zorla" göreviyle çalıştır.
 import fs from "node:fs";
@@ -40,11 +41,22 @@ for (const [s, n] of E) {
   else if (n >= 10 && m < n * 0.7) hatalar.push(`${s}: ${n} → ${m} yer (%30'dan fazla azaldı)`);
 }
 
+// Metin temizliği: HTML etiketi veya Vikipedi şablonu artığı içeren metin uygulamaya gitmesin
+const kirli = [];
+const tara = (v, yol) => {
+  if (typeof v === "string") { if (/<|\{\{/.test(v)) kirli.push(`${yol}: ${v.slice(0, 60)}`); }
+  else if (Array.isArray(v)) v.forEach((x, i) => tara(x, `${yol}[${i}]`));
+  else if (v && typeof v === "object") for (const k in v) tara(v[k], `${yol}.${k}`);
+};
+tara(yeni, "index");
+for (const f of fs.readdirSync("docs/data/il")) if (f.endsWith(".json")) tara(JSON.parse(fs.readFileSync(`docs/data/il/${f}`, "utf8")), f);
+if (kirli.length) hatalar.push(`${kirli.length} metinde "<" veya "{{" kaldı, ilk örnekler:\n   ${kirli.slice(0, 5).join("\n   ")}`);
+
 console.log(`Toplam yer: ${te} → ${ty} (${ty - te >= 0 ? "+" : ""}${ty - te})`);
 if (hatalar.length) {
-  console.log("VERİ KAPISI: yeni veri öncekinden belirgin şekilde az, main'e yazılmadı.");
+  console.log("VERİ KAPISI: yeni veride sorun var, main'e yazılmadı.");
   for (const h of hatalar) console.log(" - " + h);
-  console.log('Bilerek yapılan bir azaltmaysa "Veri hazirla" workflow\'unu elle "zorla" göreviyle çalıştır.');
+  console.log('Bilerek yapılan bir azaltmaysa (metin sorunu değilse) "Veri hazirla" workflow\'unu elle "zorla" göreviyle çalıştır.');
   process.exit(1);
 }
 console.log("Veri kapısı geçti.");
