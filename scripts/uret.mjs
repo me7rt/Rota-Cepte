@@ -353,6 +353,10 @@ if (etiketAra.length) {
   }
   rapor("ilçe maddesi tahminle bulunan:", bulunan, "| Vikipedi'den eklenen ilçe:", yeniBulunan);
 }
+// Elle ilçe merkezi (icerik-duzelt.json "ilce_koor": "İl/İlçe" -> [enlem, boylam]); Wikidata noktası ilçe sınırı dışında kalanlar için
+{ const IK = ICERIK.ilce_koor || {}; let n = 0;
+  for (const o of ilceler.values()) { const k = IK[iller.get(o.il).ad + "/" + o.ad]; if (k) { o.koor = k; n++; } }
+  rapor("elle düzeltilen ilçe merkezi:", n, "/", Object.keys(IK).length); }
 for (const o of [...ilceler.values()]) if (!o.koor) { rapor(`  UYARI koordinatsız ilçe atıldı: ${iller.get(o.il).ad} / ${o.ad}`); ilceler.delete(o.q); }
 for (const o of ilceler.values()) iller.get(o.il).ilceler.push(o);
 rapor("ilçe sayısı", ilceler.size, "| Vikipedi maddeli:", [...ilceler.values()].filter((o) => o.trA).length,
