@@ -1220,3 +1220,8 @@ button.mrow:active{background:var(--surface2)}
 .plgun .plkon.bos{border:1px dashed var(--line)}
 .plsec .morebtn{width:100%;margin-top:8px}
 .plsec .morebtn[hidden]{display:none}
+/* v6.6 otomatik program */
+.prbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:8px;min-height:44px;padding:8px 12px;border:1px solid color-mix(in srgb,var(--pri) 35%,var(--line));border-radius:var(--r-m);background:var(--pri-soft);color:var(--pri-ink);font-weight:800;font-size:14px;text-align:center}
+.prone{display:inline-grid;place-items:center;flex:none;width:18px;height:18px;border-radius:50%;background:#f5b544;color:#fff;font-style:normal}
+.prsay{text-align:center;margin:8px 0 0}
+.pluyari{display:flex;align-items:flex-start;gap:6px;margin:8px 0 0;padding:8px 10px;border-radius:var(--r-s);background:color-mix(in srgb,#f5b544 18%,var(--surface));color:var(--fg);font-size:13px;line-height:1.4}
