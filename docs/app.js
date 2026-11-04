@@ -3336,7 +3336,8 @@
     bildirimYazi(); await haftaSonuKur();
     toast(ac ? TL("Tamam! Her Cuma 18:00'de hafta sonu için 3 öneri gelecek.", "Done! Every Friday at 6 pm you'll get 3 weekend ideas.") : TL("Hafta sonu önerisi kapatıldı.", "Weekend ideas turned off."));
   }
-  // Listeye ilk yer eklendiğinde bir kez sorulur; "Şimdi değil" denirse bir daha sorulmaz (ayarlardan açılabilir)
+  // Listeye ilk yer eklendiğinde ya da uygulamanın 3. açılışında bir kez sorulur; "Şimdi değil" denirse bir daha sorulmaz (ayarlardan açılabilir)
+  let soruGosterildi = false;
   function bildirimTeklif() {
     if (!LN || document.querySelector(".tanit")) return;
     try { if (localStorage.getItem(BILDIRIM) != null) return; } catch (e) { return; }
@@ -3350,6 +3351,11 @@
     });
     document.body.appendChild(d);
   }
+  // Listeye hiç yer eklemeyenler de haftalık öneriyi duysun: 3. açılıştan itibaren, ana sayfadayken ve o açılışta başka bir soru sorulmadıysa
+  setTimeout(() => {
+    let n = 0; try { n = (JSON.parse(localStorage.getItem("gezi-puan")) || {}).n || 0; } catch (e) { return; }
+    if (n >= 3 && !soruGosterildi && !(location.hash && location.hash !== "#/")) bildirimTeklif();
+  }, 12000);
   // ---------- 10 Kasım anma bildirimi: saat 09.05'te, saygı duruşu anında (telefonda kurulur, hiçbir bilgi bize gelmez) ----------
   const ANMA = "gezi-anma", ANMA_SORU = "gezi-anma-soru", ANMA_ID = 7100;
   const anmaAcik = () => { try { return localStorage.getItem(ANMA) !== "0"; } catch (e) { return true; } };
@@ -3401,6 +3407,7 @@
     try { if ((await LN.checkPermissions()).display === "granted") return; } catch (e) { return; }
     if (document.querySelector(".tanit") || (location.hash && location.hash !== "#/")) return;
     try { localStorage.setItem(ANMA_SORU, "1"); } catch (e) {}
+    soruGosterildi = true;
     const d = document.createElement("div"); d.className = "tanit";
     d.innerHTML = `<div class="tkart"><div class="temo">${ik("bell", 36)}</div><h2>${TL("10 Kasım'da hatırlatalım mı?", "Remind you on 10 November?")}</h2><p>${TL("Atatürk'ü anmak için 10 Kasım sabahı saat 09.05'te, saygı duruşu anında telefonuna bir bildirim gelsin. Bildirim telefonunda kurulur, hiçbir bilgi bize gelmez.", "Get a notification at 9:05 am on 10 November, the minute of silence for Atatürk. It's set up on your phone and nothing is sent to us.")}</p><div class="tbtn"><button class="linkbtn" data-k="sonra">${TL("Şimdi değil", "Not now")}</button><button class="btn primary" data-k="evet">${TL("Evet, hatırlat", "Yes, remind me")}</button></div></div>`;
     const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
