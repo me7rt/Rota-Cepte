@@ -6,6 +6,10 @@
   try { dil = localStorage.getItem("gezi-dil") || ""; } catch (e) {}
   if (dil !== "tr" && dil !== "en") dil = /^tr/i.test(navigator.language || "tr") ? "tr" : "en";
   const EN = {
+    // v6.6
+    "Tatilini planla": "Plan your holiday", "Gün gün kendi rotanı yap, gideceğin yerleri sen seç": "Build your own day-by-day route and pick the places yourself",
+    "Nasıl bir gezi istiyorsun?": "What kind of trip?", "Gezi türü": "Trip type",
+    "Daha önce gittiğin yerleri işaretle": "Mark places you've been before", "Plana ekle": "Add to plan", "Tatil planı": "Holiday plan", "Tatil planlarım": "My holiday plans",
     // v6.5
     "Sana özel": "Picked for you", "En sevdiğin yerler": "Your favourite places",
     "Gittiğin yerlere yıldız ver, en sevdiklerin burada toplansın.": "Rate the places you've visited and your favourites will gather here.",

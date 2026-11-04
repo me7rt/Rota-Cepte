@@ -403,7 +403,7 @@ h1{font-size:clamp(19px,5.6vw,23px);line-height:1.15;margin:1px 0 0;font-weight:
 .gk img{width:100%;height:100%;object-fit:cover;display:block;outline:0}
 
 /* ---------- bildirim ---------- */
-.toast{position:fixed;left:50%;bottom:calc(var(--tab-h) + 18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:12px 16px;border-radius:var(--r-m);font-size:14px;font-weight:600;z-index:3000;max-width:min(92vw,520px);box-shadow:var(--sh-2);animation:tUst .25s ease}
+.toast{position:fixed;left:50%;bottom:calc(var(--tab-h) + 18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:12px 16px;border-radius:var(--r-m);font-size:14px;font-weight:600;z-index:9500;max-width:min(92vw,520px);box-shadow:var(--sh-2);animation:tUst .25s ease}
 @keyframes tUst{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
 
 /* ---------- gezi haritası, gezilerim ---------- */
@@ -1107,3 +1107,116 @@ button.mrow:active{background:var(--surface2)}
   .cayrac line{stroke:rgba(255,255,255,.75)}
   .carkgobek{box-shadow:0 0 0 4px rgba(255,255,255,.75),0 4px 12px rgba(0,0,0,.5)}
 }
+
+/* v6.6 gezi türü kutuları */
+.tarzsec{margin-top:14px}
+.tarzlar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.tarz{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:10px;align-items:center;text-align:left;border:1px solid color-mix(in srgb,var(--c) 28%,var(--line));border-radius:var(--r-l);padding:12px;background:color-mix(in srgb,var(--c) 9%,var(--surface));color:var(--fg);font:inherit;cursor:pointer;transition:transform .15s}
+.tarz:active{transform:scale(.97)}
+.tarzik{grid-row:1/3;display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:var(--c);color:#fff}
+.tarz b{font-size:15px;line-height:1.2}
+.tarz small{color:var(--muted);font-size:12.5px;line-height:1.3}
+.tarzchips{margin-bottom:10px}
+#temaMore{width:100%;margin-top:10px}
+#temaMore[hidden]{display:none}
+
+/* v6.6 tatil planı */
+.planbtn .nearik{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok-ink)}
+.plbos{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:28px 18px;border:1px dashed var(--line);border-radius:var(--r-l);background:var(--surface)}
+.plbosik{display:grid;place-items:center;width:64px;height:64px;border-radius:20px;background:var(--pri-soft);color:var(--pri-ink)}
+.plbos b{font-size:18px}
+.plbos p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.5}
+.plyeni,.plgunekle{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:12px;padding:13px}
+.plust{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px 6px;padding:2px 16px}
+.plust::-webkit-scrollbar{display:none}
+.chipbtn{flex:none;display:flex;align-items:center;gap:6px;min-height:38px;padding:0 13px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--fg);font-size:13.5px;font-weight:700}
+.plsehir{display:flex;align-items:center;gap:10px;margin:18px 0 -2px;padding:10px 14px;border-radius:var(--r-m);background:var(--fg);color:var(--bg)}
+.plsehir span{flex:1;min-width:0;display:flex;flex-direction:column}
+.plsehir b{font-size:16px}
+.plsehir small{opacity:.75;font-size:12.5px}
+.plsehir em{font-style:normal;font-weight:800;font-size:13px;opacity:.9;white-space:nowrap}
+.plgun{margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:var(--r-l);background:var(--surface);box-shadow:var(--sh-1)}
+.plbas{display:flex;align-items:center;gap:8px}
+.plbas b{font-size:17px}
+.plbas small{flex:1;color:var(--muted);font-size:12.5px;text-align:right}
+.plsil{flex:none;display:grid;place-items:center;width:34px;height:34px;border:0;border-radius:10px;background:transparent;color:var(--muted)}
+.plkon{display:flex;align-items:center;gap:10px;width:100%;margin-top:8px;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r-m);background:var(--bg);color:var(--fg);text-align:left;font:inherit;cursor:pointer}
+.plkon > svg:first-child{flex:none;color:var(--pri-ink)}
+.plkon span{flex:1;min-width:0;display:flex;flex-direction:column}
+.plkon b{font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plkon small{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plkon.bos{border-style:dashed}
+.plkon.bos b{color:var(--pri-ink)}
+.pllist{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:0}
+.pldurak{display:grid;grid-template-columns:24px 1fr auto;gap:8px;align-items:center}
+.pldurak .row{grid-template-columns:48px 1fr;min-height:62px;padding:6px 8px 6px 6px}
+.pldurak .row .thumb{width:48px;height:48px}
+.plno{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--pri);color:var(--on-pri);font-size:12.5px;font-weight:800}
+.plsira{display:flex;flex-direction:column;gap:2px}
+.plsira button{display:grid;place-items:center;width:34px;height:26px;border:0;border-radius:8px;background:var(--bg);color:var(--fg)}
+.plsira button:disabled{opacity:.3}
+.plara{display:flex;align-items:center;gap:6px;padding:4px 0 4px 32px;color:var(--muted);font-size:12.5px;font-weight:700}
+.plalt{display:flex;gap:8px;margin-top:10px}
+.plalt .btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 8px;font-size:14px}
+.plekle{border:1px dashed color-mix(in srgb,var(--pri) 45%,var(--line));background:var(--surface);color:var(--pri-ink)}
+.plekle:disabled{opacity:.5}
+/* tatil planı pencereleri */
+.plform,.plsec{text-align:left}
+.plform h2,.plsec h2,.plform .temo,.plsec .temo{text-align:center}
+.plsec > p{text-align:center}
+.plinput{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.plinput small,.plgunsec > small{color:var(--muted);font-size:13px;font-weight:700}
+.plinput input,.plara2 input{width:100%;height:48px;font-size:16px;padding:0 14px;border-radius:var(--r-m);border:1px solid var(--line);background:var(--bg);color:var(--fg);-webkit-appearance:none;appearance:none}
+.plara2{margin-top:12px}
+.plara2 input{padding-left:44px}
+.plinput input:focus,.plara2 input:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px color-mix(in srgb,var(--pri) 22%,transparent)}
+.plgunsec{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.plparca{display:grid;grid-template-columns:22px 1fr auto;grid-template-areas:"n k x" ". s s";gap:6px 8px;align-items:center;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.plparca .plsira2{grid-area:n}
+.plparca .plkon{grid-area:k;margin-top:0;min-width:0}
+.plparca .plstep{grid-area:s;justify-self:end}
+.plparca .plparsil{grid-area:x}
+.plsira2{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--fg);color:var(--bg);font-size:12px;font-weight:800}
+.plstep{display:flex;align-items:center;gap:4px}
+.plstep button{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);font-size:20px;font-weight:700;line-height:1}
+.plstep b{min-width:18px;text-align:center;font-size:17px}
+.plstep small{color:var(--muted);font-size:12px;margin-right:2px}
+.plparsil{display:grid;place-items:center;width:30px;height:30px;border:0;border-radius:8px;background:transparent;color:var(--muted)}
+.plparalt{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.plparalt b{font-size:14px}
+.plparalt [hidden]{display:none}
+.plnot{margin:4px 0 0 !important;font-size:13px !important;color:var(--muted)}
+.plsonuc{margin-top:8px;max-height:46vh;overflow-y:auto;padding-bottom:2px}
+.plsatir{grid-template-columns:48px 1fr auto;min-height:60px}
+.plsatir .thumb{width:48px;height:48px}
+.plek{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line);color:var(--pri-ink)}
+.plek svg+svg{display:none}
+.plsatir[aria-pressed="true"]{border-color:color-mix(in srgb,var(--ok) 45%,var(--line));background:var(--ok-soft)}
+.plsatir[aria-pressed="true"] .plek{background:var(--ok);border-color:var(--ok);color:#fff}
+.plsatir[aria-pressed="true"] .plek svg:first-child{display:none}
+.plsatir[aria-pressed="true"] .plek svg+svg{display:block}
+.plek.gitek{color:var(--line);border:0}
+.plsatir[aria-pressed="true"] .plek.gitek{background:transparent;color:var(--ok)}
+.plsecplan{margin-top:14px}
+.plsecplan b{display:block;margin-bottom:6px;font-size:15px}
+.plsecplan .chips{margin:0;padding:2px 0;flex-wrap:wrap}
+
+/* v6.6 gezi haritasında işaretleme */
+.isor{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;padding:14px;border-radius:var(--r-l);background:var(--pri-soft);border:1px solid color-mix(in srgb,var(--pri) 25%,var(--line))}
+.isorik{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:var(--pri);color:var(--on-pri)}
+.isor b{font-size:16px}
+.isor p{margin:4px 0 0;color:var(--fg);opacity:.85;font-size:14px;line-height:1.5}
+.isorbtn{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-top:10px}
+.isorbtn .btn{padding:10px 16px}
+.isaretbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;min-height:46px;border:1px dashed color-mix(in srgb,var(--pri) 45%,var(--line));border-radius:var(--r-m);background:var(--surface);color:var(--pri-ink);font-weight:800;font-size:14.5px}
+.isaretbtn.on{border-style:solid;background:var(--pri);border-color:var(--pri);color:var(--on-pri)}
+.iipucu{display:flex;align-items:center;gap:8px;margin:0 0 8px;padding:10px 12px;border-radius:var(--r-m);background:var(--fg);color:var(--bg);font-size:14px;font-weight:700}
+.iipucu[hidden]{display:none}
+.harita.isaret .trh path{cursor:pointer;stroke:var(--pri);stroke-width:1.2}
+.harita.isaret .trh path:hover{fill:color-mix(in srgb,var(--pri) 35%,var(--hbos)) !important}
+.plgun .plkon{display:inline-flex;width:auto;max-width:100%;margin-top:6px;padding:5px 10px;border:0;border-radius:999px;background:var(--bg)}
+.plgun .plkon small{display:none}
+.plgun .plkon b{font-size:13.5px}
+.plgun .plkon.bos{border:1px dashed var(--line)}
+.plsec .morebtn{width:100%;margin-top:8px}
+.plsec .morebtn[hidden]{display:none}

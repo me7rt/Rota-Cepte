@@ -138,6 +138,13 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
       <small>Yola mı çıkıyorsun? İki il seç, yol boyunca mola yerlerini bulalım</small></span>
       <i class="nearok" data-ik="chevron-right"></i>
     </button>
+    <button class="near yolbtn planbtn" id="planBtn">
+      <span class="nearik"><i data-ik="calendar-plus" data-boy="22"></i></span>
+      <span class="neartxt"><b>Tatilini planla</b>
+      <small id="planSub">Gün gün kendi rotanı yap, gideceğin yerleri sen seç</small></span>
+      <i class="nearok" data-ik="chevron-right"></i>
+    </button>
+    <section class="tarzsec"><h2 class="sec">Nasıl bir gezi istiyorsun?</h2><div class="tarzlar" id="tarzlar"></div></section>
     <div class="ikili">
       <button class="mini" id="kartBtn"><span class="miniik"><i data-ik="shuffle" data-boy="22"></i></span><b>Nereye gitsem?</b><small>Kartları kaydır, beğendiğini listene at</small></button>
       <button class="mini" id="kacBtn"><span class="miniik"><i data-ik="calendar-days" data-boy="22"></i></span><b>Hafta sonu kaçamağı</b><small>Arabayla birkaç saatlik iller</small></button>
@@ -222,10 +229,14 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
 </main>
 
 <main id="tema" class="view" hidden>
+  <div class="chips tarzchips" id="tarzChips" role="group" aria-label="Gezi türü" hidden></div>
   <button class="loc tkonum" id="temaLoc"><i data-ik="locate-fixed" data-boy="18"></i> Yakından uzağa sırala</button>
   <p class="tsay" id="temaSay"></p>
   <ul class="list" id="temaList"></ul>
+  <button class="morebtn" id="temaMore" hidden>Daha fazla göster</button>
 </main>
+
+<main id="planlar" class="view" hidden></main>
 
 <main id="rota" class="view" hidden>
   <p class="rnot" id="rotaNot"></p>
@@ -253,7 +264,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
 </main>
 
 <main id="rozet" class="view" hidden>
-  <section id="gezSec" class="gez" hidden><div class="harita" id="gezHarita"></div><button class="gezbtn" id="gezBtn"><span class="gezust"><b id="gezSay"></b><small id="gezAlt"></small></span><span class="bar"><i id="gezBar"></i></span></button><ul class="list" id="gezList" hidden></ul><button class="btn primary karnebtn" id="karneBtn" hidden><i data-ik="camera" data-boy="18"></i> Gezi karnemi paylaş</button><button class="btn karnebtn ozetbtn" id="ozetBtn" hidden><i data-ik="sparkles" data-boy="18"></i> <span></span></button></section>
+  <section id="gezSec" class="gez" hidden><div id="isaretSor"></div><div class="harita" id="gezHarita"></div><button class="isaretbtn" id="isaretBtn"><i data-ik="map-pin-plus" data-boy="18"></i> <span>Daha önce gittiğin yerleri işaretle</span></button><button class="gezbtn" id="gezBtn"><span class="gezust"><b id="gezSay"></b><small id="gezAlt"></small></span><span class="bar"><i id="gezBar"></i></span></button><ul class="list" id="gezList" hidden></ul><button class="btn primary karnebtn" id="karneBtn" hidden><i data-ik="camera" data-boy="18"></i> Gezi karnemi paylaş</button><button class="btn karnebtn ozetbtn" id="ozetBtn" hidden><i data-ik="sparkles" data-boy="18"></i> <span></span></button></section>
   <section class="sevsec" id="sevSec" hidden><span class="hbas" id="sevBas"><i data-ik="star" data-boy="20"></i> En sevdiğin yerler</span><ul class="list sevlist" id="sevList"></ul><p class="sevipucu" id="sevIpucu" hidden><i data-ik="star" data-boy="16"></i> Gittiğin yerlere yıldız ver, en sevdiklerin burada toplansın.</p></section>
   <section class="hedef" id="hedefSec" aria-live="polite"></section>
   <section class="pasaport" id="pasSec">
@@ -330,6 +341,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
       </div>
       <div class="eylem">
         <button class="ey gittim" id="dGit"><i data-ik="circle-check" data-boy="22"></i><span>Buraya gittim</span></button>
+        <button class="ey" id="dPlan"><i data-ik="calendar-plus" data-boy="22"></i><span>Plana ekle</span></button>
         <button class="ey" id="dDinle"><i data-ik="volume-2" data-boy="22"></i><span>Dinle</span></button>
         <button class="ey share" id="dShare"><i data-ik="share-2" data-boy="22"></i><span>Gönder</span></button>
       </div>
