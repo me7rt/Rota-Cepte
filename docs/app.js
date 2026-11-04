@@ -2108,7 +2108,7 @@
     // Bu sürümde yeni: her sürümde güncellenir (yeni, iyileşen, çıkarılan)
     const yeni = [
       ["car-front", TL("Yol üstü keşifte mola ekle", "Add stops along the way"), TL("Yol üstündeki yerleri türüne göre süz, beğendiklerini + ile mola ekle; Google Haritalar'da yol tarifi o duraklardan geçsin. Yol tarifi düğmesi artık en üstte.", "Filter places along the way by type and tap + to add stops; the Google Maps directions will pass through them. The directions button is now at the top."), "#/yol"],
-      ["languages", TL("Dil düğmesi en üstte", "Language button at the top"), TL("Türkçe ve İngilizce arasında geçmek için ana ekranın sağ üstündeki dil düğmesine dokunman yeterli.", "To switch between Turkish and English, just tap the language button at the top right of the home screen.")],
+      ["languages", TL("Dil düğmesi en üstte", "Language button at the top"), TL("Dili değiştirmek için ana ekranın sağ üstündeki küreye dokun, istediğin dili seç.", "To change the language, tap the globe at the top right of the home screen and pick one.")],
       ["camera", TL("Daha temiz bilgiler", "Cleaner information"), TL("Gezilecek bir yanı olmayan yerler çıkarıldı, iki kez görünen yerler teke indi; birçok yere yeni fotoğraf ve daha uzun açıklama geldi.", "Places with nothing to see were removed and duplicates merged; many places got new photos and longer descriptions.")],
       ["shield-check", TL("Daha güvenli", "Safer"), TL("Uygulamanın güvenliği baştan sona gözden geçirildi ve sıkılaştırıldı.", "The app's security was reviewed end to end and tightened.")],
       ["list-checks", TL("Küçük düzeltmeler", "Small fixes"), TL("Geri dönünce açık kalan pencereler artık kapanıyor; bazı yer açıklamalarında kalan kod parçaları temizlendi.", "Pop-ups now close when you go back, and leftover code bits were cleaned from some place descriptions.")],
@@ -3083,10 +3083,28 @@
     }
     const b = e.target.closest("[data-yolil]"); if (!b) return; yolAcik.add(b.dataset.yolil); renderYol();
   });
-  $("dilYazi").textContent = TL("Language: English", "Dil: Türkçe");
-  $("dilBtn").addEventListener("click", () => dilDegistir(TL("en", "tr")));
-  $("dilHizli").querySelector("span").textContent = TL("TR", "EN");
-  $("dilHizli").addEventListener("click", () => dilDegistir(TL("en", "tr")));
+  // ---------- dil seçimi: üstteki küre ve alttaki düğme aynı pencereyi açar ----------
+  const DILLER = [["tr", "Türkçe", "Turkish"], ["en", "English", "İngilizce"]];
+  function dilSec(geri) {
+    const simdi = TL("tr", "en");
+    const d = document.createElement("div"); d.className = "tanit";
+    const secenek = ([k, ad, alt]) => `<button class="tsec" role="radio" aria-checked="${k === simdi}" data-dil="${k}" lang="${k}"><span class="tad"><b>${ad}</b><small>${alt}</small></span><i class="tisaret" aria-hidden="true">${ik("check", 16)}</i></button>`;
+    d.innerHTML = `<div class="tkart"><div class="temo">${ik("languages", 36)}</div><h2>${TL("Dil", "Language")}</h2><p>${TL("Uygulamanın dilini seç.", "Choose the app language.")}</p>
+      <div class="dillist" role="radiogroup" aria-label="${TL("Dil", "Language")}">${DILLER.map(secenek).join("")}</div>
+      <div class="tbtn" style="justify-content:center"><button class="btn" data-k="kapat">${TL("Vazgeç", "Cancel")}</button></div></div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); if (geri) geri.focus(); };
+    d.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-dil]");
+      if (b) { if (b.dataset.dil === simdi) kapat(); else dilDegistir(b.dataset.dil); return; }
+      if (e.target === d || e.target.closest("[data-k=kapat]")) kapat();
+    });
+    document.body.appendChild(d);
+    setTimeout(() => { const s = d.querySelector('[aria-checked="true"]'); if (s) s.focus(); }, 50);
+  }
+  $("dilYazi").textContent = TL("Dil: Türkçe", "Language: English");
+  $("dilBtn").addEventListener("click", () => dilSec($("dilBtn")));
+  $("dilHizli").querySelector(".dilkod").textContent = TL("TR", "EN");
+  $("dilHizli").addEventListener("click", () => dilSec($("dilHizli")));
   // ---------- tema (renk paleti): varsayılan Gün Batımı, Ayarlar'dan değişir ----------
   const TEMALAR = [
     { k: "gunbatimi", ad: TL("Gün Batımı", "Sunset"), not: TL("Kum, gün batımı turuncusu, dağ laciverdi", "Sand, sunset orange, mountain navy"), r: ["#f6eee7", "#d13415", "#1f2d5c"], koyu: "#11131f" },
