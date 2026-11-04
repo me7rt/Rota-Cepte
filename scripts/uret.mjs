@@ -862,10 +862,11 @@ for (const il of iller.values()) {
     const ek = il.adaylar.filter((o) => !o.foto && o.trA && !o.wd && (o.k !== "t" || YAPI_ADI.test(o.ad))).sort((a, b) => b.sl - a.sl).slice(0, 15 - il.yerler.length);
     if (ek.length) { il.yerler.push(...ek); azIlEk += ek.length; }
   }
-  // Son sınır: ilçe başına 35, ilçesiz 40, il başına 400
+  // Son sınır: ilçe başına 50, ilçesiz 40, il başına 400. İlçeler resmî sınırlarla düzeltilince tarihî merkezler
+  // (Bursa Osmangazi, İstanbul Fatih) tek ilçede toplandı; 35'lik sınır Orhan Gazi Külliyesi gibi yerleri düşürüyordu.
   const say = new Map(); const son = [];
   for (const o of il.yerler) {
-    if (!o.one) { const key = o.ilce || "-"; const n = say.get(key) || 0; if (n >= (o.ilce ? 35 : 40)) continue; say.set(key, n + 1); }
+    if (!o.one) { const key = o.ilce || "-"; const n = say.get(key) || 0; if (n >= (o.ilce ? 50 : 40)) continue; say.set(key, n + 1); }
     son.push(o);
   }
   il.yerler = son.slice(0, 400);
@@ -957,6 +958,8 @@ for (const x of dorduncu) {
 for (const il of iller.values()) {
   const liste = ELLE[il.s] || [];
   for (const e of liste) {
+    const eq = "e-" + ascii(e.ad).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    if (ILCE_DUZ[eq] && il.ilceler.some((d) => d.ad === ILCE_DUZ[eq])) e.ilce = ILCE_DUZ[eq];
     if (!e.ilce || !il.ilceler.some((d) => d.ad === e.ilce)) e.ilce = yakinIlceAdi(il, e.lat, e.lng);
     // Elle seçilmiş fotoğraf (Commons dosya adı) varsa önce o kullanılır
     let a = null;
