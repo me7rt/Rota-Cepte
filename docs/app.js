@@ -363,7 +363,7 @@
   // ---------- ana sayfa ----------
   function showHome() {
     view = { mode: "home" }; show("home");
-    $("eyebrow").textContent = selam(); $("title").textContent = T("Nereye gidiyorsun?");
+    $("eyebrow").textContent = selam(); $("title").textContent = T("Rotan nereye?");
     renderHome();
   }
   // ---------- gideceğim yerler (favoriler) ----------

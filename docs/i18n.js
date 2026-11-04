@@ -41,7 +41,7 @@
     "Gizlilik": "Privacy", "Kaynaklar ve lisanslar": "Sources and licenses", "Kullanım koşulları": "Terms of use",
     "© 2026 Mert Turanlıoğlu · Tüm hakları saklıdır": "© 2026 Mert Turanlıoğlu · All rights reserved",
     "Fotoğraflar ve Vikipedi metinleri kendi lisanslarıyla kullanılır.": "Photos and Wikipedia texts are used under their own licenses.",
-    "Geri": "Back", "Nereye gidiyorsun?": "Where are you going?",
+    "Geri": "Back", "Rotan nereye?": "Where to?",
     "Konumumu kullan": "Use my location", "Konum kapalı": "Location off", "Konum açık": "Location on", "Konum aranıyor…": "Finding location…",
     // ana sayfa
     "İl, ilçe ya da yer ara… (ör. Uşak)": "Search a province, district or place… (e.g. Cappadocia)",
