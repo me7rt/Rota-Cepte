@@ -39,7 +39,7 @@ const IPUCU = okuJSON("data/ipuclari.json", {});
 //   elle: Wikidata no -> {tr, en} kaynak metin yanlış yere aitse elle yazılmış kısa metin (Vikipedi bağlantısı kaldırılır)
 const ICERIK = okuJSON("data/icerik-duzelt.json", {});
 const INGILIZCE_ACK = /^(?!.*[çğıöşüÇĞİÖŞÜ]).*\b(in|of|the|and|ancient|city|located|building|mosque|church|museum|lake|mountain|island|national|village|neighbou?rhood|quarter|street|bridge|castle|cave|valley|canyon|monastery|temple|statue|tree|point|bay|gulf|cape|beach|resort|square|district|range|zoo|garden|lagoon|tower|tomb|ruins|church|Turkey)\b(?!['’])/i;
-const AD_DUZ = ICERIK.ad || {}, TR_CEVIRI = ICERIK.tr || {}, EN_CEVIRI = ICERIK.en || {}, IPUCU_EN = ICERIK.ip_en || {}, IL_DUZ = ICERIK.il || {}, ELLE_METIN = ICERIK.elle || {};
+const AD_DUZ = ICERIK.ad || {}, TR_CEVIRI = ICERIK.tr || {}, EN_CEVIRI = ICERIK.en || {}, IPUCU_EN = ICERIK.ip_en || {}, IL_DUZ = ICERIK.il || {}, ILCE_DUZ = ICERIK.ilce || {}, ELLE_METIN = ICERIK.elle || {};
 
 // ---------- Sınıflar ----------
 // c: çarşı, t: tarihi, m: müze, d: doğa, s: şehir. Puan yüksek olan kategori kazanır.
@@ -680,6 +680,8 @@ for (const il of iller.values()) {
       else if (!o.trA && (o.sl < 2 || (!o.imgs.length && !o.cat))) continue;
     }
     let ic = [...o.ilceler].find((q) => ilceler.has(q) && ilceler.get(q).il === il.q);
+    // Elle ilçe düzeltmesi (icerik-duzelt.json "ilce": Wikidata no -> resmî ilçe adı), resmî sınırlarla doğrulanmış olmalı
+    if (ILCE_DUZ[o.q]) { const z = il.ilceler.find((d) => d.ad === ILCE_DUZ[o.q]); if (z) ic = z.q; else rapor("  UYARI ilçe düzeltmesi eşleşmedi:", o.ad, ILCE_DUZ[o.q]); }
     if (!ic) {
       let enY = null, enD = 1e9;
       for (const d of il.ilceler) if (d.koor) { const m = mesafe(o.koor[0], o.koor[1], d.koor[0], d.koor[1]); if (m < enD) { enD = m; enY = d; } }
