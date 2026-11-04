@@ -1255,3 +1255,24 @@ button.mrow:active{background:var(--surface2)}
 .gksira span{font-size:13px;opacity:.7;padding:0 6px 0 8px}
 .gksira button{display:flex;align-items:center;gap:5px;border:0;background:none;font:inherit;font-size:14px;padding:7px 12px;border-radius:999px;color:inherit;cursor:pointer}
 .gksira button[aria-pressed="true"]{background:var(--fg);color:var(--bg);font-weight:600}
+/* v6.6 planın haritası */
+.plharita{margin:12px 0 16px;padding:14px;border-radius:18px;background:var(--surface);border:1px solid var(--line)}
+.plhbas{display:flex;flex-direction:column;gap:2px;margin-bottom:10px}
+.plhbas b{display:flex;align-items:center;gap:8px;font-size:17px}
+.plhbas small{opacity:.7}
+.plhgun{margin:0 0 10px}
+.plhgun button i{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c);margin-right:6px;vertical-align:-1px}
+.plmap{height:280px;border-radius:14px;overflow:hidden;z-index:0}
+.plpin{width:28px;height:28px;border-radius:50%;background:var(--c);color:#fff;font:700 13px/28px Manrope,system-ui,sans-serif;text-align:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.plhliste{margin-top:10px}
+.plhliste summary{cursor:pointer;font-weight:600;padding:6px 0}
+.plhliste ol{list-style:none;margin:4px 0 0;padding:0}
+.plhdurak{display:flex;align-items:center;gap:10px;width:100%;padding:6px 4px;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.plhdurak b{font-weight:600}
+.plhdurak small{margin-left:auto;opacity:.6;font-size:12px}
+.plhno{flex:none;width:24px;height:24px;border-radius:50%;background:var(--c);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center}
+.plhara{padding:0 0 0 38px;font-size:12px;opacity:.65;display:flex;align-items:center;gap:4px}
+.plhgunbas{margin:10px 0 2px;padding-left:10px;border-left:4px solid var(--c);font-weight:700;font-size:14px}
+.plhgunbas:first-child{margin-top:4px}
+.plhgos{margin:6px 0 2px;display:flex;align-items:center;gap:6px}
+.leaflet-popup-content .linkbtn{padding:4px 0;display:inline-flex;align-items:center;gap:4px}

@@ -2919,19 +2919,22 @@
     if (map) { setTimeout(() => map.invalidateSize(), 60); return; }
     map = L.map("map", { zoomControl: false, attributionControl: true }).setView([39, 35], 6);
     L.control.zoom({ zoomInTitle: TL("Yakınlaştır", "Zoom in"), zoomOutTitle: TL("Uzaklaştır", "Zoom out") }).addTo(map);
-    // Atıflar zorunlu: OSM (ODbL) ve MapTiler kullanım şartları; bağlantılar dış tarayıcıda açılır
+    altlik(map);
+    layer = L.layerGroup().addTo(map);
+  }
+  // Harita altlığı ve zorunlu atıflar (OSM ODbL, MapTiler şartları); bağlantılar dış tarayıcıda açılır
+  function altlik(m) {
     const OSM_ATIF = `<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap ${TL("katkıcıları", "contributors")}</a>`;
-    map.attributionControl.setPrefix(`<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>`);
+    m.attributionControl.setPrefix(`<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>`);
     const osm = () => L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: OSM_ATIF });
     if (HARITA_ANAHTAR) {
       // MapTiler çalışmazsa (kota, anahtar hatası) OpenStreetMap'e geç
       let hata = 0;
       const mt = L.tileLayer(`https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=${HARITA_ANAHTAR}`, { maxZoom: 19, attribution: `<a href="https://www.maptiler.com/copyright/" target="_blank" rel="noopener">© MapTiler</a> ${OSM_ATIF}` });
       mt.on("tileload", () => { hata = 0; });
-      mt.on("tileerror", () => { if (++hata === 6 && map.hasLayer(mt)) { map.removeLayer(mt); osm().addTo(map); } });
-      mt.addTo(map);
-    } else osm().addTo(map);
-    layer = L.layerGroup().addTo(map);
+      mt.on("tileerror", () => { if (++hata === 6 && m.hasLayer(mt)) { m.removeLayer(mt); osm().addTo(m); } });
+      mt.addTo(m);
+    } else osm().addTo(m);
   }
   function drawPins() {
     if (!map) return;
@@ -3145,9 +3148,9 @@
     const p = a.find((x) => x.id === view.id); if (!p) { git("#/plan"); return; }
     $("title").textContent = p.ad;
     const gunler = p.g.map((g, gi) => {
-      const durak = g.map((x, i) => `${i ? `<li class="plara">${ik("arrow-down", 14)} ${fmt(km(g[i - 1], x))}</li>` : ""}<li class="pldurak"><span class="plno">${i + 1}</span><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${thumb(x.f, x.k)}<span class="rt"><b>${esc(kayitAd(x))}</b><small>${esc(x.il)}</small></span></button><span class="plsira"><button data-p="yukari" data-g="${gi}" data-i="${i}" aria-label="${TL("Yukarı taşı", "Move up")}" ${i ? "" : "disabled"}>${ik("arrow-up", 16)}</button><button data-p="asagi" data-g="${gi}" data-i="${i}" aria-label="${TL("Aşağı taşı", "Move down")}" ${i < g.length - 1 ? "" : "disabled"}>${ik("arrow-down", 16)}</button><button data-p="cikar" data-g="${gi}" data-i="${i}" aria-label="${TL("Plandan çıkar", "Remove from plan")}">${ik("x", 16)}</button></span></li>`).join("");
+      const durak = g.map((x, i) => `${i ? `<li class="plara">${ik("arrow-down", 14)} ~${fmt(km(g[i - 1], x) * 1.3)}</li>` : ""}<li class="pldurak"><span class="plno">${i + 1}</span><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${thumb(x.f, x.k)}<span class="rt"><b>${esc(kayitAd(x))}</b><small>${esc(x.il)}</small></span></button><span class="plsira"><button data-p="yukari" data-g="${gi}" data-i="${i}" aria-label="${TL("Yukarı taşı", "Move up")}" ${i ? "" : "disabled"}>${ik("arrow-up", 16)}</button><button data-p="asagi" data-g="${gi}" data-i="${i}" aria-label="${TL("Aşağı taşı", "Move down")}" ${i < g.length - 1 ? "" : "disabled"}>${ik("arrow-down", 16)}</button><button data-p="cikar" data-g="${gi}" data-i="${i}" aria-label="${TL("Plandan çıkar", "Remove from plan")}">${ik("x", 16)}</button></span></li>`).join("");
       const uzun = g.length > 1 && gunKm(g) > 150;
-      const ozet = g.length ? TL(`${g.length} durak` + (g.length > 1 ? ` · yaklaşık ${fmt(gunKm(g))} kuş uçuşu` : ""), `${g.length} stop${g.length === 1 ? "" : "s"}` + (g.length > 1 ? ` · about ${fmt(gunKm(g))} as the crow flies` : "")) : TL("Henüz yer eklemedin", "No places yet");
+      const ozet = g.length ? TL(`${g.length} durak` + (g.length > 1 ? ` · ~${fmt(gunKm(g) * 1.3)} yol` : ""), `${g.length} stop${g.length === 1 ? "" : "s"}` + (g.length > 1 ? ` · ~${fmt(gunKm(g) * 1.3)} drive` : "")) : TL("Henüz yer eklemedin", "No places yet");
       const kon = (p.kon || [])[gi] || null, onceki = gi ? (p.kon || [])[gi - 1] || null : undefined;
       let bant = "";
       if (kon && (onceki === undefined || konAnah(kon) !== konAnah(onceki))) {
@@ -3158,13 +3161,58 @@
         ${konDugme(kon, `data-p="kon" data-g="${gi}" aria-label="${TL(`${gi + 1}. gün nerede?`, `Where on day ${gi + 1}?`)}"`)}
         ${uzun ? `<p class="pluyari">${ik("info", 15)} ${TL("Bu günün durakları birbirine uzak. Bir yeri başka güne taşımayı düşünebilirsin.", "This day's stops are far apart. You might move one to another day.")}</p>` : ""}
         ${g.length ? `<ol class="pllist">${durak}</ol>` : ""}
+        ${g.length ? `<button class="linkbtn plhgos" data-p="hgun" data-g="${gi}">${ik("map", 16)} ${TL("Bu günü haritada gör", "See this day on the map")}</button>` : ""}
         <div class="plalt"><button class="btn plekle" data-p="ekle" data-g="${gi}" ${g.length >= PLAN_DURAK_UST ? "disabled" : ""}>${ik("plus", 18)} ${TL("Yer ekle", "Add a place")}</button>${g.length ? `<a class="btn primary" href="${gunHarita(g)}" target="_blank" rel="noopener">${ik("navigation", 18)} ${TL("Rotayı aç", "Open route")}</a>` : ""}</div></section>`;
     }).join("");
     kutu.innerHTML = `<div class="plust"><button class="chipbtn" data-p="ad">${ik("pencil", 16)} ${TL("Adını değiştir", "Rename")}</button><button class="chipbtn" data-p="paylas">${ik("share-2", 16)} ${TL("Paylaş", "Share")}</button><button class="chipbtn" data-p="sil">${ik("trash", 16)} ${TL("Planı sil", "Delete plan")}</button></div>
+      ${planHaritaHtml(p)}
       ${gunler}
       ${p.g.length < PLAN_GUN_UST ? `<button class="btn plgunekle" data-p="gunekle">${ik("calendar-plus", 18)} ${TL("Gün ekle", "Add a day")}</button>` : ""}
       <button class="btn primary plkaydet" data-p="kaydet">${ik("circle-check", 18)} ${TL("Planı kaydet", "Save plan")}</button>
-      <p class="tsay">${TL("Planın her değişiklikte bu telefona kendiliğinden de kaydedilir. Rotayı aç, bulunduğun yerden başlayıp o günün duraklarını sırasıyla Google Haritalar'da açar. Mesafeler kuş uçuşu ve yaklaşıktır.", "Your plan is also saved on this phone after every change. Open route starts from where you are and opens that day's stops in order in Google Maps. Distances are approximate, as the crow flies.")}</p>`;
+      <p class="tsay">${TL("Planın her değişiklikte bu telefona kendiliğinden de kaydedilir. Rotayı aç, bulunduğun yerden başlayıp o günün duraklarını sırasıyla Google Haritalar'da açar. Mesafeler yaklaşık yol mesafesidir.", "Your plan is also saved on this phone after every change. Open route starts from where you are and opens that day's stops in order in Google Maps. Distances are rough driving estimates.")}</p>`;
+    planHaritaCiz(p);
+  }
+  // ---------- v6.6 planın haritası: numaralı duraklar ve gün gün güzergah ----------
+  const GUN_RENK = ["#d4381a", "#2f6fde", "#2a9d5c", "#9b4dca", "#e08a00", "#0f9fb3", "#c2185b"];
+  let planMap = null;
+  // Seçili gün (-1 = tüm plan) için duraklar: {x, gi, no}; tüm planda numara baştan sona sürer
+  function planDuraklar(p, hg) {
+    const r = []; let no = 0;
+    p.g.forEach((g, gi) => g.forEach((x, i) => { no++; if (hg < 0 || hg === gi) r.push({ x, gi, no: hg < 0 ? no : i + 1 }); }));
+    return r.filter((d) => d.x.lat != null);
+  }
+  function planHaritaHtml(p) {
+    if (!planSay(p)) return "";
+    const hg = view.hgun != null && view.hgun < p.g.length ? view.hgun : -1, d = planDuraklar(p, hg);
+    let top = 0; for (let i = 1; i < d.length; i++) top += km(d[i - 1].x, d[i].x);
+    const gunVar = p.g.map((g, gi) => g.length ? gi : -1).filter((gi) => gi >= 0);
+    const satir = d.map((a, i) => {
+      const yeniGun = hg < 0 && (!i || d[i - 1].gi !== a.gi);
+      return `${yeniGun ? `<li class="plhgunbas" style="--c:${GUN_RENK[a.gi % GUN_RENK.length]}">${gunAd(a.gi)}${(p.kon || [])[a.gi] ? " · " + esc(p.kon[a.gi].ad) : ""}</li>` : i ? `<li class="plhara">${ik("arrow-down", 13)} ~${fmt(km(d[i - 1].x, a.x) * 1.3)}</li>` : ""}<li><button class="plhdurak" data-p="hodak" data-i="${i}"><span class="plhno" style="--c:${GUN_RENK[a.gi % GUN_RENK.length]}">${a.no}</span><b>${esc(kayitAd(a.x))}</b><small>${esc(a.x.il)}</small></button></li>`;
+    }).join("");
+    return `<section class="plharita"><div class="plhbas"><b>${ik("map", 18)} ${TL("Planın haritası", "Plan map")}</b><small>${TL(`${d.length} durak` + (d.length > 1 ? ` · ~${fmt(top * 1.3)} yol` : ""), `${d.length} stop${d.length === 1 ? "" : "s"}` + (d.length > 1 ? ` · ~${fmt(top * 1.3)} drive` : ""))}</small></div>
+      ${gunVar.length > 1 ? `<div class="chips plhgun"><button data-p="hgun" data-g="-1" aria-pressed="${hg < 0}">${TL("Tüm plan", "Whole plan")}</button>${gunVar.map((gi) => `<button data-p="hgun" data-g="${gi}" aria-pressed="${hg === gi}" style="--c:${GUN_RENK[gi % GUN_RENK.length]}"><i></i>${gunAd(gi)}</button>`).join("")}</div>` : ""}
+      <div id="plMap" class="plmap"></div>
+      <details class="plhliste"${d.length <= 6 ? " open" : ""}><summary>${hg < 0 ? TL("Tüm güzergah, durak durak", "The whole route, stop by stop") : TL(`${gunAd(hg)} güzergahı, durak durak`, `${gunAd(hg)} route, stop by stop`)}</summary><ol>${satir}</ol></details></section>`;
+  }
+  function planHaritaCiz(p) {
+    if (planMap) { planMap.remove(); planMap = null; }
+    const el = $("plMap"); if (!el || typeof L === "undefined") return;
+    const hg = view.hgun != null && view.hgun < p.g.length ? view.hgun : -1, d = planDuraklar(p, hg);
+    if (!d.length) return;
+    planMap = L.map(el, { zoomControl: true, attributionControl: true, scrollWheelZoom: false });
+    altlik(planMap);
+    // Gün içi yol: günün rengiyle düz çizgi; günler arası geçiş: gri kesik çizgi
+    for (let i = 1; i < d.length; i++) {
+      const a = d[i - 1], b = d[i], ayni = a.gi === b.gi;
+      L.polyline([[a.x.lat, a.x.lng], [b.x.lat, b.x.lng]], ayni ? { color: GUN_RENK[a.gi % GUN_RENK.length], weight: 4, opacity: 0.85 } : { color: "#8a8f9c", weight: 3, opacity: 0.8, dashArray: "6 8" }).addTo(planMap);
+    }
+    view.plPin = d.map((a) => L.marker([a.x.lat, a.x.lng], {
+      icon: L.divIcon({ className: "", html: `<div class="plpin" style="--c:${GUN_RENK[a.gi % GUN_RENK.length]}">${a.no}</div>`, iconSize: [28, 28], iconAnchor: [14, 14] }),
+      zIndexOffset: a.no
+    }).bindPopup(`<b>${a.no}. ${esc(kayitAd(a.x))}</b><br><small>${gunAd(a.gi)} · ${esc(a.x.il)}</small><br><button class="linkbtn" data-go="#/il/${a.x.s}/yer/${a.x.q}">${TL("Yeri aç", "Open place")} ${ik("chevron-right", 14)}</button>`).addTo(planMap));
+    const sinir = L.latLngBounds(d.map((a) => [a.x.lat, a.x.lng]));
+    if (d.length === 1) planMap.setView(sinir.getCenter(), 13); else planMap.fitBounds(sinir, { padding: [30, 30], maxZoom: 14 });
   }
   function planTik(e) {
     const b = e.target.closest("[data-p]"); if (!b) return;
@@ -3175,6 +3223,8 @@
     if (k === "yukari" || k === "asagi") { planDegis(id, (p) => { const g = p.g[gi], j = k === "yukari" ? i - 1 : i + 1; if (g[j]) [g[i], g[j]] = [g[j], g[i]]; }); return renderPlan(); }
     if (k === "cikar") { planDegis(id, (p) => p.g[gi].splice(i, 1)); return renderPlan(); }
     if (k === "kur") return gunKurAc(id, gi);
+    if (k === "hgun") { view.hgun = gi; renderPlan(); const h = document.querySelector(".plharita"); if (h) h.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+    if (k === "hodak") { const m = (view.plPin || [])[i]; if (m && planMap) { planMap.setView(m.getLatLng(), Math.max(planMap.getZoom(), 13)); m.openPopup(); $("plMap").scrollIntoView({ behavior: "smooth", block: "center" }); } return; }
     if (k === "kaydet") { planDegis(id, () => {}); toast(TL("Plan kaydedildi. Tatil planlarım'da seni bekliyor.", "Plan saved. It's waiting in My holiday plans."), 4000); git("#/plan"); return; }
     if (k === "kon") return konumSecAc((kon) => { planDegis(id, (p) => { p.kon = p.kon || []; p.kon[gi] = kon; }); renderPlan(); });
     if (k === "gunekle") { planDegis(id, (p) => { p.kon = p.kon || []; p.kon[p.g.length] = p.kon[p.g.length - 1] || null; p.g.push([]); }); renderPlan(); setTimeout(() => { const s = document.querySelectorAll(".plgun"); s[s.length - 1].scrollIntoView({ behavior: "smooth", block: "center" }); }, 50); return; }
