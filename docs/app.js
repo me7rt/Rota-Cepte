@@ -3246,10 +3246,10 @@
   const ekDa = (ad) => { const k = ad.toLocaleLowerCase("tr"), v = (k.match(/[aıoueiöü]/g) || ["a"]).pop(), n = /\s/.test(k.trim()) && /[ıiuü]$/.test(k) ? "n" : ""; return ad + "'" + n + (!n && /[çfhkpsşt]$/.test(k) ? "t" : "d") + ("aıou".includes(v) ? "a" : "e"); };
   const ekDan = (ad) => { const k = ad.toLocaleLowerCase("tr"), v = (k.match(/[aıoueiöü]/g) || ["a"]).pop(), n = /\s/.test(k.trim()) && /[ıiuü]$/.test(k) ? "n" : ""; return ad + "'" + n + (!n && /[çfhkpsşt]$/.test(k) ? "t" : "d") + ("aıou".includes(v) ? "an" : "en"); };
   const yerPuan = (y) => (y.one ? 1000 : 0) + (y.sl || 0) + (y.f ? 5 : 0);
-  // Son duraktan sonra: yakın olan önde, popüler yer biraz öne çekilir (en fazla 20 km kadar)
-  const yakinPuan = (son, y) => km(son, y) - Math.min(20, (y.one ? 12 : 0) + Math.log2(1 + (y.sl || 0)) * 2.5);
   async function gunKurAc(id, gi0) {
-    let gi = gi0, il = null, ilce = -1, mod = "ilce", goster = 20, adim = "ilce";
+    let gi = gi0, il = null, ilce = -1, mod = "ilce", goster = 20, adim = "ilce", sira = null;
+    // Sıralama: kullanıcı seçmediyse ilk durakta popülerlik, sonrasında yakınlık
+    const siraNe = (son) => sira || (son ? "yakin" : "populer");
     const plan = () => planlar().find((x) => x.id === id);
     const d = document.createElement("div"); d.className = "tanit tam";
     d.innerHTML = `<div class="tkart plsec gkur"><div id="gkUst"></div><div id="gkGovde"></div><div class="tbtn gkalt" id="gkAlt"></div></div>`;
@@ -3276,8 +3276,9 @@
       if (mod === "yakin" && son) r = r.filter((y) => km(son, y) <= 60);
       const merkez = son || (ilce >= 0 ? il.ilceler[ilce] : il);
       r = r.map((y) => ({ y, uz: km(merkez, y), j: baska.get(y.ilS + "|" + y.q) }));
-      if (son) r.sort((a, b) => (a.j != null) - (b.j != null) || yakinPuan(son, a.y) - yakinPuan(son, b.y));
-      else r.sort((a, b) => (a.j != null) - (b.j != null) || yerPuan(b.y) - yerPuan(a.y) || a.uz - b.uz);
+      const gun = (a, b) => (a.j != null) - (b.j != null);
+      if (siraNe(son) === "yakin") r.sort((a, b) => gun(a, b) || a.uz - b.uz);
+      else r.sort((a, b) => gun(a, b) || yerPuan(b.y) - yerPuan(a.y) || a.uz - b.uz);
       return { r, son };
     }
     function ciz() {
@@ -3303,8 +3304,11 @@
       const { r } = aday();
       const ilceAd = ilce >= 0 ? il.ilceler[ilce].ad : il.ad;
       const baslik = son ? TL(`${esc(ekDan(kayitAd(son)))} sonra nereye?`, `Where after ${esc(kayitAd(son))}?`) : TL(`${esc(ekDa(ilceAd))} ilk durağın neresi olsun?`, `First stop in ${esc(ilceAd)}?`);
-      const alt2 = son ? (mod === "yakin" ? TL("Yakından uzağa; popüler yerler biraz öne alınır.", "Nearest first; popular places get a small boost.") : TL(`${esc(ilceAd)} içinde, sana yakından uzağa.`, `In ${esc(ilceAd)}, nearest first.`)) : TL("En popüler yerler en üstte.", "Most popular places first.");
-      govde.innerHTML = `<h2>${baslik}</h2><p>${alt2}</p>
+      const sr = siraNe(son), nereden = son ? esc(ekDan(kayitAd(son))) : ilce >= 0 ? TL(`${esc(ilceAd)} merkezinden`, "") : TL(`${esc(il.ad)} merkezinden`, "");
+      const alt2 = sr === "yakin" ? TL(`${nereden} yakından uzağa sıralı.`, son ? `Nearest to ${esc(kayitAd(son))} first.` : "Nearest first.") : TL("En popüler yerler en üstte.", "Most popular places first.");
+      govde.innerHTML = `<h2>${baslik}</h2>
+        <div class="gksira" role="group" aria-label="${TL("Sıralama", "Sort")}"><span>${TL("Sırala:", "Sort:")}</span><button data-sira="yakin" aria-pressed="${sr === "yakin"}">${ik("navigation", 14)} ${TL("Yakınlık", "Distance")}</button><button data-sira="populer" aria-pressed="${sr === "populer"}">${ik("star", 14)} ${TL("Popülerlik", "Popularity")}</button></div>
+        <p>${alt2}</p>
         <div class="chips gksec">${son ? `<button data-mod="yakin" aria-pressed="${mod === "yakin"}">${ik("navigation", 14)} ${TL("Yakınındakiler", "Nearby")}</button>` : ""}<button data-mod="ilce" aria-pressed="${mod === "ilce"}">${ik("map-pin", 14)} ${esc(ilceAd)}</button><button data-k="ilcesec">${ik("map", 14)} ${TL("Başka ilçe", "Other district")}</button></div>
         <ul class="list plsonuc gkliste">${r.slice(0, goster).map(({ y, uz, j }, i) => `<li><button class="row plsatir gkyer" data-j="${y.j}">${thumb(y.f, y.k)}<span class="rt"><b>${y.one ? `<i class="prone">${ik("star", 12)}</i>` : ""}${esc(adi(y))}</b><small>${esc(y.ilce || il.ad)} · ${son ? TL(`${fmt(uz)} uzakta`, `${fmt(uz)} away`) : fmt(uz)}${j != null ? " · " + TL(`${j + 1}. günde var`, `in day ${j + 1}`) : ""}</small></span><span class="plek">${ik("plus", 18)}</span></button></li>`).join("") || `<li class="empty">${TL("Burada başka yer kalmadı. Başka bir ilçe seçebilirsin.", "No more places here. Try another district.")}</li>`}</ul>
         ${r.length > goster ? `<button class="morebtn" data-k="daha">${T("Daha fazla göster")}</button>` : ""}`;
@@ -3317,6 +3321,7 @@
       if (b.dataset.il) { const x = IDX.ilBy.get(b.dataset.il); planDegis(id, (p) => { p.kon = p.kon || []; p.kon[gi] = { ad: x.ad, alt: "", s: x.s, lat: x.lat, lng: x.lng, t: "il" }; }); return gunHazirla(); }
       if (b.dataset.ilce != null) { ilce = +b.dataset.ilce; mod = "ilce"; adim = "yer"; goster = 20; ciz(); d.querySelector(".tkart").scrollTop = 0; return; }
       if (b.dataset.mod) { mod = b.dataset.mod; goster = 20; return ciz(); }
+      if (b.dataset.sira) { sira = b.dataset.sira; goster = 20; return ciz(); }
       if (k === "ilcesec") { adim = "ilce"; ciz(); d.querySelector(".tkart").scrollTop = 0; return; }
       if (k === "yakin") { mod = "yakin"; adim = "yer"; goster = 20; return ciz(); }
       if (k === "daha") { goster += 20; return ciz(); }
