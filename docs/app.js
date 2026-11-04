@@ -3165,9 +3165,9 @@
         <div class="plalt"><button class="btn plekle" data-p="ekle" data-g="${gi}" ${g.length >= PLAN_DURAK_UST ? "disabled" : ""}>${ik("plus", 18)} ${TL("Yer ekle", "Add a place")}</button>${g.length ? `<a class="btn primary" href="${gunHarita(g)}" target="_blank" rel="noopener">${ik("navigation", 18)} ${TL("Rotayı aç", "Open route")}</a>` : ""}</div></section>`;
     }).join("");
     kutu.innerHTML = `<div class="plust"><button class="chipbtn" data-p="ad">${ik("pencil", 16)} ${TL("Adını değiştir", "Rename")}</button><button class="chipbtn" data-p="paylas">${ik("share-2", 16)} ${TL("Paylaş", "Share")}</button><button class="chipbtn" data-p="sil">${ik("trash", 16)} ${TL("Planı sil", "Delete plan")}</button></div>
-      ${planHaritaHtml(p)}
       ${gunler}
       ${p.g.length < PLAN_GUN_UST ? `<button class="btn plgunekle" data-p="gunekle">${ik("calendar-plus", 18)} ${TL("Gün ekle", "Add a day")}</button>` : ""}
+      ${planHaritaHtml(p)}
       <button class="btn primary plkaydet" data-p="kaydet">${ik("circle-check", 18)} ${TL("Planı kaydet", "Save plan")}</button>
       <p class="tsay">${TL("Planın her değişiklikte bu telefona kendiliğinden de kaydedilir. Rotayı aç, bulunduğun yerden başlayıp o günün duraklarını sırasıyla Google Haritalar'da açar. Mesafeler yaklaşık yol mesafesidir.", "Your plan is also saved on this phone after every change. Open route starts from where you are and opens that day's stops in order in Google Maps. Distances are rough driving estimates.")}</p>`;
     planHaritaCiz(p);
@@ -3190,10 +3190,10 @@
       const yeniGun = hg < 0 && (!i || d[i - 1].gi !== a.gi);
       return `${yeniGun ? `<li class="plhgunbas" style="--c:${GUN_RENK[a.gi % GUN_RENK.length]}">${gunAd(a.gi)}${(p.kon || [])[a.gi] ? " · " + esc(p.kon[a.gi].ad) : ""}</li>` : i ? `<li class="plhara">${ik("arrow-down", 13)} ~${fmt(km(d[i - 1].x, a.x) * 1.3)}</li>` : ""}<li><button class="plhdurak" data-p="hodak" data-i="${i}"><span class="plhno" style="--c:${GUN_RENK[a.gi % GUN_RENK.length]}">${a.no}</span><b>${esc(kayitAd(a.x))}</b><small>${esc(a.x.il)}</small></button></li>`;
     }).join("");
-    return `<section class="plharita"><div class="plhbas"><b>${ik("map", 18)} ${TL("Planın haritası", "Plan map")}</b><small>${TL(`${d.length} durak` + (d.length > 1 ? ` · ~${fmt(top * 1.3)} yol` : ""), `${d.length} stop${d.length === 1 ? "" : "s"}` + (d.length > 1 ? ` · ~${fmt(top * 1.3)} drive` : ""))}</small></div>
+    return `<section class="plharita"><div class="plhbas"><b>${ik("route", 18)} ${TL("Tüm rota", "Whole route")}</b><small>${TL(`${d.length} durak` + (d.length > 1 ? ` · ~${fmt(top * 1.3)} yol` : ""), `${d.length} stop${d.length === 1 ? "" : "s"}` + (d.length > 1 ? ` · ~${fmt(top * 1.3)} drive` : ""))}</small></div>
       ${gunVar.length > 1 ? `<div class="chips plhgun"><button data-p="hgun" data-g="-1" aria-pressed="${hg < 0}">${TL("Tüm plan", "Whole plan")}</button>${gunVar.map((gi) => `<button data-p="hgun" data-g="${gi}" aria-pressed="${hg === gi}" style="--c:${GUN_RENK[gi % GUN_RENK.length]}"><i></i>${gunAd(gi)}</button>`).join("")}</div>` : ""}
       <div id="plMap" class="plmap"></div>
-      <details class="plhliste"${d.length <= 6 ? " open" : ""}><summary>${hg < 0 ? TL("Tüm güzergah, durak durak", "The whole route, stop by stop") : TL(`${gunAd(hg)} güzergahı, durak durak`, `${gunAd(hg)} route, stop by stop`)}</summary><ol>${satir}</ol></details></section>`;
+      <details class="plhliste" open><summary>${hg < 0 ? TL("Tüm güzergah, durak durak", "The whole route, stop by stop") : TL(`${gunAd(hg)} güzergahı, durak durak`, `${gunAd(hg)} route, stop by stop`)}</summary><ol>${satir}</ol></details></section>`;
   }
   function planHaritaCiz(p) {
     if (planMap) { planMap.remove(); planMap = null; }
