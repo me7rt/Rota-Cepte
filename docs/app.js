@@ -2927,7 +2927,8 @@
     const OSM_ATIF = `<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap ${TL("katkıcıları", "contributors")}</a>`;
     m.attributionControl.setPrefix(`<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>`);
     const osm = () => L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: OSM_ATIF });
-    if (HARITA_ANAHTAR) {
+    // Anahtar yalnızca bu adreslerde geçerli; başka yerde (ör. önizleme) "Invalid key" yerine OpenStreetMap
+    if (HARITA_ANAHTAR && /^(me7rt\.github\.io|localhost)$/.test(location.hostname)) {
       // MapTiler çalışmazsa (kota, anahtar hatası) OpenStreetMap'e geç
       let hata = 0;
       const mt = L.tileLayer(`https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=${HARITA_ANAHTAR}`, { maxZoom: 19, attribution: `<a href="https://www.maptiler.com/copyright/" target="_blank" rel="noopener">© MapTiler</a> ${OSM_ATIF}` });
