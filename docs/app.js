@@ -3095,10 +3095,24 @@
     const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
     let zaman = null;
     d.querySelector("#knAra").addEventListener("input", () => { clearTimeout(zaman); zaman = setTimeout(yaz, 120); });
+    // İl seçilince ikinci adım: hangi ilçe? (ya da tüm il)
+    const ilceSor = (k) => {
+      const il = IDX.ilBy.get(k.s); if (!il) { kapat(); return geri(k); }
+      const sira = il.ilceler.map((z) => z).filter((z) => z[3] > 0).sort((a, b) => b[3] - a[3]);
+      son = [k, ...sira.map((z) => ({ ad: z[0], alt: il.ad, s: il.s, lat: z[1], lng: z[2], t: "ilce" }))];
+      d.querySelector("h2").textContent = TL(`${ekDa(il.ad)} hangi ilçe?`, `Which district of ${il.ad}?`);
+      d.querySelector("h2 + p").textContent = TL("Bir ilçe seç ya da tüm ili gez. İlçeyi gün gün de değiştirebilirsin.", "Pick a district or the whole province. You can change it day by day too.");
+      d.querySelector(".plara2").hidden = true; d.querySelector("#knBas").textContent = "";
+      d.querySelector("#knList").innerHTML = son.map((x, i) => `<li><button class="row plsatir" data-i="${i}"><span class="thumb" style="--c:${i ? BOLGE_RENK : "var(--pri)"}">${ik(i ? "map-pinned" : "map", 22)}</span><span class="rt"><b>${i ? esc(x.ad) : TL(`Tüm ${esc(il.ad)}`, `All of ${esc(il.ad)}`)}</b><small>${i ? TL(`${sira[i - 1][3]} gezilecek yer`, `${sira[i - 1][3]} places`) : TL("İlçeyi her gün ayrıca seçerim", "I'll pick a district each day")}</small></span>${OKIK}</button></li>`).join("");
+      d.querySelector(".tkart").scrollTop = 0;
+      ilceAdim = true;
+    };
+    let ilceAdim = false;
     d.addEventListener("click", (e) => {
       if (e.target === d || e.target.closest("[data-k=kapat]")) return kapat();
       const b = e.target.closest("[data-i]"); if (!b || !son[+b.dataset.i]) return;
       const { p: _p, f: _f, k: _k, ...k } = son[+b.dataset.i];
+      if (k.t === "il" && !ilceAdim) return ilceSor(k);
       kapat(); geri(k);
     });
     document.body.appendChild(d);
@@ -3142,7 +3156,6 @@
         ${konDugme(kon, `data-p="kon" data-g="${gi}" aria-label="${TL(`${gi + 1}. gün nerede?`, `Where on day ${gi + 1}?`)}"`)}
         ${uzun ? `<p class="pluyari">${ik("info", 15)} ${TL("Bu günün durakları birbirine uzak. Bir yeri başka güne taşımayı düşünebilirsin.", "This day's stops are far apart. You might move one to another day.")}</p>` : ""}
         ${g.length ? `<ol class="pllist">${durak}</ol>` : ""}
-        <button class="prbtn" data-p="kur" data-g="${gi}">${ik("route", 16)} ${g.length ? TL(`${gi + 1}. günü durak durak sürdür`, `Continue day ${gi + 1} stop by stop`) : TL(`${gi + 1}. günü durak durak kur`, `Build day ${gi + 1} stop by stop`)}</button>
         <div class="plalt"><button class="btn plekle" data-p="ekle" data-g="${gi}" ${g.length >= PLAN_DURAK_UST ? "disabled" : ""}>${ik("plus", 18)} ${TL("Yer ekle", "Add a place")}</button>${g.length ? `<a class="btn primary" href="${gunHarita(g)}" target="_blank" rel="noopener">${ik("navigation", 18)} ${TL("Rotayı aç", "Open route")}</a>` : ""}</div></section>`;
     }).join("");
     kutu.innerHTML = `<div class="plust"><button class="chipbtn" data-p="ad">${ik("pencil", 16)} ${TL("Adını değiştir", "Rename")}</button><button class="chipbtn" data-p="paylas">${ik("share-2", 16)} ${TL("Paylaş", "Share")}</button><button class="chipbtn" data-p="sil">${ik("trash", 16)} ${TL("Planı sil", "Delete plan")}</button></div>
@@ -3155,7 +3168,7 @@
     const k = b.dataset.p, gi = +b.dataset.g, i = +b.dataset.i, id = view && view.id;
     if (k === "yeni") return planYeniAc();
     if (!id) return;
-    if (k === "ekle") return yerSecAc(id, gi);
+    if (k === "ekle") return gunKurAc(id, gi);
     if (k === "yukari" || k === "asagi") { planDegis(id, (p) => { const g = p.g[gi], j = k === "yukari" ? i - 1 : i + 1; if (g[j]) [g[i], g[j]] = [g[j], g[i]]; }); return renderPlan(); }
     if (k === "cikar") { planDegis(id, (p) => p.g[gi].splice(i, 1)); return renderPlan(); }
     if (k === "kur") return gunKurAc(id, gi);
@@ -3223,56 +3236,6 @@
     document.body.appendChild(d);
     if (!eski) parcaYaz();
     setTimeout(() => d.querySelector("#plAd").focus(), 80);
-  }
-  // Bir güne yer ekleme: arama, boşken gideceğim yerler ve o günün/planın yakınındaki öne çıkan yerler
-  async function yerSecAc(id, gi) {
-    await loadAra();
-    const d = document.createElement("div"); d.className = "tanit";
-    d.innerHTML = `<div class="tkart plsec"><h2>${TL(`${gi + 1}. güne yer ekle`, `Add places to day ${gi + 1}`)}</h2>
-      <div class="arakutu plara2"><i class="araik">${ik("search", 20)}</i><input id="plAra" type="search" placeholder="${TL("Yer ya da il ara… (ör. Kapadokya)", "Search a place or province…")}" autocomplete="off" enterkeyhint="search"></div>
-      <p class="tsay" id="plBas"></p><ul class="list plsonuc" id="plSonuc"></ul>
-      <div class="tbtn" style="justify-content:center"><button class="btn primary" data-k="kapat">${TL("Tamam", "Done")}</button></div></div>`;
-    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); renderPlan(); };
-    const plan = () => planlar().find((x) => x.id === id);
-    const icinde = (s, q) => { const p = plan(); return !!p && p.g[gi].some((x) => x.s === s && x.q === q); };
-    const satir = (x, q) => `<li><button class="row plsatir" data-s="${x[2]}" data-j="${x[3]}" aria-pressed="${icinde(x[2], q)}">${x[8] ? thumb({ p: x[8], w: 1e5 }, x[6] || "t") : `<span class="thumb" style="--c:${(CATS[x[6]] || CATS.t).renk}">${icon(x[6] || "t", 20)}</span>`}<span class="rt"><b>${esc(araAd(x))}</b><small>${esc((IDX.ilBy.get(x[2]) || {}).ad || "")}</small></span><span class="plek">${ik("plus", 18)}${ik("check", 18)}</span></button></li>`;
-    // ARA satırlarında q yok; eklenmiş mi kontrolü için il dosyasındaki q'yu kullanırız
-    const qBul = (x) => { const il = IL.get(x[2]); return il && il.yerler[x[3]] ? il.yerler[x[3]].q : null; };
-    function yaz() {
-      const q = sade(d.querySelector("#plAra").value.trim());
-      let r = [], bas = "";
-      if (q.length >= 2) {
-        r = ARA.filter((x) => x[0].includes(q) || x[10].includes(q) || sade((IDX.ilBy.get(x[2]) || {}).ad || "") === q).sort((a, b) => b[11] - a[11] || b[7] - a[7]).slice(0, 40);
-        bas = r.length ? "" : TL("Bu isimde yer bulunamadı.", "No places found.");
-      } else {
-        const p = plan(), kon = p && (p.kon || [])[gi], son = p && (p.g[gi][p.g[gi].length - 1] || (!kon && p.g.flat().slice(-1)[0]));
-        const merkez = son || kon || me;
-        const fv = favs().map((f) => ARA.find((x) => x[2] === f.s && x[1] === f.ad)).filter(Boolean).slice(0, 8);
-        let yakin = [];
-        if (merkez) yakin = ARA.filter((x) => x[7] && x[11] && km(merkez, { lat: x[4], lng: x[5] }) <= 60).sort((a, b) => km(merkez, { lat: a[4], lng: a[5] }) - km(merkez, { lat: b[4], lng: b[5] })).slice(0, 15);
-        r = [...fv, ...yakin.filter((x) => !fv.includes(x))];
-        bas = !r.length ? TL("Aramaya bir yer ya da il adı yaz.", "Type a place or province name.") : fv.length && yakin.length ? TL("Gideceğim yerler ve yakındaki öne çıkanlar", "Your saved places and highlights nearby") : fv.length ? TL("Gideceğim yerler", "Your saved places") : son ? TL("Son durağının yakınındaki öne çıkan yerler", "Highlights near your last stop") : kon ? TL(`${kon.ad} ve çevresinde öne çıkan yerler`, `Highlights in and around ${kon.ad}`) : TL("Yakınındaki öne çıkan yerler", "Highlights near you");
-      }
-      d.querySelector("#plBas").textContent = bas;
-      d.querySelector("#plSonuc").innerHTML = r.map((x) => satir(x, qBul(x))).join("");
-      // q bilgisi için il dosyalarını arka planda yükle, sonra işaretleri tazele
-      const eksik = [...new Set(r.map((x) => x[2]).filter((s) => !IL.has(s)))].slice(0, 6);
-      if (eksik.length) Promise.all(eksik.map((s) => loadIl(s).catch(() => null))).then(() => { for (const b of d.querySelectorAll(".plsatir")) { const il = IL.get(b.dataset.s), y = il && il.yerler[+b.dataset.j]; if (y) b.setAttribute("aria-pressed", icinde(il.s, y.q)); } });
-    }
-    let zaman = null;
-    d.querySelector("#plAra").addEventListener("input", () => { clearTimeout(zaman); zaman = setTimeout(yaz, 120); });
-    d.addEventListener("click", async (e) => {
-      if (e.target === d || e.target.closest("[data-k=kapat]")) return kapat();
-      const b = e.target.closest(".plsatir"); if (!b) return;
-      let il; try { il = await loadIl(b.dataset.s); } catch (x) { return; }
-      const y = il.yerler[+b.dataset.j]; if (!y) return;
-      let eklendi = false, dolu = false;
-      planDegis(id, (p) => { const g = p.g[gi], i = g.findIndex((x) => x.s === y.ilS && x.q === y.q); if (i >= 0) g.splice(i, 1); else if (g.length >= PLAN_DURAK_UST) dolu = true; else { g.push(yerKayit(y)); eklendi = true; p.kon = p.kon || []; if (!p.kon[gi]) p.kon[gi] = { ad: y.ilce || y.il, alt: y.ilce ? y.il : "", s: y.ilS, lat: y.lat, lng: y.lng }; } });
-      if (dolu) { toast(TL(`Bir güne en fazla ${PLAN_DURAK_UST} yer eklenebilir.`, `A day can hold up to ${PLAN_DURAK_UST} places.`)); return; }
-      b.setAttribute("aria-pressed", eklendi);
-    });
-    document.body.appendChild(d);
-    yaz();
   }
   // ---------- v6.6 günü adım adım kur: ilçe seç, yer seç, sonra o yerin yakınından devam et ----------
   // "İzmir'de", "Konya'da", "Kars'ta"; çok kelimeli ve iyelik ekiyle biten adlarda araya n girer: "Kaputaş Plajı'nda"
