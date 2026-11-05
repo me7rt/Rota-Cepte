@@ -1,0 +1,51 @@
+name: Ses örnekleri
+
+on:
+  push:
+    branches: [claude/project-thread-iyhxd3]
+    paths: [.github/workflows/ses.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  ornek:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+      REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+    steps:
+      - name: Örnekleri üret
+        run: |
+          set -e
+          mkdir -p out
+          TR="Galata Kulesi'ne hoş geldin. Bin dört yüz kırk sekiz yılında Cenevizliler tarafından yapılan kule, İstanbul'un en güzel manzaralarından birini sunar. Rivayete göre Hezarfen Ahmed Çelebi buradan kanat takıp Üsküdar'a uçmuştur."
+          EN="Welcome to Galata Tower. Built by the Genoese in thirteen forty-eight, the tower offers one of the finest views of Istanbul. Legend says Hezarfen Ahmed Celebi flew from here to Uskudar with wings."
+          ses() { # dosya dil ses metin
+            curl -sS --fail -o "out/$1.mp3" \
+              -H "Ocp-Apim-Subscription-Key: $KEY" \
+              -H "Content-Type: application/ssml+xml" \
+              -H "X-Microsoft-OutputFormat: audio-24khz-48kbitrate-mono-mp3" \
+              -H "User-Agent: rota-cepte" \
+              --data-binary "<speak version='1.0' xml:lang='$2'><voice name='$3'>$4</voice></speak>" \
+              "https://$REGION.tts.speech.microsoft.com/cognitiveservices/v1"
+            echo "$1 $(stat -c%s out/$1.mp3) bayt"
+          }
+          ses tr-1-emel     tr-TR tr-TR-EmelNeural "$TR"
+          ses tr-2-ahmet    tr-TR tr-TR-AhmetNeural "$TR"
+          ses tr-3-ava      tr-TR en-US-AvaMultilingualNeural "<lang xml:lang='tr-TR'>$TR</lang>"
+          ses tr-4-andrew   tr-TR en-US-AndrewMultilingualNeural "<lang xml:lang='tr-TR'>$TR</lang>"
+          ses en-1-ava      en-US en-US-AvaMultilingualNeural "$EN"
+          ses en-2-andrew   en-US en-US-AndrewMultilingualNeural "$EN"
+          ses en-3-jenny    en-US en-US-JennyNeural "$EN"
+          ses en-4-sonia    en-GB en-GB-SoniaNeural "$EN"
+      - name: Dala yükle
+        run: |
+          cd out
+          git init -q -b ses-ornek
+          git config user.name "Mert Turanlıoğlu"
+          git config user.email "me7rtt@gmail.com"
+          git add . && git commit -qm "Ses örnekleri"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" ses-ornek
