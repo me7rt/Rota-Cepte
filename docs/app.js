@@ -2852,13 +2852,13 @@
   fotoPayBtn.addEventListener("click", () => { if (open) fotoKart(open, fotoPayBtn); });
 
   let tumIl = false, ilSira = "az";
-  // ---------- Sesli rehber: doğal sesle anlatım (Azure ile önceden kaydedildi, GitHub'da il il paketlerde durur) ----------
-  // Dosya: ses-<il>-<dil>/<id>-<dil>-<k|e>.mp3 · id: il | ilce-<sıra> | yerin Wikidata kodu
+  // ---------- Sesli rehber: doğal sesle anlatım (Azure ile önceden kaydedildi, GitHub'da il il klasörlerde durur) ----------
+  // Dosya: ses-kayitlari dalında <il>/<id>-<dil>-<k|e>.mp3 · id: il | ilce-<sıra> | yerin Wikidata kodu
   const SES_AYAR = "gezi-ses-ayar";
   const SES_ADI = { k: { tr: "Ava", en: "Sonia" }, e: { tr: "Andrew", en: "Andrew" } };
   function sesAyar() { let a = {}; try { a = JSON.parse(localStorage.getItem(SES_AYAR)) || {}; } catch (e) {} return { c: a.c === "e" ? "e" : "k", h: [0.9, 1, 1.15].includes(a.h) ? a.h : 1, m: a.m === 15 ? 15 : 30 }; }
   function sesAyarYaz(a) { try { localStorage.setItem(SES_AYAR, JSON.stringify(a)); } catch (e) {} }
-  const sesUrl = (s, id, c) => `https://github.com/me7rt/Rota-Cepte/releases/download/ses-${s}-${DIL === "en" ? "en" : "tr"}/${encodeURIComponent(id)}-${DIL === "en" ? "en" : "tr"}-${c || sesAyar().c}.mp3`;
+  const sesUrl = (s, id, c) => `https://raw.githubusercontent.com/me7rt/Rota-Cepte/ses-kayitlari/${s}/${encodeURIComponent(id)}-${DIL === "en" ? "en" : "tr"}-${c || sesAyar().c}.mp3`;
   const sesSesci = () => SES_ADI[sesAyar().c][DIL === "en" ? "en" : "tr"];
   const SESC = new Audio(); SESC.preload = "none";
   let sesNo = 0;

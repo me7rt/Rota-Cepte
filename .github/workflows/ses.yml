@@ -19,7 +19,8 @@ jobs:
       - id: a
         run: |
           echo "mod=$(jq -r .mod scripts/ses-ayar.json)" >> "$GITHUB_OUTPUT"
-          echo "iller=$(ls docs/data/il | sed 's/.json$//' | jq -R . | jq -sc .)" >> "$GITHUB_OUTPUT"
+          secim=$(jq -c '.iller // empty' scripts/ses-ayar.json)
+          echo "iller=${secim:-$(ls docs/data/il | sed 's/.json$//' | jq -R . | jq -sc .)}" >> "$GITHUB_OUTPUT"
 
   dene:
     needs: hazirla
@@ -56,22 +57,43 @@ jobs:
       IL: ${{ matrix.il }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
-      - name: Seslendir (önceden yüklenenler atlanır)
+      - name: Önceki kayıtları topla (yeniden seslendirilmesin)
         run: |
-          for dil in tr en; do gh release view "ses-$IL-$dil" --json assets -q '.assets[].name' 2>/dev/null || true; done > var.txt
-          echo "zaten var: $(wc -l < var.txt)"
-          node scripts/ses-metin.mjs metin && ATLA=var.txt node scripts/ses-uret.mjs metin out "$IL"
+          mkdir -p "out/$IL"
+          # Dalda zaten olanlar
+          git ls-remote --exit-code origin ses-kayitlari >/dev/null 2>&1 && { git fetch -q --depth=1 --filter=blob:none origin ses-kayitlari; git ls-tree --name-only FETCH_HEAD "$IL/" | sed "s#^$IL/##" > var.txt; } || : > var.txt
+          echo "dalda: $(wc -l < var.txt)"
+          # İlk denemede sürüm sayfalarına yüklenenler: indir (API sınırına takılmaz)
+          for dil in tr en; do
+            gh release view "ses-$IL-$dil" --json assets -q '.assets[].name' 2>/dev/null | while read -r f; do
+              grep -qx "$f" var.txt && continue
+              curl -sSfL -o "out/$IL/$f" "https://github.com/${{ github.repository }}/releases/download/ses-$IL-$dil/$f" || rm -f "out/$IL/$f"
+            done
+          done
+          echo "indirilen: $(ls out/$IL | wc -l)"
+      - name: Seslendir
+        run: node scripts/ses-metin.mjs metin && ATLA=var.txt node scripts/ses-uret.mjs metin out "$IL"
         env:
           AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
           AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
-      - name: Ses paketlerine yükle
+      - name: Ses dalına yükle
         if: always()
+        env:
+          GIT_AUTHOR_NAME: Mert Turanlıoğlu
+          GIT_AUTHOR_EMAIL: me7rtt@gmail.com
+          GIT_COMMITTER_NAME: Mert Turanlıoğlu
+          GIT_COMMITTER_EMAIL: me7rtt@gmail.com
         run: |
-          ad=$(jq -r .ad "docs/data/il/$IL.json")
-          for dil in tr en; do
-            ls out/"$IL"/*-"$dil"-*.mp3 >/dev/null 2>&1 || continue
-            tag="ses-$IL-$dil"
-            gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --prerelease --latest=false \
-              --target main --title "Ses paketi: $ad ($(echo $dil | tr a-z A-Z))" --notes "Rota Cepte sesli rehber kayıtları."
-            gh release upload "$tag" out/"$IL"/*-"$dil"-*.mp3 --clobber
+          ls out/"$IL"/*.mp3 >/dev/null 2>&1 || { echo "yeni kayıt yok"; exit 0; }
+          mkdir dal && cd dal && git init -q && git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}"
+          mkdir "$IL" && mv ../out/"$IL"/*.mp3 "$IL"/
+          # Aynı anda başka iller de yüklüyor: reddedilirse son hali alıp tekrar dene
+          for i in $(seq 1 20); do
+            if git fetch -q --depth=1 --filter=blob:none origin ses-kayitlari 2>/dev/null; then base=$(git rev-parse FETCH_HEAD); git read-tree "$base"; else base=""; git read-tree --empty; fi
+            git add "$IL"
+            tree=$(git write-tree)
+            if [ -n "$base" ]; then c=$(git commit-tree "$tree" -p "$base" -m "Ses kayıtları: $IL"); else c=$(git commit-tree "$tree" -m "Ses kayıtları: $IL"); fi
+            git push -q origin "$c:refs/heads/ses-kayitlari" && { echo "yüklendi ($i. deneme)"; exit 0; }
+            sleep $((RANDOM % 15 + 5))
           done
+          exit 1
