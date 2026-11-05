@@ -3,7 +3,7 @@
 import fs from "node:fs";
 const OUT = "muze-cikti", K = "https://muze.gov.tr"; fs.mkdirSync(OUT, { recursive: true });
 const UA = "RotaCepte-veri/1.0 (+https://me7rt.github.io/Rota-Cepte/)";
-let cerez = "";
+let cerez = "", hata = 0;
 const cerezAl = (r) => { const s = r.headers.getSetCookie ? r.headers.getSetCookie() : []; if (s.length) cerez = [cerez, ...s.map((x) => x.split(";")[0])].filter(Boolean).join("; "); };
 const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
 async function al(u, govde) {
@@ -11,7 +11,8 @@ async function al(u, govde) {
     try {
       const r = await fetch(u, govde ? { method: "POST", headers: { "User-Agent": UA, Cookie: cerez, "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "X-Requested-With": "XMLHttpRequest" }, body: new URLSearchParams(govde), signal: AbortSignal.timeout(40000) } : { headers: { "User-Agent": UA, Cookie: cerez }, signal: AbortSignal.timeout(40000) });
       cerezAl(r); const t = await r.text(); if (r.ok) return t;
-    } catch (e) {}
+      if (hata++ < 6) console.log("HATA", r.status, u, r.headers.get("location") || "", t.slice(0, 300).replace(/\s+/g, " "));
+    } catch (e) { if (hata++ < 6) console.log("HATA", String(e), u); }
     await bekle(1500 * (i + 1));
   }
   return "";
@@ -35,6 +36,8 @@ for (const il of iller) {
 }
 console.log("muze", muzeler.size);
 const liste = [...muzeler.values()]; let i = 0, ilk = true;
+for (const m of liste.slice(0, 3)) { for (const [ad, ek] of [["cerezli", {}], ["cerezsiz", { Cookie: "" }]]) { try { const r = await fetch(m.u, { headers: { "User-Agent": UA, Cookie: cerez, ...ek }, redirect: "manual", signal: AbortSignal.timeout(40000) }); const t = await r.text(); console.log("DENE", ad, r.status, r.headers.get("location") || "", t.length, (t.match(/<title>([^<]*)/) || [])[1]); } catch (e) { console.log("DENE", ad, String(e)); } } }
+if (process.env.SADECE_DENE) process.exit(0);
 // Site sayfa başına ~10 sn yanıt veriyor: 4 istek aynı anda
 async function isci() {
   while (i < liste.length) {
