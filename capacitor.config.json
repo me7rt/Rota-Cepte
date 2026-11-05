@@ -8,5 +8,8 @@
       "smallIcon": "ic_stat_rota",
       "iconColor": "#D13415"
     }
+  },
+  "android": {
+    "useLegacyBridge": true
   }
 }

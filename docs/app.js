@@ -1012,7 +1012,7 @@
   const IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   const HIZ = 0.95; // biraz sakin, anlatıcı gibi
   let dinleNo = 0, konusuyor = false; // dinleNo: durdurulan okumanın geç gelen "bitti" haberini yok saymak için
-  function dinleDurdur() { dinleNo++; if (NTTS) NTTS.stop().catch(() => {}); else if (webSes) speechSynthesis.cancel(); dinleYaz(false); }
+  function dinleDurdur() { dinleNo++; if (typeof sesDur === "function" && !(GM && GM.simdi)) sesDur(); if (NTTS) NTTS.stop().catch(() => {}); else if (webSes) speechSynthesis.cancel(); dinleYaz(false); }
   function dinleYaz(on) { konusuyor = on; const b = $("dDinle"); b.classList.toggle("on", on); b.innerHTML = ik(on ? "square" : "volume-2", 22) + `<span>${on ? T("Durdur") : T("Dinle")}</span>`; }
   // Telefondaki en doğal sesi seç: Premium / geliştirilmiş / doğal sesler öne, robotik ve şaka sesleri (iPhone'daki Albert, Zarvox...) sona
   const ROBOT = /compact|espeak|robot|\b(albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|jester|organ|superstar|trinoids|whisper|wobble|zarvox|junior|ralph|fred|kathy|princess|eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley)\b/;
@@ -1075,12 +1075,20 @@
     }
     if (no === dinleNo) dinleYaz(false);
   }
-  function dinle() {
-    if (!sesVar || !open) return;
+  async function dinle() {
+    if (!open) return;
     if (konusuyor) return dinleDurdur();
+    if (open.q && open.ilS) {
+      const no = ++dinleNo, p = open;
+      dinleYaz(true);
+      const ok = await sesCal(sesUrl(p.ilS, p.q), { bitti: () => { if (no === dinleNo) dinleYaz(false); } });
+      if (ok || no !== dinleNo) return;
+      if (!sesVar) { toast(TL("Ses yüklenemedi. İnternetini kontrol et.", "Couldn't load the voice. Check your connection.")); return dinleYaz(false); }
+    }
+    if (!sesVar) return;
     const metin = DIL === "en" ? $("dText").textContent.replace(/\s*\([^)]*\)/g, "") : okunur($("dText").textContent);
     const cumleler = (adi(open) + ". " + metin).split(/(?<=[.!?])\s+(?=[A-ZÇĞİÖŞÜ])/).map((c) => c.trim()).filter(Boolean);
-    const no = ++dinleNo;
+    const no = dinleNo;
     dinleYaz(true);
     if (NTTS) yerelOku(cumleler, no); else webOku(cumleler, no);
   }
@@ -2245,6 +2253,7 @@
     let son = "istanbul"; try { son = localStorage.getItem("gezi-son-il") || son; } catch (e) {}
     // Bu sürümde yeni: her sürümde güncellenir (yeni, iyileşen, çıkarılan)
     const yeni = [
+      ["headphones", TL("Gezi Modu ve doğal ses", "Tour Mode and natural voice"), TL("Bütün yerler artık doğal bir sesle anlatılıyor, kadın ya da erkek sesi seç. Gezi Modu'nu aç, yürürken yaklaştığın yeri kulağına anlatsın; tatil planın varsa günün rotası ana sayfada seni beklesin.", "Every place is now narrated in a natural voice; choose a female or male narrator. Start Tour Mode and hear about each place as you walk up to it; if you have a holiday plan, today's route waits on the home screen."), ""],
       ["calendar-days", TL("Tatil planı", "Holiday planner"), TL("Kaç gün gideceğini seç, nerede kaç gün kalacağını yaz; günlere yer ekle, sırasını değiştir, her günün rotasını haritada aç ve planını paylaş.", "Choose how many days, set where you'll stay each day, add places to each day, reorder them, open each day's route on the map and share your plan."), "#/plan"],
       ["landmark", "MüzeKart", TL("MüzeKart'ın geçerli olduğu 358 müze ve ören yeri il il: açılış saatleri, kapalı günler, kendi listen ve gezdiklerin.", "The 358 museums and sites where the Museum Pass (MüzeKart) is valid, by province: opening hours, closed days, your own list and the ones you visited."), "#/muzekart"],
       ["compass", TL("Nasıl bir gezi istiyorsun?", "What kind of trip?"), TL("Deniz, tarih, doğa ya da müze: gezi türünü seç, Türkiye'nin dört bir yanından yerleri gör.", "Sea, history, nature or museums: pick a trip type and see places from all over Turkey."), "#/tarz/deniz"],
@@ -2843,9 +2852,259 @@
   fotoPayBtn.addEventListener("click", () => { if (open) fotoKart(open, fotoPayBtn); });
 
   let tumIl = false, ilSira = "az";
+  // ---------- Sesli rehber: doğal sesle anlatım (Azure ile önceden kaydedildi, GitHub'da il il paketlerde durur) ----------
+  // Dosya: ses-<il>-<dil>/<id>-<dil>-<k|e>.mp3 · id: il | ilce-<sıra> | yerin Wikidata kodu
+  const SES_AYAR = "gezi-ses-ayar";
+  const SES_ADI = { k: { tr: "Ava", en: "Sonia" }, e: { tr: "Andrew", en: "Andrew" } };
+  function sesAyar() { let a = {}; try { a = JSON.parse(localStorage.getItem(SES_AYAR)) || {}; } catch (e) {} return { c: a.c === "e" ? "e" : "k", h: [0.9, 1, 1.15].includes(a.h) ? a.h : 1, m: a.m === 15 ? 15 : 30 }; }
+  function sesAyarYaz(a) { try { localStorage.setItem(SES_AYAR, JSON.stringify(a)); } catch (e) {} }
+  const sesUrl = (s, id, c) => `https://github.com/me7rt/Rota-Cepte/releases/download/ses-${s}-${DIL === "en" ? "en" : "tr"}/${encodeURIComponent(id)}-${DIL === "en" ? "en" : "tr"}-${c || sesAyar().c}.mp3`;
+  const sesSesci = () => SES_ADI[sesAyar().c][DIL === "en" ? "en" : "tr"];
+  const SESC = new Audio(); SESC.preload = "none";
+  let sesNo = 0;
+  // Doğal sesi çal; olmazsa (internet yok, kayıt yok) false döner, çağıran telefonun sesine geçer
+  function sesCal(url, olay) {
+    const no = ++sesNo;
+    return new Promise((coz) => {
+      let basladi = false;
+      SESC.onplaying = () => { if (no !== sesNo) return; basladi = true; coz(true); if (olay && olay.bas) olay.bas(); };
+      SESC.onended = () => { if (no === sesNo && olay && olay.bitti) olay.bitti(); };
+      SESC.onerror = () => { if (no !== sesNo) return; if (!basladi) coz(false); else if (olay && olay.bitti) olay.bitti(); };
+      SESC.ontimeupdate = () => { if (no === sesNo && olay && olay.ilerle) olay.ilerle(SESC.currentTime, SESC.duration); };
+      SESC.src = url; SESC.playbackRate = sesAyar().h;
+      SESC.play().catch(() => { if (no === sesNo && !basladi) coz(false); });
+      setTimeout(() => { if (no === sesNo && !basladi) { SESC.pause(); coz(false); } }, navigator.onLine === false ? 10 : 12000);
+    });
+  }
+  function sesDur() { sesNo++; SESC.pause(); SESC.removeAttribute("src"); try { SESC.load(); } catch (e) {} }
+
+  // Ayarlar › Sesli rehber
+  function sesAyarAc() {
+    const d = document.createElement("div"); d.className = "tanit ust";
+    const ciz = () => {
+      const a = sesAyar(), sec = (ad, v, yazi) => `<button data-a="${ad}" data-v="${v}" aria-pressed="${a[ad] === v}">${yazi}</button>`;
+      d.innerHTML = `<div class="tkart gmayar"><span class="temo">${ik("headphones", 34)}</span><h2>${TL("Sesli rehber", "Audio guide")}</h2>
+        <p>${TL("Yerleri doğal bir sesle anlatır. Bir yerin sayfasında “Dinle”ye bas ya da Gezi Modu'nu aç.", "Places are narrated in a natural voice. Tap “Listen” on a place, or start Tour Mode.")}</p>
+        <b class="gmb">${TL("Anlatıcı", "Narrator")}</b><div class="seg">${sec("c", "k", TL("Kadın · ", "Female · ") + SES_ADI.k[DIL === "en" ? "en" : "tr"])}${sec("c", "e", TL("Erkek · ", "Male · ") + SES_ADI.e[DIL === "en" ? "en" : "tr"])}</div>
+        <button class="linkbtn gmdene">${ik("play", 16)} ${TL("Sesi dene", "Try the voice")}</button>
+        <b class="gmb">${TL("Hız", "Speed")}</b><div class="seg">${sec("h", 0.9, TL("Yavaş", "Slow"))}${sec("h", 1, TL("Normal", "Normal"))}${sec("h", 1.15, TL("Hızlı", "Fast"))}</div>
+        <b class="gmb">${TL("Gezi Modu'nda ne zaman anlatsın?", "When should Tour Mode narrate?")}</b><div class="seg">${sec("m", 30, TL("Yaklaşınca (30 m)", "Nearby (30 m)"))}${sec("m", 15, TL("Varınca (15 m)", "On arrival (15 m)"))}</div>
+        <div class="tbtn" style="justify-content:center"><button class="btn primary" data-k="kapat">${TL("Tamam", "Done")}</button></div></div>`;
+    };
+    ciz();
+    d.addEventListener("click", (e) => {
+      const b = e.target.closest("button"); if (!b && e.target !== d) return;
+      if (e.target === d || b.dataset.k === "kapat") { sesDur(); d.classList.add("out"); setTimeout(() => d.remove(), 300); return; }
+      if (b.classList.contains("gmdene")) { const s = (IDX && IDX.iller.find((x) => x.s === "istanbul")) ? "istanbul" : IDX.iller[0].s; sesCal(sesUrl(s, "il")).then((ok) => { if (!ok) toast(TL("Ses yüklenemedi. İnternetini kontrol et.", "Couldn't load the voice. Check your connection.")); }); return; }
+      if (b.dataset.a) { const a = sesAyar(); a[b.dataset.a] = b.dataset.a === "c" ? b.dataset.v : +b.dataset.v; sesAyarYaz(a); if (b.dataset.a === "h") SESC.playbackRate = a.h; ciz(); }
+    });
+    document.body.appendChild(d);
+  }
+
+  // ---------- Ana sayfa: Bugünkü rotan kartı ya da "Etrafımı anlat" ----------
+  // Etkin plan: son 30 günde açılmış, gezilmemiş durağı kalan en son plan. Gün: gezilmemiş durağı olan ilk gün.
+  function etkinPlan() {
+    const git = new Set(gittiklerim().map((x) => x.q));
+    const p = planlar().filter((x) => planSay(x) && Date.now() - (x.u || 0) < 30 * 864e5).sort((a, b) => (b.u || 0) - (a.u || 0))[0];
+    if (!p) return null;
+    const gi = p.g.findIndex((g) => g.some((x) => !git.has(x.q)));
+    if (gi < 0) return null;
+    const g = p.g[gi], sira = g.findIndex((x) => !git.has(x.q));
+    return { p, gi, g, sira, gez: g.filter((x) => git.has(x.q)).length };
+  }
+  function gmKart() {
+    const el = $("gmKart"); if (!el) return;
+    const e = etkinPlan();
+    if (!e) {
+      el.innerHTML = `<button class="ea" data-gm="etraf"><span class="halka"></span><span class="eq">${[14, 26, 36, 22, 30, 16].map((h) => `<i style="height:${h}px"></i>`).join("")}</span><span class="eat"><b>${TL("Etrafımı anlat", "Tell me what's around")}</b><small>${TL("Yürü, yaklaştığın yerleri sesli anlatsın", "Walk, and hear about places as you get near")}</small></span><span class="eabas">${TL("Başlat", "Start")}</span></button>`;
+      return;
+    }
+    const x = e.g[e.sira], kon = (e.p.kon || [])[e.gi], src = foto(x.f, 960), mes = me ? km(me, x) : null;
+    const yuru = mes != null && mes < 5 ? ` · ${Math.max(1, Math.round((mes * 1000) / 80))} ${TL("dk yürüme", "min walk")}` : "";
+    const nok = e.g.map((y, i) => (i ? `<s class="${i <= e.gez ? "ok" : ""}"></s>` : "") + `<i class="${i < e.sira || gittiklerim().some((z) => z.q === y.q) ? "ok" : i === e.sira ? "su" : ""}"></i>`).join("");
+    el.innerHTML = `<div class="gmk"><button class="gmkfoto" data-gm="detay" style="${src ? `background-image:url('${src}')` : `--c:${CATS[x.k] ? CATS[x.k].renk : "var(--pri)"}`}">
+      <span class="gmkchip">${esc(TL("BUGÜNKÜ ROTAN", "TODAY'S ROUTE"))} · ${esc((kon ? kon.ad : e.p.ad) || "")} · ${esc(gunAd(e.gi).toLocaleUpperCase(DIL === "en" ? "en" : "tr"))}</span>
+      <span class="gmkhalka" style="--y:${Math.round((e.gez / e.g.length) * 100)}%"><span>${e.gez}/${e.g.length}</span></span>
+      <span class="gmkalt"><small>${TL("SIRADAKİ DURAK", "NEXT STOP")}</small><b>${esc(kayitAd(x))}</b><em>${ik("map-pin", 14)} ${mes != null ? fmt(mes) + yuru : esc(x.il || "")}</em></span></button>
+      <div class="gmkad"><div class="gmkadim">${nok}</div><div class="gmkbt"><button class="gmkgo" data-gm="plan">${ik("headphones", 19)} ${TL("Gezmeye başla", "Start the tour")}</button><a class="gmkyol" href="https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lng}&travelmode=walking" target="_blank" rel="noopener" aria-label="${TL("Yol tarifi", "Directions")}">${ik("navigation", 20)}</a></div></div></div>`;
+  }
+  document.addEventListener("click", (ev) => {
+    const b = ev.target.closest("[data-gm]"); if (!b || !$("gmKart") || !$("gmKart").contains(b)) return;
+    const e = etkinPlan();
+    if (b.dataset.gm === "etraf") gmAc({ tur: "etraf" });
+    else if (b.dataset.gm === "plan" && e) gmAc({ tur: "plan", liste: e.g.slice(), ad: gunAd(e.gi) });
+    else if (b.dataset.gm === "detay" && e) { const x = e.g[e.sira]; yerAc(x.s, x.q); }
+  });
+  async function yerAc(s, q) { try { const d = await loadIl(s); const p = d.yerler.find((y) => y.q === q); if (p) openDetail(p); } catch (e) {} }
+
+  // ---------- Gezi Modu: yürürken yaklaşılan yeri anlatır ----------
+  const BG = window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() !== "web" && window.Capacitor.Plugins && window.Capacitor.Plugins.BackgroundGeolocation;
+  let GM = null; // { tur, liste, anlatilan:Set, simdi, gecmis:[], konum, izci, kilit }
+  const gmYaricap = (x) => sesAyar().m + (x.k === "d" ? 60 : x.k === "s" ? 20 : 0);
+  // Yakındaki adaylar: plan modunda planın durakları, etraf modunda tüm yerler (arama listesinden)
+  function gmAdaylar() {
+    if (!GM || !GM.konum) return [];
+    let a;
+    if (GM.tur === "plan") a = GM.liste.map((x) => ({ s: x.s, q: x.q, ad: kayitAd(x), k: x.k, f: x.f, lat: x.lat, lng: x.lng }));
+    else {
+      if (!ARA) { loadAra(); return []; }
+      a = [];
+      // Arama listesindeki konum kaba (yaklaşık 100 m): yakındakilerin ilini yükleyip gerçek konumu kullan
+      for (const x of ARA) {
+        if (Math.abs(x[4] - GM.konum.lat) > 0.012 || Math.abs(x[5] - GM.konum.lng) > 0.016) continue;
+        const d = IL.get(x[2]), y = d && d.yerler[x[3]];
+        if (!d) { if (!GM.yukle.has(x[2])) { GM.yukle.add(x[2]); loadIl(x[2]).then(() => gmKontrol()).catch(() => {}); } continue; }
+        if (y) a.push({ s: x[2], j: x[3], q: y.q, ad: araAd(x), k: y.k, f: y.f, lat: y.lat, lng: y.lng });
+      }
+    }
+    a.forEach((x) => (x.m = km(GM.konum, x) * 1000));
+    return a.sort((x, y) => x.m - y.m);
+  }
+  async function gmYerBul(x) {
+    try { const d = await loadIl(x.s); return x.q ? d.yerler.find((y) => y.q === x.q) : d.yerler[x.j]; } catch (e) { return null; }
+  }
+  async function gmAnlat(x, vardi) {
+    const p = await gmYerBul(x); if (!p || !GM) return;
+    GM.anlatilan.add(p.q); GM.simdi = { x, p }; GM.gecmis.push(x);
+    // Plan durağına varıldıysa sessizce "gittim" olarak işaretle (kutlama penceresi yürürken rahatsız etmesin)
+    if (vardi && GM.tur === "plan" && !gittimMi(p)) { const a = gittiklerim(); a.unshift({ q: p.q, s: p.ilS, ad: p.ad, il: [...new Set([p.ilce, p.il].filter(Boolean))].join(", "), k: p.k, f: p.f, t: Date.now() }); try { localStorage.setItem(GIT, JSON.stringify(a)); } catch (e) {} }
+    gmCiz();
+    if ("mediaSession" in navigator) { try { navigator.mediaSession.metadata = new MediaMetadata({ title: adi(p), artist: "Rota Cepte · " + TL("Gezi Modu", "Tour Mode"), artwork: foto(p.f, 512) ? [{ src: foto(p.f, 512), sizes: "512x512" }] : [] }); } catch (e) {} }
+    const ok = await sesCal(sesUrl(p.ilS, p.q), { bas: () => gmCiz(), bitti: () => { if (GM && GM.simdi && GM.simdi.p === p) { GM.simdi = null; gmCiz(); gmKontrol(); } }, ilerle: (t, s) => gmIlerle(t, s) });
+    if (!ok && GM && GM.simdi && GM.simdi.p === p) {
+      // İnternet yoksa telefonun kendi sesiyle oku
+      const metin = DIL === "en" ? p.me || "" : okunur(p.m || "");
+      const cumleler = (adi(p) + ". " + metin).split(/(?<=[.!?])\s+(?=[A-ZÇĞİÖŞÜ])/).filter(Boolean).slice(0, 8);
+      const no = ++dinleNo;
+      if (NTTS) await yerelOku(cumleler, no); else if (webSes) webOku(cumleler, no);
+      if (GM && GM.simdi && GM.simdi.p === p) { GM.simdi = null; gmCiz(); }
+    }
+  }
+  function gmKontrol() {
+    if (!GM || GM.simdi || GM.durdu) return;
+    const x = gmAdaylar().find((y) => !GM.anlatilan.has(y.q || y.s + "|" + y.j) && y.m <= gmYaricap(y));
+    if (x) { GM.anlatilan.add(x.q || x.s + "|" + x.j); gmAnlat(x, true); }
+    else gmCiz();
+  }
+  function gmKonum(lat, lng, acc) {
+    if (!GM) return;
+    GM.konum = { lat, lng, acc };
+    me = { lat, lng, acc };
+    gmKontrol();
+  }
+  async function gmAc(o) {
+    if (GM) gmKapat();
+    dinleDurdur();
+    GM = { tur: o.tur, liste: o.liste || [], ad: o.ad || "", anlatilan: new Set(), gecmis: [], simdi: null, konum: me ? { ...me } : null, yukle: new Set() };
+    if (o.tur === "etraf") loadAra();
+    let el = $("gezi");
+    if (!el) { el = document.createElement("div"); el.id = "gezi"; el.className = "gmy"; document.body.appendChild(el); }
+    el.hidden = false; document.documentElement.classList.add("gm-acik");
+    gmCiz();
+    try {
+      if (BG) {
+        // Android 13+: ekran kapalıyken görünen "Gezi Modu açık" bildirimi için izin
+        if (LN) { try { const iz = await LN.checkPermissions(); if (iz.display === "prompt") await LN.requestPermissions(); } catch (e) {} }
+        GM.izci = await BG.addWatcher({ backgroundTitle: TL("Gezi Modu açık", "Tour Mode is on"), backgroundMessage: TL("Yaklaştığın yerleri anlatıyorum. Bitirmek için uygulamayı aç.", "Narrating places as you get near. Open the app to stop."), requestPermissions: true, stale: false, distanceFilter: 5 },
+          (konum, hata) => {
+            if (hata) { if (hata.code === "NOT_AUTHORIZED") { toast(T("Konum izni verilmedi. Ayarlardan izin verebilirsin.")); gmKapat(); } return; }
+            if (konum) gmKonum(konum.latitude, konum.longitude, konum.accuracy);
+          });
+      } else if (navigator.geolocation) {
+        GM.izci = navigator.geolocation.watchPosition((p) => gmKonum(p.coords.latitude, p.coords.longitude, p.coords.accuracy), (e) => { if (e.code === 1) { toast(T("Konum izni verilmedi. Ayarlardan izin verebilirsin.")); gmKapat(); } }, { enableHighAccuracy: true, maximumAge: 3000, timeout: 20000 });
+        // Tarayıcıda ekran kapanınca konum durur: açık tut
+        if (navigator.wakeLock) navigator.wakeLock.request("screen").then((k) => { if (GM) GM.kilit = k; else k.release(); }).catch(() => {});
+      }
+    } catch (e) { toast(T("Konum bulunamadı, tekrar dene.")); }
+    if ("mediaSession" in navigator) {
+      try {
+        navigator.mediaSession.setActionHandler("pause", () => gmDuraklat());
+        navigator.mediaSession.setActionHandler("play", () => gmDuraklat());
+        navigator.mediaSession.setActionHandler("nexttrack", () => gmSonraki());
+        navigator.mediaSession.setActionHandler("previoustrack", () => gmOnceki());
+      } catch (e) {}
+    }
+    if (GM.konum) gmKontrol();
+  }
+  function gmKapat() {
+    if (!GM) return;
+    const g = GM; GM = null;
+    sesDur(); dinleDurdur();
+    try { if (BG && g.izci) BG.removeWatcher({ id: g.izci }); else if (g.izci != null) navigator.geolocation.clearWatch(g.izci); } catch (e) {}
+    try { if (g.kilit) g.kilit.release(); } catch (e) {}
+    const el = $("gezi"); if (el) { el.hidden = true; el.innerHTML = ""; }
+    document.documentElement.classList.remove("gm-acik");
+    if (!$("home").hidden) gmKart();
+    const n = g.gecmis.length;
+    if (n) toast(TL(`Gezi Modu bitti · ${n} yer dinledin`, `Tour Mode ended · you heard about ${n} places`));
+  }
+  function gmDuraklat() {
+    if (!GM) return;
+    if (GM.simdi && !SESC.paused) { SESC.pause(); GM.durdu = true; }
+    else if (GM.simdi && SESC.src) { SESC.play().catch(() => {}); GM.durdu = false; }
+    else { GM.durdu = !GM.durdu; if (!GM.durdu) gmKontrol(); }
+    gmCiz();
+  }
+  function gmSonraki() {
+    if (!GM) return;
+    const simdi = GM.simdi; sesDur(); dinleDurdur(); GM.simdi = null; GM.durdu = false;
+    // Planda sıradaki durağı, etrafta en yakın anlatılmamış yeri hemen anlat
+    const kal = GM.tur === "plan" ? GM.liste.filter((x) => !GM.anlatilan.has(x.q)).map((x) => ({ ...x, ad: kayitAd(x) })) : gmAdaylar().filter((y) => !GM.anlatilan.has(y.q || y.s + "|" + y.j));
+    const x = kal.find((y) => !simdi || (y.q || y.s + "|" + y.j) !== (simdi.x.q || simdi.x.s + "|" + simdi.x.j));
+    if (x) { GM.anlatilan.add(x.q || x.s + "|" + x.j); gmAnlat(x); } else { toast(TL("Anlatılacak başka yer kalmadı.", "No more places to narrate.")); gmCiz(); }
+  }
+  function gmOnceki() {
+    if (!GM) return;
+    if (GM.simdi && SESC.currentTime > 4) { SESC.currentTime = 0; return; }
+    const i = GM.gecmis.length - (GM.simdi ? 2 : 1), x = GM.gecmis[i];
+    if (x) { sesDur(); dinleDurdur(); GM.simdi = null; GM.gecmis.splice(i); gmAnlat(x); }
+  }
+  function gmIlerle(t, s) {
+    const el = $("gezi"); if (!el || !s || !isFinite(s)) return;
+    const bar = el.querySelectorAll(".gmdalga i"), n = Math.round((t / s) * bar.length);
+    bar.forEach((b, i) => b.classList.toggle("on", i < n));
+    const z = (v) => Math.floor(v / 60) + ":" + String(Math.floor(v % 60)).padStart(2, "0");
+    const a = el.querySelector(".gmzm"); if (a) a.innerHTML = `<span>${z(t)}</span><span>${z(s)}</span>`;
+  }
+  const DALGA = Array.from({ length: 44 }, (_, i) => 8 + Math.round(Math.abs(Math.sin(i * 1.7) + Math.sin(i * 0.6)) * 14));
+  function gmCiz() {
+    const el = $("gezi"); if (!el || !GM) return;
+    const ad = GM.tur === "plan" ? TL(`${GM.ad} rotası`, `${GM.ad} route`) : TL("Etrafımı anlat", "Tell me what's around");
+    const yak = gmAdaylar().filter((y) => !GM.anlatilan.has(y.q || y.s + "|" + y.j)).slice(0, 6);
+    const sp = GM.simdi && GM.simdi.p, hedef = sp || yak[0];
+    const src = hedef ? foto(hedef.f, 960) : "";
+    let orta;
+    if (sp) {
+      orta = `<small class="gms">${TL("ŞİMDİ ANLATIYOR", "NOW PLAYING")} · ${esc(sesSesci().toLocaleUpperCase(DIL === "en" ? "en" : "tr"))}</small><h1>${esc(adi(sp))}</h1>
+        <div class="gmyer">${esc([...new Set([sp.ilce, sp.il].filter(Boolean))].join(", "))}${GM.konum ? " · " + fmt(km(GM.konum, sp)) : ""}</div>
+        <div class="gmdalga">${DALGA.map((h) => `<i style="height:${h}px"></i>`).join("")}</div><div class="gmzm"><span>0:00</span><span></span></div>`;
+    } else if (!GM.konum) {
+      orta = `<small class="gms">${TL("KONUM ARANIYOR", "FINDING YOU")}</small><h1>${TL("Bir saniye…", "One moment…")}</h1><div class="gmyer">${TL("Konumun bulununca yakındaki yerleri anlatmaya başlayacağım.", "I'll start narrating nearby places once your location is found.")}</div>`;
+    } else if (yak[0]) {
+      orta = `<small class="gms">${GM.durdu ? TL("DURAKLATILDI", "PAUSED") : TL("YÜRÜMEYE DEVAM ET", "KEEP WALKING")}</small><h1>${esc(yak[0].ad)}</h1><div class="gmyer">${TL(`${fmt(yak[0].m / 1000)} uzakta · yaklaşınca anlatacağım`, `${fmt(yak[0].m / 1000)} away · I'll narrate when you get close`)}</div>`;
+    } else {
+      orta = `<small class="gms">${TL("YÜRÜMEYE DEVAM ET", "KEEP WALKING")}</small><h1>${TL("Yakında yer yok", "Nothing nearby")}</h1><div class="gmyer">${GM.tur === "plan" ? TL("Planındaki duraklar bitti ya da uzakta.", "Your planned stops are done or far away.") : TL("1 km içinde rehberimizde yer bulunmuyor. Yürümeye devam et.", "There are no places from our guide within 1 km. Keep walking.")}</div>`;
+    }
+    const oynuyor = sp && !SESC.paused;
+    el.innerHTML = `<div class="gmkap" style="${src ? `background-image:url('${src}')` : ""}"><div class="gmust"><span class="gmgl c"><i></i>${esc(ad)}</span><button class="gmgl" data-g="bitir">${TL("Bitir", "End")}</button></div></div>
+      <div class="gmalt">${orta}
+        <div class="gmkont"><button data-g="onceki" aria-label="${TL("Önceki", "Previous")}">${ik("skip-back", 24)}</button><button class="ana" data-g="dur" aria-label="${oynuyor ? TL("Durdur", "Pause") : TL("Devam", "Play")}">${ik(oynuyor || (!sp && !GM.durdu) ? "pause" : "play", 28)}</button><button data-g="sonraki" aria-label="${TL("Sonraki", "Next")}">${ik("skip-forward", 24)}</button></div>
+        ${yak.length ? `<div class="gmyak">${yak.slice(sp ? 0 : 1, sp ? 4 : 5).map((y) => `<button data-g="yak" data-id="${esc(y.q || y.s + "|" + y.j)}">${esc(y.ad)}<em>${fmt(y.m / 1000)}</em></button>`).join("")}</div>` : ""}
+        <div class="gmnot">${BG ? TL("Ekranı kapatabilirsin · kulaklıktan anlatmaya devam eder", "You can lock your screen · narration continues in your headphones") : TL("Ekran açık kalsın · kulaklık önerilir", "Keep the screen on · headphones recommended")}</div></div>`;
+    if (sp && SESC.duration) gmIlerle(SESC.currentTime, SESC.duration);
+  }
+  document.addEventListener("click", (ev) => {
+    const b = ev.target.closest("#gezi [data-g]"); if (!b || !GM) return;
+    const g = b.dataset.g;
+    if (g === "bitir") gmKapat();
+    else if (g === "dur") gmDuraklat();
+    else if (g === "sonraki") gmSonraki();
+    else if (g === "onceki") gmOnceki();
+    else if (g === "yak") { const x = gmAdaylar().find((y) => (y.q || y.s + "|" + y.j) === b.dataset.id); if (x) { sesDur(); dinleDurdur(); GM.simdi = null; GM.anlatilan.add(b.dataset.id); gmAnlat(x); } }
+  });
   function renderHome() {
     if (!IDX) return;
-    mkKutu();
+    mkKutu(); gmKart();
     const q = $("search").value.trim();
     if (q.length >= 2) return renderSearch(q);
     gununKesfi(); sanaOzel(); ayKart(); renderPasOzet(); renderTarzlar(); planAlt();
@@ -3127,7 +3386,7 @@
     renderFacts(p);
     favBtn(p); gitBtn(p); $("dFav").hidden = $("dShare").hidden = $("dGit").hidden = !p.q;
     $("dFotoPay").hidden = !p.q || !foto(p.f, 1280);
-    dinleDurdur(); $("dDinle").hidden = !sesVar;
+    dinleDurdur(); $("dDinle").hidden = !sesVar && !open.q;
     const ip = DIL === "en" ? p.ipe : p.ip;
     $("dTip").hidden = !ip; $("dTip").innerHTML = ip ? `<b>${TL("İpucu:", "Tip:")}</b> ` + esc(ip) : "";
     const ilce = p.ilce && p.ilce !== p.il ? p.ilce : "";
@@ -3805,6 +4064,7 @@
   });
   document.querySelectorAll(".onerbtn").forEach((b) => b.addEventListener("click", yerOner));
   $("dDinle").addEventListener("click", dinle);
+  $("sesBtn").addEventListener("click", sesAyarAc);
   $("gezBtn").addEventListener("click", () => { $("gezList").hidden = !$("gezList").hidden; });
   $("karneBtn").addEventListener("click", karne);
   $("ozetBtn").addEventListener("click", () => yilOzeti());
@@ -3857,6 +4117,7 @@
   if (CapApp && CapApp.addListener) {
     let cikisZamani = 0;
     CapApp.addListener("backButton", (e) => {
+      if (GM) { gmKapat(); return; }
       const modal = document.querySelector(".tanit");
       if (modal) { const k = modal.querySelector('[data-t="gec"],[data-k="kapat"],[data-k="sonra"],[data-k="iptal"]'); if (k) k.click(); else modal.remove(); return; }
       if (!$("sheet").hidden) { closeDetail(); return; }

@@ -21,7 +21,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="vendor/leaflet.css">
 <link rel="preload" href="vendor/font/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=6.6-o11">
+<link rel="stylesheet" href="style.css?v=6.6-o12">
 <style>
 /* Açılış ekranı v6.2: koyu lacivert zemin + yavaş kayan ışık bulutları, Türkiye nokta haritası,
    ışıklı rota ve iğne, uygulama simgesi + yazı, sayan rakamlar, alt kısımda yükleme çizgisi */
@@ -125,6 +125,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
   <div class="arakutu"><i class="araik" data-ik="search"></i><input id="search" type="search" placeholder="Şehir, müze, plaj, antik kent ara…" aria-label="Ara" autocomplete="off" enterkeyhint="search"><button class="arasil" id="araSil" aria-label="Aramayı temizle" hidden><i data-ik="x" data-boy="18"></i></button></div>
   <ul class="list" id="results" hidden></ul>
   <div id="homeMain">
+    <div id="gmKart"></div>
     <div class="ozelgun" id="ozelGun" hidden></div>
     <button class="near" id="nearBtn" hidden>
       <span class="nearik"><i data-ik="navigation" data-boy="22"></i></span>
@@ -156,6 +157,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
     <details class="ayarlar"><summary class="grow"><i data-ik="settings"></i><span><b>Ayarlar ve hakkında</b><small>Dil, tema, sürüm, gizlilik, lisanslar</small></span></summary>
     <button class="grow" id="yeniBtn"><i data-ik="sparkles"></i><span>Bu sürümde neler yeni?</span></button>
     <button class="grow" id="dilBtn"><i data-ik="languages"></i><span id="dilYazi"></span></button>
+    <button class="grow" id="sesBtn"><i data-ik="headphones"></i><span>Sesli rehber</span></button>
     <button class="grow" id="temaBtn"><i data-ik="palette"></i><span id="temaYazi"></span></button>
     <button class="grow" id="bildirimBtn" hidden><i data-ik="bell"></i><span id="bildirimYazi"></span></button>
     <button class="grow" id="anmaBtn" hidden><i data-ik="bell"></i><span id="anmaYazi"></span></button>
@@ -356,9 +358,9 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
 </div>
 
 <script src="vendor/leaflet.js"></script>
-<script src="vendor/lucide.js?v=6.6-o11"></script>
-<script src="i18n.js?v=6.6-o11"></script>
-<script src="app.js?v=6.6-o11"></script>
+<script src="vendor/lucide.js?v=6.6-o12"></script>
+<script src="i18n.js?v=6.6-o12"></script>
+<script src="app.js?v=6.6-o12"></script>
 <script>
 /* Açılış ekranı ve kopya uyarısı · © 2026 Mert Turanlıoğlu */
 (function () {

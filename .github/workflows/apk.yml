@@ -36,6 +36,9 @@ jobs:
           for d in assets/android-bildirim/drawable-*; do mkdir -p "android/app/src/main/res/$(basename $d)"; cp "$d/ic_stat_rota.png" "android/app/src/main/res/$(basename $d)/"; done
           ls android/app/src/main/res/drawable-xxhdpi/ic_stat_rota.png
           npx cap sync android
+          # Gezi Modu: ekran kapalıyken konum bildiriminin simgesi ve kanal adı
+          sed -i 's#</resources>#    <string name="capacitor_background_geolocation_notification_channel_name">Gezi Modu</string>\n    <string name="capacitor_background_geolocation_notification_icon">drawable/ic_stat_rota</string>\n</resources>#' android/app/src/main/res/values/strings.xml
+          grep -q "capacitor_background_geolocation_notification_icon" android/app/src/main/res/values/strings.xml || { echo "Gezi Modu ayari eklenemedi"; exit 1; }
           # Google Play: en az Android 7 (SDK 24), hedef SDK 36
           sed -i 's/minSdkVersion = [0-9]*/minSdkVersion = 24/; s/compileSdkVersion = [0-9]*/compileSdkVersion = 36/; s/targetSdkVersion = [0-9]*/targetSdkVersion = 36/' android/variables.gradle
           printf '\nandroid.suppressUnsupportedCompileSdk=36\n' >> android/gradle.properties
