@@ -65,7 +65,12 @@ jobs:
           echo "dalda: $(wc -l < var.txt)"
           # İlk denemede sürüm sayfalarına yüklenenler: indir (API sınırına takılmaz)
           for dil in tr en; do
-            gh release view "ses-$IL-$dil" --json assets -q '.assets[].name' 2>/dev/null | while read -r f; do
+            # Sürüm sayfası yoksa sorun değil; ama API sınırı doluysa dur, yoksa hepsi boşuna yeniden seslendirilir
+            if ! gh release view "ses-$IL-$dil" --json assets -q '.assets[].name' > rel.txt 2> rel.err; then
+              grep -qi "not found" rel.err || { cat rel.err; echo "GitHub API şu an cevap vermiyor, sonra tekrar dene"; exit 1; }
+              : > rel.txt
+            fi
+            cat rel.txt | while read -r f; do
               grep -qx "$f" var.txt && continue
               curl -sSfL -o "out/$IL/$f" "https://github.com/${{ github.repository }}/releases/download/ses-$IL-$dil/$f" || rm -f "out/$IL/$f"
             done
