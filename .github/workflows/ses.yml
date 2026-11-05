@@ -1,51 +1,77 @@
-name: Ses örnekleri
+name: Sesli rehber
 
 on:
   push:
     branches: [claude/project-thread-iyhxd3]
-    paths: [.github/workflows/ses.yml]
-  workflow_dispatch:
+    paths: [scripts/ses-ayar.json]
 
 permissions:
   contents: write
 
 jobs:
-  ornek:
+  hazirla:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    env:
-      KEY: ${{ secrets.AZURE_SPEECH_KEY }}
-      REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+    outputs:
+      mod: ${{ steps.a.outputs.mod }}
+      iller: ${{ steps.a.outputs.iller }}
     steps:
-      - name: Örnekleri üret
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - id: a
         run: |
-          set -e
-          mkdir -p out
-          TR="Galata Kulesi'ne hoş geldin. Bin dört yüz kırk sekiz yılında Cenevizliler tarafından yapılan kule, İstanbul'un en güzel manzaralarından birini sunar. Rivayete göre Hezarfen Ahmed Çelebi buradan kanat takıp Üsküdar'a uçmuştur."
-          EN="Welcome to Galata Tower. Built by the Genoese in thirteen forty-eight, the tower offers one of the finest views of Istanbul. Legend says Hezarfen Ahmed Celebi flew from here to Uskudar with wings."
-          ses() { # dosya dil ses metin
-            curl -sS --fail -o "out/$1.mp3" \
-              -H "Ocp-Apim-Subscription-Key: $KEY" \
-              -H "Content-Type: application/ssml+xml" \
-              -H "X-Microsoft-OutputFormat: audio-24khz-48kbitrate-mono-mp3" \
-              -H "User-Agent: rota-cepte" \
-              --data-binary "<speak version='1.0' xml:lang='$2'><voice name='$3'>$4</voice></speak>" \
-              "https://$REGION.tts.speech.microsoft.com/cognitiveservices/v1"
-            echo "$1 $(stat -c%s out/$1.mp3) bayt"
-          }
-          ses tr-1-emel     tr-TR tr-TR-EmelNeural "$TR"
-          ses tr-2-ahmet    tr-TR tr-TR-AhmetNeural "$TR"
-          ses tr-3-ava      tr-TR en-US-AvaMultilingualNeural "<lang xml:lang='tr-TR'>$TR</lang>"
-          ses tr-4-andrew   tr-TR en-US-AndrewMultilingualNeural "<lang xml:lang='tr-TR'>$TR</lang>"
-          ses en-1-ava      en-US en-US-AvaMultilingualNeural "$EN"
-          ses en-2-andrew   en-US en-US-AndrewMultilingualNeural "$EN"
-          ses en-3-jenny    en-US en-US-JennyNeural "$EN"
-          ses en-4-sonia    en-GB en-GB-SoniaNeural "$EN"
-      - name: Dala yükle
+          echo "mod=$(jq -r .mod scripts/ses-ayar.json)" >> "$GITHUB_OUTPUT"
+          echo "iller=$(ls docs/data/il | sed 's/.json$//' | jq -R . | jq -sc .)" >> "$GITHUB_OUTPUT"
+
+  dene:
+    needs: hazirla
+    if: needs.hazirla.outputs.mod == 'dene'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - run: node scripts/ses-metin.mjs metin && node scripts/ses-uret.mjs metin out dene
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+      - name: Örnekleri dala yükle
         run: |
           cd out
           git init -q -b ses-ornek
           git config user.name "Mert Turanlıoğlu"
           git config user.email "me7rtt@gmail.com"
-          git add . && git commit -qm "Ses örnekleri"
+          git add . && git commit -qm "Ses denemesi"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" ses-ornek
+
+  hepsi:
+    needs: hazirla
+    if: needs.hazirla.outputs.mod == 'hepsi'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        il: ${{ fromJSON(needs.hazirla.outputs.iller) }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      IL: ${{ matrix.il }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Seslendir (önceden yüklenenler atlanır)
+        run: |
+          for dil in tr en; do gh release view "ses-$IL-$dil" --json assets -q '.assets[].name' 2>/dev/null || true; done > var.txt
+          echo "zaten var: $(wc -l < var.txt)"
+          node scripts/ses-metin.mjs metin && ATLA=var.txt node scripts/ses-uret.mjs metin out "$IL"
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+      - name: Ses paketlerine yükle
+        if: always()
+        run: |
+          ad=$(jq -r .ad "docs/data/il/$IL.json")
+          for dil in tr en; do
+            ls out/"$IL"/*-"$dil"-*.mp3 >/dev/null 2>&1 || continue
+            tag="ses-$IL-$dil"
+            gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --prerelease --latest=false \
+              --target main --title "Ses paketi: $ad ($(echo $dil | tr a-z A-Z))" --notes "Rota Cepte sesli rehber kayıtları."
+            gh release upload "$tag" out/"$IL"/*-"$dil"-*.mp3 --clobber
+          done
