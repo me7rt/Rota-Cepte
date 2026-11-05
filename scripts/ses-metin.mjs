@@ -35,6 +35,7 @@ function trOkunur(t) {
     .replace(/\bMS\b/g, "milattan sonra")
     .replace(/(\d)\s*km²/g, "$1 kilometrekare").replace(/(\d)\s*m²/g, "$1 metrekare").replace(/(\d)\s*m³/g, "$1 metreküp")
     .replace(/(\d)\s*km\b/g, "$1 kilometre").replace(/(\d)\s*cm\b/g, "$1 santimetre").replace(/(\d)\s*m\b/g, "$1 metre").replace(/(\d)\s*ha\b/g, "$1 hektar")
+    .replace(/\s*\d+°[\d′″'".,\s]*[KGNS]\.?,?\s?\d+°[\d′″'".,\s]*[DBEW]\b\.?/g, "")
     .replace(/(\d)\s*°C/g, "$1 derece").replace(/(\d)\s*°/g, "$1 derece")
     .replace(/\byy\.?/g, "yüzyıl").replace(/\bvb\.?/g, "ve benzeri").replace(/\bvs\.?/g, "ve saire").replace(/\bbkz\.?/gi, "")
     .replace(/\bHz\. ?/g, "Hazreti ").replace(/\bDr\. ?/g, "Doktor ").replace(/\bProf\. ?/g, "Profesör ").replace(/\bAv\. ?/g, "Avukat ")
@@ -46,7 +47,7 @@ function enOkunur(t) {
     .replace(/\s*\[[^\]]*\]/g, "")
     .replace(/(\d)\s*km²/g, "$1 square kilometres").replace(/(\d)\s*m²/g, "$1 square metres")
     .replace(/(\d)\s*km\b/g, "$1 kilometres").replace(/(\d)\s*m\b/g, "$1 metres").replace(/(\d)\s*°C/g, "$1 degrees Celsius")
-    .replace(/\bc\. (?=\d)/g, "circa ").replace(/\bBC\b/g, "B.C.").replace(/\bAD (?=\d)/g, "A.D. ")
+    .replace(/\bc\. (?=\d)/g, "circa ").replace(/\s*(at )?\d+°[\d′″'".,\s]*[NS],?\s?\d+°[\d′″'".,\s]*[EW]\b/g, "")
     .replace(/\s*[\n\r]+\s*/g, " ").replace(/\s{2,}/g, " ").replace(/\s+([,.;:])/g, "$1").trim();
 }
 const nokta = (s) => (/[.!?]$/.test(s) ? s : s + ".");
