@@ -46,8 +46,18 @@ async function isci() {
   while (i < liste.length) {
     const m = liste[i++]; const h = await al(m.u);
     if (ilk && h) { fs.writeFileSync(`${OUT}/detay-ornek.html`, h); ilk = false; }
-    const govde = h.split(/<footer/i)[0]; const bas = govde.search(/<h1/i);
-    m.metin = metin(bas > 0 ? govde.slice(bas) : govde).slice(0, 6000);
+    // Bilgilendirme kutusu: açılış/kapanış, kapalı günler, durum; ad ve konum
+    const bilgi = (h.match(/<div class="row museum-info">([\s\S]*?)<hr/) || [])[1] || "";
+    const kutu = [...bilgi.matchAll(/<div class="col-sm-3 divider">([\s\S]*?)<\/div>/g)].map((x) => metin(x[1]));
+    m.adTr = metin((h.match(/class="h1-responsive[^"]*">([\s\S]*?)<\/span>/) || [])[1] || "");
+    const sa = kutu.find((x) => /Saat/.test(x)) || "";
+    m.ac = (sa.match(/Açılış Saati:\s*([\d:.]+)/) || [])[1] || ""; m.kp = (sa.match(/Kapanış Saati:\s*([\d:.]+)/) || [])[1] || "";
+    m.gise = (sa.match(/Gişe Kapanış Saati:\s*([\d:.]+)/) || [])[1] || "";
+    m.saatMetin = sa.replace(/^Açılış\/Kapanış Saatleri\s*/, "").slice(0, 300);
+    m.kapali = (kutu.find((x) => /Kapalı Günler/.test(x)) || "").replace(/^Kapalı Günler\s*/, "").slice(0, 200);
+    m.durum = (bilgi.match(/Durum:\s*([^<]+)/) || [])[1] ? metin(bilgi.match(/Durum:\s*([^<]+)/)[1]) : "";
+    const k = h.match(/daddr=([\d.-]+),([\d.-]+)/); m.konum = k ? [+(+k[1]).toFixed(5), +(+k[2]).toFixed(5)] : null;
+    m.mkVar = /m(ü|&#xFC;)zekart/i.test(h.split(/<footer/i)[0].replace(/<nav[\s\S]*?<\/nav>/gi, ""));
     if (i % 25 === 0) console.log(i, "/", liste.length);
     await bekle(200);
   }
