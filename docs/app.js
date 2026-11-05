@@ -1896,8 +1896,9 @@
   }
   function mkSatir(m, L, G, gq) {
     const ls = L.has(m.i), gz = mkGezdi(m, G, gq);
-    const bilgi = [m.h ? `${ik("clock", 14)} ${esc(m.h)}` : "", `${ik("ticket", 14)} ${m.u ? esc(TL("Bilet ", "Ticket ") + m.u) + " · " : ""}<b class="mkok">${TL("MüzeKart ile ücretsiz", "Free with Museum Pass")}</b>`].filter(Boolean).join("<br>");
-    return `<li class="mkmz${gz ? " gez" : ""}"><div class="mkb"><b>${esc(m.a)}</b>${MK && !view.s && view.f !== "hepsi" ? `<small class="mkil">${esc(IDX.ilBy.get(m.s).ad)}</small>` : ""}<div class="mki">${bilgi}</div>
+    const kapali = m.d && m.d !== "Her gün açık" ? TL(m.d, m.de || m.d) : TL("Her gün açık", "Open every day");
+    const bilgi = [m.h && m.h !== "00.00–00.00" ? `${ik("clock", 14)} ${esc(m.h)} · ${esc(kapali)}` : "", m.x ? `<b class="mkkapali">${esc(TL(m.x, "Note: fully or partly closed, check the official page"))}</b>` : "", `${ik("ticket", 14)} <b class="mkok">${TL("MüzeKart ile ücretsiz", "Free with Museum Pass (MüzeKart)")}</b>`].filter(Boolean).join("<br>");
+    return `<li class="mkmz${gz ? " gez" : ""}"><div class="mkb"><b>${esc(DIL === "en" && m.e ? m.e : m.a)}</b>${MK && !view.s && view.f !== "hepsi" ? `<small class="mkil">${esc(IDX.ilBy.get(m.s).ad)}</small>` : ""}<div class="mki">${bilgi}</div>
       <div class="mkact"><button class="mkc${ls ? " on" : ""}" data-mk="liste" data-i="${esc(m.i)}">${ik(ls ? "check" : "plus", 14)} ${ls ? TL("Listemde", "In my list") : TL("Listeme ekle", "Add to list")}</button><button class="mkc${gz ? " ok" : ""}" data-mk="gez" data-i="${esc(m.i)}"${m.q && gq.has(m.s + "|" + m.q) && !G.has(m.i) ? " disabled" : ""}>${ik(gz ? "circle-check" : "circle", 14)} ${gz ? TL("Gezdim", "Visited") : TL("Gezdim mi?", "Visited?")}</button>${m.q ? `<a class="mkc" href="#/il/${esc(m.s)}/yer/${encodeURIComponent(m.q)}">${TL("Detay", "Details")}</a>` : ""}<a class="mkc" href="${esc("https://muze.gov.tr/muze-detay?" + m.l)}" target="_blank" rel="noopener">${TL("Resmî sayfa", "Official page")}</a></div></div></li>`;
   }
   function mkCiz() {
@@ -2877,6 +2878,7 @@
     if (s.length >= 3) for (const [key, kelime] of ARA_TUR) if (kelime.some((w) => w.startsWith(s) || [w, w + "lar", w + "ler", w + "s", w + "es"].includes(s))) {
       const z = TARZ[key]; res.push({ p: -1, go: `#/tarz/${key}`, k: key === "muze" ? "m" : key === "tarih" ? "t" : "d", ad: z.ad, alt: TL(`Gezi türü · ${ARA ? ARA.filter(z.f).length + " yer" : z.alt}`, `Trip type · ${ARA ? ARA.filter(z.f).length + " places" : z.alt}`) });
     }
+    if ((s.length >= 4 && "muzekart".startsWith(s.replace(/\s+/g, ""))) || (s.length >= 6 && "museum pass".startsWith(s))) res.push({ p: -2, go: "#/muzekart", k: "m", ad: "MüzeKart", alt: TL("Geçerli müze ve ören yerleri, il il", "Museum Pass sites, by province") });
     res.sort((a, b) => a.p - b.p || a.ad.localeCompare(b.ad, "tr"));
     $("homeMain").hidden = true; $("results").hidden = false;
     $("results").innerHTML = res.length
