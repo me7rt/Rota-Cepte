@@ -2253,6 +2253,7 @@
     let son = "istanbul"; try { son = localStorage.getItem("gezi-son-il") || son; } catch (e) {}
     // Bu sürümde yeni: her sürümde güncellenir (yeni, iyileşen, çıkarılan)
     const yeni = [
+      ["car-front", TL("Arabamı, otelimi kaydet", "Save my car or hotel"), TL("İl haritasındaki konum düğmesine bas, arabanı ya da otelini tek tıkla kaydet. Dönerken Yol tarifi'ne bas, Google Haritalar seni doğrudan oraya götürsün.", "Tap the pin button on the city map to save your car or hotel in one tap. On the way back, tap Directions and Google Maps takes you straight there."), ""],
       ["headphones", TL("Gezi Modu ve doğal ses", "Tour Mode and natural voice"), TL("Bütün yerler artık doğal bir sesle anlatılıyor, kadın ya da erkek sesi seç. Gezi Modu'nu aç, yürürken yaklaştığın yeri kulağına anlatsın; tatil planın varsa günün rotası ana sayfada seni beklesin.", "Every place is now narrated in a natural voice; choose a female or male narrator. Start Tour Mode and hear about each place as you walk up to it; if you have a holiday plan, today's route waits on the home screen."), ""],
       ["calendar-days", TL("Tatil planı", "Holiday planner"), TL("Kaç gün gideceğini seç, nerede kaç gün kalacağını yaz; günlere yer ekle, sırasını değiştir, her günün rotasını haritada aç ve planını paylaş.", "Choose how many days, set where you'll stay each day, add places to each day, reorder them, open each day's route on the map and share your plan."), "#/plan"],
       ["landmark", "MüzeKart", TL("MüzeKart'ın geçerli olduğu 358 müze ve ören yeri il il: açılış saatleri, kapalı günler, kendi listen ve gezdiklerin.", "The 358 museums and sites where the Museum Pass (MüzeKart) is valid, by province: opening hours, closed days, your own list and the ones you visited."), "#/muzekart"],
@@ -3297,13 +3298,67 @@
       `<li><button class="row" data-go="#/il/${d.s}/ilce/${i}">${thumb(z.f, "y")}<span class="rt"><b>${esc(z.ad)}</b><small>${z.n ? z.n + TL(" gezilecek yer", " places") : T("İlçe bilgisi")}${z.nuf ? " · " + nf(z.nuf) + TL(" kişi", " people") : ""}</small></span><span class="km" data-lat="${z.lat}" data-lng="${z.lng}">${me ? fmt(km(me, z)) : OKIK}</span></button></li>`).join("");
   }
 
+  // ---------- Park yeri ve otel: tek tıkla kaydet, tek tıkla yol tarifi ----------
+  const PARK = "gezi-park", PARK_TUR = { a: { ik: "car-front", tr: "Arabam", en: "My car" }, o: { ik: "bed", tr: "Otelim", en: "My hotel" } };
+  function parkOku() { try { return JSON.parse(localStorage.getItem(PARK)) || {}; } catch (e) { return {}; } }
+  function parkYaz(v) { try { localStorage.setItem(PARK, JSON.stringify(v)); } catch (e) {} }
+  function parkGit(t) {
+    const x = parkOku()[t]; if (!x) return;
+    // Arabaya dönüş yürüyerek; otel için yolu harita uygulaması seçer
+    disAc(`https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lng}${t === "a" ? "&travelmode=walking" : ""}&dir_action=navigate`);
+  }
+  function parkKaydet(t) {
+    const kaydet = () => {
+      if (!me) return;
+      const v = parkOku(); v[t] = { lat: +me.lat.toFixed(6), lng: +me.lng.toFixed(6), u: Date.now() }; parkYaz(v);
+      parkCiz(); drawPark();
+      toast(t === "a" ? TL("Araban kaydedildi. Dönmek için 🚗 Yol tarifi'ne bas.", "Car saved. Tap 🚗 Directions to get back.") : TL("Otelin kaydedildi. Dönmek için 🏨 Yol tarifi'ne bas.", "Hotel saved. Tap 🏨 Directions to get back."));
+    };
+    if (me) kaydet(); else { toast(TL("Konumun bulunuyor…", "Finding your location…")); startLocation(kaydet); }
+  }
+  function parkSec() {
+    const v = parkOku(), d = document.createElement("div"); d.className = "tanit ust";
+    const satir = (t) => `<button class="parksec" data-p="${t}">${ik(PARK_TUR[t].ik, 22)}<span><b>${t === "a" ? TL("Arabamı kaydet", "Save my car") : TL("Otelimi kaydet", "Save my hotel")}</b><small>${v[t] ? TL("Eski kaydın yerine şu anki konumun yazılır", "Replaces the saved spot with where you are now") : TL("Şu an durduğun yer kaydedilir", "Saves where you are standing now")}</small></span></button>`;
+    const sil = Object.keys(PARK_TUR).filter((t) => v[t]).map((t) => `<button class="linkbtn" data-sil="${t}">${ik("trash", 15)} ${t === "a" ? TL("Araba kaydını sil", "Delete car spot") : TL("Otel kaydını sil", "Delete hotel spot")}</button>`).join("");
+    d.innerHTML = `<div class="tkart parkkart"><h2>${TL("Konumu kaydet", "Save this spot")}</h2>${satir("a")}${satir("o")}${sil ? `<div class="parksil">${sil}</div>` : ""}</div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    d.addEventListener("click", (e) => {
+      const b = e.target.closest("button");
+      if (e.target === d) return kapat();
+      if (!b) return;
+      if (b.dataset.p) { kapat(); parkKaydet(b.dataset.p); }
+      else if (b.dataset.sil) { const x = parkOku(); delete x[b.dataset.sil]; parkYaz(x); parkCiz(); drawPark(); kapat(); toast(TL("Kayıt silindi", "Spot deleted")); }
+    });
+    document.body.appendChild(d);
+  }
+  function parkCiz() {
+    const el = $("parkBar"); if (!el) return;
+    const v = parkOku();
+    el.innerHTML = Object.keys(PARK_TUR).filter((t) => v[t]).map((t) => `<button class="parkgit" data-pg="${t}" aria-label="${t === "a" ? TL("Arabama yol tarifi", "Directions to my car") : TL("Otelime yol tarifi", "Directions to my hotel")}">${ik(PARK_TUR[t].ik, 17)}<span>${TL("Yol tarifi", "Directions")}</span></button>`).join("")
+      + `<button class="parkkay" data-pk="1" aria-label="${TL("Arabamı ya da otelimi kaydet", "Save my car or hotel")}">${ik("map-pin", 19)}</button>`;
+  }
+  let parkKatman = null;
+  function drawPark() {
+    if (!map) return;
+    if (!parkKatman) parkKatman = L.layerGroup().addTo(map);
+    parkKatman.clearLayers();
+    const v = parkOku();
+    for (const t of Object.keys(PARK_TUR)) if (v[t]) L.marker([v[t].lat, v[t].lng], { icon: L.divIcon({ className: "", html: `<div class="parkpin">${ik(PARK_TUR[t].ik, 15)}</div>`, iconSize: [30, 30], iconAnchor: [15, 15] }), title: PARK_TUR[t][DIL === "en" ? "en" : "tr"], zIndexOffset: 900 }).on("click", () => parkGit(t)).addTo(parkKatman);
+  }
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("#parkBar button"); if (!b) return;
+    e.stopPropagation();
+    if (b.dataset.pg) parkGit(b.dataset.pg); else parkSec();
+  });
+
   // ---------- harita ----------
   function ensureMap() {
-    if (map) { setTimeout(() => map.invalidateSize(), 60); return; }
+    if (map) { parkCiz(); setTimeout(() => map.invalidateSize(), 60); return; }
     map = L.map("map", { zoomControl: false, attributionControl: true }).setView([39, 35], 6);
     L.control.zoom({ zoomInTitle: TL("Yakınlaştır", "Zoom in"), zoomOutTitle: TL("Uzaklaştır", "Zoom out") }).addTo(map);
     altlik(map);
     layer = L.layerGroup().addTo(map);
+    drawPark(); parkCiz();
   }
   // Harita altlığı ve zorunlu atıflar (OSM ODbL, MapTiler şartları); bağlantılar dış tarayıcıda açılır
   function altlik(m) {
