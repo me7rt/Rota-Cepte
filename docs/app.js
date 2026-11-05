@@ -2253,7 +2253,7 @@
     let son = "istanbul"; try { son = localStorage.getItem("gezi-son-il") || son; } catch (e) {}
     // Bu sürümde yeni: her sürümde güncellenir (yeni, iyileşen, çıkarılan)
     const yeni = [
-      ["car-front", TL("Arabamı, otelimi kaydet", "Save my car or hotel"), TL("İl haritasındaki konum düğmesine bas, arabanı ya da otelini tek tıkla kaydet. Dönerken Yol tarifi'ne bas, Google Haritalar seni doğrudan oraya götürsün.", "Tap the pin button on the city map to save your car or hotel in one tap. On the way back, tap Directions and Google Maps takes you straight there."), ""],
+      ["car-front", TL("Arabamı, otelimi kaydet", "Save my car or hotel"), TL("Ana sayfadaki “Arabamı / otelimi kaydet” düğmesine bas, durduğun yer kaydedilsin. Dönerken “Arabama dön”e bas, Google Haritalar seni doğrudan oraya götürsün.", "Tap “Save my car / hotel” on the home screen to save where you are. On the way back, tap “Back to car” and Google Maps takes you straight there."), ""],
       ["headphones", TL("Gezi Modu ve doğal ses", "Tour Mode and natural voice"), TL("Bütün yerler artık doğal bir sesle anlatılıyor, kadın ya da erkek sesi seç. Gezi Modu'nu aç, yürürken yaklaştığın yeri kulağına anlatsın; tatil planın varsa günün rotası ana sayfada seni beklesin.", "Every place is now narrated in a natural voice; choose a female or male narrator. Start Tour Mode and hear about each place as you walk up to it; if you have a holiday plan, today's route waits on the home screen."), ""],
       ["calendar-days", TL("Tatil planı", "Holiday planner"), TL("Kaç gün gideceğini seç, nerede kaç gün kalacağını yaz; günlere yer ekle, sırasını değiştir, her günün rotasını haritada aç ve planını paylaş.", "Choose how many days, set where you'll stay each day, add places to each day, reorder them, open each day's route on the map and share your plan."), "#/plan"],
       ["landmark", "MüzeKart", TL("MüzeKart'ın geçerli olduğu 358 müze ve ören yeri il il: açılış saatleri, kapalı günler, kendi listen ve gezdiklerin.", "The 358 museums and sites where the Museum Pass (MüzeKart) is valid, by province: opening hours, closed days, your own list and the ones you visited."), "#/muzekart"],
@@ -2914,6 +2914,7 @@
     return { p, gi, g, sira, gez: g.filter((x) => git.has(x.q)).length };
   }
   function gmKart() {
+    parkCiz();
     const el = $("gmKart"); if (!el) return;
     const e = etkinPlan();
     if (!e) {
@@ -3312,7 +3313,7 @@
       if (!me) return;
       const v = parkOku(); v[t] = { lat: +me.lat.toFixed(6), lng: +me.lng.toFixed(6), u: Date.now() }; parkYaz(v);
       parkCiz(); drawPark();
-      toast(t === "a" ? TL("Araban kaydedildi. Dönmek için 🚗 Yol tarifi'ne bas.", "Car saved. Tap 🚗 Directions to get back.") : TL("Otelin kaydedildi. Dönmek için 🏨 Yol tarifi'ne bas.", "Hotel saved. Tap 🏨 Directions to get back."));
+      toast(t === "a" ? TL("Araban kaydedildi. Dönmek için ana sayfadaki “Arabama dön”e bas.", "Car saved. Tap “Back to car” on the home screen to get back.") : TL("Otelin kaydedildi. Dönmek için ana sayfadaki “Otelime dön”e bas.", "Hotel saved. Tap “Back to hotel” on the home screen to get back."));
     };
     if (me) kaydet(); else { toast(TL("Konumun bulunuyor…", "Finding your location…")); startLocation(kaydet); }
   }
@@ -3332,10 +3333,15 @@
     document.body.appendChild(d);
   }
   function parkCiz() {
-    const el = $("parkBar"); if (!el) return;
-    const v = parkOku();
-    el.innerHTML = Object.keys(PARK_TUR).filter((t) => v[t]).map((t) => `<button class="parkgit" data-pg="${t}" aria-label="${t === "a" ? TL("Arabama yol tarifi", "Directions to my car") : TL("Otelime yol tarifi", "Directions to my hotel")}">${ik(PARK_TUR[t].ik, 17)}<span>${TL("Yol tarifi", "Directions")}</span></button>`).join("")
-      + `<button class="parkkay" data-pk="1" aria-label="${TL("Arabamı ya da otelimi kaydet", "Save my car or hotel")}">${ik("map-pin", 19)}</button>`;
+    const v = parkOku(), var_ = Object.keys(PARK_TUR).filter((t) => v[t]);
+    const git = (t, sinif, yazi) => `<button class="${sinif}" data-pg="${t}" aria-label="${t === "a" ? TL("Arabama yol tarifi", "Directions to my car") : TL("Otelime yol tarifi", "Directions to my hotel")}">${ik(PARK_TUR[t].ik, 18)}<span>${yazi(t)}</span></button>`;
+    const kay = (sinif) => `<button class="${sinif}" data-pk="1" aria-label="${TL("Arabamı ya da otelimi kaydet", "Save my car or hotel")}">${ik("map-pin", 19)}</button>`;
+    const el = $("parkBar");
+    if (el) el.innerHTML = var_.map((t) => git(t, "parkgit", () => TL("Yol tarifi", "Directions"))).join("") + kay("parkkay");
+    const ev = $("parkHome");
+    if (ev) ev.innerHTML = var_.length
+      ? var_.map((t) => git(t, "pev git", (t) => t === "a" ? TL("Arabama dön", "Back to car") : TL("Otelime dön", "Back to hotel"))).join("") + kay("pev kay")
+      : `<button class="pev" data-pk="1">${ik("car-front", 18)}<span>${TL("Arabamı / otelimi kaydet", "Save my car / hotel")}</span>${ik("bed", 18)}</button>`;
   }
   let parkKatman = null;
   function drawPark() {
@@ -3346,7 +3352,7 @@
     for (const t of Object.keys(PARK_TUR)) if (v[t]) L.marker([v[t].lat, v[t].lng], { icon: L.divIcon({ className: "", html: `<div class="parkpin">${ik(PARK_TUR[t].ik, 15)}</div>`, iconSize: [30, 30], iconAnchor: [15, 15] }), title: PARK_TUR[t][DIL === "en" ? "en" : "tr"], zIndexOffset: 900 }).on("click", () => parkGit(t)).addTo(parkKatman);
   }
   document.addEventListener("click", (e) => {
-    const b = e.target.closest("#parkBar button"); if (!b) return;
+    const b = e.target.closest("#parkBar button, #parkHome button"); if (!b) return;
     e.stopPropagation();
     if (b.dataset.pg) parkGit(b.dataset.pg); else parkSec();
   });
