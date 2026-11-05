@@ -2263,17 +2263,17 @@
     const isik = g.createRadialGradient(W * 0.85, 120, 0, W * 0.85, 120, 700); isik.addColorStop(0, "rgba(245,181,68,.35)"); isik.addColorStop(1, "rgba(245,181,68,0)");
     g.fillStyle = isik; g.fillRect(0, 0, W, H);
     g.textAlign = "center"; g.fillStyle = "#fff";
-    try { const ik = new Image(); ik.src = "icon-192.png"; await ik.decode(); g.save(); g.beginPath(); g.roundRect(W / 2 - 150, 92, 64, 64, 16); g.clip(); g.drawImage(ik, W / 2 - 150, 92, 64, 64); g.restore(); } catch (e) {}
-    g.font = F(800, 46); g.textAlign = "left"; g.fillText("Rota Cepte", W / 2 - 70, 140); g.textAlign = "center";
-    g.font = F(800, 96); g.fillText(TL("Gezi Karnem", "My Travel Card"), W / 2, 300);
+    try { const ik = new Image(); ik.src = "icon-192.png"; await ik.decode(); g.save(); g.beginPath(); g.roundRect(W / 2 - 150, 232, 64, 64, 16); g.clip(); g.drawImage(ik, W / 2 - 150, 232, 64, 64); g.restore(); } catch (e) {}
+    g.font = F(800, 46); g.textAlign = "left"; g.fillText("Rota Cepte", W / 2 - 70, 280); g.textAlign = "center";
+    g.font = F(800, 90); g.fillText(TL("Gezi Karnem", "My Travel Card"), W / 2, 400);
     const iller = new Set(a.map((x) => x.s)).size;
-    g.textAlign = "left"; g.font = F(800, 230); const wN = g.measureText(String(iller)).width;
+    g.textAlign = "left"; g.font = F(800, 200); const wN = g.measureText(String(iller)).width;
     g.font = F(700, 90); const w2 = g.measureText("/ 81").width, x0 = (W - wN - 24 - w2) / 2;
-    g.font = F(800, 230); g.fillStyle = "#f5b544"; g.fillText(String(iller), x0, 540);
-    g.font = F(700, 90); g.fillStyle = "rgba(255,255,255,.75)"; g.fillText("/ 81", x0 + wN + 24, 540); g.textAlign = "center";
-    g.font = F(600, 44); g.fillStyle = "#fff"; g.fillText(TL("ili gezdim", "provinces visited"), W / 2, 620);
+    g.font = F(800, 200); g.fillStyle = "#f5b544"; g.fillText(String(iller), x0, 600);
+    g.font = F(700, 90); g.fillStyle = "rgba(255,255,255,.75)"; g.fillText("/ 81", x0 + wN + 24, 600); g.textAlign = "center";
+    g.font = F(600, 44); g.fillStyle = "#fff"; g.fillText(TL("ili gezdim", "provinces visited"), W / 2, 670);
     // harita
-    const [bx, by, bw, bh] = HARITA_KUTU, olc = 980 / bw, ox = (W - bw * olc) / 2, oy = 700;
+    const [bx, by, bw, bh] = HARITA_KUTU, olc = 980 / bw, ox = (W - bw * olc) / 2, oy = 720;
     g.save(); g.translate(ox, oy); g.scale(olc, olc); g.translate(-bx, -by);
     for (const [s, d] of Object.entries(HARITA || {})) {
       const o = HARITA_ORAN.get(s) || 0, p = new Path2D(d);
@@ -2284,14 +2284,14 @@
     // sayılar
     const R = rozetler(), rk = R.filter((x) => x.tamam);
     const kutu = (x, sayi, yazi) => {
-      g.fillStyle = "rgba(255,255,255,.1)"; g.beginPath(); g.roundRect(x - 230, 1300, 460, 220, 36); g.fill();
-      g.fillStyle = "#fff"; g.font = F(800, 96); g.fillText(sayi, x, 1420); g.font = F(600, 38); g.fillStyle = "rgba(255,255,255,.8)"; g.fillText(yazi, x, 1478);
+      g.fillStyle = "rgba(255,255,255,.1)"; g.beginPath(); g.roundRect(x - 230, 1200, 460, 200, 36); g.fill();
+      g.fillStyle = "#fff"; g.font = F(800, 96); g.fillText(sayi, x, 1310); g.font = F(600, 38); g.fillStyle = "rgba(255,255,255,.8)"; g.fillText(yazi, x, 1368);
     };
     kutu(W / 2 - 255, String(a.length), TL("yer gördüm", "places seen"));
     kutu(W / 2 + 255, `${rk.length}/${R.length}`, TL("rozet", "badges"));
-    if (rk.length) { g.font = F(400, 64); g.fillStyle = "#fff"; g.fillText(rk.slice(0, 8).map((x) => x.e).join(" "), W / 2, 1640); }
-    g.fillStyle = "#f5b544"; sigdir(g, T("Yol senin, rotan cepte!"), W / 2, 1770, W - 100, (px) => F(800, px), 50);
-    g.fillStyle = "rgba(255,255,255,.75)"; g.font = F(600, 36); g.fillText(TL("Sen de gez: me7rt.github.io/Rota-Cepte", "Explore too: me7rt.github.io/Rota-Cepte"), W / 2, 1835);
+    if (rk.length) { g.font = F(400, 64); g.fillStyle = "#fff"; g.fillText(rk.slice(0, 8).map((x) => x.e).join(" "), W / 2, 1490); }
+    g.fillStyle = "#f5b544"; sigdir(g, T("Yol senin, rotan cepte!"), W / 2, 1580, W - 100, (px) => F(800, px), 50);
+    g.fillStyle = "rgba(255,255,255,.75)"; g.font = F(600, 36); g.fillText(TL("Sen de gez: me7rt.github.io/Rota-Cepte", "Explore too: me7rt.github.io/Rota-Cepte"), W / 2, 1640);
     const url = c.toDataURL("image/png");
     // önizleme + paylaş
     const d = document.createElement("div"); d.className = "tanit";
