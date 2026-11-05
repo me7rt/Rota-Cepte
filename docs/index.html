@@ -21,7 +21,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="vendor/leaflet.css">
 <link rel="preload" href="vendor/font/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=6.6-o9">
+<link rel="stylesheet" href="style.css?v=6.6-o10">
 <style>
 /* Açılış ekranı v6.2: koyu lacivert zemin + yavaş kayan ışık bulutları, Türkiye nokta haritası,
    ışıklı rota ve iğne, uygulama simgesi + yazı, sayan rakamlar, alt kısımda yükleme çizgisi */
@@ -122,50 +122,38 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
 </header>
 
 <main id="home" class="view">
-  <div class="arakutu"><i class="araik" data-ik="search"></i><input id="search" type="search" placeholder="İl, ilçe ya da yer ara… (ör. Uşak)" aria-label="Ara" autocomplete="off" enterkeyhint="search"><button class="arasil" id="araSil" aria-label="Aramayı temizle" hidden><i data-ik="x" data-boy="18"></i></button></div>
+  <div class="arakutu"><i class="araik" data-ik="search"></i><input id="search" type="search" placeholder="Şehir, müze, plaj, antik kent ara…" aria-label="Ara" autocomplete="off" enterkeyhint="search"><button class="arasil" id="araSil" aria-label="Aramayı temizle" hidden><i data-ik="x" data-boy="18"></i></button></div>
   <ul class="list" id="results" hidden></ul>
   <div id="homeMain">
     <div class="ozelgun" id="ozelGun" hidden></div>
-    <button class="near" id="nearBtn">
+    <button class="near" id="nearBtn" hidden>
       <span class="nearik"><i data-ik="navigation" data-boy="22"></i></span>
       <span class="neartxt"><b>Yakınımdaki yerler</b>
       <small id="nearSub">Konumunu aç, sana en yakın gezilecek yerleri sıralayalım</small></span>
       <i class="nearok" data-ik="chevron-right"></i>
     </button>
-    <button class="near yolbtn" id="yolBtn">
-      <span class="nearik"><i data-ik="car-front" data-boy="22"></i></span>
-      <span class="neartxt"><b>Yol üstü keşif</b>
-      <small>Yola mı çıkıyorsun? İki il seç, yol boyunca mola yerlerini bulalım</small></span>
-      <i class="nearok" data-ik="chevron-right"></i>
-    </button>
-    <button class="near yolbtn planbtn" id="planBtn">
-      <span class="nearik"><i data-ik="calendar-plus" data-boy="22"></i></span>
-      <span class="neartxt"><b>Tatilini planla</b>
-      <small id="planSub">Gün gün kendi rotanı yap, gideceğin yerleri sen seç</small></span>
-      <i class="nearok" data-ik="chevron-right"></i>
-    </button>
-    <section class="tarzsec"><h2 class="sec">Nasıl bir gezi istiyorsun?</h2><div class="tarzlar" id="tarzlar"></div></section>
-    <div class="ikili">
-      <button class="mini" id="kartBtn"><span class="miniik"><i data-ik="shuffle" data-boy="22"></i></span><b>Nereye gitsem?</b><small>Kartları kaydır, beğendiğini listene at</small></button>
-      <button class="mini" id="kacBtn"><span class="miniik"><i data-ik="calendar-days" data-boy="22"></i></span><b>Hafta sonu kaçamağı</b><small>Arabayla birkaç saatlik iller</small></button>
+    <div class="ikili arac">
+      <button class="mini" id="yolBtn"><span class="miniik"><i data-ik="car-front" data-boy="22"></i></span><b>Yol üstü keşif</b></button>
+      <button class="mini" id="planBtn"><span class="miniik"><i data-ik="calendar-plus" data-boy="22"></i></span><b>Tatilini planla</b><small id="planSub"></small></button>
+      <button class="mini" id="kartBtn"><span class="miniik"><i data-ik="shuffle" data-boy="22"></i></span><b>Nereye gitsem?</b></button>
+      <button class="mini" id="kacBtn"><span class="miniik"><i data-ik="calendar-days" data-boy="22"></i></span><b>Hafta sonu kaçamağı</b></button>
     </div>
-    <button class="near yolbtn oyunbtn" id="oyunBtn">
-      <span class="nearik"><i data-ik="binoculars" data-boy="22"></i></span>
-      <span class="neartxt"><b>Hangi ilde?</b>
-      <small id="oyunSub">Fotoğrafa bak, ili tahmin et</small></span>
-      <i class="nearok" data-ik="chevron-right"></i>
-    </button>
+    <section class="tarzsec"><h2 class="sec">Nasıl bir gezi istiyorsun?</h2><div class="tarzlar" id="tarzlar"></div></section>
+    <button class="mkbox" id="mkBtn" hidden><span class="mkcoin" id="mkCoin"></span><span class="mktxt"><b>MüzeKart</b><small id="mkSub"></small><i class="mkbar"><i id="mkBar"></i></i></span><i data-ik="chevron-right"></i></button>
     <div id="gunun"></div>
     <section class="ozel" id="ozelSec" hidden><div class="ozbas"><span class="ozik"><i data-ik="sparkles" data-boy="20"></i></span><span class="oztxt"><b>Sana özel</b><small id="ozelNeden"></small></span></div><div class="ozkartlar" id="ozelKart"></div></section>
     <div id="pasOzet" hidden></div>
     <section class="kesfet"><h2 class="sec">Keşfet</h2><div class="mevsim" id="mevsim"></div><div class="tchips" id="temaChips"></div></section>
     <section id="rotaSec" hidden><h2 class="sec">Hazır rotalar</h2><div class="rkartlar" id="rotaKart"></div></section>
-    <h2 class="sec">81 il</h2>
-    <ul class="ils" id="ilGrid"><li class="empty">Yükleniyor…</li></ul>
+    <h2 class="sec" id="ilBaslik">Öne çıkan iller</h2>
+    <div class="ilsira" id="ilSira" hidden><button class="chip on" data-sira="az">A–Z</button><button class="chip" data-sira="plaka">Plaka</button></div>
+    <ul class="ils yatay" id="ilGrid"><li class="empty">Yükleniyor…</li></ul>
+    <button class="tumil" id="tumIlBtn">Tüm iller (81)</button>
   </div>
   <div class="grup">
     <button class="grow onerbtn"><i data-ik="map-pin-plus"></i><span>Burada olmayan bir yer mi biliyorsun? <b>Öner</b></span></button>
     <button class="grow" id="paylasBtn"><i data-ik="share-2"></i><span>Rota Cepte'yi arkadaşlarına öner</span></button>
+    <details class="ayarlar"><summary class="grow"><i data-ik="settings"></i><span><b>Ayarlar ve hakkında</b><small>Dil, tema, sürüm, gizlilik, lisanslar</small></span></summary>
     <button class="grow" id="yeniBtn"><i data-ik="sparkles"></i><span>Bu sürümde neler yeni?</span></button>
     <button class="grow" id="dilBtn"><i data-ik="languages"></i><span id="dilYazi"></span></button>
     <button class="grow" id="temaBtn"><i data-ik="palette"></i><span id="temaYazi"></span></button>
@@ -174,6 +162,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
     <a class="grow" href="gizlilik.html"><i data-ik="shield-check"></i><span>Gizlilik</span></a>
     <a class="grow" href="lisanslar.html"><i data-ik="copyright"></i><span>Kaynaklar ve lisanslar</span></a>
     <a class="grow" href="kosullar.html"><i data-ik="scale"></i><span>Kullanım koşulları</span></a>
+    </details>
   </div>
   <p class="credit" id="ver"></p>
   <p class="credit">Hazırlayan: <b>Mert Turanlıoğlu</b><br>© 2026 Mert Turanlıoğlu · Tüm hakları saklıdır<br>Fotoğraflar ve Vikipedi metinleri kendi lisanslarıyla kullanılır.</p>
@@ -274,6 +263,12 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
     <div id="pasSira"></div>
     <button class="btn primary ppay" id="pasPay" hidden><i data-ik="share-2" data-boy="18"></i> Pasaportumu paylaş</button>
   </section>
+  <button class="near yolbtn oyunbtn" id="oyunBtn">
+    <span class="nearik"><i data-ik="binoculars" data-boy="22"></i></span>
+    <span class="neartxt"><b>Hangi ilde?</b>
+    <small id="oyunSub">Fotoğrafa bak, ili tahmin et</small></span>
+    <i class="nearok" data-ik="chevron-right"></i>
+  </button>
   <h2 class="sec">Rozetler</h2>
   <p class="tsay">Kazandığın rozetler: <b id="rozetSay"></b>. Bir yerin sayfasında "Buraya gittim" dedikçe yenileri açılır.</p>
   <button class="gezbtn rozetbtn" id="rozetBtn" hidden></button>
@@ -360,9 +355,9 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
 </div>
 
 <script src="vendor/leaflet.js"></script>
-<script src="vendor/lucide.js?v=6.6-o9"></script>
-<script src="i18n.js?v=6.6-o9"></script>
-<script src="app.js?v=6.6-o9"></script>
+<script src="vendor/lucide.js?v=6.6-o10"></script>
+<script src="i18n.js?v=6.6-o10"></script>
+<script src="app.js?v=6.6-o10"></script>
 <script>
 /* Açılış ekranı ve kopya uyarısı · © 2026 Mert Turanlıoğlu */
 (function () {

@@ -49,6 +49,9 @@
     "Konumumu kullan": "Use my location", "Konum kapalı": "Location off", "Konum açık": "Location on", "Konum aranıyor…": "Finding location…",
     // ana sayfa
     "İl, ilçe ya da yer ara… (ör. Uşak)": "Search a province, district or place… (e.g. Cappadocia)",
+    "Şehir, müze, plaj, antik kent ara…": "Search a city, museum, beach, ancient site…",
+    "Öne çıkan iller": "Featured provinces", "Tüm iller (81)": "All provinces (81)", "Tüm iller": "All provinces", "Daha az göster": "Show less", "Plaka": "Plate no.",
+    "Ayarlar ve hakkında": "Settings and about", "Dil, tema, sürüm, gizlilik, lisanslar": "Language, theme, version, privacy, licences",
     "Aramayı temizle": "Clear search",
     "Yakınımdaki yerler": "Places near me",
     "Konumunu aç, sana en yakın gezilecek yerleri sıralayalım": "Turn on location to see the nearest places to visit",

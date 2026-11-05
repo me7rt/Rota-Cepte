@@ -1294,6 +1294,13 @@
     doga: { ad: TL("Doğa & manzara", "Nature & views"), alt: TL("Şelale, göl, kanyon", "Waterfalls, lakes, canyons"), e: "mountain", renk: "var(--k-d)", f: (x) => x[6] === "d" && !denizMi(x) },
     muze: { ad: TL("Müze", "Museums"), alt: TL("Arkeoloji, kent, sanat", "Archaeology, city, art"), e: "landmark", renk: "var(--k-m)", f: (x) => x[6] === "m" }
   };
+  // Aramada tür kelimeleri (Türkçe + İngilizce, sade yazımla): "plaj", "beach", "museum"…
+  const ARA_TUR = [
+    ["deniz", ["plaj", "sahil", "deniz", "koy", "ada", "beach", "sea", "coast", "bay", "island"]],
+    ["tarih", ["tarih", "antik", "kale", "oren", "harabe", "cami", "kilise", "history", "historic", "ancient", "ruin", "castle", "mosque", "church"]],
+    ["doga", ["doga", "selale", "gol", "kanyon", "magara", "yayla", "manzara", "nature", "waterfall", "lake", "canyon", "cave", "view"]],
+    ["muze", ["muze", "museum", "sanat", "art", "galeri", "gallery"]]
+  ];
   function renderTarzlar() {
     $("tarzlar").innerHTML = Object.entries(TARZ).map(([k, z]) =>
       `<button class="tarz" data-go="#/tarz/${k}" style="--c:${z.renk}"><span class="tarzik">${ik(z.e, 22)}</span><b>${esc(z.ad)}</b><small>${esc(z.alt)}</small></button>`).join("");
@@ -2733,14 +2740,24 @@
   $("dShare").after(fotoPayBtn);
   fotoPayBtn.addEventListener("click", () => { if (open) fotoKart(open, fotoPayBtn); });
 
+  let tumIl = false, ilSira = "az";
   function renderHome() {
     if (!IDX) return;
     const q = $("search").value.trim();
     if (q.length >= 2) return renderSearch(q);
     gununKesfi(); sanaOzel(); ayKart(); renderPasOzet(); renderTarzlar(); planAlt();
     $("results").hidden = true; $("homeMain").hidden = false;
-    const iller = IDX.iller.slice();
-    if (me) iller.sort((a, b) => km(me, a) - km(me, b));
+    let iller = IDX.iller.slice();
+    $("ilGrid").classList.toggle("yatay", !tumIl); $("ilSira").hidden = !tumIl;
+    $("ilBaslik").textContent = tumIl ? T("Tüm iller") : T("Öne çıkan iller");
+    $("tumIlBtn").textContent = tumIl ? T("Daha az göster") : T("Tüm iller (81)");
+    if (tumIl) {
+      if (ilSira === "plaka") iller.sort((a, b) => (+a.plaka || 0) - (+b.plaka || 0));
+      else iller.sort((a, b) => a.ad.localeCompare(b.ad, "tr"));
+    } else {
+      iller.sort((a, b) => me ? km(me, a) - km(me, b) : b.n - a.n);
+      iller = iller.slice(0, 10);
+    }
     $("ilGrid").innerHTML = iller.map((il) =>
       `<li><button class="ilcard" data-go="#/il/${il.s}">${thumb(il.f, "s", 500, "cover")}<span class="ilname"><b>${esc(il.ad)}</b><small>${me ? fmt(km(me, il)) + " · " : ""}${il.n} ${TL("yer", "places")} · ${il.ilceler.length} ${TL("ilçe", "districts")}</small></span></button></li>`).join("");
   }
@@ -2756,8 +2773,11 @@
       });
     }
     if (ARA) {
-      for (const [b, ad, ils, j, , , k, , fp, en, be] of ARA) if (b.includes(s) || (DIL === "en" && be.includes(s))) res.push({ p: b.startsWith(s) || (DIL === "en" && be.startsWith(s)) ? 2 : 5, yer: `${ils}|${j}`, k: CATS[k] ? k : "t", fp, ad: DIL === "en" ? en : ad, alt: [(IDX.ilBy.get(ils) || {}).ad, CATS[k] && CATS[k].ad].filter(Boolean).join(" · ") });
+      for (const [b, ad, ils, j, , , k, , fp, en, be] of ARA) if (b.includes(s) || (be && be.includes(s))) res.push({ p: b.startsWith(s) || (be && be.startsWith(s)) ? 2 : 5, yer: `${ils}|${j}`, k: CATS[k] ? k : "t", fp, ad: DIL === "en" ? en : ad, alt: [(IDX.ilBy.get(ils) || {}).ad, CATS[k] && CATS[k].ad].filter(Boolean).join(" · ") });
     } else loadAra();
+    if (s.length >= 3) for (const [key, kelime] of ARA_TUR) if (kelime.some((w) => w.startsWith(s) || [w, w + "lar", w + "ler", w + "s", w + "es"].includes(s))) {
+      const z = TARZ[key]; res.push({ p: -1, go: `#/tarz/${key}`, k: key === "muze" ? "m" : key === "tarih" ? "t" : "d", ad: z.ad, alt: TL(`Gezi türü · ${ARA ? ARA.filter(z.f).length + " yer" : z.alt}`, `Trip type · ${ARA ? ARA.filter(z.f).length + " places" : z.alt}`) });
+    }
     res.sort((a, b) => a.p - b.p || a.ad.localeCompare(b.ad, "tr"));
     $("homeMain").hidden = true; $("results").hidden = false;
     $("results").innerHTML = res.length
@@ -3486,6 +3506,8 @@
   $("ilAra").addEventListener("input", () => { ilAra = sade($("ilAra").value.trim()); $("ilAraSil").hidden = !ilAra; shown = 60; renderList(); drawPins(); });
   $("ilAraSil").addEventListener("click", () => { ilAraSifirla(); renderList(); drawPins(); $("ilAra").focus(); });
   $("nearBtn").addEventListener("click", () => git("#/yakin"));
+  $("tumIlBtn").addEventListener("click", () => { tumIl = !tumIl; renderHome(); if (!tumIl) $("ilBaslik").scrollIntoView({ block: "start" }); });
+  $("ilSira").addEventListener("click", (e) => { const b = e.target.closest("[data-sira]"); if (!b) return; ilSira = b.dataset.sira; $("ilSira").querySelectorAll("[data-sira]").forEach((x) => x.classList.toggle("on", x === b)); renderHome(); });
   $("yolBtn").addEventListener("click", () => git("#/yol"));
   $("planBtn").addEventListener("click", () => git("#/plan"));
   $("tarzChips").addEventListener("click", (e) => { const b = e.target.closest("[data-tarz]"); if (b && view && view.tarz) { history.replaceState(null, "", "#/tarz/" + b.dataset.tarz); showTarz(b.dataset.tarz); } });
