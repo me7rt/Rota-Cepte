@@ -389,6 +389,7 @@
     b.classList.toggle("on", on); b.setAttribute("aria-pressed", on);
     b.setAttribute("aria-label", on ? T("Listemden çıkar") : T("Gideceğim yerlere ekle"));
   }
+  let favSirali = (() => { try { return localStorage.getItem("gezi-fav-sira") === "1"; } catch (e) { return false; } })();
   function renderFav() {
     const a = favs();
     $("favSec").hidden = !a.length; $("favBos").hidden = !!a.length;
@@ -399,13 +400,11 @@
     };
     if (a.some((x) => x.lat == null) && !ARA && IDX) loadAra();
     const nok = a.map(kon).filter(Boolean);
-    $("favList").innerHTML = a.map((x) => {
-      const n = kon(x);
-      return `<li><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${thumb(x.f, x.k)}<span class="rt"><b>${esc(kayitAd(x))}</b><small>${esc(x.il)}</small></span><span class="km">${me && n ? fmt(km(me, n)) : OKIK}</span></button></li>`;
-    }).join("");
     // Kendi rotan: en yakından başlayıp hep bir sonraki en yakın yere giden sıra (en fazla 10 durak)
-    const b = $("favRota");
-    if (nok.length < 2) { b.hidden = true; return; }
+    const b = $("favRota"), sb = $("favSirala");
+    const satir = (x, no, ara) => { const n = kon(x); return `<li><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${no ? `<span class="favno">${no}</span>` : ""}${thumb(x.f, x.k)}<span class="rt"><b>${esc(kayitAd(x))}</b><small>${esc(x.il)}${ara ? " · " + ara : ""}</small></span><span class="km">${me && n ? fmt(km(me, n)) : OKIK}</span></button></li>`; };
+    const duz = () => { $("favList").innerHTML = a.map((x) => satir(x)).join(""); };
+    if (nok.length < 2) { b.hidden = sb.hidden = true; duz(); return; }
     let kalan = nok.slice(), sira = [], cur = me || null, top = 0;
     while (kalan.length && sira.length < 10) {
       let bi = 0;
@@ -424,6 +423,12 @@
       }
     }
     top = yolUz(sira);
+    sb.hidden = false; sb.classList.toggle("on", favSirali);
+    sb.innerHTML = favSirali ? `${ik("list-ordered", 16)} ${TL("En mantıklı sırada · eklenme sırasına dön", "In best order · back to added order")}` : `${ik("sparkles", 16)} ${TL("En mantıklı sıraya koy", "Put in best order")}`;
+    if (favSirali) {
+      const kalanlar = a.filter((x) => !sira.some((y) => y.q === x.q && y.s === x.s));
+      $("favList").innerHTML = sira.map((x, i) => satir(x, i + 1, i ? fmt(km(sira[i - 1], x) * 1.3) + TL(" yol", " away") : "")).join("") + kalanlar.map((x) => satir(x)).join("");
+    } else duz();
     const nk = (x) => x.lat + "," + x.lng;
     b.href = yolLink(sira.map(nk));
     b.innerHTML = TL(`<span>${ik("route", 18)} Listemden rota yap</span><small>${sira.length} durak · ~${fmt(top * 1.3)} · en kısa sırayla</small>`, `<span>${ik("route", 18)} Make a route from my list</span><small>${sira.length} stops · ~${fmt(top * 1.3)} · shortest order</small>`);
@@ -1477,7 +1482,17 @@
     b.classList.toggle("hazir", !!ind);
     b.innerHTML = ind
       ? `<b>${ik("circle-check", 18)} ${TL("İnternetsiz hazır", "Ready offline")}</b><small>${TL(`${ind.n} fotoğraf · ${new Date(ind.t).toLocaleDateString("tr-TR")} · güncellemek için dokun`, `${ind.n} photos · ${new Date(ind.t).toLocaleDateString("en-GB")} · tap to update`)}</small>`
-      : `<b>${ik("download", 18)} ${TL("İnternetsiz kullan", "Use offline")}</b><small>${TL("Bu ilin yerlerini ve fotoğraflarını telefona indir, çekmeyen yerde de aç", "Save this province's places and photos to your phone")}</small>`;
+      : `<b>${ik("download", 18)} ${TL("İnternetsiz kullan", "Use offline")} · ${TL("yaklaşık", "about")} ${indirBoyut(view.d)} MB</b><small>${TL("Bu ilin yerlerini ve fotoğraflarını telefona indir, çekmeyen yerde de aç. Wi-Fi'da indirmen önerilir.", "Save this province's places and photos to your phone. Wi-Fi recommended.")}</small>`;
+  }
+  // Tahmini indirme boyutu: küçük fotoğraf ~18 KB, büyük ~150 KB, il verisi ~0,3 MB
+  function indirBoyut(d) {
+    let b = 0, k = 0;
+    const say = (f, buyuk) => { if (f) { k++; if (buyuk) b++; } };
+    say(d.f, 1); if (d.kapak) say(d.kapak, 1);
+    d.yerler.forEach((y) => { say(y.f, 1); (y.g || []).forEach((f) => say(f, 1)); });
+    d.ilceler.forEach((z) => say(z.f, 0));
+    const mb = 0.3 + (k * 18 + b * 150) / 1024;
+    return mb < 10 ? mb.toFixed(1).replace(".", DIL === "en" ? "." : ",") : Math.round(mb);
   }
   // İlk açılışta servis çalışanı sayfayı devralınca "İnternetsiz kullan" düğmesi hemen görünsün
   if (navigator.serviceWorker) navigator.serviceWorker.addEventListener("controllerchange", () => { try { indirBtn(); } catch (e) {} });
@@ -1569,11 +1584,13 @@
     if (!view || view.mode !== "il" || view.d.s !== d.s) return;
     const yemek = YEMEK && YEMEK[d.s] && YEMEK[d.s][0];
     let top = 0; for (let i = 1; i < s.length; i++) top += km(s[i - 1], s[i]);
-    const saat = ["09:00", "11:00", "14:00", "16:00", "18:00"];
+    // Katı saat yok: gün bölümleri (sabah / öğle / öğleden sonra / akşamüstü)
+    const bant = (e, t) => `<li class="plbant">${ik(e, 15)} ${t}</li>`;
+    const bolum = { 0: bant("sunrise", TL("Sabah", "Morning")), 4: bant("sunset", TL("Akşamüstü", "Early evening")) };
     const nk = (x) => x.lat + "," + x.lng;
     kutu.innerHTML = `<div class="plust"><h3>${ik("calendar-days", 20)} ${TL(esc(d.ad) + ekDe(d.ad) + " 1 günlük plan", "A day in " + esc(d.ad))}</h3><button class="linkbtn" id="planYeni">${ik("shuffle", 16)} ${TL("Başka plan", "Another plan")}</button></div>
       <small class="plalt">${TL(`${s.length} durak · aralarda toplam ~${fmt(top * 1.3)} yol`, `${s.length} stops · ~${fmt(top * 1.3)} of driving in between`)}</small>
-      <ol class="plist">${s.map((p, i) => `${i === 2 ? `<li class="plyemek"><time>13:00</time><span>${ik("utensils", 16)} ${TL("Öğle arası", "Lunch break")}${yemek ? `: <b>${esc(yemekAd(yemek))}</b>${TL(" dene", "")}` : ""}</span></li>` : ""}<li><button class="row" data-s="${p.ilS}" data-j="${p.j}"><time>${saat[i]}</time>${thumb(p.f, p.k)}<span class="rt"><b>${esc(adi(p))}</b><small>${i ? fmt(km(s[i - 1], p) * 1.3) + TL(" yol", " drive") : esc(p.ilce || d.ad)}</small></span></button></li>`).join("")}</ol>
+      <ol class="plist">${s.map((p, i) => `${bolum[i] || ""}${i === 2 ? `<li class="plyemek"><time>${ik("utensils", 15)}</time><span>${TL("Öğle molası", "Lunch break")}${yemek ? `: <b>${esc(yemekAd(yemek))}</b>${TL(" dene", "")}` : ""}</span></li>${bant("sun", TL("Öğleden sonra", "Afternoon"))}` : ""}<li><button class="row" data-s="${p.ilS}" data-j="${p.j}"><time>${i + 1}</time>${thumb(p.f, p.k)}<span class="rt"><b>${esc(adi(p))}</b><small>${i ? fmt(km(s[i - 1], p) * 1.3) + TL(" yol", " drive") : esc(p.ilce || d.ad)}</small></span></button></li>`).join("")}</ol>
       <a class="btn primary rotaac" target="_blank" rel="noopener" href="${yolLink(s.map(nk))}">${ik("navigation", 18)} ${TL("Planı Google Maps'te aç", "Open plan in Google Maps")}</a>`;
     kutu.hidden = false;
   }
@@ -3506,6 +3523,7 @@
   $("ilAra").addEventListener("input", () => { ilAra = sade($("ilAra").value.trim()); $("ilAraSil").hidden = !ilAra; shown = 60; renderList(); drawPins(); });
   $("ilAraSil").addEventListener("click", () => { ilAraSifirla(); renderList(); drawPins(); $("ilAra").focus(); });
   $("nearBtn").addEventListener("click", () => git("#/yakin"));
+  $("favSirala").addEventListener("click", () => { favSirali = !favSirali; try { localStorage.setItem("gezi-fav-sira", favSirali ? "1" : "0"); } catch (e) {} renderFav(); });
   $("tumIlBtn").addEventListener("click", () => { tumIl = !tumIl; renderHome(); if (!tumIl) $("ilBaslik").scrollIntoView({ block: "start" }); });
   $("ilSira").addEventListener("click", (e) => { const b = e.target.closest("[data-sira]"); if (!b) return; ilSira = b.dataset.sira; $("ilSira").querySelectorAll("[data-sira]").forEach((x) => x.classList.toggle("on", x === b)); renderHome(); });
   $("yolBtn").addEventListener("click", () => git("#/yol"));
