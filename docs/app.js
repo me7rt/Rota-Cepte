@@ -298,7 +298,7 @@
     $("tema").hidden = v !== "tema";
     $("rota").hidden = v !== "rota";
     $("yol").hidden = v !== "yol";
-    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark", "planlar"]) $(x).hidden = v !== x;
+    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark", "planlar", "muzekart"]) $(x).hidden = v !== x;
     $("ataturk").hidden = v !== "ataturk";
     $("rozet").hidden = v !== "rozet";
     $("listem").hidden = v !== "listem";
@@ -348,6 +348,7 @@
       if (h[0] === "yol") return showYol(h[1], h[2]);
       if (h[0] === "liste") return await showListe(h[1], no);
       if (h[0] === "kacamak") return showKacamak(h[1]);
+      if (h[0] === "muzekart") return await showMuzeKart(h[1]);
       if (h[0] === "kartlar") return await showKartlar();
       if (h[0] === "oyun") return await showOyun();
       if (h[0] === "cark") return showCark();
@@ -1853,6 +1854,86 @@
   }
   // ---------- hafta sonu kaçamağı: arabayla 1,5-4 saatlik iller; bayram için 3-4 günlük, daha uzak ----------
   let kacGun = 1;
+  // ---------- v6.6 MüzeKart: geçerli müze ve ören yerleri (muze.gov.tr, il il), kendi listen ve gezdiklerin ----------
+  // Simge kendi çizimimiz (Lidya sikkesi); resmî logo kullanılmaz. Liste ve gezdim bilgisi yalnızca bu cihazda durur.
+  const MK_L = "gezi-mk-liste", MK_G = "gezi-mk-gez";
+  let MK = null, mkSoz = null;
+  function mkSikke(boy) {
+    let n = ""; for (let i = 0; i < 24; i++) { const a = i * Math.PI / 12; n += `<circle cx="${(32 + 20.5 * Math.cos(a)).toFixed(1)}" cy="${(32 + 20.5 * Math.sin(a)).toFixed(1)}" r="1"/>`; }
+    const g = "mk" + Math.random().toString(36).slice(2, 7), d = "M32 7c8 0 14 3 18 8s6 11 5 18-3 13-8 17-11 6-17 5-12-2-16-7-6-11-5-17 3-12 8-16 9-8 15-8z";
+    return `<svg width="${boy}" height="${boy}" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe3a3"/><stop offset=".45" stop-color="#e2a336"/><stop offset="1" stop-color="#a8701f"/></linearGradient></defs><path d="${d}" fill="url(#${g})"/><path d="${d}" fill="none" stroke="#8a5a14" stroke-width="1.2" opacity=".6"/><g fill="#8a5a14" opacity=".8">${n}</g><g transform="translate(12.2 12.4) scale(0.62)" fill="#8a5a14"><polygon points="15.5,50 18.5,14 21,14 18,50"/><polygon points="18,14 24.5,14 35.5,48 30.5,48"/><polygon points="30.5,48 45,14 47.2,14 33,48"/><polygon points="44,14 50.5,14 52.5,50 46,50"/><rect x="11.5" y="49.5" width="11" height="2.6" rx="1"/><rect x="42.5" y="49.5" width="14" height="2.6" rx="1"/><rect x="14" y="12.6" width="11" height="2.4" rx="1"/><rect x="42.5" y="12.6" width="10" height="2.4" rx="1"/></g><path d="M20 15a20 20 0 0 1 14-5" stroke="#fff6" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
+  }
+  const mkOku = (k) => { try { return new Set(JSON.parse(localStorage.getItem(k)) || []); } catch (e) { return new Set(); } };
+  const mkYaz = (k, set) => { try { localStorage.setItem(k, JSON.stringify([...set])); } catch (e) {} };
+  function mkYukle() {
+    if (MK) return Promise.resolve(MK);
+    return mkSoz ||= fetch("data/muzekart.json").then((r) => r.ok ? r.json() : null).then((j) => {
+      if (!j) return null;
+      j.hepsi = []; for (const [s, a] of Object.entries(j.il)) a.forEach((m) => { m.s = s; j.hepsi.push(m); });
+      return (MK = j);
+    }).catch(() => (mkSoz = null));
+  }
+  // Gezdim: MüzeKart ekranında işaretlenen ya da aynı yeri uygulamada "Gittim" yaptıysan
+  function mkGezdi(m, G, gq) { return G.has(m.i) || (m.q && gq.has(m.s + "|" + m.q)); }
+  const mkGitQ = () => new Set(gittiklerim().map((x) => x.s + "|" + x.q));
+  async function mkKutu() {
+    const j = await mkYukle(), b = $("mkBtn"); if (!b) return;
+    if (!j) { b.hidden = true; return; }
+    if (!$("mkCoin").firstChild) $("mkCoin").innerHTML = mkSikke(52);
+    const G = mkOku(MK_G), gq = mkGitQ(), g = j.hepsi.filter((m) => mkGezdi(m, G, gq)).length;
+    $("mkSub").textContent = TL(`${j.hepsi.length} yerde geçerli${g ? ` · ${g}'i gezildi` : ""}`, `Museum Pass · ${j.hepsi.length} sites${g ? ` · ${g} visited` : ""}`);
+    $("mkBar").style.width = Math.max(g ? 3 : 0, Math.round(g / j.hepsi.length * 100)) + "%";
+    b.hidden = false;
+  }
+  async function showMuzeKart(s) {
+    view = { mode: "muzekart", s: s || "", f: (view && view.mode === "muzekart" && view.f) || "hepsi" }; show("muzekart");
+    const j = await mkYukle();
+    if (!j) { $("muzekart").innerHTML = `<p class="empty">${T("Veriler yüklenemedi. İnternet bağlantını kontrol edip tekrar dene.")}</p>`; return; }
+    if (s && !j.il[s]) { view.s = ""; s = ""; }
+    $("eyebrow").textContent = s ? TL("MüzeKart", "Museum Pass (MüzeKart)") : TL("Kültür ve Turizm Bakanlığı müzeleri", "Ministry of Culture and Tourism sites");
+    $("title").textContent = s ? IDX.ilBy.get(s).ad : "MüzeKart";
+    mkCiz();
+  }
+  function mkSatir(m, L, G, gq) {
+    const ls = L.has(m.i), gz = mkGezdi(m, G, gq);
+    const bilgi = [m.h ? `${ik("clock", 14)} ${esc(m.h)}` : "", `${ik("ticket", 14)} ${m.u ? esc(TL("Bilet ", "Ticket ") + m.u) + " · " : ""}<b class="mkok">${TL("MüzeKart ile ücretsiz", "Free with Museum Pass")}</b>`].filter(Boolean).join("<br>");
+    return `<li class="mkmz${gz ? " gez" : ""}"><div class="mkb"><b>${esc(m.a)}</b>${MK && !view.s && view.f !== "hepsi" ? `<small class="mkil">${esc(IDX.ilBy.get(m.s).ad)}</small>` : ""}<div class="mki">${bilgi}</div>
+      <div class="mkact"><button class="mkc${ls ? " on" : ""}" data-mk="liste" data-i="${esc(m.i)}">${ik(ls ? "check" : "plus", 14)} ${ls ? TL("Listemde", "In my list") : TL("Listeme ekle", "Add to list")}</button><button class="mkc${gz ? " ok" : ""}" data-mk="gez" data-i="${esc(m.i)}"${m.q && gq.has(m.s + "|" + m.q) && !G.has(m.i) ? " disabled" : ""}>${ik(gz ? "circle-check" : "circle", 14)} ${gz ? TL("Gezdim", "Visited") : TL("Gezdim mi?", "Visited?")}</button>${m.q ? `<a class="mkc" href="#/il/${esc(m.s)}/yer/${encodeURIComponent(m.q)}">${TL("Detay", "Details")}</a>` : ""}<a class="mkc" href="${esc("https://muze.gov.tr/muze-detay?" + m.l)}" target="_blank" rel="noopener">${TL("Resmî sayfa", "Official page")}</a></div></div></li>`;
+  }
+  function mkCiz() {
+    if (!view || view.mode !== "muzekart" || !MK) return;
+    const s = view.s, L = mkOku(MK_L), G = mkOku(MK_G), gq = mkGitQ(), j = MK;
+    const not = `<p class="mknot">${ik("info", 14)} ${TL(`Saat ve ücretler Kültür ve Turizm Bakanlığı'nın sitesinden alındı (${j.t}). Gitmeden önce <a href="https://muze.gov.tr/muzeler" target="_blank" rel="noopener">resmî sayfadan</a> kontrol et.`, `Hours and fees are from the Ministry of Culture and Tourism website (${j.t}). Check the <a href="https://muze.gov.tr/muzeler" target="_blank" rel="noopener">official page</a> before you go.`)}</p>`;
+    let h = "";
+    if (!s) {
+      const g = j.hepsi.filter((m) => mkGezdi(m, G, gq)).length;
+      h += `<div class="mkust">${mkSikke(44)}<div><b>${TL(`${j.hepsi.length} müze ve ören yeri`, `${j.hepsi.length} museums and sites`)}</b><small>${TL(`${g} gezildi · ${L.size} listende`, `${g} visited · ${L.size} in your list`)}</small><i class="mkbar"><i style="width:${Math.round(g / j.hepsi.length * 100)}%"></i></i></div></div>`;
+      h += `<div class="mkchips">${[["hepsi", TL("Tüm iller", "All provinces")], ["liste", TL(`Listem (${L.size})`, `My list (${L.size})`)], ["gez", TL("Gezdiklerim", "Visited")]].map(([k, t]) => `<button class="tchip${view.f === k ? " on" : ""}" data-mkf="${k}">${esc(t)}</button>`).join("")}</div>`;
+      if (view.f === "hepsi") {
+        const iller = Object.entries(j.il).map(([k, a]) => ({ il: IDX.ilBy.get(k), n: a.length, g: a.filter((m) => mkGezdi(m, G, gq)).length })).filter((x) => x.il).sort((a, b) => b.n - a.n || a.il.ad.localeCompare(b.il.ad, "tr"));
+        h += `<ul class="mkiller">${iller.map((x) => `<li><a href="#/muzekart/${x.il.s}"><span class="mkpl">${esc(x.il.plaka)}</span><span class="mkt"><b>${esc(x.il.ad)}</b><small>${x.g ? TL(`${x.g} gezildi`, `${x.g} visited`) : "—"}</small></span><span class="mkpill">${TL(`${x.n} yer`, `${x.n} sites`)}</span>${ik("chevron-right", 18)}</a></li>`).join("")}</ul>`;
+      } else {
+        const a = j.hepsi.filter((m) => view.f === "liste" ? L.has(m.i) : mkGezdi(m, G, gq));
+        h += a.length ? `<ul class="mkliste">${a.map((m) => mkSatir(m, L, G, gq)).join("")}</ul>` : `<p class="empty">${view.f === "liste" ? TL("Listen boş. Bir ile girip “Listeme ekle”ye dokun.", "Your list is empty. Open a province and tap “Add to list”.") : TL("Henüz gezdiğin bir yer işaretlemedin.", "You haven't marked any visited sites yet.")}</p>`;
+      }
+    } else {
+      const a = j.il[s], f = view.f === "hepsi" || view.f === "liste" || view.f === "gezme" ? view.f : "hepsi";
+      h += `<div class="mkchips">${[["hepsi", TL(`Hepsi (${a.length})`, `All (${a.length})`)], ["liste", TL("Listemde", "In my list")], ["gezme", TL("Gezmediklerim", "Not visited")]].map(([k, t]) => `<button class="tchip${f === k ? " on" : ""}" data-mkf="${k}">${esc(t)}</button>`).join("")}</div>`;
+      const b = a.filter((m) => f === "liste" ? L.has(m.i) : f === "gezme" ? !mkGezdi(m, G, gq) : true);
+      h += b.length ? `<ul class="mkliste">${b.map((m) => mkSatir(m, L, G, gq)).join("")}</ul>` : `<p class="empty">${TL("Bu filtrede yer yok.", "Nothing here for this filter.")}</p>`;
+    }
+    $("muzekart").innerHTML = h + not;
+  }
+  $("muzekart").addEventListener("click", (e) => {
+    const f = e.target.closest("[data-mkf]");
+    if (f) { view.f = f.dataset.mkf; mkCiz(); return; }
+    const b = e.target.closest("[data-mk]"); if (!b) return;
+    const k = b.dataset.mk === "liste" ? MK_L : MK_G, set = mkOku(k), i = b.dataset.i;
+    if (set.has(i)) set.delete(i); else set.add(i);
+    mkYaz(k, set); mkCiz(); mkKutu();
+  });
+  $("mkBtn").addEventListener("click", () => git("#/muzekart"));
+
   function showKacamak(g) {
     kacGun = g === "3" ? 3 : 1;
     view = { mode: "kacamak" }; show("kacamak");
@@ -2760,6 +2841,7 @@
   let tumIl = false, ilSira = "az";
   function renderHome() {
     if (!IDX) return;
+    mkKutu();
     const q = $("search").value.trim();
     if (q.length >= 2) return renderSearch(q);
     gununKesfi(); sanaOzel(); ayKart(); renderPasOzet(); renderTarzlar(); planAlt();

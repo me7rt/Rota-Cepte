@@ -9,7 +9,7 @@ const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
 async function al(u, govde) {
   for (let i = 0; i < 3; i++) {
     try {
-      const r = await fetch(u, govde ? { method: "POST", headers: { "User-Agent": UA, Cookie: cerez, "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "X-Requested-With": "XMLHttpRequest" }, body: new URLSearchParams(govde) } : { headers: { "User-Agent": UA, Cookie: cerez } });
+      const r = await fetch(u, govde ? { method: "POST", headers: { "User-Agent": UA, Cookie: cerez, "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "X-Requested-With": "XMLHttpRequest" }, body: new URLSearchParams(govde), signal: AbortSignal.timeout(40000) } : { headers: { "User-Agent": UA, Cookie: cerez }, signal: AbortSignal.timeout(40000) });
       cerezAl(r); const t = await r.text(); if (r.ok) return t;
     } catch (e) {}
     await bekle(1500 * (i + 1));
@@ -35,13 +35,17 @@ for (const il of iller) {
 }
 console.log("muze", muzeler.size);
 const liste = [...muzeler.values()]; let i = 0, ilk = true;
-for (const m of liste) {
-  const h = await al(m.u);
-  if (ilk && h) { fs.writeFileSync(`${OUT}/detay-ornek.html`, h); ilk = false; }
-  const govde = h.split(/<footer/i)[0]; const bas = govde.search(/<h1/i);
-  m.metin = metin(bas > 0 ? govde.slice(bas) : govde).slice(0, 6000);
-  if (++i % 25 === 0) console.log(i, "/", liste.length);
-  await bekle(250);
+// Site sayfa başına ~10 sn yanıt veriyor: 4 istek aynı anda
+async function isci() {
+  while (i < liste.length) {
+    const m = liste[i++]; const h = await al(m.u);
+    if (ilk && h) { fs.writeFileSync(`${OUT}/detay-ornek.html`, h); ilk = false; }
+    const govde = h.split(/<footer/i)[0]; const bas = govde.search(/<h1/i);
+    m.metin = metin(bas > 0 ? govde.slice(bas) : govde).slice(0, 6000);
+    if (i % 25 === 0) console.log(i, "/", liste.length);
+    await bekle(200);
+  }
 }
+await Promise.all([isci(), isci(), isci(), isci()]);
 fs.writeFileSync(`${OUT}/muzeler.json`, JSON.stringify({ tarih: new Date().toISOString(), iller, muzeler: liste }, null, 1));
 fs.writeFileSync(`${OUT}/log.txt`, `token ${!!token}\nil ${iller.length}\nmuze ${liste.length}\nbos ${liste.filter((m) => !m.metin).length}\n`);
