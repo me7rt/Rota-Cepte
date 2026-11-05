@@ -1,17 +1,47 @@
-// muze.gov.tr'den müze listesi, ziyaret saati, ücret ve MüzeKart geçerliliği (keşif aşaması: ham sayfaları kaydeder)
+// muze.gov.tr'den (robots.txt izin veriyor) müze listesi ve detay sayfalarının metni. Çıktı muze-ham dalına gider,
+// asıl ayrıştırma docs/data/muzekart.json üretiminde yapılır.
 import fs from "node:fs";
-const OUT = "muze-cikti"; fs.mkdirSync(OUT, { recursive: true });
-const UA = { "User-Agent": "RotaCepte-veri/1.0 (+https://me7rt.github.io/Rota-Cepte/)" };
-const al = async (u) => { try { const r = await fetch(u, { headers: UA }); return { u, s: r.status, t: await r.text() }; } catch (e) { return { u, s: 0, t: String(e) }; } };
-const sayfalar = ["https://muze.gov.tr/robots.txt", "https://muze.gov.tr/", "https://muze.gov.tr/muzeler", "https://muze.gov.tr/muzekart", "https://muze.gov.tr/sitemap.xml"];
-const log = [];
-for (const u of sayfalar) {
-  const r = await al(u); log.push(`${r.s} ${u} ${r.t.length}`);
-  fs.writeFileSync(`${OUT}/${u.replace(/^https:\/\//, "").replace(/[^a-z0-9]+/gi, "_")}.html`, r.t);
+const OUT = "muze-cikti", K = "https://muze.gov.tr"; fs.mkdirSync(OUT, { recursive: true });
+const UA = "RotaCepte-veri/1.0 (+https://me7rt.github.io/Rota-Cepte/)";
+let cerez = "";
+const cerezAl = (r) => { const s = r.headers.getSetCookie ? r.headers.getSetCookie() : []; if (s.length) cerez = [cerez, ...s.map((x) => x.split(";")[0])].filter(Boolean).join("; "); };
+const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
+async function al(u, govde) {
+  for (let i = 0; i < 3; i++) {
+    try {
+      const r = await fetch(u, govde ? { method: "POST", headers: { "User-Agent": UA, Cookie: cerez, "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "X-Requested-With": "XMLHttpRequest" }, body: new URLSearchParams(govde) } : { headers: { "User-Agent": UA, Cookie: cerez } });
+      cerezAl(r); const t = await r.text(); if (r.ok) return t;
+    } catch (e) {}
+    await bekle(1500 * (i + 1));
+  }
+  return "";
 }
-// listede geçen ilk birkaç müze bağlantısını da indir
-const liste = fs.readFileSync(`${OUT}/muze_gov_tr_muzeler.html`, "utf8");
-const linkler = [...new Set([...liste.matchAll(/href="([^"]*muze-detay[^"]*)"/gi)].map((m) => m[1]))].slice(0, 3);
-for (const l of linkler) { const u = new URL(l, "https://muze.gov.tr/").href; const r = await al(u); log.push(`${r.s} ${u} ${r.t.length}`); fs.writeFileSync(`${OUT}/detay_${linkler.indexOf(l)}.html`, r.t); }
-fs.writeFileSync(`${OUT}/log.txt`, log.join("\n") + "\n");
-console.log(log.join("\n"));
+const coz = (s) => s.replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16))).replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(+d)).replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&nbsp;/g, " ");
+const metin = (h) => coz(h.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, " ").replace(/<br\s*\/?>|<\/p>|<\/li>|<\/h\d>|<\/div>|<\/tr>/gi, "\n").replace(/<[^>]+>/g, " ")).replace(/[ \t]+/g, " ").replace(/\n\s*\n+/g, "\n").trim();
+const ana = await al(K + "/muzeler");
+const token = (ana.match(/name="__RequestVerificationToken"[^>]*value="([^"]+)"/) || [])[1] || "";
+const iller = [...ana.matchAll(/<option value="(\d+)">([^<]+)/g)].map((m) => ({ id: m[1], ad: coz(m[2]).trim() }));
+console.log("token", !!token, "il", iller.length);
+const muzeler = new Map();
+for (const il of iller) {
+  const h = await al(K + "/Museums/GetSections", { __RequestVerificationToken: token, provinceId: il.id, sections: "" });
+  if (il.id === "6") fs.writeFileSync(`${OUT}/il-ankara.html`, h);
+  for (const m of h.matchAll(/<article[\s\S]*?<\/article>/g)) {
+    const a = m[0], l = (a.match(/href="([^"]*muze-detay[^"]*)"/) || [])[1]; if (!l) continue;
+    const u = K + coz(l), ad = coz((a.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) || [])[1] || "").trim(), foto = (a.match(/data-progressive="([^"]+)"/) || [])[1] || "";
+    if (!muzeler.has(u)) muzeler.set(u, { u, il: il.ad, ilId: il.id, ad, kart: metin(a).slice(0, 400), foto: !!foto });
+  }
+  await bekle(300);
+}
+console.log("muze", muzeler.size);
+const liste = [...muzeler.values()]; let i = 0, ilk = true;
+for (const m of liste) {
+  const h = await al(m.u);
+  if (ilk && h) { fs.writeFileSync(`${OUT}/detay-ornek.html`, h); ilk = false; }
+  const govde = h.split(/<footer/i)[0]; const bas = govde.search(/<h1/i);
+  m.metin = metin(bas > 0 ? govde.slice(bas) : govde).slice(0, 6000);
+  if (++i % 25 === 0) console.log(i, "/", liste.length);
+  await bekle(250);
+}
+fs.writeFileSync(`${OUT}/muzeler.json`, JSON.stringify({ tarih: new Date().toISOString(), iller, muzeler: liste }, null, 1));
+fs.writeFileSync(`${OUT}/log.txt`, `token ${!!token}\nil ${iller.length}\nmuze ${liste.length}\nbos ${liste.filter((m) => !m.metin).length}\n`);
