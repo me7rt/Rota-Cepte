@@ -1,0 +1,29 @@
+name: Muze verisi
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/project-thread-iyhxd3]
+    paths: ["scripts/muze.mjs", ".github/workflows/muze.yml"]
+permissions:
+  contents: write
+concurrency: { group: muze, cancel-in-progress: true }
+jobs:
+  muze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with: { node-version: 20 }
+      - name: Muze verisini topla
+        run: node scripts/muze.mjs
+      - name: Sonucu muze-ham dalina yukle
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd muze-cikti
+          git init -q -b muze-ham
+          git config user.name "Mert Turanlıoğlu"
+          git config user.email "me7rtt@gmail.com"
+          git add -A && git commit -qm "Müze verisi ham çıktı"
+          git push -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" muze-ham
