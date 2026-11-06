@@ -13,54 +13,67 @@ const SES = {
   "en-k": ["en-GB-SoniaNeural", "en-GB"],
   "en-e": ["en-US-AndrewMultilingualNeural", "en-US"],
 };
-// İngilizce metindeki Türkçe adlar: çok dilli seste Türkçe okunur, Sonia'da IPA ile
+// İngilizce metindeki Türkçe adlar: iki seste de IPA ile okunur (yalnız İngilizce ses birimleri)
 const TELAFFUZ = [
-  ["Hezarfen Ahmed Çelebi", "hɛzɑːˈfɛn ɑːˈmɛd tʃɛlɛˈbiː"],
-  ["Küçük Menderes", "kyˈtʃyk mɛndɛˈrɛs"],
-  ["Evliya Çelebi", "ɛvliˈjɑː tʃɛlɛˈbiː"],
+  ["Küçük Menderes", "kuːˈtʃuːk mɛndɛˈrɛs"],
+  ["Büyük Menderes", "buːˈjuːk mɛndɛˈrɛs"],
+  ["Kavaklı Burun", "kɑːvɑːkˈlə buːˈruːn"],
+  ["Kahramanmaraş", "kɑːrɑːmɑːnmɑːˈrɑːʃ"],
   ["Zincirli Han", "zɪndʒɪrˈliː hɑːn"],
-  ["Kabayanidis", "kɑbɑjɑˈnidis"],
-  ["Sarayburnu", "sɑˈraɪbʊrnuː"],
-  ["Altındere", "ɑltɯndɛˈrɛ"],
-  ["Müzekart", "myzɛˈkɑrt"],
-  ["Akçaabat", "ɑktʃɑːˈbɑt"],
-  ["Hezarfen", "hɛzɑːˈfɛn"],
+  ["Kabayanidis", "kæbæjæˈniːdɪs"],
+  ["Güzelçamlı", "ɡuːˈzɛltʃɑːmlə"],
+  ["Sarayburnu", "sɑːˈraɪbʊrnuː"],
+  ["Şahin Bey", "ʃɑːhɪn ˈbeɪ"],
+  ["Altındere", "ɑːltəndɛˈrɛ"],
+  ["Gaziantep", "ɡɑːziːɑːnˈtɛp"],
+  ["Akçaabat", "ˈɑːktʃɑːbɑːt"],
+  ["Arsameia", "ɑːsəˈmeɪə"],
+  ["Kumbahçe", "kʊmbɑːˈtʃɛ"],
+  ["Aydınlık", "aɪdənˈlək"],
+  ["Şahinbey", "ʃɑːhɪnˈbeɪ"],
   ["bedesten", "bɛdɛsˈtɛn"],
-  ["Karakuş", "kɑrɑˈkʊʃ"],
+  ["Hezarfen", "hɛzɑːˈfɛn"],
   ["Cendere", "dʒɛndɛˈrɛ"],
-  ["Şirince", "ʃiˈrindʒɛ"],
-  ["çöp şiş", "tʃøp ʃiʃ"],
-  ["Karadağ", "kɑrɑˈdɑː"],
-  ["Atatürk", "ɑtɑˈtyrk"],
-  ["Trabzon", "trɑbˈzɔn"],
-  ["Soğuksu", "soːˈʊksʊ"],
-  ["Boztepe", "bɔztɛˈpɛ"],
+  ["Boztepe", "bɒztɛˈpɛ"],
+  ["Şirince", "ʃɪˈrɪndʒɛ"],
+  ["Karakuş", "kɑːrɑːˈkʊʃ"],
+  ["Soğuksu", "sɔːˈʊksuː"],
+  ["Trabzon", "træbˈzɒn"],
+  ["İçmeler", "ɪtʃmɛˈlɛr"],
+  ["Antakya", "ænˈtɑːkjə"],
+  ["Harbiye", "hɑːrbiːˈjɛ"],
+  ["Karadağ", "kɑːrɑːˈdɑː"],
   ["Üsküdar", "ˈʊskʊdɑː"],
-  ["Salacak", "sæləˈdʒɑːk"],
-  ["Nemrut", "nɛmˈrʊt"],
-  ["Selçuk", "sɛlˈtʃʊk"],
-  ["Göreme", "gøˈrɛmɛ"],
+  ["Salacak", "sɑːlɑːˈdʒɑːk"],
+  ["Göreme", "ɡəˈrɛmɛ"],
+  ["Nemrut", "nɛmˈruːt"],
+  ["Selçuk", "sɛlˈtʃuːk"],
+  ["künefe", "kuːnɛˈfɛ"],
+  ["Bodrum", "ˈbɒdrʊm"],
   ["Mehmed", "mɛˈmɛd"],
-  ["Kahta", "kɑhˈtɑ"],
+  ["Çelebi", "tʃɛlɛˈbiː"],
+  ["Evliya", "ɛvliːˈjɑː"],
+  ["Kahta", "kɑːˈtɑː"],
   ["Zelve", "zɛlˈvɛ"],
-  ["köfte", "køfˈtɛ"],
-  ["Maçka", "mɑtʃˈkɑ"],
+  ["Niğde", "ˈniːdɛ"],
+  ["Maçka", "mɑːtʃˈkɑː"],
+  ["Hatay", "hɑːˈtaɪ"],
+  ["Antep", "ɑːnˈtɛp"],
 ];
+// en-US sesi uzunluk işareti ve ɒ tanımaz; en-GB sesi ɛ yerine e kullanır
+const sesBirim = (ipa, cins) => cins === "k" ? ipa.replace(/ɛ/g, "e") : ipa.replace(/ː/g, "").replace(/ɒ/g, "ɑ");
 const xml = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 // Paragraf ve kart cümleleri arasında kısa durak
 const durak = (s) => s.replace(/\n+/g, ' <break time="700ms"/> ');
 function ic(metin, dil, cins) {
   let t = xml(metin);
   if (dil !== "en") return `<lang xml:lang="tr-TR">${durak(t)}</lang>`;
-  const ipa = cins === "k";
   const parca = t.split(new RegExp(`(${TELAFFUZ.map(([a]) => a).join("|")})`));
   t = parca.map((p) => {
     const b = TELAFFUZ.find(([a]) => a === p);
-    if (!b) return p;
-    return ipa ? `<phoneme alphabet="ipa" ph="${b[1]}">${p}</phoneme>` : `</lang><lang xml:lang="tr-TR">${p}</lang><lang xml:lang="en-US">`;
+    return b ? `<phoneme alphabet="ipa" ph="${sesBirim(b[1], cins)}">${p}</phoneme>` : p;
   }).join("");
-  t = durak(t);
-  return ipa ? t : `<lang xml:lang="en-US">${t}</lang>`.replace(/<lang xml:lang="en-US"><\/lang>/g, "");
+  return durak(t);
 }
 function ssml(metin, dil, cins) {
   const [ad, lang] = SES[dil + "-" + cins];

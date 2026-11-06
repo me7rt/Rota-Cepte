@@ -57,12 +57,12 @@ jobs:
         if: always()
         run: |
           ls out/*.mp3 >/dev/null 2>&1 || { echo "ses yok, yüklenmedi"; exit 0; }
-          cd out
-          git init -q -b rehber-ses
+          git clone -q --depth 1 -b rehber-ses "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" dal
+          cp out/* dal/ && cd dal
           git config user.name "Mert Turanlıoğlu"
           git config user.email "me7rtt@gmail.com"
-          git add . && git commit -qm "Rehber ses denemesi"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" rehber-ses
+          git add . && git commit -qm "Rehber ses denemesi, düzeltme"
+          git push -q origin rehber-ses
 
   hepsi:
     needs: hazirla
