@@ -1457,3 +1457,18 @@ html.gm-acik,html.gm-acik body{overflow:hidden}
 .kocb summary{font-weight:700}
 .kocgiris,.kocnot{margin:0;color:var(--muted);font-size:14px}
 .kocnot{font-size:12.5px}
+
+/* festivaller */
+.fsatir{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;margin:0 0 12px;padding:8px 12px;text-align:left;border:1px solid #e08a3c;border-radius:var(--r-m);background:color-mix(in srgb,#ffb36b 14%,var(--surface));color:var(--fg);font:inherit;cursor:pointer}
+.fsatir .rt{flex:1;min-width:0}.fsatir b{display:block;font-size:15px}.fsatir small{display:block;color:var(--muted);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fsik,.ftarih{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,#ffb36b 26%,var(--surface));color:#b4560f}
+.ftarih{width:56px;height:56px}
+.ftarih.anma{background:color-mix(in srgb,#d93a2b 16%,var(--surface));color:#b3261e}
+.flist{display:flex;flex-direction:column;gap:8px}
+.flist .row small.facik{white-space:normal;margin-top:3px}
+.fay{margin-top:0}
+.ilfest .fil{padding:10px 0;border-top:1px solid var(--line)}
+.ilfest h3 + .fil{border-top:0;padding-top:0}
+.ilfest .fil b{display:block}.ilfest .fil p{margin:3px 0;color:var(--muted);font-size:14px}
+.ilfest .fil small{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:13px;color:var(--muted)}
+.ilfest .fil a{color:var(--accent,inherit);font-weight:700}

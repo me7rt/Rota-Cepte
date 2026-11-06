@@ -308,7 +308,7 @@
     $("tema").hidden = v !== "tema";
     $("rota").hidden = v !== "rota";
     $("yol").hidden = v !== "yol";
-    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark", "planlar", "muzekart", "acil", "kultur"]) $(x).hidden = v !== x;
+    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark", "planlar", "muzekart", "acil", "kultur", "festival"]) $(x).hidden = v !== x;
     $("ataturk").hidden = v !== "ataturk";
     $("rozet").hidden = v !== "rozet";
     $("listem").hidden = v !== "listem";
@@ -365,6 +365,7 @@
       if (h[0] === "cark") return showCark();
       if (h[0] === "acil") return showAcil();
       if (h[0] === "kultur") return showKultur();
+      if (h[0] === "festival") return showFestival(h[1]);
       if (h[0] === "ozet") { history.replaceState(null, "", "#/rozetler"); route(); setTimeout(() => yilOzeti(+h[1] || 0), 600); return; }
       if (h[0] === "rozetler") { view = { mode: "rozet" }; show("rozet"); $("eyebrow").textContent = T("Gezi haritan ve rozetler"); $("title").textContent = T("Gezilerim"); renderGez(); return; }
       if (h[0] === "listem") { view = { mode: "listem" }; show("listem"); $("eyebrow").textContent = "Rota Cepte"; $("title").textContent = T("Gideceğim yerler"); renderFav(); return; }
@@ -1322,6 +1323,7 @@
       // Çok dar ekranda uzun kelimeli tema adı ("kervansaraylar") varsa çipler tek sütun olur
       const uzun = m.t.some((k) => TEMA[k].ad.split(" ").some((w) => w.length > 11));
       el.innerHTML = `<div class="mvust"><span class="mvik">${ik(m.e, 22)}</span><span><b>${esc(m.ad)}</b><small>${esc(m.not)}</small></span></div>` +
+        festSatir() +
         `<ul class="mvserit" id="aySerit" aria-label="${TL("Bu ay için öneriler", "Picks for this month")}">${'<li><span class="mvf yuk"></span></li>'.repeat(8)}</ul>` +
         `<div class="mvchips${uzun ? " uzun" : ""}">${(m.ata ? chip("#/ataturk", "footprints", TL("Atatürk'ün izinde", "In Atatürk's footsteps"), " ata") : "") + m.t.map((k) => chip(`#/tema/${k}`, TEMA[k].e, TEMA[k].ad)).join("")}</div>`;
     }
@@ -2352,6 +2354,7 @@
     const yeni = [
       ["car-front", TL("Arabamı, otelimi kaydet", "Save my car or hotel"), TL("Ana sayfadaki “Arabamı / otelimi kaydet” düğmesine bas, durduğun yer kaydedilsin. Dönerken “Arabama dön”e bas, Google Haritalar seni doğrudan oraya götürsün.", "Tap “Save my car / hotel” on the home screen to save where you are. On the way back, tap “Back to car” and Google Maps takes you straight there."), ""],
       ["shield-plus", TL("Acil yardım", "Emergency help"), TL("Tek dokunuşla 112, internetsiz konumun, en yakın hastane, karakol ve nöbetçi eczane. Yakınımda sekmesinde ve Ayarlar'da.", "Call 112 in one tap, see your location offline, find the nearest hospital, police and pharmacy on duty. In Nearby and Settings."), "#/acil"],
+      ["party-popper", TL("Festivaller ve anmalar", "Festivals and commemorations"), TL("Ana sayfadaki ay kutusunda o ayın festivalleri; ay ay bütün Türkiye ve her ilin sayfasında kendi festivalleri. 10 Kasım, 18 Mart, 19 Mayıs ve Kocatepe anmaları da burada.", "This month's festivals in the season box, every month across Türkiye, and each province's own festivals on its page."), "#/festival"],
       ["sparkles", TL("Kültür koçu", "Culture coach"), TL("Cami sayfalarında girmeden önce bilmen gereken 4 kısa kural; çay, bahşiş, pazarlık ve Ramazan için küçük bilgiler.", "Four quick rules on every mosque page, plus tips on tea, tipping, bargaining and Ramadan."), "#/kultur"],
       ["map", TL("İller tek bakışta", "Provinces at a glance"), TL("Her ilin kartında en bilinen yerleri yazıyor; tüm illeri bölgeye göre süz. Paylaşılan linkler artık doğrudan uygulamada açılıyor.", "Every province card names its best-known sights; filter all provinces by region. Shared links now open straight in the app."), ""],
       ["headphones", TL("Gezi Modu ve doğal ses", "Tour Mode and natural voice"), TL("Bütün yerler artık doğal bir sesle anlatılıyor, kadın ya da erkek sesi seç. Gezi Modu'nu aç, yürürken yaklaştığın yeri kulağına anlatsın; tatil planın varsa günün rotası ana sayfada seni beklesin.", "Every place is now narrated in a natural voice; choose a female or male narrator. Start Tour Mode and hear about each place as you walk up to it; if you have a holiday plan, today's route waits on the home screen."), ""],
@@ -3260,7 +3263,7 @@
 
   // ---------- il / ilçe / yakın ekranları ----------
   function renderHero(h) {
-    $("hero").hidden = false; $("hava").hidden = $("yemek").hidden = true;
+    $("hero").hidden = false; $("hava").hidden = $("yemek").hidden = $("ilFest").hidden = true;
     const src = foto(h.f, 960);
     $("heroImg").style.setProperty("--c", BOLGE_RENK);
     $("heroImg").innerHTML = icon("y", 40) + (src ? `<img src="${src}" alt="" onerror="fotoHata(this)">` : "");
@@ -3289,7 +3292,7 @@
     $("tabs").hidden = false;
     $("tabBtnIlce").textContent = `${T("İlçeler")} (${d.ilceler.length})`;
     $("tabBtnYer").textContent = `${T("Gezilecek yerler")} (${d.yerler.length})`;
-    havaGoster(IDX.ilBy.get(d.s) || d); yemekGoster(d); ilDamga(d);
+    havaGoster(IDX.ilBy.get(d.s) || d); yemekGoster(d); festIl(d); ilDamga(d);
     planBas = 0; planGoster(d);
     indirBtn();
     places = d.yerler; cat = "hepsi"; shown = 60; fitted = false;
@@ -3346,6 +3349,88 @@
     if (no !== routeNo) return;
     places = ds.flatMap((d) => d.yerler).sort((a, b) => km(me, a) - km(me, b)).slice(0, 150);
     renderAll();
+  }
+
+  // ---------- festivaller ve anmalar: ay ay, il il (tarihler her yıl biraz değişir, kesin tarih için arama linki) ----------
+  // [il, aylar, ad, ad (en), ne zaman, ne zaman (en), kısa bilgi, kısa bilgi (en), tür: f festival / a anma]
+  const FEST = [
+    ["izmir", [1], "Selçuk Efes Deve Güreşi Festivali", "Selçuk Camel Wrestling Festival", "Ocak", "January", "Süslenmiş develer ve davul zurnayla Ege'nin en renkli kış şenliği.", "Decorated camels, drums and pipes: the Aegean's most colourful winter fair.", "f"],
+    ["kars", [1], "Sarıkamış Şehitlerini Anma", "Sarıkamış Commemoration", "Ocak başı", "Early January", "Allahuekber Dağları'nda donarak şehit olan askerlerimiz için karda anma yürüyüşü.", "A walk through the snow honouring the soldiers who froze in the Allahuekber Mountains in 1915.", "a"],
+    ["mugla", [2], "Datça Badem Çiçeği Festivali", "Datça Almond Blossom Festival", "Şubat", "February", "Datça yarımadası beyaz badem çiçekleriyle dolar.", "The Datça peninsula fills with white almond blossom.", "f"],
+    ["canakkale", [3], "18 Mart Çanakkale Zaferi Anması", "Çanakkale Victory Day", "18 Mart", "18 March", "Gelibolu'daki şehitliklerde 1915 deniz zaferi anılır.", "The 1915 naval victory is remembered at the Gallipoli memorials.", "a"],
+    ["manisa", [3], "Mesir Macunu Festivali", "Mesir Paste Festival", "21 Mart civarı", "Around 21 March", "Sultan Camii'nin kubbesinden şifa macunu saçılır; 480 yılı aşkın bir gelenek.", "Healing paste is thrown from the dome of the Sultan Mosque, a tradition of almost 500 years.", "f"],
+    ["istanbul", [4], "İstanbul Lale Festivali", "Istanbul Tulip Festival", "Nisan", "April", "Emirgan Korusu başta olmak üzere parklar milyonlarca laleyle renklenir.", "Parks, above all Emirgan Grove, bloom with millions of tulips.", "f"],
+    ["istanbul", [4], "İstanbul Film Festivali", "Istanbul Film Festival", "Nisan", "April", "Şehrin sinemalarında Türk ve dünya filmleri.", "Turkish and world cinema across the city's theatres.", "f"],
+    ["izmir", [4], "Alaçatı Ot Festivali", "Alaçatı Herb Festival", "Nisan", "April", "Ege otlarıyla yemekler, pazar ve sokak şenliği.", "Aegean wild herbs in dishes, markets and street fun.", "f"],
+    ["adana", [4], "Portakal Çiçeği Karnavalı", "Orange Blossom Carnival", "Nisan", "April", "Portakal çiçeği kokan sokaklarda kortej ve konserler.", "Parades and concerts in streets scented with orange blossom.", "f"],
+    ["edirne", [5], "Kakava ve Hıdırellez Şenlikleri", "Kakava and Hıdırellez", "5-6 Mayıs", "5-6 May", "Baharın gelişi ateş üstünden atlanıp dilek tutularak kutlanır, Sarayiçi'nde büyük şenlik.", "Spring is welcomed by jumping over fires and making wishes, with a big party at Sarayiçi.", "f"],
+    ["samsun", [5], "19 Mayıs Kutlamaları", "19 May Celebrations", "19 Mayıs", "19 May", "Atatürk'ün Samsun'a çıktığı gün; Bandırma Vapuru'nun yanında coşkulu kutlama.", "The day Atatürk landed in Samsun, celebrated beside the Bandırma ferry replica.", "a"],
+    ["giresun", [5], "Aksu Festivali", "Aksu Festival", "20 Mayıs civarı", "Around 20 May", "Karadeniz'in en eski bahar şenliklerinden; Giresun Adası'na tekne yolculuğu.", "One of the Black Sea's oldest spring festivals, with boat trips to Giresun Island.", "f"],
+    ["mersin", [5], "Silifke Müzik ve Folklor Festivali", "Silifke Music and Folk Festival", "Mayıs sonu", "Late May", "Türkiye'nin en eski folklor festivallerinden biri.", "One of Türkiye's oldest folk dance festivals.", "f"],
+    ["isparta", [5, 6], "Gül Hasadı", "Rose Harvest", "Mayıs sonu – Haziran", "Late May – June", "Sabahın erken saatlerinde gül bahçelerinde toplama; gül yağı ve reçeli.", "Rose picking in the fields at dawn; rose oil and rose jam.", "f"],
+    ["istanbul", [6], "İstanbul Müzik Festivali", "Istanbul Music Festival", "Haziran", "June", "Klasik müzik konserleri, tarihi mekânlarda.", "Classical concerts, often in historic venues.", "f"],
+    ["izmir", [6], "Bergama Kermesi", "Bergama Fair", "Haziran", "June", "Atatürk'ün önerisiyle başlayan, Bergama'nın kültür ve sanat şenliği.", "Bergama's arts and culture fair, started on Atatürk's suggestion.", "f"],
+    ["amasya", [6], "Atatürk Kültür ve Sanat Haftası", "Atatürk Culture and Arts Week", "Haziran ortası", "Mid-June", "Amasya Genelgesi'nin yıldönümü etkinlikleri.", "Events marking the anniversary of the Amasya Circular.", "a"],
+    ["tekirdag", [6], "Tekirdağ Kiraz Festivali", "Tekirdağ Cherry Festival", "Haziran", "June", "Kiraz zamanı konserler ve sahilde şenlik.", "Concerts and seaside fun in cherry season.", "f"],
+    ["bursa", [6, 7], "Bursa Festivali", "Bursa Festival", "Haziran – Temmuz", "June – July", "Konserler ve halk dansları gösterileri.", "Concerts and folk dance shows.", "f"],
+    ["izmir", [6, 7], "Uluslararası İzmir Festivali", "International İzmir Festival", "Haziran – Temmuz", "June – July", "Efes Antik Tiyatrosu gibi mekânlarda konserler.", "Concerts in venues such as the ancient theatre of Ephesus.", "f"],
+    ["edirne", [6, 7], "Kırkpınar Yağlı Güreşleri", "Kırkpınar Oil Wrestling", "Haziran sonu – Temmuz başı", "Late June – early July", "600 yılı aşkın gelenek; pehlivanlar zeytinyağına bulanıp Sarayiçi'nde güreşir.", "A 600-year-old tradition: wrestlers covered in olive oil compete at Sarayiçi.", "f"],
+    ["artvin", [6, 7], "Kafkasör Kültür Sanat Festivali", "Kafkasör Festival", "Haziran sonu – Temmuz başı", "Late June – early July", "Kafkasör Yaylası'nda boğa güreşleri ve yayla şenliği.", "Bull wrestling and highland fun on the Kafkasör plateau.", "f"],
+    ["istanbul", [7], "İstanbul Caz Festivali", "Istanbul Jazz Festival", "Temmuz", "July", "Açık hava sahnelerinde caz konserleri.", "Jazz concerts on open-air stages.", "f"],
+    ["konya", [7], "Akşehir Nasreddin Hoca Şenliği", "Nasreddin Hodja Festival", "Temmuz başı", "Early July", "Nasreddin Hoca'nın memleketinde fıkralar, mizah ve gösteriler.", "Jokes, humour and shows in Nasreddin Hodja's hometown.", "f"],
+    ["erzurum", [7], "Erzurum Kongresi Yıldönümü", "Erzurum Congress Anniversary", "23 Temmuz", "23 July", "Millî Mücadele'nin ilk kongresi anılır.", "Marks the first congress of the War of Independence.", "a"],
+    ["bayburt", [7], "Dede Korkut Kültür ve Sanat Şöleni", "Dede Korkut Festival", "Temmuz", "July", "Dede Korkut destanlarına adanmış şölen.", "A festival dedicated to the Dede Korkut epics.", "f"],
+    ["malatya", [7], "Malatya Kayısı Festivali", "Malatya Apricot Festival", "Temmuz", "July", "Kayısı hasadı zamanı şenlik ve pazar.", "Markets and fun at apricot harvest time.", "f"],
+    ["trabzon", [7], "Kadırga Yayla Şenliği", "Kadırga Highland Festival", "Temmuz", "July", "Karadeniz yaylalarında horon ve kemençe.", "Horon dancing and kemençe music on the Black Sea highlands.", "f"],
+    ["canakkale", [8], "Troya Kültür ve Turizm Festivali", "Troy Culture Festival", "Ağustos", "August", "Konserler, kortej ve Troya temalı etkinlikler.", "Concerts, parades and Troy-themed events.", "f"],
+    ["nevsehir", [8], "Hacı Bektaş-ı Veli Anma Törenleri", "Hacı Bektaş Veli Commemoration", "16-18 Ağustos", "16-18 August", "Hacıbektaş'ta anma, semah ve konserler.", "Commemoration, semah dances and concerts in Hacıbektaş.", "a"],
+    ["bolu", [8], "Mengen Aşçılık Festivali", "Mengen Cooks Festival", "Ağustos", "August", "Ünlü Mengen aşçılarının memleketinde yemek şenliği.", "A food festival in the hometown of Türkiye's famous Mengen cooks.", "f"],
+    ["afyonkarahisar", [8], "Kocatepe Şafak Töreni", "Kocatepe Dawn Ceremony", "26 Ağustos, şafakta", "26 August, at dawn", "Büyük Taarruz'un başladığı Kocatepe'de, Atatürk'ün izlediği tepede tören.", "A ceremony on the hill where Atatürk watched the Great Offensive begin.", "a"],
+    ["mus", [8], "Malazgirt Zaferi Kutlamaları", "Battle of Manzikert Anniversary", "26 Ağustos", "26 August", "1071 Malazgirt Zaferi, savaşın yapıldığı ovada anılır.", "The 1071 victory is marked on the plain where the battle was fought.", "a"],
+    ["izmir", [9], "İzmir Enternasyonal Fuarı", "İzmir International Fair", "Eylül başı", "Early September", "Kültürpark'ta Türkiye'nin en eski fuarı ve konserler.", "Türkiye's oldest fair, with concerts, at Kültürpark.", "f"],
+    ["sivas", [9], "Sivas Kongresi Yıldönümü", "Sivas Congress Anniversary", "4 Eylül", "4 September", "Kongre binasında Millî Mücadele'nin büyük kongresi anılır.", "The great congress of the War of Independence is marked at its building.", "a"],
+    ["nevsehir", [9], "Ürgüp Bağ Bozumu Festivali", "Ürgüp Grape Harvest Festival", "Eylül", "September", "Kapadokya bağlarında üzüm hasadı şenliği.", "Grape harvest celebrations in Cappadocia's vineyards.", "f"],
+    ["diyarbakir", [9], "Diyarbakır Karpuz Festivali", "Diyarbakır Watermelon Festival", "Eylül", "September", "Dicle kıyısında yetişen dev karpuzlar yarışır.", "Giant watermelons grown on the Tigris compete for the title.", "f"],
+    ["antalya", [10], "Antalya Altın Portakal Film Festivali", "Antalya Golden Orange Film Festival", "Ekim", "October", "Türkiye'nin en köklü film festivali.", "Türkiye's longest-running film festival.", "f"],
+    ["ankara", [11], "10 Kasım Atatürk'ü Anma", "Atatürk Remembrance Day", "10 Kasım, 09.05", "10 November, 9:05 am", "Saat 09.05'te tüm Türkiye saygı duruşunda; Anıtkabir'de anma.", "At 9:05 am all of Türkiye stands in silence; ceremonies at Anıtkabir.", "a"],
+    ["istanbul", [11], "İstanbul Kitap Fuarı", "Istanbul Book Fair", "Kasım", "November", "Türkiye'nin en büyük kitap fuarı, yazarlarla imza günleri.", "Türkiye's biggest book fair, with author signings.", "f"],
+    ["antalya", [11], "Antalya Piyano Festivali", "Antalya Piano Festival", "Kasım", "November", "Dünyaca ünlü piyanistlerin konserleri.", "Concerts by world-famous pianists.", "f"],
+    ["konya", [12], "Şeb-i Arus Mevlânâ Anma Törenleri", "Şeb-i Arus Rumi Commemoration", "7-17 Aralık", "7-17 December", "Mevlânâ'nın vefat yıldönümü; semazenlerin sema gösterileri.", "The anniversary of Rumi's death, with whirling dervish ceremonies.", "a"]
+  ];
+  const AY_ADI = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+  const AY_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const AY_EK = ["'ta", "'ta", "'ta", "'da", "'ta", "'da", "'da", "'ta", "'de", "'de", "'da", "'ta"];
+  const ayAd = (a) => (DIL === "en" ? AY_EN[a - 1] : AY_ADI[a - 1]);
+  const ayDe = (a) => (DIL === "en" ? "in " + AY_EN[a - 1] : AY_ADI[a - 1] + AY_EK[a - 1]);
+  const fF = (x) => ({ s: x[0], ay: x[1], ad: DIL === "en" ? x[3] : x[2], ne: DIL === "en" ? x[5] : x[4], acik: DIL === "en" ? x[7] : x[6], anma: x[8] === "a" });
+  const festAy = (a) => FEST.filter((x) => x[1].includes(a)).map(fF);
+  const festAra = (f) => `https://www.google.com/search?q=${encodeURIComponent(f.ad + " " + new Date().getFullYear())}`;
+  // Mevsim kutusunda bu ayın satırı (festival yoksa görünmez)
+  function festSatir() {
+    const a = new Date().getMonth() + 1, l = festAy(a);
+    if (!l.length) return "";
+    const fs = l.filter((f) => !f.anma), an = l.length - fs.length;
+    const say = [fs.length ? TL(`${fs.length} festival`, `${fs.length} festival${fs.length > 1 ? "s" : ""}`) : "", an ? TL(`${an} anma`, `${an} commemoration${an > 1 ? "s" : ""}`) : ""].filter(Boolean).join(TL(" ve ", " and "));
+    return `<button class="fsatir" data-go="#/festival/${a}"><span class="fsik">${ik("party-popper", 20)}</span><span class="rt"><b>${esc(TL(`${ayDe(a)} ${say} var`, `${say} ${ayDe(a)}`))}</b><small>${esc(l[0].ad)}${l.length > 1 ? esc(TL(` ve ${l.length - 1} tane daha`, ` and ${l.length - 1} more`)) : ""}</small></span>${ik("chevron-right", 18)}</button>`;
+  }
+  function showFestival(a) {
+    a = Math.min(12, Math.max(1, +a || new Date().getMonth() + 1));
+    view = { mode: "festival", a }; show("festival");
+    $("eyebrow").textContent = TL("Ay ay Türkiye", "Türkiye month by month"); $("title").textContent = TL("Festivaller ve anmalar", "Festivals and commemorations");
+    const l = festAy(a);
+    $("festival").innerHTML = `<div class="ilsira ilbolge fay" role="group" aria-label="${TL("Ay", "Month")}">${AY_ADI.map((_, i) => `<button class="chip${i + 1 === a ? " on" : ""}" data-go="#/festival/${i + 1}" aria-pressed="${i + 1 === a}">${esc(ayAd(i + 1))}</button>`).join("")}</div>` +
+      (l.length ? `<ul class="list flist">${l.map((f) => { const il = IDX && IDX.ilBy.get(f.s);
+        return `<li><button class="row" data-go="#/il/${f.s}"><span class="ftarih${f.anma ? " anma" : ""}">${ik(f.anma ? "flag" : "party-popper", 20)}</span><span class="rt"><b>${esc(f.ad)}</b><small>${esc((il ? il.ad : f.s) + " · " + f.ne)}</small><small class="facik">${esc(f.acik)}</small></span><span class="km">${ik("chevron-right", 18)}</span></button></li>`; }).join("")}</ul>`
+        : `<p class="kocgiris">${TL(`${ayDe(a)} listemizde festival yok. Başka bir aya bak.`, `No festivals on our list ${ayDe(a)}. Try another month.`)}</p>`) +
+      `<p class="kocnot">${ik("info", 14)} ${TL("Kesin tarih her yıl biraz değişir. Gitmeden ilin sayfasındaki arama linkinden kontrol et.", "Exact dates shift a little every year. Check with the search link on the province page before you go.")}</p>`;
+    const on = $("festival").querySelector(".fay .on"); if (on) on.scrollIntoView({ inline: "center", block: "nearest" });
+  }
+  // İl sayfasında o ilin festivalleri
+  function festIl(d) {
+    const kutu = $("ilFest"), l = FEST.filter((x) => x[0] === d.s).map(fF);
+    kutu.hidden = !l.length; if (!l.length) { kutu.innerHTML = ""; return; }
+    kutu.innerHTML = `<h3>${ik("party-popper", 18)} ${esc(TL(d.ad + ekDe(d.ad) + " festivaller ve anmalar", "Festivals in " + d.ad))}</h3>` + l.map((f) =>
+      `<div class="fil"><b>${esc(f.ad)}</b><p>${esc(f.acik)}</p><small>${ik("calendar-days", 14)} ${esc(TL("Her yıl ", "Every year: ") + f.ne)} · <a href="${festAra(f)}" target="_blank" rel="noopener">${TL("Bu yılın tarihine bak", "Check this year's dates")}</a></small></div>`).join("");
   }
 
   // ---------- kültür koçu: gezerken işe yarayan kısa görgü bilgileri (internetsiz) ----------
