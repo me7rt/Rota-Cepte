@@ -7,6 +7,15 @@
   // "6.5.1'de", "6.5'te", "6.6'da": sürüm numarasına Türkçe bulunma eki
   const surumEk = (v) => ({ 0: "da", 1: "de", 2: "de", 3: "te", 4: "te", 5: "te", 6: "da", 7: "de", 8: "de", 9: "da" })[String(v).slice(-1)] || "de";
   if (window.ikDoldur) ikDoldur();
+  // Paylaşılan link Android tarayıcıda açıldıysa uygulama yüklü değildir (yüklüyse Android linki doğrudan uygulamaya verir): Google Play'e yönlendir
+  const PAYLASIM_YOLU = /^#\/(il\/[^/]+\/yer\/|liste\/|yol\/)/;
+  try {
+    const yerli = window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() !== "web";
+    if (!yerli && location.hostname === "me7rt.github.io" && /Android/i.test(navigator.userAgent) && PAYLASIM_YOLU.test(location.hash) && !/[?&]web\b/.test(location.search)) {
+      location.replace("https://play.google.com/store/apps/details?id=io.github.me7rt.rotacepte");
+      return;
+    }
+  } catch (e) { /* yönlendirme yapılamazsa web sürümü açılır */ }
   // MapTiler harita anahtarı (boşsa OpenStreetMap kullanılır)
   const HARITA_ANAHTAR = "pI5pMuHAI4gLw3aqy35G";
 
@@ -4188,6 +4197,17 @@
       if (Date.now() - cikisZamani < 2000) { CapApp.exitApp(); return; }
       cikisZamani = Date.now(); toast(T("Çıkmak için tekrar geri bas"));
     });
+  }
+  // ---------- paylaşılan Rota Cepte linki uygulamada açılınca aynı sayfaya git (Android App Links) ----------
+  if (CapApp && CapApp.addListener) {
+    const linkAc = (u) => {
+      try {
+        const x = new URL(u);
+        if (x.hostname === "me7rt.github.io" && x.pathname.indexOf("/Rota-Cepte") === 0 && PAYLASIM_YOLU.test(x.hash)) git(x.hash);
+      } catch (e) { /* tanınmayan link: ana sayfada kal */ }
+    };
+    CapApp.addListener("appUrlOpen", (e) => { if (e && e.url) linkAc(e.url); });
+    if (CapApp.getLaunchUrl) CapApp.getLaunchUrl().then((r) => { if (r && r.url) linkAc(r.url); }).catch(() => {});
   }
   // ---------- hafta sonu önerisi: her Cuma 18:00'de telefonda hazırlanan yerel bildirim (yalnızca uygulamada) ----------
   const LN = window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() !== "web" && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications;
