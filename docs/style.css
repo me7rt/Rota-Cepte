@@ -1418,3 +1418,24 @@ html.gm-acik,html.gm-acik body{overflow:hidden}
 .pev.git{background:var(--pri);color:var(--on-pri,#fff);border-color:transparent}.pev.git svg{color:inherit}
 .pev.kay{flex:none;width:46px}
 .pev span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* acil yardım */
+.acilpill{display:inline-flex;align-items:center;gap:6px;min-height:44px;margin:0 0 10px;padding:0 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.acilpill svg{color:#d93a2b}
+.acilv{display:flex;flex-direction:column;gap:12px}
+.acara{display:flex;align-items:center;justify-content:center;gap:14px;min-height:76px;border-radius:20px;background:#d93a2b;color:#fff;font-weight:800;font-size:22px;text-decoration:none;padding:14px}
+.acara small{display:block;font-size:13px;font-weight:700;opacity:.92}
+.acnot{margin:-2px 0 0;color:var(--muted);font-size:13px;text-align:center}
+.ackart{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);padding:14px;display:flex;flex-direction:column;gap:8px}
+.ackart h3{margin:0;font-size:15px;display:flex;gap:8px;align-items:center}
+.ackart p{margin:0;color:var(--muted);font-size:13.5px}
+.ackart ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;font-size:14px}
+.ackoor{font-variant-numeric:tabular-nums;font-size:18px;font-weight:800;user-select:text;-webkit-user-select:text}
+.acdug{display:flex;gap:8px;flex-wrap:wrap}
+.acdug .btn{min-height:44px}
+.acet{font-size:11px;font-weight:800;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:1px 7px;white-space:nowrap;margin-left:auto}
+.acet.ok{color:#1f8a4c;border-color:#1f8a4c}
+.acsatir{display:flex;align-items:center;gap:12px;min-height:56px;padding:6px 0;border-top:1px solid var(--line);color:var(--fg);text-decoration:none}
+.ackart h3 + .acsatir{border-top:0}
+.aci{width:40px;height:40px;border-radius:12px;background:var(--surface2);display:grid;place-items:center;flex:none}
+.acsatir small{display:block;color:var(--muted);font-size:13px}

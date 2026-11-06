@@ -307,7 +307,7 @@
     $("tema").hidden = v !== "tema";
     $("rota").hidden = v !== "rota";
     $("yol").hidden = v !== "yol";
-    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark", "planlar", "muzekart"]) $(x).hidden = v !== x;
+    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark", "planlar", "muzekart", "acil"]) $(x).hidden = v !== x;
     $("ataturk").hidden = v !== "ataturk";
     $("rozet").hidden = v !== "rozet";
     $("listem").hidden = v !== "listem";
@@ -316,6 +316,7 @@
     $("plan").hidden = true;
     $("back").hidden = v === "home" || v === "listem" || v === "rozet" || (view && view.mode === "near");
     $("dilHizli").hidden = v !== "home";
+    $("acilPill").hidden = !(view && view.mode === "near");
     if (degisti || v === "city") window.scrollTo(0, 0);
     navAktif();
   }
@@ -361,6 +362,7 @@
       if (h[0] === "kartlar") return await showKartlar();
       if (h[0] === "oyun") return await showOyun();
       if (h[0] === "cark") return showCark();
+      if (h[0] === "acil") return showAcil();
       if (h[0] === "ozet") { history.replaceState(null, "", "#/rozetler"); route(); setTimeout(() => yilOzeti(+h[1] || 0), 600); return; }
       if (h[0] === "rozetler") { view = { mode: "rozet" }; show("rozet"); $("eyebrow").textContent = T("Gezi haritan ve rozetler"); $("title").textContent = T("Gezilerim"); renderGez(); return; }
       if (h[0] === "listem") { view = { mode: "listem" }; show("listem"); $("eyebrow").textContent = "Rota Cepte"; $("title").textContent = T("Gideceğim yerler"); renderFav(); return; }
@@ -3340,6 +3342,66 @@
     places = ds.flatMap((d) => d.yerler).sort((a, b) => km(me, a) - km(me, b)).slice(0, 150);
     renderAll();
   }
+
+  // ---------- acil yardım: 112, konumum (internetsiz), yakındaki hastane / karakol / nöbetçi eczane ----------
+  function showAcil() {
+    view = { mode: "acil" }; show("acil");
+    $("eyebrow").textContent = TL("Sakin ol, adım adım", "Stay calm, step by step"); $("title").textContent = TL("Acil yardım", "Emergency help");
+    renderAcil();
+    if (!me) startLocation(() => { if (view.mode === "acil") renderAcil(); });
+  }
+  let acilYer = "";
+  async function acilYerBul() {
+    if (!me || !IDX) return;
+    const il = IDX.iller.slice().sort((a, b) => km(me, a) - km(me, b))[0];
+    let yaz = il.ad;
+    try {
+      const d = await loadIl(il.s);
+      const ilce = d.ilceler.filter((x) => x.lat).sort((a, b) => km(me, a) - km(me, b))[0];
+      if (ilce) yaz = ilce.ad + ", " + il.ad;
+    } catch (e) {}
+    if (yaz !== acilYer) { acilYer = yaz; if (view.mode === "acil") renderAcil(); }
+  }
+  function renderAcil() {
+    if (!view || view.mode !== "acil") return;
+    const k = me ? `${me.lat.toFixed(5)}, ${me.lng.toFixed(5)}` : "";
+    const ara = (q) => me ? `https://www.google.com/maps/search/${encodeURIComponent(q)}/@${me.lat},${me.lng},14z` : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+    const satir = (ikon, ad, alt, href) => `<a class="acsatir" href="${href}" target="_blank" rel="noopener"><span class="aci">${ik(ikon, 20)}</span><span class="rt"><b>${ad}</b><small>${alt}</small></span><span class="acet">${TL("internet", "online")}</span></a>`;
+    $("acil").innerHTML = `
+      <a class="acara" href="tel:112">${ik("phone", 30)}<span>${TL("112'yi ara", "Call 112")}<small>${TL("Polis · Ambulans · İtfaiye", "Police · Ambulance · Fire")}</small></span></a>
+      <p class="acnot">${TL("Telefonun arama ekranı açılır, aramayı sen başlatırsın. 112 ücretsizdir.", "Your phone's dialer opens and you start the call. 112 is free. If you don't speak Turkish, say \"English, please\" and stay on the line.")}</p>
+      <section class="ackart">
+        <h3>${ik("locate-fixed", 18)} ${TL("Konumum", "My location")} <span class="acet ok">${TL("internetsiz", "offline")}</span></h3>
+        ${me ? `<div class="ackoor">${k}</div><p>${acilYer ? esc(acilYer) + TL(" yakınları", " area") + " · " : ""}${TL("112 \"neredesiniz\" diye sorarsa bunu oku.", "If 112 asks where you are, read this out.")}</p>
+        <div class="acdug"><button class="btn" data-acil="kopya">${ik("copy", 16)} ${TL("Kopyala", "Copy")}</button><button class="btn" data-acil="gonder">${ik("send", 16)} ${TL("Konumumu gönder", "Send my location")}</button></div>
+        <p>${TL("Tek seferlik gönderilir, canlı takip yok.", "Sent once, no live tracking.")}</p>`
+        : `<p>${watchId !== null ? T("Konum aranıyor…") : TL("Konumun kapalı. Açarsan koordinatın burada görünür, internet olmasa da.", "Location is off. Turn it on to see your coordinates here, even offline.")}</p>${watchId === null ? `<div class="acdug"><button class="btn primary" data-acil="konum">${ik("locate-fixed", 16)} ${T("Konumu aç")}</button></div>` : ""}`}
+      </section>
+      <section class="ackart">
+        <h3>${ik("map-pin", 18)} ${TL("Yakınımda bul", "Find near me")}</h3>
+        ${satir("hospital", TL("En yakın hastane", "Nearest hospital"), TL("Google Haritalar'da açılır", "Opens in Google Maps"), ara(TL("hastane", "hospital")))}
+        ${satir("shield", TL("En yakın karakol", "Nearest police station"), TL("Google Haritalar'da açılır", "Opens in Google Maps"), ara(TL("polis karakolu", "police station")))}
+        ${satir("pill", TL("Nöbetçi eczane", "Pharmacy on duty"), TL("e-Devlet'in resmi nöbetçi eczane sayfası", "Official e-Devlet page (in Turkish)"), "https://www.turkiye.gov.tr/saglik-titck-nobetci-eczane-sorgulama")}
+      </section>
+      ${DIL === "en" ? `<section class="ackart">
+        <h3>${ik("book-open", 18)} Lost your passport?</h3>
+        <ol><li>Go to the nearest police station and get a loss report.</li><li>Contact your country's embassy or consulate.</li><li>Travel home with the emergency travel document they issue.</li></ol>
+        <div class="acdug"><a class="btn" href="https://www.mfa.gov.tr/diplomatic-missions-in-turkey.en.mfa" target="_blank" rel="noopener">${ik("external-link", 16)} Embassies and consulates</a></div>
+        <p>The list is the official page of the Turkish Ministry of Foreign Affairs.</p>
+      </section>` : ""}`;
+    if (me && !acilYer) acilYerBul();
+  }
+  document.addEventListener("click", async (e) => {
+    const b = e.target.closest("[data-acil]"); if (!b) return;
+    const a = b.dataset.acil;
+    if (a === "konum") { startLocation(() => { if (view.mode === "acil") renderAcil(); }); renderAcil(); return; }
+    if (!me) return;
+    const k = `${me.lat.toFixed(5)}, ${me.lng.toFixed(5)}`, link = `https://maps.google.com/?q=${me.lat.toFixed(5)},${me.lng.toFixed(5)}`;
+    if (a === "kopya") {
+      try { await navigator.clipboard.writeText(k); toast(TL("Konum kopyalandı", "Location copied")); }
+      catch (x) { toast(k, 8000); }
+    } else if (a === "gonder") metinPaylas(TL("Konumum", "My location"), TL("Şu an buradayım:", "I'm here right now:"), link);
+  });
 
   // ---------- liste ----------
   let ilAra = "";

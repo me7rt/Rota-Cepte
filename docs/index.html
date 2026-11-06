@@ -157,6 +157,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
     <button class="grow onerbtn"><i data-ik="map-pin-plus"></i><span>Burada olmayan bir yer mi biliyorsun? <b>Öner</b></span></button>
     <button class="grow" id="paylasBtn"><i data-ik="share-2"></i><span>Rota Cepte'yi arkadaşlarına öner</span></button>
     <details class="ayarlar"><summary class="grow"><i data-ik="settings"></i><span><b>Ayarlar ve hakkında</b><small>Dil, tema, sürüm, gizlilik, lisanslar</small></span></summary>
+    <button class="grow" data-go="#/acil"><i data-ik="shield-plus"></i><span><b>Acil yardım</b><small>112, konumum, en yakın hastane ve eczane</small></span></button>
     <button class="grow" id="yeniBtn"><i data-ik="sparkles"></i><span>Bu sürümde neler yeni?</span></button>
     <button class="grow" id="dilBtn"><i data-ik="languages"></i><span id="dilYazi"></span></button>
     <button class="grow" id="sesBtn"><i data-ik="headphones"></i><span>Sesli rehber</span></button>
@@ -231,6 +232,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
 
 <main id="planlar" class="view" hidden></main>
 <main id="muzekart" class="view mkview" hidden></main>
+<main id="acil" class="view acilv" hidden></main>
 
 <main id="rota" class="view" hidden>
   <p class="rnot" id="rotaNot"></p>
@@ -299,6 +301,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
     <button role="tab" data-tab="ilce" id="tabBtnIlce">İlçeler</button>
   </div>
   <div id="tabYer">
+    <button class="acilpill" id="acilPill" data-go="#/acil" hidden><i data-ik="shield-plus" data-boy="16"></i> Acil yardım</button>
     <div class="mapkap"><div id="map" class="map"></div><div class="parkbar" id="parkBar"></div></div>
     <div class="chips" id="chips" role="group" aria-label="Kategori"></div>
     <div class="arakutu ilarakutu"><i class="araik" data-ik="search"></i><input id="ilAra" type="search" placeholder="Bu ilde yer ara… (ör. kale, şelale)" aria-label="Bu ilde yer ara" autocomplete="off" enterkeyhint="search"><button id="ilAraSil" class="arasil" aria-label="Aramayı temizle" hidden><i data-ik="x" data-boy="18"></i></button></div>
