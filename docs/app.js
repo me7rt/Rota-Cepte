@@ -8,7 +8,7 @@
   const surumEk = (v) => ({ 0: "da", 1: "de", 2: "de", 3: "te", 4: "te", 5: "te", 6: "da", 7: "de", 8: "de", 9: "da" })[String(v).slice(-1)] || "de";
   if (window.ikDoldur) ikDoldur();
   // Paylaşılan link Android tarayıcıda açıldıysa uygulama yüklü değildir (yüklüyse Android linki doğrudan uygulamaya verir): Google Play'e yönlendir
-  const PAYLASIM_YOLU = /^#\/(il\/[^/]+\/yer\/|liste\/|yol\/)/;
+  const PAYLASIM_YOLU = /^#\/(il\/[^/]+\/yer\/|liste\/|yol\/|plan-al\/)/;
   try {
     const yerli = window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() !== "web";
     if (!yerli && location.hostname === "me7rt.github.io" && /Android/i.test(navigator.userAgent) && PAYLASIM_YOLU.test(location.hash) && !/[?&]web\b/.test(location.search)) {
@@ -353,6 +353,7 @@
       if (h[0] === "yakin") return await showNear(no);
       if (h[0] === "tema" && TEMA[h[1]]) return showTema(h[1]);
       if (h[0] === "tarz" && TARZ[h[1]]) return showTarz(h[1]);
+      if (h[0] === "plan-al") return await showPlanAl(h[1]);
       if (h[0] === "plan") return await showPlan(h[1]);
       if (h[0] === "ataturk") return await showAtaturk();
       if (h[0] === "rota") return await showRota(h[1], no);
@@ -2354,6 +2355,7 @@
     const yeni = [
       ["car-front", TL("Arabamı, otelimi kaydet", "Save my car or hotel"), TL("Ana sayfadaki “Arabamı / otelimi kaydet” düğmesine bas, durduğun yer kaydedilsin. Dönerken “Arabama dön”e bas, Google Haritalar seni doğrudan oraya götürsün.", "Tap “Save my car / hotel” on the home screen to save where you are. On the way back, tap “Back to car” and Google Maps takes you straight there."), ""],
       ["shield-plus", TL("Acil yardım", "Emergency help"), TL("Tek dokunuşla 112, internetsiz konumun, en yakın hastane, karakol ve nöbetçi eczane. Yakınımda sekmesinde ve Ayarlar'da.", "Call 112 in one tap, see your location offline, find the nearest hospital, police and pharmacy on duty. In Nearby and Settings."), "#/acil"],
+      ["users", TL("Ortak plan", "Shared plan"), TL("Tatil planını linkle gönder; arkadaşın açıp düzenlesin, geri göndersin. Ne eklendi, ne çıkarıldı tek tek görürsün, istersen planını güncellersin.", "Send your holiday plan as a link; your friend edits it and sends it back. See what was added or removed, then update your plan if you like."), "#/plan"],
       ["party-popper", TL("Festivaller ve anmalar", "Festivals and commemorations"), TL("Ana sayfadaki ay kutusunda o ayın festivalleri; ay ay bütün Türkiye ve her ilin sayfasında kendi festivalleri. 10 Kasım, 18 Mart, 19 Mayıs ve Kocatepe anmaları da burada.", "This month's festivals in the season box, every month across Türkiye, and each province's own festivals on its page."), "#/festival"],
       ["sparkles", TL("Kültür koçu", "Culture coach"), TL("Cami sayfalarında girmeden önce bilmen gereken 4 kısa kural; çay, bahşiş, pazarlık ve Ramazan için küçük bilgiler.", "Four quick rules on every mosque page, plus tips on tea, tipping, bargaining and Ramadan."), "#/kultur"],
       ["map", TL("İller tek bakışta", "Provinces at a glance"), TL("Her ilin kartında en bilinen yerleri yazıyor; tüm illeri bölgeye göre süz. Paylaşılan linkler artık doğrudan uygulamada açılıyor.", "Every province card names its best-known sights; filter all provinces by region. Shared links now open straight in the app."), ""],
@@ -3899,7 +3901,7 @@
         ${g.length ? `<button class="linkbtn plhgos" data-p="hgun" data-g="${gi}">${ik("map", 16)} ${TL("Bu günü haritada gör", "See this day on the map")}</button>` : ""}
         <div class="plalt"><button class="btn plekle" data-p="ekle" data-g="${gi}" ${g.length >= PLAN_DURAK_UST ? "disabled" : ""}>${ik("plus", 18)} ${TL("Yer ekle", "Add a place")}</button>${g.length ? `<a class="btn primary" href="${gunHarita(g)}" target="_blank" rel="noopener">${ik("navigation", 18)} ${TL("Rotayı aç", "Open route")}</a>` : ""}</div></section>`;
     }).join("");
-    kutu.innerHTML = `<div class="plust"><button class="chipbtn" data-p="ad">${ik("pencil", 16)} ${TL("Adını değiştir", "Rename")}</button><button class="chipbtn" data-p="paylas">${ik("share-2", 16)} ${TL("Paylaş", "Share")}</button><button class="chipbtn" data-p="sil">${ik("trash", 16)} ${TL("Planı sil", "Delete plan")}</button></div>
+    kutu.innerHTML = `<div class="plust"><button class="chipbtn" data-p="ad">${ik("pencil", 16)} ${TL("Adını değiştir", "Rename")}</button><button class="chipbtn" data-p="paylas">${ik("share-2", 16)} ${TL("Paylaş", "Share")}</button>${p.op ? `<button class="chipbtn opgeri" data-p="geri">${ik("send", 16)} ${esc(TL(`${p.op.k}${ekE(p.op.k)} geri gönder`, `Send back to ${p.op.k}`))}</button>` : ""}<button class="chipbtn" data-p="sil">${ik("trash", 16)} ${TL("Planı sil", "Delete plan")}</button></div>
       ${gunler}
       ${p.g.length < PLAN_GUN_UST ? `<button class="btn plgunekle" data-p="gunekle">${ik("calendar-plus", 18)} ${TL("Gün ekle", "Add a day")}</button>` : ""}
       ${planHaritaHtml(p)}
@@ -3974,12 +3976,110 @@
       if (!p || !confirm(TL(`"${p.ad}" planı silinsin mi?`, `Delete the plan "${p.ad}"?`))) return;
       planYaz(planlar().filter((x) => x.id !== id)); toast(TL("Plan silindi.", "Plan deleted.")); git("#/plan"); return;
     }
-    if (k === "paylas") {
+    if (k === "paylas" || k === "geri") {
       const p = planlar().find((x) => x.id === id); if (!p) return;
-      const metin = p.ad + "\n" + p.g.map((g, j) => gunAd(j) + ((p.kon || [])[j] ? " (" + p.kon[j].ad + ")" : "") + ": " + (g.length ? g.map((x) => kayitAd(x)).join(", ") : "—")).join("\n") + "\n\n" + TL("Rota Cepte ile planladım:", "Planned with Rota Cepte:");
-      metinPaylas(p.ad, metin, "https://me7rt.github.io/Rota-Cepte/");
+      planGonder(p, k === "geri" && p.op);
     }
   }
+  // ---------- ortak plan: plan linkin içinde gider gelir (sunucu yok). Arkadaş açar, düzenler, geri gönderir ----------
+  const ADIM = "gezi-adim";
+  // Yönelme eki: Mert'e, Ayşe'ye, Ahmet'e, Ali'ye, Burak'a
+  const ekE = (ad) => { const k = ad.toLocaleLowerCase("tr"), sesli = k.match(/[aeıioöuü]/g), son = sesli ? sesli[sesli.length - 1] : "e"; return "'" + (/[aeıioöuü]$/.test(k) ? "y" : "") + ("aıou".includes(son) ? "a" : "e"); };
+  const adimOku = () => { try { return localStorage.getItem(ADIM) || ""; } catch (e) { return ""; } };
+  const b64 = (o) => btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const b64Oku = (k) => { try { return JSON.parse(decodeURIComponent(escape(atob(String(k).replace(/-/g, "+").replace(/_/g, "/"))))); } catch (e) { return null; } };
+  const yerAnah = (x) => x.s + "~" + String(x.q || "").replace(/^Q/, "");
+  // Linke yalnızca yerlerin kimliği, sırası, günlerin nerede geçtiği ve gönderenin adı girer
+  function planKod(p, kime) {
+    const kon = (p.kon || []).map((k) => k ? [k.ad, k.alt || "", k.s, +(+k.lat).toFixed(4), +(+k.lng).toFixed(4), k.t || ""] : 0);
+    return b64({ v: 1, a: p.ad, k: adimOku(), i: kime ? kime.id : p.id, r: kime ? 1 : 0, g: p.g.map((g) => g.filter((x) => /^Q\d+$/.test(x.q || "")).map(yerAnah)), o: kon });
+  }
+  function adSor(baslik, geri) {
+    const d = document.createElement("div"); d.className = "tanit";
+    d.innerHTML = `<div class="tkart plform"><div class="temo">${ik("users", 34)}</div><h2>${esc(baslik)}</h2><p>${TL("Arkadaşın planı kimin gönderdiğini görsün. Adını bir kere yazman yeter.", "So your friend knows who sent it. You only type it once.")}</p>
+      <label class="plinput"><small>${TL("Adın", "Your name")}</small><input id="opAd" maxlength="24" autocomplete="given-name" value="${esc(adimOku())}"></label>
+      <div class="tbtn"><button class="linkbtn" data-k="kapat">${T("Vazgeç")}</button><button class="btn primary" data-k="tamam">${ik("send", 18)} ${TL("Gönder", "Send")}</button></div></div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    d.addEventListener("click", (e) => {
+      if (e.target === d || e.target.closest("[data-k=kapat]")) return kapat();
+      if (e.target.closest("[data-k=tamam]")) { const ad = d.querySelector("#opAd").value.trim(); if (!ad) { d.querySelector("#opAd").focus(); return; } try { localStorage.setItem(ADIM, ad); } catch (x) {} kapat(); geri(); }
+    });
+    document.body.appendChild(d); setTimeout(() => d.querySelector("#opAd").focus(), 80);
+  }
+  function planGonder(p, geriMi) {
+    const git2 = () => {
+      const link = "https://me7rt.github.io/Rota-Cepte/#/plan-al/" + planKod(p, geriMi ? { id: p.op.i } : null);
+      const metin = geriMi ? TL(`"${p.ad}" planını düzenledim, bakar mısın?`, `I've edited the plan "${p.ad}", take a look:`)
+        : TL(`"${p.ad}" tatil planımı seninle paylaşıyorum (${p.g.length} gün, ${planSay(p)} yer). Açıp düzenleyebilirsin:`, `Here's my holiday plan "${p.ad}" (${p.g.length} days, ${planSay(p)} places). You can open and edit it:`);
+      metinPaylas(p.ad, metin, link);
+    };
+    if (adimOku()) git2(); else adSor(geriMi ? TL("Planı geri gönder", "Send the plan back") : TL("Planı paylaş", "Share the plan"), git2);
+  }
+  // Linkteki planı yerlerin gerçek kayıtlarına çevir
+  async function planCoz(o) {
+    const g = [];
+    for (const gun of (o.g || []).slice(0, PLAN_GUN_UST)) {
+      const l = [];
+      for (const a of gun.slice(0, PLAN_DURAK_UST)) {
+        const [sl, n] = String(a).split("~");
+        if (!IDX.ilBy.has(sl) || !/^\d+$/.test(n)) continue;
+        try { const d = await loadIl(sl); const y = d.yerler.find((x) => x.q === "Q" + n); if (y) l.push(yerKayit(y)); } catch (e) {}
+      }
+      g.push(l);
+    }
+    const kon = g.map((_, i) => { const k = (o.o || [])[i]; return Array.isArray(k) && IDX.ilBy.has(k[2]) ? { ad: String(k[0]).slice(0, 60), alt: String(k[1]).slice(0, 60), s: k[2], lat: +k[3], lng: +k[4], t: k[5] } : null; });
+    return { ad: String(o.a || TL("Ortak plan", "Shared plan")).slice(0, 40), g, kon };
+  }
+  // Fark: eklenen, çıkarılan, günü ya da sırası değişen yerler
+  function planFark(eski, yeni) {
+    const yer = (p) => { const m = new Map(); p.g.forEach((g, gi) => g.forEach((x, i) => m.set(yerAnah(x), { x, gi, i }))); return m; };
+    const A = yer(eski), B = yer(yeni), ekl = [], cik = [], deg = [];
+    for (const [k, v] of B) { const e = A.get(k); if (!e) ekl.push(v); else if (e.gi !== v.gi || e.i !== v.i) deg.push(v); }
+    for (const [k, v] of A) if (!B.has(k)) cik.push(v);
+    return { ekl, cik, deg, gunDeg: eski.g.length !== yeni.g.length };
+  }
+  async function showPlanAl(kod) {
+    const o = b64Oku(kod);
+    git("#/plan");
+    if (!o || o.v !== 1 || !Array.isArray(o.g)) { toast(TL("Bu plan linki açılamadı.", "This plan link couldn't be opened.")); return; }
+    const yeni = await planCoz(o), kim = String(o.k || "").slice(0, 24) || TL("Arkadaşın", "Your friend");
+    const benim = o.r && planlar().find((x) => x.id === o.i);
+    const d = document.createElement("div"); d.className = "tanit";
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    const yeniPlan = (op) => { const p = { id: "p" + Date.now().toString(36), ad: yeni.ad, g: yeni.g.length ? yeni.g : [[]], kon: yeni.kon, u: Date.now() }; if (op) p.op = op; const a = planlar(); a.unshift(p); planYaz(a); return p; };
+    if (benim) {
+      const f = planFark(benim, yeni);
+      const sat = (ikon, l, yazi) => l.length ? `<li>${ik(ikon, 18)}<span><b>${yazi}</b> ${esc(l.slice(0, 6).map((v) => kayitAd(v.x)).join(", "))}${l.length > 6 ? "…" : ""}</span></li>` : "";
+      const hic = !f.ekl.length && !f.cik.length && !f.deg.length && !f.gunDeg;
+      d.innerHTML = `<div class="tkart plform"><div class="temo">${ik("refresh-cw", 34)}</div><h2>${esc(TL(`${kim} planını düzenledi`, `${kim} edited your plan`))}</h2><p>${esc(benim.ad)}</p>
+        ${hic ? `<p>${TL("Hiçbir şey değişmemiş.", "Nothing has changed.")}</p>` : `<ul class="opfark">${sat("plus", f.ekl, TL(`${f.ekl.length} yer eklendi:`, `${f.ekl.length} added:`))}${sat("minus", f.cik, TL(`${f.cik.length} yer çıkarıldı:`, `${f.cik.length} removed:`))}${sat("arrow-up-down", f.deg, TL(`${f.deg.length} yerin günü ya da sırası değişti:`, `${f.deg.length} moved:`))}${f.gunDeg ? `<li>${ik("calendar-days", 18)}<span>${TL(`Gün sayısı ${benim.g.length} → ${yeni.g.length}`, `Days ${benim.g.length} → ${yeni.g.length}`)}</span></li>` : ""}</ul>`}
+        <div class="tbtn opbtn"><button class="linkbtn" data-k="kapat">${T("Vazgeç")}</button><button class="btn" data-k="ayri">${TL("Ayrı plan olarak kaydet", "Save as a new plan")}</button>${hic ? "" : `<button class="btn primary" data-k="guncelle">${ik("check", 18)} ${TL("Planımı güncelle", "Update my plan")}</button>`}</div></div>`;
+      d.addEventListener("click", (e) => {
+        if (e.target === d || e.target.closest("[data-k=kapat]")) return kapat();
+        if (e.target.closest("[data-k=guncelle]")) {
+          try { localStorage.setItem("gezi-plan-yedek", JSON.stringify(benim)); } catch (x) {}
+          planDegis(benim.id, (p) => { p.g = yeni.g.length ? yeni.g : [[]]; p.kon = yeni.kon; });
+          kapat(); toast(TL("Planın güncellendi.", "Your plan was updated.")); git("#/plan/" + benim.id);
+        } else if (e.target.closest("[data-k=ayri]")) { const p = yeniPlan(); kapat(); toast(TL("Ayrı plan olarak kaydedildi.", "Saved as a new plan.")); git("#/plan/" + p.id); }
+      });
+    } else {
+      const n = yeni.g.reduce((t, g) => t + g.length, 0);
+      const yerler = [...new Set(yeni.kon.filter(Boolean).map((k) => k.ad))].join(", ");
+      d.innerHTML = `<div class="tkart plform"><div class="temo">${ik("calendar-days", 34)}</div><h2>${esc(TL(`${kim} sana bir plan gönderdi`, `${kim} sent you a plan`))}</h2>
+        <p><b>${esc(yeni.ad)}</b><br>${TL(`${yeni.g.length} gün · ${n} yer`, `${yeni.g.length} day${yeni.g.length === 1 ? "" : "s"} · ${n} place${n === 1 ? "" : "s"}`)}${yerler ? " · " + esc(yerler) : ""}</p>
+        <p>${TL(`Açıp düzenleyebilirsin. Düzenleyince "${esc(kim + ekE(kim))} geri gönder" düğmesi çıkar.`, `You can open and edit it. Then a "Send back to ${esc(kim)}" button appears.`)}</p>
+        <div class="tbtn opbtn"><button class="linkbtn" data-k="kapat">${T("Vazgeç")}</button><button class="btn" data-k="kaydet">${TL("Sadece kaydet", "Just save")}</button><button class="btn primary" data-k="ac">${ik("pencil", 18)} ${TL("Aç ve düzenle", "Open and edit")}</button></div></div>`;
+      d.addEventListener("click", (e) => {
+        if (e.target === d || e.target.closest("[data-k=kapat]")) return kapat();
+        const ac = e.target.closest("[data-k=ac]"), kay = e.target.closest("[data-k=kaydet]");
+        if (!ac && !kay) return;
+        const p = yeniPlan(o.r ? null : { i: String(o.i || "").slice(0, 40), k: kim });
+        kapat(); toast(TL("Plan kaydedildi.", "Plan saved.")); git("#/plan/" + p.id);
+      });
+    }
+    document.body.appendChild(d);
+  }
+
   // Yeni plan penceresi: ad, sonra hangi şehirde kaç gün (ör. 2 gün İzmir + 2 gün Muğla + 3 gün Antalya).
   // adId verilirse yalnızca ad değişir; yer verilirse 1. güne eklenir.
   function planYeniAc(yer, adId) {

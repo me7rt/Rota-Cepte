@@ -1472,3 +1472,9 @@ html.gm-acik,html.gm-acik body{overflow:hidden}
 .ilfest .fil b{display:block}.ilfest .fil p{margin:3px 0;color:var(--muted);font-size:14px}
 .ilfest .fil small{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:13px;color:var(--muted)}
 .ilfest .fil a{color:var(--accent,inherit);font-weight:700}
+
+/* ortak plan */
+.opfark{list-style:none;margin:8px 0 4px;padding:0;display:flex;flex-direction:column;gap:8px;text-align:left;font-size:14px}
+.opfark li{display:flex;gap:8px;align-items:flex-start}.opfark svg{flex:none;margin-top:2px}
+.opbtn{flex-wrap:wrap;justify-content:flex-end}
+.opgeri{border-color:var(--pri)}
