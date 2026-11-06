@@ -1,0 +1,16 @@
+name: Foto raporu
+on:
+  push:
+    branches: [foto-rapor]
+    paths: [rapor/liste.json]
+permissions:
+  contents: write
+jobs:
+  indir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install -q pillow && python3 rapor/indir.py
+      - run: |
+          git config user.name "Mert Turanlıoğlu"; git config user.email "me7rtt@gmail.com"
+          git add rapor/k && git commit -q -m "Fotoğraf raporu küçük resimleri" && git push
