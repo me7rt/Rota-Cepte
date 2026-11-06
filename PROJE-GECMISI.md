@@ -110,7 +110,7 @@ Durum sözcükleri:
 | Hafta sonu bildirimi, puan sorusu, "Yeni sürüm hazır" uyarısı | Tamam | |
 | Sürüm yenilikleri kartı | Tamam | Her sürümde güncellenmesi gerekiyor. |
 | Gizlilik (KVKK), lisanslar, koşullar | Tamam | 6.6'daki yeni özellikler için gizlilik metni 6 Kasım'da güncellendi. Bu güncelleme 6.6 dalında. |
-| Gezi haritan (il sınırları çizimi) | Bozuk değil, hukuki risk var | Çizim verisinin lisansı bilinmiyor, bölüm 7'ye bak. |
+| Gezi haritan (il sınırları çizimi) | Tamam | 6.5'te Natural Earth verisinden yeniden çizildi. Bu veri kamu malı, kaynağı `data/tr-harita-KAYNAK.md` dosyasında. |
 
 ### 6.6 dalında, henüz yayınlanmadı
 
@@ -310,7 +310,7 @@ Dal yaklaşık 1.450 sese düşmüştü. Seslendirme işinin kendisi hiçbir dos
 | Gezi Modu | Telefonda denenmedi. Ekran kapalı modu yok. Play'de konum izni beyanı ve video gerekiyor. |
 | Ses barındırma | Sesler şimdilik GitHub üzerinden sunuluyor. Herkese açık yayından önce Cloudflare R2'ye taşınması planlandı. Ses adresi uygulamada sabit yazılmayacak. |
 | Ücretsiz planlar | MapTiler, Open-Meteo ve OSM ticari kullanım dışı. Gelir başlamadan ücretli plana geçilmeli. |
-| Gezi haritan çizimi | `docs/tr-harita.json` dosyasının lisansı bilinmiyor. Lisanslı bir kaynaktan yeniden yapılması planlandı. Yapılıp yapılmadığı kontrol edilmeli. |
+| Gezi haritan çizimi | Lisans riski 6.5'te çözüldü: harita kamu malı Natural Earth verisinden çiziliyor. Lisanslar sayfası da Natural Earth'ü gösteriyor. Eski kaynaktan bir MIT lisans dosyası kalmış (`docs/tr-harita-LICENSE.txt`). Artık o kaynaktan bir şey kullanılmadığı için silinebilir, MERT'in onayı bekleniyor. |
 | KVKK gri alanı | E-postaların ABD'deki Gmail'de tutulması yurt dışı aktarım sayılabilir. Yorum ve hesap gibi özellikler gelince avukata danışılmalı. |
 | Azure maliyeti | 200 dolarlık ücretsiz kredi tahminden çok daha hızlı bitti. Abonelik kullandıkça öde planına geçti, 25 dolar bütçe uyarısı var. Yaşayan Rehber'in tahmini maliyeti yaklaşık 28 dolar, bütçe uyarısının üstünde. Gerçek tutar Azure'un Maliyet analizi ekranından kontrol edilmeli. |
 | Çalışma ortamı | Geliştirme ortamı geçici. Yaşayan Rehber taslak betikleri ortam kapanınca kaybolacak. Kalıcı olan metinler, sesler ve raporlar. |
