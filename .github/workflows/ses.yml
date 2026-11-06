@@ -53,6 +53,7 @@ jobs:
         env:
           AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
           AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+          EN_ERKEK: en-US-AndrewNeural
       - name: Örnekleri dala yükle
         if: always()
         run: |
