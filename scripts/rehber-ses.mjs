@@ -16,19 +16,42 @@ const SES = {
 // İngilizce metindeki Türkçe adlar: çok dilli seste Türkçe okunur, Sonia'da IPA ile
 const TELAFFUZ = [
   ["Hezarfen Ahmed Çelebi", "hɛzɑːˈfɛn ɑːˈmɛd tʃɛlɛˈbiː"],
+  ["Küçük Menderes", "kyˈtʃyk mɛndɛˈrɛs"],
   ["Evliya Çelebi", "ɛvliˈjɑː tʃɛlɛˈbiː"],
   ["Zincirli Han", "zɪndʒɪrˈliː hɑːn"],
-  ["Hezarfen", "hɛzɑːˈfɛn"],
-  ["Üsküdar", "ˈʊskʊdɑː"],
+  ["Kabayanidis", "kɑbɑjɑˈnidis"],
   ["Sarayburnu", "sɑˈraɪbʊrnuː"],
-  ["Salacak", "sæləˈdʒɑːk"],
-  ["Mehmed", "mɛˈmɛd"],
+  ["Altındere", "ɑltɯndɛˈrɛ"],
+  ["Müzekart", "myzɛˈkɑrt"],
+  ["Akçaabat", "ɑktʃɑːˈbɑt"],
+  ["Hezarfen", "hɛzɑːˈfɛn"],
   ["bedesten", "bɛdɛsˈtɛn"],
+  ["Karakuş", "kɑrɑˈkʊʃ"],
+  ["Cendere", "dʒɛndɛˈrɛ"],
+  ["Şirince", "ʃiˈrindʒɛ"],
+  ["çöp şiş", "tʃøp ʃiʃ"],
+  ["Karadağ", "kɑrɑˈdɑː"],
+  ["Atatürk", "ɑtɑˈtyrk"],
+  ["Trabzon", "trɑbˈzɔn"],
+  ["Soğuksu", "soːˈʊksʊ"],
+  ["Boztepe", "bɔztɛˈpɛ"],
+  ["Üsküdar", "ˈʊskʊdɑː"],
+  ["Salacak", "sæləˈdʒɑːk"],
+  ["Nemrut", "nɛmˈrʊt"],
+  ["Selçuk", "sɛlˈtʃʊk"],
+  ["Göreme", "gøˈrɛmɛ"],
+  ["Mehmed", "mɛˈmɛd"],
+  ["Kahta", "kɑhˈtɑ"],
+  ["Zelve", "zɛlˈvɛ"],
+  ["köfte", "køfˈtɛ"],
+  ["Maçka", "mɑtʃˈkɑ"],
 ];
 const xml = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+// Paragraf ve kart cümleleri arasında kısa durak
+const durak = (s) => s.replace(/\n+/g, ' <break time="700ms"/> ');
 function ic(metin, dil, cins) {
   let t = xml(metin);
-  if (dil !== "en") return `<lang xml:lang="tr-TR">${t}</lang>`;
+  if (dil !== "en") return `<lang xml:lang="tr-TR">${durak(t)}</lang>`;
   const ipa = cins === "k";
   const parca = t.split(new RegExp(`(${TELAFFUZ.map(([a]) => a).join("|")})`));
   t = parca.map((p) => {
@@ -36,6 +59,7 @@ function ic(metin, dil, cins) {
     if (!b) return p;
     return ipa ? `<phoneme alphabet="ipa" ph="${b[1]}">${p}</phoneme>` : `</lang><lang xml:lang="tr-TR">${p}</lang><lang xml:lang="en-US">`;
   }).join("");
+  t = durak(t);
   return ipa ? t : `<lang xml:lang="en-US">${t}</lang>`.replace(/<lang xml:lang="en-US"><\/lang>/g, "");
 }
 function ssml(metin, dil, cins) {
@@ -66,7 +90,7 @@ const SINIR = Number(process.env.HARF_SINIRI || 50000);
 let harf = 0, hata = 0;
 for (const x of JSON.parse(fs.readFileSync(METIN, "utf8"))) {
   for (const cins of ["k", "e"]) {
-    const ad = `${x.id}-${x.dil}-${cins}`, govde = ssml(x.metin, x.dil, cins);
+    const ad = `${x.id}_${cins === "k" ? "kadin" : "erkek"}`, govde = ssml(x.metin, x.dil, cins);
     if (harf + x.metin.length > SINIR) { console.error("HARF SINIRI doldu, durdu:", harf); process.exitCode = 1; break; }
     harf += x.metin.length;
     fs.writeFileSync(path.join(CIKTI, ad + ".xml"), govde);

@@ -58,11 +58,11 @@ jobs:
         run: |
           ls out/*.mp3 >/dev/null 2>&1 || { echo "ses yok, yüklenmedi"; exit 0; }
           cd out
-          git init -q -b ses-ornek
+          git init -q -b rehber-ses
           git config user.name "Mert Turanlıoğlu"
           git config user.email "me7rtt@gmail.com"
           git add . && git commit -qm "Rehber ses denemesi"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" ses-ornek
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" rehber-ses
 
   hepsi:
     needs: hazirla
