@@ -61,13 +61,18 @@ async function seslendir(govde, dosya) {
 }
 
 fs.mkdirSync(CIKTI, { recursive: true });
-let hata = 0;
+// Harcama koruması: bu kadar harften fazlasını asla seslendirme
+const SINIR = Number(process.env.HARF_SINIRI || 50000);
+let harf = 0, hata = 0;
 for (const x of JSON.parse(fs.readFileSync(METIN, "utf8"))) {
   for (const cins of ["k", "e"]) {
     const ad = `${x.id}-${x.dil}-${cins}`, govde = ssml(x.metin, x.dil, cins);
+    if (harf + x.metin.length > SINIR) { console.error("HARF SINIRI doldu, durdu:", harf); process.exitCode = 1; break; }
+    harf += x.metin.length;
     fs.writeFileSync(path.join(CIKTI, ad + ".xml"), govde);
     try { console.log(ad, await seslendir(govde, path.join(CIKTI, ad + ".mp3"))); }
     catch (e) { hata++; console.error("HATA", ad, e.message); }
   }
 }
+console.log(`toplam ${harf} harf`);
 if (hata) process.exitCode = 1;

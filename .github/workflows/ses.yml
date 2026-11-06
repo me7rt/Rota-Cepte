@@ -56,6 +56,7 @@ jobs:
       - name: Örnekleri dala yükle
         if: always()
         run: |
+          ls out/*.mp3 >/dev/null 2>&1 || { echo "ses yok, yüklenmedi"; exit 0; }
           cd out
           git init -q -b ses-ornek
           git config user.name "Mert Turanlıoğlu"
