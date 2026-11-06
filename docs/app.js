@@ -1282,22 +1282,32 @@
     <blockquote class="atsoz">${esc(TL("“Beni görmek demek mutlaka yüzümü görmek değildir. Benim fikirlerimi, benim duygularımı anlıyorsanız ve hissediyorsanız bu kâfidir.”", "“To see me does not necessarily mean to see my face. To understand my ideas and my feelings is enough.”"))}<cite>Mustafa Kemal Atatürk</cite></blockquote>`;
   }
   // ---------- keşfet: tema listeleri (Türkiye geneli) ----------
+  // Antik kentler adında "antik kent" geçmeyebilir (Efes, Perge): bu yüzden ad listesiyle eşleşir
+  const ANTIK = new Set("adada | adramytteion | afrodisias | aigai | aizanoi | alabanda | alacahoyuk | alexandria troas | alinda | amos | anemurium antik kenti | ani | antandros | antiocheia ad cragum | antiokheia | apameia kibotos | apollonia | araxa | ariassos | arsada | arsameia | arslantepe | arykanda | aspendos | aspendos antik tiyatrosu | assos | athena tapinagi | ayasuluk | ayazini | bargylia | bergama akropolu | beycesultan | bouleuterion/odeion | briula | catalhoyuk | cavustepe | dara | delikkemer | didyma | duluk | efes | elaiussa sebaste | emirzeli | epiphaneia | eski smyrna | euromos | gobeklitepe | gordion | hadrianapolis | halikarnassos | harran | hattusa | herakleia | hierapolis | hierapolis plutoniumu | issos | izmir agorasi | juliopolis nekropolu | kabacam oren yeri | kandyba | kanlidivane | karahantepe | kastabala | kaunos | kelenderis | kerkenes | khrysa | kilistra | klaros | klazomenai | knidos | korykos | kremna | ksantos | kultepe | kyme | kyzikos | labranda | lagina | laodikeia | larissa | letoon | limyra | lyrbe | magarsa | magnesia | mastaura | metropolis | milet | myra | nemrut dagi milli parki | nerik | nikaia | notion | nysa | oinoanda | okuzlu oren yeri | olba | olimpos | panionion | parion | patara | pergamon | perge | perre | pessinus | pinara | pitane | pompeiopolis | priene | rhodiapolis | sagalassos | sapinuva | sardis | satala | sayburc oren yeri | sedir adasi | seleucia pieria | seleukia | selge | selinus | sidyma | sillyon | simena | sobesos antik kenti | sogmatar harabeleri | stratonikeia | sura | syedra | tapureli | teimiussa | tekkadin | telmessos | teos | termessos | tisna | tlos | tralleis | troya | troya tarihi milli parki | uzuncaburc | yanikhan | yazilikaya | yesemek tas ocagi ve heykel atolyesi | zelve oren yeri | zerzevan kalesi | zeugma".split(" | "));
+  // gizli: eski bağlantılar (#/tema/kanyon) açılsın diye duruyor, şeritte birleşik kutunun içinde
   const TEMA = {
     aile: { ad: T("Çocuklarla gezi"), e: "heart-handshake", k: ["hayvanat", "akvaryum", "oyuncak", "bilim", "botanik", "teleferik", "rahmi m", "havacilik", "deniz muzesi", "millet bahcesi", "kent ormani", "tabiat park", "kus cenneti", "kelebek", "magara", "selale", "planetaryum", "lunapark", "plaj", "demiryolu", "miniaturk"] },
-    selale: { ad: T("Şelaleler"), e: "droplets", k: ["selale"] },
-    magara: { ad: T("Mağaralar"), e: "mountain-snow", k: ["magara"] },
-    kanyon: { ad: T("Kanyon ve vadiler"), e: "mountain", k: ["kanyon", "vadi"] },
+    cami: { ad: TL("Cami ve dini yapılar", "Mosques and places of worship"), e: "moon-star", k: ["cami", "mescit", "mescid", "kilise", "sinagog", "manastir", "turbe", "kulliye"], nd: 1 },
+    antik: { ad: TL("Antik kentler", "Ancient cities"), e: "amphora", k: ["antik kent", "oren yeri", "harabe", "antik tiyatro"], tam: ANTIK },
+    kale: { ad: TL("Kale, saray ve konaklar", "Castles, palaces and mansions"), e: "castle", k: ["kale", " saray", "konag", "kosk"], nd: 1, sil: /canakkale/g },
+    han: { ad: TL("Köprü, han ve çarşılar", "Bridges, inns and bazaars"), e: "store", k: ["kervansaray", " hani", "bedesten", "kopru", "carsi"] },
+    semt: { ad: TL("Semtler ve kasabalar", "Quarters and towns"), e: "houses", k: [], tam: new Set(["hamamonu", "ulus", "kaleici", "damal", "amasra", "osmaneli", "mudurnu", "cumalikizik", "akcakoca", "konuralp", "kemaliye", "balat", "moda", "beyoglu", "galata", "eminonu", "fener", "karakoy", "kalamis", "yeldegirmeni", "alacati", "sirince", "kordon", "yenifoca", "safranbolu", "taskale", "talas", "sille", "akyaka", "halfeti", "amasya yaliboyu evleri", "istiklal caddesi", "cunda", "adasi", "bozcaada", "buyukada", "heybeliada", "kinaliada", "hasankeyf", "golturkbuku"]) },
+    selale: { ad: TL("Şelale ve kanyonlar", "Waterfalls and canyons"), e: "droplets", k: ["selale", "kanyon", "vadi"] },
     gol: { ad: T("Göller"), e: "waves-horizontal", k: ["golu", "gol "], d: 1 },
-    ada: { ad: T("Adalar ve koylar"), e: "tree-palm", k: ["adasi", "koyu", "plaj"] },
-    park: { ad: T("Milli parklar"), e: "trees", k: ["milli park", "tabiat park"] },
+    magara: { ad: T("Mağaralar"), e: "mountain-snow", k: ["magara"] },
     dag: { ad: T("Dağlar ve yaylalar"), e: "mountain-snow", k: ["dagi", "yayla"], d: 1 },
-    kale: { ad: T("Kaleler"), e: "castle", k: ["kale"] },
-    kopru: { ad: T("Tarihi köprüler"), e: "bridge", k: ["kopru"] },
-    saray: { ad: T("Saraylar ve konaklar"), e: "crown", k: ["saray", "konag", "kosk"] },
-    han: { ad: T("Han ve kervansaraylar"), e: "store", k: ["kervansaray", " hani", "bedesten"] },
-    muze: { ad: T("Müzeler"), e: "landmark", k: ["muze"] }
+    ada: { ad: T("Adalar ve koylar"), e: "tree-palm", k: ["adasi", "koyu", "plaj"], sil: /koyu cami/g },
+    park: { ad: TL("Milli parklar ve ormanlar", "National parks and forests"), e: "trees", k: ["milli park", "tabiat park", "orman"] },
+    muze: { ad: T("Müzeler"), e: "landmark", k: ["muze"] },
+    kanyon: { ad: T("Kanyon ve vadiler"), e: "mountain", k: ["kanyon", "vadi"], gizli: 1 },
+    kopru: { ad: T("Tarihi köprüler"), e: "bridge", k: ["kopru"], gizli: 1 },
+    saray: { ad: T("Saraylar ve konaklar"), e: "crown", k: [" saray", "konag", "kosk"], gizli: 1 }
   };
-  const temaUyar = (t, x) => t.k.some((w) => (" " + x[0] + " ").includes(w)) && (!t.d || x[6] === "d");
+  // Mevsim kutusunda eski tema adı birleşik kutuya döner (kanyon -> şelale ve kanyonlar)
+  const TEMA_ES = { kanyon: "selale", kopru: "han", saray: "kale" };
+  const temaUyarAd = (t, sadeAd, k) => { const m = TEMA[t], a = " " + (m.sil ? sadeAd.replace(m.sil, "") : sadeAd) + " "; return ((m.tam && m.tam.has(sadeAd)) || m.k.some((w) => a.includes(w))) && (!m.d || k === "d") && (!m.nd || k !== "d"); };
+  for (const k in TEMA) TEMA[k].id = k;
+  const temaUyar = (t, x) => temaUyarAd(t.id, x[0], x[6]);
   // Aylık öneri: "Kasım'da nereye?" başlığı, kısa not, 3-4 tema ve fotoğraflı yer şeridi
   const AYLAR = [
     { e: "snowflake", ad: TL("Ocak'ta nereye?", "Where to go in January?"), not: TL("Kısa, soğuk günler içeride gezmelik: müzeler, saraylar, kervansaraylar. Mağaraların içi yaz kış hemen hemen aynı ısıda.", "Short, cold days suit indoor sights: museums, palaces and caravanserais. Caves stay about the same temperature all year."), t: ["muze", "saray", "han", "magara"] },
@@ -1313,11 +1323,13 @@
     { e: "leaf", ad: TL("Kasım'da nereye?", "Where to go in November?"), not: TL("Ormanlar sonbahar renginde, yağmurlarla şelaleler coşuyor; serin günlerde müzeler de güzel. 10 Kasım'da Atatürk'ü saygıyla anıyoruz.", "Forests wear their autumn colours and the rains bring waterfalls to life; on cool days, museums are lovely too. On 10 November we remember Atatürk."), t: ["park", "selale", "muze"], ata: 1 },
     { e: "snowflake", ad: TL("Aralık'ta nereye?", "Where to go in December?"), not: TL("Yılın en kısa günleri: müzeler ve saraylar sıcacık bir mola. Yükseklerde karlı manzaralar başlıyor.", "The shortest days of the year: museums and palaces make a cosy break. Snowy views begin up in the mountains."), t: ["muze", "saray", "magara", "dag"] }
   ];
+  // Ayın kutuları, eski adlar birleşik kutuya çevrilip tekrarsız
+  function ayTema(ay) { const m = AYLAR[ay]; return Object.assign({}, m, { t: [...new Set(m.t.map((k) => TEMA_ES[k] || k))] }); }
   // Günün tohumu: aynı gün aynı sıra, ertesi gün yeni sıra (FNV-1a)
   function tohum(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
   let ayAnahtar = "", ayBekle = false;
   function ayKart() {
-    const n = new Date(), ay = n.getMonth(), m = AYLAR[ay], el = $("mevsim");
+    const n = new Date(), ay = n.getMonth(), m = ayTema(ay), el = $("mevsim");
     if (el.dataset.ay !== String(ay)) {
       el.dataset.ay = ay; ayAnahtar = "";
       const chip = (go, e, ad, cls) => `<button class="tchip${cls || ""}" data-go="${go}"><i>${ik(e, 20)}</i><span>${esc(ad)}</span></button>`;
@@ -1367,7 +1379,9 @@
     ayKart();
     // Kasım kartında zaten Atatürk çipi varsa aşağıda tekrar gösterme
     const ataAy = (AYLAR[new Date().getMonth()] || {}).ata;
-    $("temaChips").innerHTML = (ataAy ? "" : `<button class="tchip tata" data-go="#/ataturk"><i>${ik("footprints", 20)}</i><span>${TL("Atatürk'ün izinde", "In Atatürk's footsteps")}</span></button>`) + Object.entries(TEMA).map(([k, t]) =>
+    // Bu ayın kutusunda olan tür aşağıda tekrar çıkmasın
+    const ayT = new Set(ayTema(new Date().getMonth()).t);
+    $("temaChips").innerHTML = (ataAy ? "" : `<button class="tchip tata" data-go="#/ataturk"><i>${ik("footprints", 20)}</i><span>${TL("Atatürk'ün izinde", "In Atatürk's footsteps")}</span></button>`) + Object.entries(TEMA).filter(([k, t]) => !t.gizli && !ayT.has(k)).map(([k, t]) =>
       `<button class="tchip" data-go="#/tema/${k}"><i>${ik(t.e, 20)}</i><span>${esc(t.ad)}</span></button>`).join("");
   }
   function showTema(k) {
@@ -1507,14 +1521,13 @@
     }).join("");
   }
   // Sana özel: listendeki ve gittiğin yerlerden zevkini çıkar, her gün 6 yer öner (hesap cihazda yapılır)
-  const OZ_TEMA = { aile: ["çocuklarla gezmeyi", "family days out"], selale: ["şelaleleri", "waterfalls"], magara: ["mağaraları", "caves"], kanyon: ["kanyonları", "canyons"], gol: ["gölleri", "lakes"], ada: ["adaları", "islands"], park: ["milli parkları", "national parks"], dag: ["dağları", "mountains"], kale: ["kaleleri", "castles"], kopru: ["tarihi köprüleri", "historic bridges"], saray: ["sarayları", "palaces"], han: ["kervansarayları", "caravanserais"], muze: ["müzeleri", "museums"] };
+  const OZ_TEMA = { aile: ["çocuklarla gezmeyi", "family days out"], cami: ["camileri", "mosques"], antik: ["antik kentleri", "ancient cities"], semt: ["semt ve kasabaları", "quarters and towns"], selale: ["şelale ve kanyonları", "waterfalls and canyons"], magara: ["mağaraları", "caves"], kanyon: ["kanyonları", "canyons"], gol: ["gölleri", "lakes"], ada: ["adaları", "islands"], park: ["milli parkları ve ormanları", "national parks and forests"], dag: ["dağları", "mountains"], kale: ["kale ve sarayları", "castles and palaces"], kopru: ["tarihi köprüleri", "historic bridges"], saray: ["sarayları", "palaces"], han: ["han ve çarşıları", "inns and bazaars"], muze: ["müzeleri", "museums"] };
   const OZ_KAT = { t: ["tarihi yerleri", "historic sites"], d: ["doğayı", "nature"], m: ["müzeleri", "museums"], c: ["çarşıları", "bazaars"], s: ["şehir semtlerini", "city quarters"] };
   // Temanın zaten söylediği kategori ("şelaleleri ve doğayı" olmasın)
-  const OZ_TK = { selale: "d", magara: "d", kanyon: "d", gol: "d", ada: "d", park: "d", dag: "d", kale: "t", kopru: "t", saray: "t", han: "t", muze: "m" };
-  const temaUyarAd = (t, sadeAd, k) => TEMA[t].k.some((w) => (" " + sadeAd + " ").includes(w)) && (!TEMA[t].d || k === "d");
+  const OZ_TK = { cami: "t", antik: "t", semt: "s", selale: "d", magara: "d", kanyon: "d", gol: "d", ada: "d", park: "d", dag: "d", kale: "t", kopru: "t", saray: "t", han: "t", muze: "m" };
   // Bir yerin temaları (renderTema ile aynı anahtar kelimeler); "Çocuklarla gezi" yalnızca başka temaya girmeyen yerde sayılır
   function yerTema(sadeAd, k) {
-    const l = Object.keys(TEMA).filter((t) => temaUyarAd(t, sadeAd, k)), o = l.filter((t) => t !== "aile");
+    const l = Object.keys(TEMA).filter((t) => !TEMA[t].gizli && temaUyarAd(t, sadeAd, k)), o = l.filter((t) => t !== "aile");
     return o.length ? o : l;
   }
   function zevk() {
