@@ -1478,3 +1478,6 @@ html.gm-acik,html.gm-acik body{overflow:hidden}
 .opfark li{display:flex;gap:8px;align-items:flex-start}.opfark svg{flex:none;margin-top:2px}
 .opbtn{flex-wrap:wrap;justify-content:flex-end}
 .opgeri{border-color:var(--pri)}
+/* Sana özel: neden bunlar, sürpriz kartı */
+.ozel .ozneden{margin:2px 14px -6px 6px;font-size:13px}
+.ozsur{background:linear-gradient(150deg,var(--altin-a),var(--altin-b));color:var(--altin-ink);-webkit-backdrop-filter:none;backdrop-filter:none}

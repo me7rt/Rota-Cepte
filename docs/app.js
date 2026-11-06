@@ -1530,19 +1530,55 @@
     const l = Object.keys(TEMA).filter((t) => !TEMA[t].gizli && temaUyarAd(t, sadeAd, k)), o = l.filter((t) => t !== "aile");
     return o.length ? o : l;
   }
+  // Sana özel öğrenme: yer sayfasında ne kadar ilgilendiğin bu telefonda tutulur, hiçbir yere gönderilmez.
+  // Puanlar: 30 sn bakma 1, sonuna kadar okuma 2, Dinle 2, yol tarifi 3, paylaşma 3, başka gün tekrar açma 3; 30 günde yarıya iner.
+  const ILGI = "gezi-ilgi", YARI = 30 * 864e5;
+  const bugun = () => { const d = new Date(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
+  function ilgiOku() { try { const o = JSON.parse(localStorage.getItem(ILGI)); return o && typeof o === "object" && o.y ? o : { y: {}, g: [] }; } catch (e) { return { y: {}, g: [] }; } }
+  const ilgiPuan = (r, now) => r.s * Math.pow(0.5, (now - r.t) / YARI);
+  function ilgiEkle(p, tur, puan) {
+    if (!p || !p.q || !p.ilS) return;
+    try {
+      const o = ilgiOku(), now = Date.now(), gun = bugun(), a = p.ilS + "|" + p.q;
+      let r = o.y[a];
+      if (!r) r = o.y[a] = { ad: p.ad, k: p.k, s: 0, t: now, d: "", x: [] };
+      if (r.d !== gun) { if (r.d && r.s > 0 && tur === "ac") { tur = "tekrar"; puan = 3; } r.d = gun; r.x = []; }
+      // Aynı sinyal aynı gün bir kez sayılır
+      if (r.x.includes(tur)) return;
+      r.x.push(tur);
+      if (puan) { r.s = ilgiPuan(r, now) + puan; r.t = now; }
+      if (!o.g.includes(gun)) o.g = [...o.g, gun].slice(-10);
+      // En fazla 400 yer: en az ilgi görenler düşer
+      const k = Object.keys(o.y);
+      if (k.length > 400) k.sort((m, n) => ilgiPuan(o.y[m], now) - ilgiPuan(o.y[n], now)).slice(0, k.length - 400).forEach((m) => delete o.y[m]);
+      localStorage.setItem(ILGI, JSON.stringify(o));
+    } catch (e) {}
+  }
+  let ilgiSaat = 0;
+  function ilgiBasla(p) {
+    clearTimeout(ilgiSaat);
+    ilgiEkle(p, "ac", 0);
+    ilgiSaat = setTimeout(() => { if (open === p && document.visibilityState === "visible") ilgiEkle(p, "bak", 1); }, 30000);
+  }
   function zevk() {
-    const f = favs(), g = gittiklerim(), w = new Map();
-    for (const x of f) w.set(x.s + "|" + x.q, [x, 1]);
-    // Gittiğin yerde 4-5 yıldız iki kat, 1-2 yıldız eksi sayılır
-    for (const x of g) w.set(x.s + "|" + x.q, [x, x.p >= 4 ? 2 : x.p > 0 && x.p <= 2 ? -1 : 1]);
-    const tema = {}, kat = {}; let say = 0;
-    for (const [x, a] of w.values()) {
-      if (a > 0) say++;
+    const f = favs(), g = gittiklerim(), now = Date.now(), w = new Map();
+    const il = ilgiOku();
+    for (const [a, r] of Object.entries(il.y)) { const v = ilgiPuan(r, now); if (v > 0.2) w.set(a, [{ ad: r.ad, k: r.k, s: a.split("|")[0] }, v, 0]); }
+    const ekle = (x, v) => { const a = x.s + "|" + x.q, o = w.get(a); w.set(a, [x, (o ? o[1] : 0) + v, 1]); };
+    for (const x of f) ekle(x, 3);
+    for (const p of planlar()) for (const gun of p.g || []) for (const x of gun) if (x && x.q) ekle(x, 4);
+    // Gittiğin yerde 4-5 yıldız daha çok, 1-2 yıldız eksi sayılır
+    for (const x of g) ekle(x, x.p >= 4 ? 8 : x.p > 0 && x.p <= 2 ? -3 : 5);
+    const tema = {}, kat = {}, bol = {}; let say = 0, toplam = 0;
+    for (const [x, a, kayit] of w.values()) {
+      if (a > 0) { toplam += a; if (kayit) say++; }
       for (const t of yerTema(sade(x.ad || ""), x.k)) tema[t] = (tema[t] || 0) + a;
       if (CATS[x.k]) kat[x.k] = (kat[x.k] || 0) + a;
+      const b = IL_BOLGE.get(x.s); if (b && a > 0) bol[b] = (bol[b] || 0) + a;
     }
-    return { say, tema, kat, haric: new Set([...f, ...g].map((x) => x.s + "|" + x.ad)) };
+    return { say, toplam, gunler: il.g.length, tema, kat, bol, haric: new Set([...f, ...g].map((x) => x.s + "|" + x.ad).concat(Object.entries(il.y).map(([k, r]) => k.split("|")[0] + "|" + r.ad))) };
   }
+
   // Güne bağlı sabit sayı (0-1): aynı gün aynı öneriler
   function gunSayi(s) {
     let h = 2166136261;
@@ -1554,9 +1590,11 @@
   function ozelGizle() { $("ozelSec").hidden = true; $("ozelKart").innerHTML = ozelHtml = ""; }
   async function sanaOzel() {
     try {
-      if (zevk().say < 3) return ozelGizle();
+      // Listende/gezdiklerinde/planında 3 yer ya da yer sayfalarında 20 puanlık ilgi
+      const yeter = (z) => z.say >= 3 || z.toplam >= 20;
+      if (!yeter(zevk())) return ozelGizle();
       await loadAra(); if (!ARA || !IDX) return;
-      const z = zevk(); if (z.say < 3) return ozelGizle();
+      const z = zevk(); if (!yeter(z)) return ozelGizle();
       const sira = (o) => Object.entries(o).filter((e) => e[1] > 0).sort((a, b) => b[1] - a[1]);
       const neden = sira(z.tema).slice(0, 2).map(([t]) => ({ t }));
       for (const [k] of sira(z.kat)) if (neden.length < 2 && !neden.some((n) => OZ_TK[n.t] === k || n.k === k)) neden.push({ k });
@@ -1564,8 +1602,10 @@
       // Öne çıkan yer işareti veride yoksa: fotoğraflı ve ilinin ilk 10 yerinden biri
       const oneVar = ARA.some((x) => x[11]), one = (x) => (oneVar ? x[11] : x[7] === 1 && x[8] && x[3] < 10);
       const g = new Date(), tohum = `${g.getFullYear()}-${g.getMonth() + 1}-${g.getDate()}|`;
+      // En çok baktığın bölge, toplam ilginin üçte birini geçiyorsa o bölgenin yerleri biraz öne gelir
+      const bs = sira(z.bol), bt = bs.reduce((a, b) => a + b[1], 0), bolge = bs.length && bs[0][1] >= bt / 3 && bs[0][1] >= 6 ? bs[0][0] : "";
       const listeler = neden.map((n) => ARA.filter((x) => !z.haric.has(x[2] + "|" + x[1]) && (n.t ? temaUyarAd(n.t, x[0], x[6]) : x[6] === n.k)).map((x) => {
-        const r = gunSayi(tohum + x[2] + "|" + x[3]), s = one(x) ? 0 : x[8] ? 1 : 2, uz = me ? km(me, { lat: x[4], lng: x[5] }) : null;
+        const r = gunSayi(tohum + x[2] + "|" + x[3]) - (bolge && IL_BOLGE.get(x[2]) === bolge ? 0.5 : 0), s = one(x) ? 0 : x[8] ? 1 : 2, uz = me ? km(me, { lat: x[4], lng: x[5] }) : null;
         // Konum açıksa yakındakiler öne (gün içinde sabit küçük sapmayla), değilse öne çıkanlar güne göre karışık
         return { x, uz, v: me ? uz * (0.75 + r * 0.5) + [0, 60, 250][s] : s + r };
       }).sort((a, b) => a.v - b.v));
@@ -1582,9 +1622,19 @@
         });
       }
       if (sec.length < 3) return ozelGizle();
+      // Seni iyi tanıyınca (60 puan, 3 farklı gün) son kart sürpriz: hiç bakmadığın türden öne çıkan bir yer
+      if (z.toplam >= 60 && z.gunler >= 3) {
+        const bilinen = new Set(Object.keys(z.tema).filter((t) => z.tema[t] > 0));
+        const yeni = Object.keys(TEMA).filter((t) => !TEMA[t].gizli && t !== "aile" && !bilinen.has(t));
+        const aday = ARA.filter((x) => x[8] && one(x) && !z.haric.has(x[2] + "|" + x[1]) && !il.has(x[2]) && yeni.some((t) => temaUyarAd(t, x[0], x[6])))
+          .sort((a, b) => gunSayi(tohum + "s|" + a[2] + a[3]) - gunSayi(tohum + "s|" + b[2] + b[3]))[0];
+        if (aday) { if (sec.length >= 6) sec.pop(); sec.push({ x: aday, uz: me ? km(me, { lat: aday[4], lng: aday[5] }) : null, sur: 1 }); }
+      }
       const ad = (n) => (n.t ? OZ_TEMA[n.t] : OZ_KAT[n.k]), tr = neden.map((n) => ad(n)[0]).join(" ve ");
-      $("ozelNeden").textContent = TL(tr.charAt(0).toLocaleUpperCase("tr") + tr.slice(1) + " seviyorsun", "You love " + neden.map((n) => ad(n)[1]).join(" and "));
-      const html = sec.map(({ x, uz }) => `<button class="ozk" data-yer="${x[2]}|${x[3]}">${thumb(x[8] ? { p: x[8], w: 1e5 } : null, x[6] || "t", 400, "cover")}${uz != null ? `<em class="ozkm">${ik("navigation", 11)}${fmt(uz)}</em>` : ""}<span class="ozkt"><b>${esc(araAd(x))}</b><small>${esc((IDX.ilBy.get(x[2]) || {}).ad || "")}</small></span></button>`).join("");
+      const BY = { "Marmara": ["Marmara'ya", "the Marmara region"], "Ege": ["Ege'ye", "the Aegean"], "Akdeniz": ["Akdeniz'e", "the Mediterranean region"], "İç Anadolu": ["İç Anadolu'ya", "Central Anatolia"], "Karadeniz": ["Karadeniz'e", "the Black Sea region"], "Doğu Anadolu": ["Doğu Anadolu'ya", "Eastern Anatolia"], "Güneydoğu": ["Güneydoğu'ya", "southeastern Türkiye"] }[bolge];
+      const bAd = BY ? TL(`, en çok ${BY[0]} bakıyorsun`, `, especially in ${BY[1]}`) : "";
+      $("ozelNeden").textContent = TL(tr.charAt(0).toLocaleUpperCase("tr") + tr.slice(1) + " seviyorsun", "You love " + neden.map((n) => ad(n)[1]).join(" and ")) + bAd;
+      const html = sec.map(({ x, uz, sur }) => `<button class="ozk" data-yer="${x[2]}|${x[3]}">${thumb(x[8] ? { p: x[8], w: 1e5 } : null, x[6] || "t", 400, "cover")}${sur ? `<em class="ozkm ozsur">${ik("sparkles", 11)}${TL("Sürpriz", "Surprise")}</em>` : uz != null ? `<em class="ozkm">${ik("navigation", 11)}${fmt(uz)}</em>` : ""}<span class="ozkt"><b>${esc(araAd(x))}</b><small>${esc((IDX.ilBy.get(x[2]) || {}).ad || "")}</small></span></button>`).join("");
       if (html !== ozelHtml) { ozelHtml = html; $("ozelKart").innerHTML = html; }
       $("ozelSec").hidden = false;
     } catch (e) { console.warn("Sana özel:", e); }
@@ -2371,6 +2421,7 @@
       ["users", TL("Ortak plan", "Shared plan"), TL("Tatil planını linkle gönder; arkadaşın açıp düzenlesin, geri göndersin. Ne eklendi, ne çıkarıldı tek tek görürsün, istersen planını güncellersin.", "Send your holiday plan as a link; your friend edits it and sends it back. See what was added or removed, then update your plan if you like."), "#/plan"],
       ["party-popper", TL("Festivaller ve anmalar", "Festivals and commemorations"), TL("Ana sayfadaki ay kutusunda o ayın festivalleri; ay ay bütün Türkiye ve her ilin sayfasında kendi festivalleri. 10 Kasım, 18 Mart, 19 Mayıs ve Kocatepe anmaları da burada.", "This month's festivals in the season box, every month across Türkiye, and each province's own festivals on its page."), "#/festival"],
       ["sparkles", TL("Kültür koçu", "Culture coach"), TL("Cami sayfalarında girmeden önce bilmen gereken 4 kısa kural; çay, bahşiş, pazarlık ve Ramazan için küçük bilgiler.", "Four quick rules on every mosque page, plus tips on tea, tipping, bargaining and Ramadan."), "#/kultur"],
+      ["sparkles", TL("Sana özel artık seni tanıyor", "Picks that learn from you"), TL("Ana sayfadaki öneriler ilgiyle baktığın, okuduğun ve yol tarifi aldığın yerlerden de öğreniyor; arada bir sürpriz yer çıkıyor. Hepsi sadece telefonunda kalır.", "Home picks now learn from places you read, listen to and get directions for, with the odd surprise. It all stays on your phone."), ""],
       ["amphora", TL("Yeni gezi türleri", "New kinds of places"), TL("Keşfet'e cami, antik kent ve semt kutuları geldi; il sayfasında yerler artık türüne göre: cami, antik kent, kale, göl, şelale…", "Explore now has mosques, ancient cities and towns; province pages sort places by kind: mosques, ancient cities, castles, lakes, waterfalls…"), "#/tema/antik"],
       ["map", TL("İller tek bakışta", "Provinces at a glance"), TL("Her ilin kartında en bilinen yerleri yazıyor; tüm illeri bölgeye göre süz. Paylaşılan linkler artık doğrudan uygulamada açılıyor.", "Every province card names its best-known sights; filter all provinces by region. Shared links now open straight in the app."), ""],
       ["headphones", TL("Gezi Modu ve doğal ses", "Tour Mode and natural voice"), TL("Bütün yerler artık doğal bir sesle anlatılıyor, kadın ya da erkek sesi seç. Gezi Modu'nu aç, yürürken yaklaştığın yeri kulağına anlatsın; tatil planın varsa günün rotası ana sayfada seni beklesin.", "Every place is now narrated in a natural voice; choose a female or male narrator. Start Tour Mode and hear about each place as you walk up to it; if you have a holiday plan, today's route waits on the home screen."), ""],
@@ -3826,6 +3877,7 @@
     $("dWiki").textContent = wk && wk.startsWith("en:") ? T("Vikipedi'de (İngilizce) oku") : DIL === "en" && wk ? "Read more on Wikipedia (Turkish)" : T("Vikipedi'de devamını oku");
     metinLisans($("dLis"), !!(DIL === "en" ? p.me && p.we : p.m && p.w), DIL === "en" ? p.cve : p.cv);
     $("sheet").querySelector(".card").scrollTop = 0;
+    ilgiBasla(p);
     if ($("sheet").hidden) { history.pushState({ sheet: 1 }, "", location.href); sheetPushed = true; acan = document.activeElement; }
     $("sheet").hidden = false; arkaPlan(true);
     $("dClose").focus({ preventScroll: true });
@@ -4571,6 +4623,23 @@
   });
   document.querySelectorAll(".onerbtn").forEach((b) => b.addEventListener("click", yerOner));
   $("dDinle").addEventListener("click", dinle);
+  function ilgiSifirla() { try { localStorage.removeItem(ILGI); } catch (e) {} sanaOzel(); toast(TL("Sana özel öneriler sıfırlandı.", "Your picks have been reset.")); }
+  $("ilgiSil").addEventListener("click", ilgiSifirla);
+  $("ozelNedenBtn").addEventListener("click", () => {
+    const d = document.createElement("div"); d.className = "tanit";
+    d.innerHTML = `<div class="tkart"><div class="temo">${ik("sparkles", 34)}</div><h2>${TL("Bu öneriler nereden geliyor?", "Where do these picks come from?")}</h2>
+      <p>${TL("Gezdiğin, plana koyduğun, listene eklediğin ve ilgiyle baktığın yerlere bakıyoruz: sayfada durman, sonuna kadar okuman, Dinle'ye ya da yol tarifine basman. Eski ilgiler zamanla azalır, öneriler hep taze kalır.", "We look at places you've visited, planned, saved and spent time on: reading to the end, tapping Listen or directions. Old interests fade over time, so picks stay fresh.")}</p>
+      <p>${TL("Bu bilgi sadece senin telefonunda durur, hiçbir yere gönderilmez.", "This stays on your phone only and is never sent anywhere.")}</p>
+      <div class="tbtn"><button class="linkbtn" data-k="sil">${ik("refresh-cw", 16)} ${TL("Sıfırla", "Reset")}</button><button class="btn" data-k="kapat">${TL("Tamam", "OK")}</button></div></div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    d.addEventListener("click", (e) => { if (e.target === d || e.target.closest("[data-k=kapat]")) kapat(); else if (e.target.closest("[data-k=sil]")) { kapat(); ilgiSifirla(); } });
+    document.body.appendChild(d);
+  });
+  $("dDinle").addEventListener("click", () => ilgiEkle(open, "dinle", 2));
+  $("dDir").addEventListener("click", () => ilgiEkle(open, "yol", 3));
+  $("dShare").addEventListener("click", () => ilgiEkle(open, "paylas", 3));
+  // Yer sayfasını sonuna kadar kaydırdıysa: okudu
+  $("sheet").querySelector(".card").addEventListener("scroll", (e) => { const c = e.currentTarget; if (open && c.scrollTop > 200 && c.scrollTop + c.clientHeight >= c.scrollHeight - 60) ilgiEkle(open, "son", 2); }, { passive: true });
   $("sesBtn").addEventListener("click", sesAyarAc);
   $("gezBtn").addEventListener("click", () => { $("gezList").hidden = !$("gezList").hidden; });
   $("karneBtn").addEventListener("click", karne);
