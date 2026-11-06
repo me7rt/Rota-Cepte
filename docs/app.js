@@ -229,6 +229,7 @@
 
   // ---------- konum ----------
   document.querySelector("#locBtn .locik").innerHTML = ik("locate-fixed", 16);
+  $("kocEn").hidden = DIL !== "en"; // turist için kültür koçu ana sayfada da görünür
   function stopLocation() {
     if (watchId !== null) navigator.geolocation.clearWatch(watchId);
     watchId = null; me = null; homeMe = null; konumBekleyen = [];
@@ -307,7 +308,7 @@
     $("tema").hidden = v !== "tema";
     $("rota").hidden = v !== "rota";
     $("yol").hidden = v !== "yol";
-    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark", "planlar", "muzekart", "acil"]) $(x).hidden = v !== x;
+    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark", "planlar", "muzekart", "acil", "kultur"]) $(x).hidden = v !== x;
     $("ataturk").hidden = v !== "ataturk";
     $("rozet").hidden = v !== "rozet";
     $("listem").hidden = v !== "listem";
@@ -363,6 +364,7 @@
       if (h[0] === "oyun") return await showOyun();
       if (h[0] === "cark") return showCark();
       if (h[0] === "acil") return showAcil();
+      if (h[0] === "kultur") return showKultur();
       if (h[0] === "ozet") { history.replaceState(null, "", "#/rozetler"); route(); setTimeout(() => yilOzeti(+h[1] || 0), 600); return; }
       if (h[0] === "rozetler") { view = { mode: "rozet" }; show("rozet"); $("eyebrow").textContent = T("Gezi haritan ve rozetler"); $("title").textContent = T("Gezilerim"); renderGez(); return; }
       if (h[0] === "listem") { view = { mode: "listem" }; show("listem"); $("eyebrow").textContent = "Rota Cepte"; $("title").textContent = T("Gideceğim yerler"); renderFav(); return; }
@@ -3343,6 +3345,43 @@
     renderAll();
   }
 
+  // ---------- kültür koçu: gezerken işe yarayan kısa görgü bilgileri (internetsiz) ----------
+  // [ikon, başlık, alt yazı, [[tamam mı (1) / kaçın (0), TR, EN], ...]]
+  const KOC = [
+    ["landmark", ["Cami ziyareti", "Visiting a mosque"], ["Ayakkabı, kıyafet, namaz vakitleri", "Shoes, clothing, prayer times"], [
+      [1, "Ayakkabını girişte çıkar, raflara ya da verilen poşete koy.", "Take your shoes off at the entrance and leave them on the racks or in the bag provided."],
+      [1, "Omuz ve dizler kapalı olsun. Kadınlar başını örter; büyük camilerin çoğunda girişte örtü bulunur.", "Cover shoulders and knees. Women cover their hair; most large mosques lend scarves at the door."],
+      [0, "Namaz vakitlerinde, özellikle Cuma öğle namazında ziyaret kısa süre durur. Ezan okununca biraz bekle.", "Visits pause briefly at prayer times, especially Friday noon prayer. When you hear the call to prayer, wait a little."],
+      [0, "Namaz kılanların önünden geçme, yüksek sesle konuşma, flaşla fotoğraf çekme.", "Don't walk in front of people praying, keep your voice down and don't use flash."]]],
+    ["coffee", ["Çay ve misafirlik", "Tea and hospitality"], ["İkram edilince ne yapılır", "When you're offered something"], [
+      [1, "Çay ikramını kabul etmek nezakettir; nazikçe reddetmek de ayıp sayılmaz.", "Accepting offered tea is polite; declining kindly is fine too."],
+      [1, "Yeter demek için çay kaşığını bardağın üstüne yatır.", "To say \"no more\", lay the teaspoon across the top of your glass."],
+      [1, "Eve davet edilirsen kapıda ayakkabını çıkar.", "If you're invited into a home, take your shoes off at the door."]]],
+    ["coins", ["Bahşiş", "Tipping"], ["Lokanta, taksi, otel", "Restaurants, taxis, hotels"], [
+      [1, "Lokantada hesabın yaklaşık %5-10'u kadar bahşiş yaygındır, zorunlu değildir. Hesaba servis ücreti eklendiyse gerekmez.", "In restaurants about 5-10% is common but not required. If a service charge is already on the bill, no need."],
+      [1, "Takside genelde ücret yukarı yuvarlanır.", "In taxis people usually round the fare up."]]],
+    ["handshake", ["Pazarlık", "Bargaining"], ["Nerede yapılır, nerede yapılmaz", "Where it's done and where it isn't"], [
+      [1, "Tarihi çarşılarda, halı ve hediyelik eşya dükkânlarında pazarlık olağandır. Güler yüzle yap.", "Bargaining is normal in historic bazaars, carpet and souvenir shops. Keep it friendly."],
+      [0, "Market, mağaza ve fiyatı yazılı yerlerde pazarlık yapılmaz.", "Supermarkets, chain stores and places with marked prices don't bargain."]]],
+    ["moon-star", ["Ramazan'da", "During Ramadan"], ["Oruç ayında gezerken", "Travelling in the fasting month"], [
+      [1, "Lokantaların çoğu gündüz de açıktır, yemek yemek serbesttir. Oruç tutanlara saygıyla, gösterişsiz ye.", "Most restaurants stay open by day and you're free to eat. Just be discreet out of respect for those fasting."],
+      [1, "İftar saatine yakın lokantalar çok dolar; erken git ya da yer ayırt.", "Restaurants fill up close to iftar (sunset meal), so go early or book."],
+      [1, "Gece sahur davulcusu sokakları dolaşabilir, bu bir gelenektir.", "At night a drummer may walk the streets to wake people for the pre-dawn meal. It's a tradition."]]]
+  ];
+  const kocMadde = ([ok, tr, en]) => `<li class="kmad ${ok ? "ok" : "no"}">${ik(ok ? "check" : "x", 18)}<span>${esc(DIL === "en" ? en : tr)}</span></li>`;
+  const camiMi = (p) => sade(p.ad) === "ayasofya" || /(^| )(cami|camii|camisi|mescit|mescidi)( |,|$)/.test(sade(p.ad)) && !/kopru|muze|meydan|carsi|sokak|mahalle/.test(sade(p.ad));
+  function kocKart(p) {
+    if (!camiMi(p)) return "";
+    return `<details class="koc"><summary>${ik("sparkles", 20)}<span><b>${TL("Camiye girmeden önce", "Before you enter the mosque")}</b><small>${TL("4 kısa kural · 20 saniyede oku", "4 quick rules · a 20-second read")}</small></span>${ik("chevron-down", 18)}</summary><ul>${KOC[0][3].map(kocMadde).join("")}</ul></details>`;
+  }
+  function showKultur() {
+    view = { mode: "kultur" }; show("kultur");
+    $("eyebrow").textContent = TL("Türkiye'de gezerken", "Travelling in Türkiye"); $("title").textContent = TL("Kültür koçu", "Culture coach");
+    $("kultur").innerHTML = `<p class="kocgiris">${TL("Gezerken işine yarayacak küçük bilgiler. İnternetsiz de açılır.", "Little things that help while you travel. Works offline too.")}</p>` +
+      KOC.map(([ikon, ad, alt, m]) => `<details class="kocb"><summary><span class="aci">${ik(ikon, 20)}</span><span class="rt"><b>${esc(DIL === "en" ? ad[1] : ad[0])}</b><small>${esc(DIL === "en" ? alt[1] : alt[0])}</small></span>${ik("chevron-down", 18)}</summary><ul>${m.map(kocMadde).join("")}</ul></details>`).join("") +
+      `<p class="kocnot">${TL("Genel geçer kurallardır; yerine göre küçük farklar olabilir.", "These are general customs; small local differences are normal.")}</p>`;
+  }
+
   // ---------- acil yardım: 112, konumum (internetsiz), yakındaki hastane / karakol / nöbetçi eczane ----------
   function showAcil() {
     view = { mode: "acil" }; show("acil");
@@ -3612,6 +3651,7 @@
     dinleDurdur(); $("dDinle").hidden = !sesVar && !open.q;
     const ip = DIL === "en" ? p.ipe : p.ip;
     $("dTip").hidden = !ip; $("dTip").innerHTML = ip ? `<b>${TL("İpucu:", "Tip:")}</b> ` + esc(ip) : "";
+    const koc = kocKart(p); $("dKoc").hidden = !koc; $("dKoc").innerHTML = koc;
     const ilce = p.ilce && p.ilce !== p.il ? p.ilce : "";
     let txt;
     if (DIL === "en") txt = p.me || `${adi(p)} is one of the places worth seeing in ${ilce ? ilce + ", " : ""}${p.il} Province, Türkiye.`;

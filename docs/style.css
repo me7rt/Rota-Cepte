@@ -1439,3 +1439,21 @@ html.gm-acik,html.gm-acik body{overflow:hidden}
 .ackart h3 + .acsatir{border-top:0}
 .aci{width:40px;height:40px;border-radius:12px;background:var(--surface2);display:grid;place-items:center;flex:none}
 .acsatir small{display:block;color:var(--muted);font-size:13px}
+
+/* kültür koçu */
+.koc{margin:12px 0;border:1px solid #c9952b;background:color-mix(in srgb,#f5c96b 16%,var(--surface));border-radius:var(--r-m)}
+.koc summary,.kocb summary{list-style:none;display:flex;align-items:center;gap:12px;min-height:56px;padding:8px 12px;cursor:pointer}
+.koc summary::-webkit-details-marker,.kocb summary::-webkit-details-marker{display:none}
+.koc summary>svg:first-child{color:#b07a12;flex:none}
+.koc summary span,.kocb summary .rt{flex:1;min-width:0}
+.koc summary b,.kocb summary b{display:block}
+.koc summary small,.kocb summary small{display:block;color:var(--muted);font-size:13px}
+.koc[open] summary>svg:last-child,.kocb[open] summary>svg:last-child{transform:rotate(180deg)}
+.koc ul,.kocb ul{list-style:none;margin:0;padding:0 14px 14px;display:flex;flex-direction:column;gap:8px}
+.kmad{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.kmad svg{flex:none;margin-top:2px}
+.kmad.ok svg{color:#1f8a4c}.kmad.no svg{color:#d93a2b}
+.kocb{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l)}
+.kocb summary{font-weight:700}
+.kocgiris,.kocnot{margin:0;color:var(--muted);font-size:14px}
+.kocnot{font-size:12.5px}

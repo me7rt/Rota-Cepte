@@ -155,9 +155,11 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
   </div>
   <div class="grup">
     <button class="grow onerbtn"><i data-ik="map-pin-plus"></i><span>Burada olmayan bir yer mi biliyorsun? <b>Öner</b></span></button>
+    <button class="grow" id="kocEn" data-go="#/kultur" hidden><i data-ik="sparkles"></i><span><b>Culture coach</b><small>Mosques, tea, tipping, bargaining, Ramadan</small></span></button>
     <button class="grow" id="paylasBtn"><i data-ik="share-2"></i><span>Rota Cepte'yi arkadaşlarına öner</span></button>
     <details class="ayarlar"><summary class="grow"><i data-ik="settings"></i><span><b>Ayarlar ve hakkında</b><small>Dil, tema, sürüm, gizlilik, lisanslar</small></span></summary>
     <button class="grow" data-go="#/acil"><i data-ik="shield-plus"></i><span><b>Acil yardım</b><small>112, konumum, en yakın hastane ve eczane</small></span></button>
+    <button class="grow" data-go="#/kultur"><i data-ik="sparkles"></i><span><b>Kültür koçu</b><small>Cami, çay, bahşiş, pazarlık, Ramazan</small></span></button>
     <button class="grow" id="yeniBtn"><i data-ik="sparkles"></i><span>Bu sürümde neler yeni?</span></button>
     <button class="grow" id="dilBtn"><i data-ik="languages"></i><span id="dilYazi"></span></button>
     <button class="grow" id="sesBtn"><i data-ik="headphones"></i><span>Sesli rehber</span></button>
@@ -233,6 +235,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
 <main id="planlar" class="view" hidden></main>
 <main id="muzekart" class="view mkview" hidden></main>
 <main id="acil" class="view acilv" hidden></main>
+<main id="kultur" class="view acilv" hidden></main>
 
 <main id="rota" class="view" hidden>
   <p class="rnot" id="rotaNot"></p>
@@ -349,6 +352,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
         <button class="ey share" id="dShare"><i data-ik="share-2" data-boy="22"></i><span>Gönder</span></button>
       </div>
       <div class="gnot" id="dNot" hidden></div>
+      <div id="dKoc" hidden></div>
       <div class="tip" id="dTip" hidden></div>
       <p id="dText" class="text"></p>
       <a class="more" id="dWiki" target="_blank" rel="noopener">Vikipedi'de devamını oku</a>
