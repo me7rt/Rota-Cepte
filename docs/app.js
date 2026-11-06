@@ -1283,14 +1283,14 @@
   }
   // ---------- keşfet: tema listeleri (Türkiye geneli) ----------
   // Antik kentler adında "antik kent" geçmeyebilir (Efes, Perge): bu yüzden ad listesiyle eşleşir
-  const ANTIK = new Set("adada | adramytteion | afrodisias | aigai | aizanoi | alabanda | alacahoyuk | alexandria troas | alinda | amos | anemurium antik kenti | ani | antandros | antiocheia ad cragum | antiokheia | apameia kibotos | apollonia | araxa | ariassos | arsada | arsameia | arslantepe | arykanda | aspendos | aspendos antik tiyatrosu | assos | athena tapinagi | ayasuluk | ayazini | bargylia | bergama akropolu | beycesultan | bouleuterion/odeion | briula | catalhoyuk | cavustepe | dara | delikkemer | didyma | duluk | efes | elaiussa sebaste | emirzeli | epiphaneia | eski smyrna | euromos | gobeklitepe | gordion | hadrianapolis | halikarnassos | harran | hattusa | herakleia | hierapolis | hierapolis plutoniumu | issos | izmir agorasi | juliopolis nekropolu | kabacam oren yeri | kandyba | kanlidivane | karahantepe | kastabala | kaunos | kelenderis | kerkenes | khrysa | kilistra | klaros | klazomenai | knidos | korykos | kremna | ksantos | kultepe | kyme | kyzikos | labranda | lagina | laodikeia | larissa | letoon | limyra | lyrbe | magarsa | magnesia | mastaura | metropolis | milet | myra | nemrut dagi milli parki | nerik | nikaia | notion | nysa | oinoanda | okuzlu oren yeri | olba | olimpos | panionion | parion | patara | pergamon | perge | perre | pessinus | pinara | pitane | pompeiopolis | priene | rhodiapolis | sagalassos | sapinuva | sardis | satala | sayburc oren yeri | sedir adasi | seleucia pieria | seleukia | selge | selinus | sidyma | sillyon | simena | sobesos antik kenti | sogmatar harabeleri | stratonikeia | sura | syedra | tapureli | teimiussa | tekkadin | telmessos | teos | termessos | tisna | tlos | tralleis | troya | troya tarihi milli parki | uzuncaburc | yanikhan | yazilikaya | yesemek tas ocagi ve heykel atolyesi | zelve oren yeri | zerzevan kalesi | zeugma".split(" | "));
+  const ANTIK = new Set("atarneus | myrina | ceramus | kadyanda | loryma | abarnis | abonuteikhos | adada | adramytteion | afrodisias | aigai | ainos | aizanoi | akhilleion | alabanda | alacahoyuk | alexandreion | alexandria troas | alinda | amisos | amorium | amos | anemurium antik kenti | ani | antandros | antiocheia ad cragum | antiokheia | antiphellos | apameia kibotos | aperlae | apollonia | araxa | argyria | ariassos | arsada | arsameia | arslantepe | arykanda | aspendos | aspendos antik tiyatrosu | assos | athena tapinagi | aulae | ayasuluk | ayazini | bargylia | bergama akropolu | beycesultan | blaundos | bouleuterion/odeion | briula | catalhoyuk | cavustepe | cedrae | dara | delikkemer | didyma | dokimeion | duluk | efes | elaiussa sebaste | emirzeli | epiphaneia | erithrai | eski smyrna | eumania | euromos | faselis | gobeklitepe | gordion | gryneion | hadrianapolis | halikarnassos | hamaksya | hamaxitos | harran | hattusa | herakleia | hierapolis | hierapolis plutoniumu | iassos | idebessos | imbriogon | issos | izmir agorasi | juliopolis nekropolu | kabacam oren yeri | kandyba | kanis | kanlidivane | karahantepe | kastabala | kaunos | kelenderis | kerkenes | khrysa | kilistra | klaros | klazomenai | knidos | kolossai | korykos | kremna | ksantos | kultepe | kyaneai | kybeleia | kyme | kyzikos | labranda | lagina | lamos | laodikeia | larissa | latmos | lebedos | letoon | limyra | lydae | lyrbe | magarsa | magnesia | mastaura | metropolis | milet | misis | mokissos | myndos | myra | myriandos | nais | nakoleia | neandreia | nemrut dagi milli parki | neonteikhos | nerik | nicomedia | nikaia | notion | nysa | oinoanda | okuzlu oren yeri | olba | olimpos | orthosia | panionion | parion | patara | pergamon | perge | perinthos | perre | pessinus | phellos | philadelphia | phokaia | pinara | pisilis | pitane | pompeiopolis | priene | pydnai | rhodiapolis | sagalassos | sapinuva | sardis | satala | sayburc oren yeri | sedir adasi | seleucia pieria | seleukia | selge | selinus | sidyma | sillyon | simena | skepsis | smintheion | sobesos antik kenti | sogmatar harabeleri | stratonikeia | sura | syedra | tapureli | tavium | teimiussa | tekkadin | telmessos | teos | termessos | tisna | tlos | tralleis | troya | troya tarihi milli parki | tyberissos | uzuncaburc | yanikhan | yazilikaya | yesemek tas ocagi ve heykel atolyesi | zelve oren yeri | zerzevan kalesi | zeugma".split(" | "));
   // gizli: eski bağlantılar (#/tema/kanyon) açılsın diye duruyor, şeritte birleşik kutunun içinde
   const TEMA = {
     aile: { ad: T("Çocuklarla gezi"), e: "heart-handshake", k: ["hayvanat", "akvaryum", "oyuncak", "bilim", "botanik", "teleferik", "rahmi m", "havacilik", "deniz muzesi", "millet bahcesi", "kent ormani", "tabiat park", "kus cenneti", "kelebek", "magara", "selale", "planetaryum", "lunapark", "plaj", "demiryolu", "miniaturk"] },
-    cami: { ad: TL("Cami ve dini yapılar", "Mosques and places of worship"), e: "moon-star", k: ["cami", "mescit", "mescid", "kilise", "sinagog", "manastir", "turbe", "kulliye"], nd: 1 },
-    antik: { ad: TL("Antik kentler", "Ancient cities"), e: "amphora", k: ["antik kent", "oren yeri", "harabe", "antik tiyatro"], tam: ANTIK },
-    kale: { ad: TL("Kale, saray ve konaklar", "Castles, palaces and mansions"), e: "castle", k: ["kale", " saray", "konag", "kosk"], nd: 1, sil: /canakkale/g },
-    han: { ad: TL("Köprü, han ve çarşılar", "Bridges, inns and bazaars"), e: "store", k: ["kervansaray", " hani", "bedesten", "kopru", "carsi"] },
+    cami: { ad: TL("Cami ve dini yapılar", "Mosques and places of worship"), e: "moon-star", k: ["cami", "mescit", "mescid", "kilise", "sinagog", "manastir", "turbe", "kulliye", "ayasofya"], nd: 1 },
+    antik: { ad: TL("Antik kentler", "Ancient cities"), e: "amphora", k: ["antik kent", "oren yeri", "harabe", "antik tiyatro", "roma tiyatrosu", "roma hamami", "roma yolu", "tapinagi", "mozolesi", "celsus"], tam: ANTIK },
+    kale: { ad: TL("Kale, saray ve konaklar", "Castles, palaces and mansions"), e: "castle", k: ["kale", " saray", "konag", "kosk", "hisari"], nd: 1, sil: /canakkale/g },
+    han: { ad: TL("Köprü, han ve çarşılar", "Bridges, inns and bazaars"), e: "store", k: ["kervansaray", " hani", "bedesten", "kopru", "carsi"], sil: / hanim/g },
     semt: { ad: TL("Semtler ve kasabalar", "Quarters and towns"), e: "houses", k: [], tam: new Set(["hamamonu", "ulus", "kaleici", "damal", "amasra", "osmaneli", "mudurnu", "cumalikizik", "akcakoca", "konuralp", "kemaliye", "balat", "moda", "beyoglu", "galata", "eminonu", "fener", "karakoy", "kalamis", "yeldegirmeni", "alacati", "sirince", "kordon", "yenifoca", "safranbolu", "taskale", "talas", "sille", "akyaka", "halfeti", "amasya yaliboyu evleri", "istiklal caddesi", "cunda", "adasi", "bozcaada", "buyukada", "heybeliada", "kinaliada", "hasankeyf", "golturkbuku"]) },
     selale: { ad: TL("Şelale ve kanyonlar", "Waterfalls and canyons"), e: "droplets", k: ["selale", "kanyon", "vadi"] },
     gol: { ad: T("Göller"), e: "waves-horizontal", k: ["golu", "gol "], d: 1 },
@@ -2371,6 +2371,7 @@
       ["users", TL("Ortak plan", "Shared plan"), TL("Tatil planını linkle gönder; arkadaşın açıp düzenlesin, geri göndersin. Ne eklendi, ne çıkarıldı tek tek görürsün, istersen planını güncellersin.", "Send your holiday plan as a link; your friend edits it and sends it back. See what was added or removed, then update your plan if you like."), "#/plan"],
       ["party-popper", TL("Festivaller ve anmalar", "Festivals and commemorations"), TL("Ana sayfadaki ay kutusunda o ayın festivalleri; ay ay bütün Türkiye ve her ilin sayfasında kendi festivalleri. 10 Kasım, 18 Mart, 19 Mayıs ve Kocatepe anmaları da burada.", "This month's festivals in the season box, every month across Türkiye, and each province's own festivals on its page."), "#/festival"],
       ["sparkles", TL("Kültür koçu", "Culture coach"), TL("Cami sayfalarında girmeden önce bilmen gereken 4 kısa kural; çay, bahşiş, pazarlık ve Ramazan için küçük bilgiler.", "Four quick rules on every mosque page, plus tips on tea, tipping, bargaining and Ramadan."), "#/kultur"],
+      ["amphora", TL("Yeni gezi türleri", "New kinds of places"), TL("Keşfet'e cami, antik kent ve semt kutuları geldi; il sayfasında yerler artık türüne göre: cami, antik kent, kale, göl, şelale…", "Explore now has mosques, ancient cities and towns; province pages sort places by kind: mosques, ancient cities, castles, lakes, waterfalls…"), "#/tema/antik"],
       ["map", TL("İller tek bakışta", "Provinces at a glance"), TL("Her ilin kartında en bilinen yerleri yazıyor; tüm illeri bölgeye göre süz. Paylaşılan linkler artık doğrudan uygulamada açılıyor.", "Every province card names its best-known sights; filter all provinces by region. Shared links now open straight in the app."), ""],
       ["headphones", TL("Gezi Modu ve doğal ses", "Tour Mode and natural voice"), TL("Bütün yerler artık doğal bir sesle anlatılıyor, kadın ya da erkek sesi seç. Gezi Modu'nu aç, yürürken yaklaştığın yeri kulağına anlatsın; tatil planın varsa günün rotası ana sayfada seni beklesin.", "Every place is now narrated in a natural voice; choose a female or male narrator. Start Tour Mode and hear about each place as you walk up to it; if you have a holiday plan, today's route waits on the home screen."), ""],
       ["calendar-days", TL("Tatil planı", "Holiday planner"), TL("Kaç gün gideceğini seç, nerede kaç gün kalacağını yaz; günlere yer ekle, sırasını değiştir, her günün rotasını haritada aç ve planını paylaş.", "Choose how many days, set where you'll stay each day, add places to each day, reorder them, open each day's route on the map and share your plan."), "#/plan"],
@@ -3310,7 +3311,7 @@
     havaGoster(IDX.ilBy.get(d.s) || d); yemekGoster(d); festIl(d); ilDamga(d);
     planBas = 0; planGoster(d);
     indirBtn();
-    places = d.yerler; cat = "hepsi"; shown = 60; fitted = false;
+    places = d.yerler; cat = "hepsi"; turAcik = false; shown = 60; fitted = false;
     ilAraSifirla();
     sortMode = me ? "yakin" : "oner";
     setTab(tab);
@@ -3335,7 +3336,7 @@
       : z.m || `${z.ad}, ${d.ad} iline bağlı bir ilçedir.${z.nuf ? ` Nüfusu ${nf(z.nuf)}${z.nufY ? " (" + z.nufY + ")" : ""}.` : ""}${z.alan ? ` Yüzölçümü ${nf(z.alan)} km².` : ""}`;
     renderHero({ f: z.f, m: ilceMetin, w: DIL === "en" ? "" : z.w, facts: [nufusBilgi(z), alanBilgi(z), [T("Gezilecek yer"), z.n]] });
     $("tabs").hidden = true;
-    places = d.yerler.filter((y) => y.i === i); cat = "hepsi"; shown = 60; fitted = false;
+    places = d.yerler.filter((y) => y.i === i); cat = "hepsi"; turAcik = false; shown = 60; fitted = false;
     // İlçede kayıtlı yer yoksa ilçe merkezine en yakın yerleri göster (35 km içinde)
     view.yakin = !places.length;
     if (view.yakin) places = d.yerler.map((y) => [y, km(z, y)]).filter((x) => x[1] < 35).sort((a, b) => a[1] - b[1]).slice(0, 15).map((x) => x[0]);
@@ -3349,7 +3350,7 @@
     show("city");
     $("eyebrow").textContent = T("Konumuna göre"); $("title").textContent = T("Yakınımdakiler");
     $("hero").hidden = true; $("tabs").hidden = true; $("tabYer").hidden = false; $("tabIlce").hidden = true;
-    places = []; cat = "hepsi"; shown = 60; fitted = false; sortMode = "yakin";
+    places = []; cat = "hepsi"; turAcik = false; shown = 60; fitted = false; sortMode = "yakin";
     ilAraSifirla();
     ensureMap();
     if (!me) {
@@ -3552,6 +3553,7 @@
     if (ilAra) v = v.filter((p) => sade(p.ad + " " + (p.ilce || "")).includes(ilAra));
     if (cat === "one") v = v.filter((p) => p.one);
     else if (cat === "aile") v = v.filter(aileMi);
+    else if (cat.startsWith("tur:")) v = v.filter((p) => turu(p) === cat.slice(4));
     else if (cat !== "hepsi") v = v.filter((p) => p.k === cat);
     if (sortMode === "yakin" && me) v = v.slice().sort((a, b) => km(me, a) - km(me, b));
     else v = v.slice().sort((a, b) => (b.one || 0) - (a.one || 0) || b.sl - a.sl);
@@ -3560,16 +3562,56 @@
   function ilAraSifirla() { ilAra = ""; $("ilAra").value = ""; $("ilAraSil").hidden = true; }
   function renderAll() { renderChips(); renderSort(); renderList(); drawPins(); }
   const aileMi = (p) => TEMA.aile.k.some((w) => (" " + sade(p.ad) + " ").includes(w));
+  // İl sayfası türleri: her yer adına bakılarak tek bir türe girer (sıra önemli: ilk tutan tür)
+  const TUR = [
+    ["ataturk", TL("Atatürk ve Kurtuluş yolu", "Atatürk and the War of Independence"), "x"],
+    ["muze", TL("Müzeler", "Museums"), "t"],
+    ["cami", TL("Cami ve dini yapılar", "Mosques and places of worship"), "t"],
+    ["antik", TL("Antik kentler", "Ancient cities"), "t"],
+    ["kale", TL("Kale, saray ve konaklar", "Castles, palaces and mansions"), "t"],
+    ["han", TL("Köprü, han ve çarşılar", "Bridges, inns and bazaars"), "t"],
+    ["deniz", TL("Deniz ve koylar", "Sea and coves"), "x"],
+    ["selale", TL("Şelale ve kanyonlar", "Waterfalls and canyons"), "d"],
+    ["magara", TL("Mağaralar", "Caves"), "d"],
+    ["gol", TL("Göller", "Lakes"), "d"],
+    ["dag", TL("Dağ ve yaylalar", "Mountains and highlands"), "d"],
+    ["park", TL("Milli parklar ve ormanlar", "National parks and forests"), "d"],
+    ["semt", TL("Şehir ve semtler", "Town and quarters"), "x"]
+  ];
+  const TUR_RENK = { t: "var(--k-t)", d: "var(--k-d)", x: "var(--k-s)" };
+  const turHafiza = new WeakMap();
+  function turu(p) {
+    if (turHafiza.has(p)) return turHafiza.get(p);
+    const a = sade(p.ad || ""), b = " " + a + " ";
+    let t = "diger";
+    if (b.includes("ataturk") && !/park|bulvar|cadde|baraj|stadyum|kosu|ormani/.test(a) || /kurtulus savasi|milli mucadele|anitkabir|zubeyde hanim/.test(a)) t = "ataturk";
+    else if (p.k === "m" || b.includes("muze")) t = "muze";
+    else if (denizMi([0, p.ad || "", p.ilS, 0, 0, 0, p.k])) t = "deniz";
+    else for (const k of ["cami", "antik", "kale", "han", "selale", "magara", "gol", "dag", "park"]) if (temaUyarAd(k, a, p.k)) { t = k; break; }
+    if (t === "diger" && p.k === "s") t = "semt";
+    // Deniz kontrolü cami ve kaleden sonra gelsin: "Kız Kalesi" kale sayılır
+    if (t === "deniz") for (const k of ["cami", "antik", "kale"]) if (temaUyarAd(k, a, p.k)) { t = k; break; }
+    turHafiza.set(p, t); return t;
+  }
+  let turAcik = false;
   function renderChips() {
-    const say = (k) => places.filter((p) => (k === "one" ? p.one : p.k === k)).length;
     const items = [["hepsi", T("Hepsi"), places.length]];
-    const one = say("one");
+    const one = places.filter((p) => p.one).length;
     if (one && one < places.length) items.push(["one", ik("star", 14) + " " + T("Öne çıkanlar"), one]);
-    for (const k of Object.keys(CATS)) { const c = say(k); if (c) items.push([k, CATS[k].ad, c]); }
+    const say = {};
+    for (const p of places) { const t = turu(p); say[t] = (say[t] || 0) + 1; }
+    // En kalabalık 6 tür görünür, kalanı "Daha fazla" ile açılır; seçili tür her zaman görünür
+    const turler = TUR.filter(([k]) => say[k]).sort((a, b) => say[b[0]] - say[a[0]]);
+    const gor = [], gizli = [];
+    turler.forEach((t, i) => (i < 6 || turAcik || cat === "tur:" + t[0] ? gor : gizli).push(t));
+    for (const [k, ad, g] of gor) items.push(["tur:" + k, ad, say[k], TUR_RENK[g]]);
+    if (say.diger && (turAcik || !gizli.length || cat === "tur:diger")) items.push(["tur:diger", TL("Diğer", "Other"), say.diger, "var(--muted)"]);
+    else if (say.diger) gizli.push(1);
     const aile = places.filter(aileMi).length;
     if (aile >= 2) items.push(["aile", ik("heart-handshake", 14) + " " + T("Çocuklarla"), aile]);
-    $("chips").innerHTML = places.length ? items.map(([k, ad, c]) =>
-      `<button data-k="${k}" aria-pressed="${cat === k}">${CATS[k] ? `<span class="dot" style="background:${CATS[k].renk}"></span>` : ""}${ad} <small>${c}</small></button>`).join("") : "";
+    $("chips").innerHTML = places.length ? items.map(([k, ad, c, r]) =>
+      `<button data-k="${k}" aria-pressed="${cat === k}">${r ? `<span class="dot" style="background:${r}"></span>` : ""}${ad} <small>${c}</small></button>`).join("") +
+      (gizli.length ? `<button data-k="daha" aria-expanded="false">${TL("Daha fazla", "More")} <small>${gizli.length}</small></button>` : "") : "";
   }
   function renderSort() {
     $("sortSeg").innerHTML = me && view.mode !== "near"
@@ -4477,7 +4519,7 @@
     history.replaceState(null, "", `#/il/${view.d.s}${b.dataset.tab === "ilce" ? "/ilceler" : ""}`);
     setTab(b.dataset.tab);
   });
-  $("chips").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; cat = b.dataset.k; shown = 60; fitted = false; renderChips(); renderList(); drawPins(); });
+  $("chips").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; if (b.dataset.k === "daha") { turAcik = true; renderChips(); return; } cat = b.dataset.k; shown = 60; fitted = false; renderChips(); renderList(); drawPins(); });
   $("sortSeg").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; sortMode = b.dataset.s; renderSort(); renderList(); });
   $("moreBtn").addEventListener("click", () => { shown += 60; renderList(); });
   $("list").addEventListener("click", (e) => {
