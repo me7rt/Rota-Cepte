@@ -1296,6 +1296,13 @@ button.mrow:active{background:var(--surface2)}
 .ilsira{display:flex;gap:8px;margin:0 0 10px}
 .ilsira button{padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
 .ilsira button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.ilsira button{min-height:44px}
+.ilbolge{overflow-x:auto;scrollbar-width:none;margin:0 -16px 10px;padding:0 16px 2px}
+.ilbolge::-webkit-scrollbar{display:none}
+.ilbolge button{flex:none;white-space:nowrap}
+.ils.satir{display:flex;flex-direction:column;gap:8px}
+.ils.satir .row small{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.plaka{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;font-weight:800;margin-right:4px;flex:none}
 .ayarlar>summary{list-style:none;cursor:pointer}
 .ayarlar>summary::-webkit-details-marker{display:none}
 .ayarlar>summary span{display:flex;flex-direction:column}

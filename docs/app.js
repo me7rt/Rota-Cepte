@@ -234,7 +234,7 @@
     watchId = null; me = null; homeMe = null; konumBekleyen = [];
     try { localStorage.setItem("gezi-konum-kapali", "1"); } catch (e) {}
     $("locBtn").classList.remove("on");
-    $("locText").textContent = T("Konum kapalı");
+    $("locText").textContent = T("Konumu aç");
     $("nearSub").textContent = T("Konumunu aç, sana en yakın gezilecek yerleri sıralayalım");
     if (meMarker && layer) { layer.removeLayer(meMarker); meMarker = null; }
     if (open) renderFacts(open);
@@ -266,7 +266,7 @@
         if (watchId !== null) navigator.geolocation.clearWatch(watchId);
         watchId = null; me = null; homeMe = null; konumBekleyen = [];
         $("locBtn").classList.remove("on");
-        $("locText").textContent = T("Konum kapalı");
+        $("locText").textContent = T("Konumu aç");
         toast(T("Konum izni verilmedi. Ayarlardan izin verebilirsin."));
       },
       { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
@@ -484,6 +484,90 @@
     $("gezList").innerHTML = a.map((x) =>
       `<li><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${thumb(x.f, x.k)}<span class="rt"><b>${esc(kayitAd(x))}</b><small>${esc(x.il)}${x.t ? " · " + new Date(x.t).toLocaleDateString(DIL === "en" ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" }) : ""}</small></span><span class="km ok">${ik("circle-check", 20)}</span></button></li>`).join("");
   }
+  // İl kartlarındaki kısa tanıtım (her ilin en bilinen yerleri, verideki adlarla kontrol edildi)
+  const KANCA = {
+    "adana": ["Taşköprü ve Seyhan kıyısı", "Taşköprü bridge and the Seyhan riverside"],
+    "adiyaman": ["Nemrut'ta gün doğumu", "Sunrise on Mount Nemrut"],
+    "afyonkarahisar": ["Kayalık kale ve Frig Vadisi", "A clifftop castle and the Phrygian Valley"],
+    "agri": ["İshak Paşa Sarayı ve Ağrı Dağı", "Ishak Pasha Palace and Mount Ararat"],
+    "aksaray": ["Ihlara Vadisi ve kaya kiliseleri", "Ihlara Valley and its rock churches"],
+    "amasya": ["Kral kaya mezarları ve Yeşilırmak evleri", "Royal rock tombs above the Yeşilırmak"],
+    "ankara": ["Anıtkabir ve Anadolu Medeniyetleri Müzesi", "Anıtkabir and the Museum of Anatolian Civilizations"],
+    "antalya": ["Antik kentler ve turkuaz koylar", "Ancient cities and turquoise coves"],
+    "ardahan": ["Çıldır Gölü ve yayla yolları", "Lake Çıldır and highland roads"],
+    "artvin": ["Borçka Karagöl ve eski manastırlar", "Lake Karagöl and old monasteries"],
+    "aydin": ["Afrodisias, Milet ve Didyma", "Aphrodisias, Miletus and Didyma"],
+    "balikesir": ["Kazdağı ve Cunda Adası", "Mount Ida and Cunda Island"],
+    "bartin": ["Amasra'nın kalesi ve koyları", "Amasra's castle and bays"],
+    "batman": ["Hasankeyf ve Dicle kıyısı", "Hasankeyf on the Tigris"],
+    "bayburt": ["Baksı Müzesi ve Bayburt Kalesi", "Baksı Museum and Bayburt Castle"],
+    "bilecik": ["Söğüt, Osmanlı'nın doğduğu yer", "Söğüt, where the Ottomans began"],
+    "bingol": ["Yüzen adalar ve dağ gölleri", "Floating islands and mountain lakes"],
+    "bitlis": ["Ahlat mezar taşları ve Nemrut Krater Gölü", "Ahlat tombstones and Nemrut Crater Lake"],
+    "bolu": ["Abant Gölü ve Yedigöller", "Lake Abant and the Seven Lakes"],
+    "burdur": ["Salda Gölü'nün beyaz kıyıları", "The white shores of Lake Salda"],
+    "bursa": ["Uludağ ve ilk Osmanlı başkenti", "Uludağ and the first Ottoman capital"],
+    "canakkale": ["Gelibolu ve Troya", "Gallipoli and Troy"],
+    "cankiri": ["Ilgaz Dağı ve tuz mağarası", "Ilgaz Mountain and the salt cave"],
+    "corum": ["Hattuşa, Hititlerin başkenti", "Hattusa, capital of the Hittites"],
+    "denizli": ["Pamukkale travertenleri", "The white terraces of Pamukkale"],
+    "diyarbakir": ["Surlar, Hevsel Bahçeleri ve Dicle", "City walls, Hevsel Gardens and the Tigris"],
+    "duzce": ["Akçakoca sahili ve şelaleler", "Akçakoca coast and waterfalls"],
+    "edirne": ["Selimiye ve Kırkpınar", "Selimiye Mosque and Kırkpınar wrestling"],
+    "elazig": ["Harput ve Hazar Gölü", "Harput and Lake Hazar"],
+    "erzincan": ["Gürlevik Şelalesi ve Kemaliye", "Gürlevik Waterfall and Kemaliye"],
+    "erzurum": ["Çifte Minareli Medrese ve Palandöken", "Twin Minaret Madrasa and Palandöken"],
+    "eskisehir": ["Odunpazarı evleri ve Porsuk kıyısı", "Odunpazarı houses and the Porsuk river"],
+    "gaziantep": ["Zeugma mozaikleri ve baklava", "Zeugma mosaics and baklava"],
+    "giresun": ["Giresun Adası ve fındık bahçeleri", "Giresun Island and hazelnut groves"],
+    "gumushane": ["Karaca Mağarası ve Santa harabeleri", "Karaca Cave and the ruins of Santa"],
+    "hakkari": ["Cilo Dağları ve Sat Gölleri", "The Cilo Mountains and Sat Lakes"],
+    "hatay": ["Aziz Petrus Kilisesi ve Antakya sofrası", "St Peter's Church and Antakya cuisine"],
+    "igdir": ["Ağrı Dağı ve Aras Kuş Cenneti", "Mount Ararat and the Aras bird sanctuary"],
+    "isparta": ["Eğirdir Gölü ve lavanta tarlaları", "Lake Eğirdir and lavender fields"],
+    "istanbul": ["İki kıta, bir vapur yolculuğu", "Two continents, one ferry ride"],
+    "izmir": ["Efes sütunları, Kordon'da gün batımı", "Ephesus columns, sunset on the Kordon"],
+    "kahramanmaras": ["Kalesi, Ulu Camii ve dövme dondurma", "Its castle, Great Mosque and stretchy ice cream"],
+    "karabuk": ["Safranbolu'nun Osmanlı evleri", "The Ottoman houses of Safranbolu"],
+    "karaman": ["Binbir Kilise ve Karadağ", "A thousand and one churches on Karadağ"],
+    "kars": ["Ani'nin yıkık kiliseleri", "The ruined churches of Ani"],
+    "kastamonu": ["Valla Kanyonu ve Küre Dağları", "Valla Canyon and the Küre Mountains"],
+    "kayseri": ["Erciyes ve Kapadokya'nın kapısı", "Mount Erciyes, gateway to Cappadocia"],
+    "kirikkale": ["Kızılırmak kıyısı ve Hasandede", "The Kızılırmak riverside and Hasandede"],
+    "kirklareli": ["Dupnisa Mağarası ve İğneada ormanları", "Dupnisa Cave and the İğneada forests"],
+    "kirsehir": ["Cacabey Medresesi ve Ahi Evran", "Cacabey Madrasa and Ahi Evran"],
+    "kilis": ["Ravanda Kalesi ve zeytinlikler", "Ravanda Castle and olive groves"],
+    "kocaeli": ["İzmit Körfezi ve Kefken sahili", "The Gulf of İzmit and the Kefken coast"],
+    "konya": ["Mevlana Müzesi ve Çatalhöyük", "The Mevlana Museum and Çatalhöyük"],
+    "kutahya": ["Aizanoi ve çini atölyeleri", "Aizanoi and tile workshops"],
+    "malatya": ["Arslantepe ve kayısı bahçeleri", "Arslantepe and apricot orchards"],
+    "manisa": ["Sardes antik kenti ve Spil Dağı", "Ancient Sardis and Mount Spil"],
+    "mardin": ["Taş evler ve Mezopotamya manzarası", "Stone houses above the Mesopotamian plain"],
+    "mersin": ["Kız Kalesi ve Cennet Cehennem", "Maiden's Castle and the Heaven and Hell sinkholes"],
+    "mugla": ["Bodrum, Fethiye ve Ölüdeniz", "Bodrum, Fethiye and Ölüdeniz"],
+    "mus": ["Malazgirt, Anadolu'nun kapısı", "Malazgirt, where Anatolia's story turned"],
+    "nevsehir": ["Kapadokya, peribacaları ve balonlar", "Cappadocia, fairy chimneys and balloons"],
+    "nigde": ["Aladağlar ve Gümüşler Manastırı", "The Aladağlar range and Gümüşler Monastery"],
+    "ordu": ["Boztepe manzarası ve Yason Burnu", "The Boztepe view and Cape Jason"],
+    "osmaniye": ["Karatepe-Aslantaş ve taş kabartmalar", "Karatepe-Aslantaş and its stone reliefs"],
+    "rize": ["Ayder Yaylası ve çay bahçeleri", "Ayder plateau and tea gardens"],
+    "sakarya": ["Sapanca Gölü ve Acarlar Longozu", "Lake Sapanca and the Acarlar floodplain forest"],
+    "samsun": ["Bandırma Vapuru ve 19 Mayıs", "The Bandırma steamer and 19 May 1919"],
+    "siirt": ["Botan Vadisi ve Veysel Karani", "Botan Valley and the shrine of Veysel Karani"],
+    "sinop": ["Hamsilos Koyu ve Sinop Kalesi", "Hamsilos bay and Sinop fortress"],
+    "sivas": ["Divriği Ulu Camii ve Gökmedrese", "Divriği Great Mosque and the Gökmedrese"],
+    "sanliurfa": ["Göbeklitepe ve Balıklıgöl", "Göbeklitepe and the sacred fish pools"],
+    "sirnak": ["Cudi Dağı ve Cizre Kalesi", "Mount Cudi and Cizre Castle"],
+    "tekirdag": ["Uçmakdere ve Rakoçi Müzesi", "Uçmakdere and the Rákóczi Museum"],
+    "tokat": ["Ballıca Mağarası ve Taşhan", "Ballıca Cave and the Taşhan inn"],
+    "trabzon": ["Sümela ve yayla sisleri", "Sümela and misty highlands"],
+    "tunceli": ["Munzur Vadisi ve gözeler", "Munzur Valley and its springs"],
+    "usak": ["Ulubey Kanyonu", "The Ulubey Canyon"],
+    "van": ["Van Gölü ve Akdamar Adası", "Lake Van and Akdamar Island"],
+    "yalova": ["Termal kaplıcalar ve Sudüşen Şelalesi", "Thermal springs and Sudüşen Waterfall"],
+    "yozgat": ["Yozgat Çamlığı ve Kerkenes", "Yozgat pine forest and Kerkenes"],
+    "zonguldak": ["Gökgöl Mağarası ve maden tarihi", "Gökgöl Cave and the coal-mining story"]
+  };
   // ---------- rozetler ----------
   const BOLGE = {
     "Marmara": "istanbul edirne kirklareli tekirdag canakkale kocaeli yalova sakarya bilecik bursa balikesir",
@@ -2861,7 +2945,7 @@
   $("dShare").after(fotoPayBtn);
   fotoPayBtn.addEventListener("click", () => { if (open) fotoKart(open, fotoPayBtn); });
 
-  let tumIl = false, ilSira = "az";
+  let tumIl = false, ilSira = "az", ilBol = "hepsi";
   // ---------- Sesli rehber: doğal sesle anlatım (Azure ile önceden kaydedildi, GitHub'da il il klasörlerde durur) ----------
   // Dosya: ses-kayitlari dalında <il>/<id>-<dil>-<k|e>.mp3 · id: il | ilce-<sıra> | yerin Wikidata kodu
   const SES_AYAR = "gezi-ses-ayar";
@@ -3121,18 +3205,25 @@
     gununKesfi(); sanaOzel(); ayKart(); renderPasOzet(); renderTarzlar(); planAlt();
     $("results").hidden = true; $("homeMain").hidden = false;
     let iller = IDX.iller.slice();
-    $("ilGrid").classList.toggle("yatay", !tumIl); $("ilSira").hidden = !tumIl;
+    $("ilGrid").classList.toggle("yatay", !tumIl); $("ilGrid").classList.toggle("satir", tumIl); $("ilSira").hidden = !tumIl; $("ilBolge").hidden = !tumIl;
     $("ilBaslik").textContent = tumIl ? T("Tüm iller") : T("Öne çıkan iller");
     $("tumIlBtn").textContent = tumIl ? T("Daha az göster") : T("Tüm iller (81)");
     if (tumIl) {
       if (ilSira === "plaka") iller.sort((a, b) => (+a.plaka || 0) - (+b.plaka || 0));
       else iller.sort((a, b) => a.ad.localeCompare(b.ad, "tr"));
+      if (ilBol !== "hepsi") iller = iller.filter((il) => IL_BOLGE.get(il.s) === ilBol);
+      $("ilBolge").innerHTML = ["hepsi", ...Object.keys(BOLGE)].map((b) => `<button class="chip${b === ilBol ? " on" : ""}" data-bolge="${esc(b)}" aria-pressed="${b === ilBol}">${b === "hepsi" ? T("Tümü") : esc(T(b))}</button>`).join("");
     } else {
       iller.sort((a, b) => me ? km(me, a) - km(me, b) : b.n - a.n);
       iller = iller.slice(0, 10);
     }
-    $("ilGrid").innerHTML = iller.map((il) =>
-      `<li><button class="ilcard" data-go="#/il/${il.s}">${thumb(il.f, "s", 500, "cover")}<span class="ilname"><b>${esc(il.ad)}</b><small>${me ? fmt(km(me, il)) + " · " : ""}${il.n} ${TL("yer", "places")} · ${il.ilceler.length} ${TL("ilçe", "districts")}</small></span></button></li>`).join("");
+    // Kısa tanıtım yoksa eski "yer · ilçe" yazısı kalır
+    const ilAlt = (il) => KANCA[il.s] ? (DIL === "en" ? KANCA[il.s][1] : KANCA[il.s][0]) : `${il.n} ${TL("yer", "places")} · ${il.ilceler.length} ${TL("ilçe", "districts")}`;
+    $("ilGrid").innerHTML = tumIl
+      ? iller.map((il) =>
+        `<li><button class="row" data-go="#/il/${il.s}">${thumb(il.f, "s")}<span class="rt"><b><span class="plaka">${esc(il.plaka || "")}</span>${esc(il.ad)}</b><small>${esc(ilAlt(il))}</small></span><span class="km">${me ? fmt(km(me, il)) : ik("chevron-right", 18)}</span></button></li>`).join("")
+      : iller.map((il) =>
+        `<li><button class="ilcard" data-go="#/il/${il.s}">${thumb(il.f, "s", 500, "cover")}<span class="ilname"><b>${esc(il.ad)}</b><small>${me ? fmt(km(me, il)) + " · " : ""}${esc(ilAlt(il))}</small></span></button></li>`).join("");
   }
   function renderSearch(q) {
     const s = sade(q);
@@ -3941,6 +4032,7 @@
   $("nearBtn").addEventListener("click", () => git("#/yakin"));
   $("favSirala").addEventListener("click", () => { favSirali = !favSirali; try { localStorage.setItem("gezi-fav-sira", favSirali ? "1" : "0"); } catch (e) {} renderFav(); });
   $("tumIlBtn").addEventListener("click", () => { tumIl = !tumIl; renderHome(); if (!tumIl) $("ilBaslik").scrollIntoView({ block: "start" }); });
+  $("ilBolge").addEventListener("click", (e) => { const b = e.target.closest("[data-bolge]"); if (!b) return; ilBol = b.dataset.bolge; renderHome(); });
   $("ilSira").addEventListener("click", (e) => { const b = e.target.closest("[data-sira]"); if (!b) return; ilSira = b.dataset.sira; $("ilSira").querySelectorAll("[data-sira]").forEach((x) => x.classList.toggle("on", x === b)); renderHome(); });
   $("yolBtn").addEventListener("click", () => git("#/yol"));
   $("planBtn").addEventListener("click", () => git("#/plan"));
