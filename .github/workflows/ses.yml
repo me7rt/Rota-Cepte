@@ -2,7 +2,7 @@ name: Sesli rehber
 
 on:
   push:
-    branches: [claude/project-thread-iyhxd3]
+    branches: [claude/project-thread-iyhxd3, claude/project-thread-2h3c9c]
     paths: [scripts/ses-ayar.json]
 
 permissions:
@@ -40,6 +40,27 @@ jobs:
           git config user.name "Mert Turanlıoğlu"
           git config user.email "me7rtt@gmail.com"
           git add . && git commit -qm "Ses denemesi"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" ses-ornek
+
+  rehber:
+    needs: hazirla
+    if: needs.hazirla.outputs.mod == 'rehber'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - run: node scripts/rehber-ses.mjs scripts/rehber-dene.json out
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+      - name: Örnekleri dala yükle
+        if: always()
+        run: |
+          cd out
+          git init -q -b ses-ornek
+          git config user.name "Mert Turanlıoğlu"
+          git config user.email "me7rtt@gmail.com"
+          git add . && git commit -qm "Rehber ses denemesi"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" ses-ornek
 
   hepsi:
