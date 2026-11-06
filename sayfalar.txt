@@ -1,0 +1,2098 @@
+no	sayfa	tur	il	ad	kaynak	suphe	dosya
+1	sayfa 1	il	Balıkesir	Balıkesir	kategori	yedek kaynak	Paşa camii ve gece 20230415 224614.jpg
+2	sayfa 1	il	Bursa	Bursa	kategori	yedek kaynak	Söğütalan-Bursa, Turkey - panoramio - MERMERCİ ÖZGÜR1.jpg
+3	sayfa 1	il	Diyarbakır	Diyarbakır	kategori	yedek kaynak	Caferî.jpg
+4	sayfa 1	il	Erzurum	Erzurum	kategori	yedek kaynak	Kazım Yurdalan, 25080 Palandöken-Erzurum, Turkey - panoramio.jpg
+5	sayfa 1	il	Kahramanmaraş	Kahramanmaraş	wikidata	indirilemedi	Trabzon Caddesi.jpg
+6	sayfa 1	il	Karabük	Karabük	wikidata	indirilemedi	Karabük view 8028.jpg
+7	sayfa 1	il	Karaman	Karaman	wikidata	indirilemedi	Karaman Yunus Emre Camisi 2163.jpg
+8	sayfa 1	il	Kars	Kars	wikidata	indirilemedi	Kars Panorama.JPG
+9	sayfa 1	il	Kastamonu	Kastamonu	wikidata	indirilemedi	Kastamonu edge of town 1305.jpg
+10	sayfa 1	il	Kayseri	Kayseri	kategori	indirilemedi	Steppenlandschaft (2).JPG
+11	sayfa 1	il	Kilis	Kilis	kategori	indirilemedi	AFAD Kilis kampı.jpg
+12	sayfa 1	il	Kocaeli	Kocaeli	kategori	indirilemedi	KOCAELİ PLATOSU.jpg
+13	sayfa 1	il	Konya	Konya	kategori	indirilemedi	Konya 37.JPG
+14	sayfa 1	il	Kütahya	Kütahya	wikidata	indirilemedi	Kütahya hisar-üçler tepesinden.jpg
+15	sayfa 1	il	Kırklareli	Kırklareli	wikidata	indirilemedi	Kirklareli mosque.jpg
+16	sayfa 1	il	Kırıkkale	Kırıkkale	wikidata	indirilemedi	Kırıkkale.jpg
+17	sayfa 1	il	Kırşehir	Kırşehir	wikidata	indirilemedi	Autumn on Lake Hilla - panoramio.jpg
+18	sayfa 1	il	Malatya	Malatya	wikidata	indirilemedi	44 malatya panorama.JPG
+19	sayfa 1	il	Manisa	Manisa	wikidata	indirilemedi	Ulu Cami önünden Manisa'nın görünüşü 2010.jpg
+20	sayfa 1	il	Mardin	Mardin	wikidata	indirilemedi	Mardin, Mardin Merkez-Mardin, Turkey - panoramio (1).jpg
+21	sayfa 1	il	Mersin	Mersin	kategori	indirilemedi	Hasanaliler, 33940 Narlıkuyu-Silifke-Mersin, Turkey - panoramio (1).jpg
+22	sayfa 1	il	Muğla	Muğla	wikidata	indirilemedi	Muğla 188.JPG
+23	sayfa 1	il	Muş	Muş	wikidata	indirilemedi	Mush 1213.jpg
+24	sayfa 1	il	Nevşehir	Nevşehir	wikidata	indirilemedi	"00 0720 Feenkamine bei Nevşehir in Kappadokien.jpg
+25	sayfa 1	il	Niğde	Niğde	wikidata	indirilemedi	NigdeKale2.jpg
+26	sayfa 1	il	Ordu	Ordu	wikidata	indirilemedi	Ordu gölköy.jpg
+27	sayfa 1	il	Osmaniye	Osmaniye	wikidata	indirilemedi	Osmaniye 01.jpg
+28	sayfa 1	il	Rize	Rize	wikidata	indirilemedi	Panorama of Rize.jpg
+29	sayfa 1	il	Sakarya	Sakarya	wikidata	indirilemedi	Sakarya Müzesi1.jpg
+30	sayfa 1	il	Samsun	Samsun	wikidata	indirilemedi	Samsun - panoramio (11).jpg
+31	sayfa 2	il	Siirt	Siirt	wikidata	indirilemedi	Botan Vadisi.jpg
+32	sayfa 2	il	Sinop	Sinop	wikidata	indirilemedi	Sinop Overview 2009.JPG
+33	sayfa 2	il	Sivas	Sivas	wikidata	indirilemedi	Sivas 20-08-2009 - panoramio.jpg
+34	sayfa 2	il	Tekirdağ	Tekirdağ	kategori	indirilemedi	59850 Yenice-Çorlu-Tekirdağ, Turkey - panoramio (1).jpg
+35	sayfa 2	il	Tokat	Tokat	wikidata	indirilemedi	Tokat panorama 2012.JPG
+36	sayfa 2	il	Trabzon	Trabzon	wikidata	indirilemedi	Trabzon,harbour.jpg
+37	sayfa 2	il	Tunceli	Tunceli	wikidata	indirilemedi	Tunceli.jpg
+38	sayfa 2	il	Uşak	Uşak	wikidata	indirilemedi	Antikle Kirche von Sebaste, bei Selcikler (Usak).JPG
+39	sayfa 2	il	Van	Van	wikidata	indirilemedi	Wan, Վան.JPG
+40	sayfa 2	il	Yalova	Yalova	wikidata	indirilemedi	Yalova Seaside.JPG
+41	sayfa 2	il	Yozgat	Yozgat	kategori	indirilemedi	Sarıkaya 10 10 2007 Bozok Yaylası.jpg
+42	sayfa 2	il	Zonguldak	Zonguldak	wikidata	indirilemedi	Zonguldak2.jpg
+43	sayfa 2	il	İstanbul	İstanbul	kategori	yedek kaynak	Hagia Sophia in Istanbul 07.08.2023.jpg
+44	sayfa 2	il	Şanlıurfa	Şanlıurfa	wikidata	indirilemedi	Şanlıurfa skyline.jpg
+45	sayfa 2	il	Şırnak	Şırnak	wikidata	indirilemedi	Şırnak şehir görünümü.jpg
+46	sayfa 2	one	Adana	Sabancı Merkez Camii	önceki	benzer: Aladağ, benzer: İmamoğlu	Adana Merkez Camii.jpg
+47	sayfa 2	one	Adana	Yılankale	wikidata	beyaz 0.37	Yilankale1.jpg
+48	sayfa 2	one	Ardahan	Damal	wikidata	benzer: Posof	Damal.JPG
+49	sayfa 2	one	Balıkesir	Ayvalık Adaları Tabiat Parkı	wikidata	beyaz 0.36, benzer: Cunda Adası	Ayvalık.jpeg
+50	sayfa 2	one	Balıkesir	Sütüven Şelalesi	elle	yedek kaynak	Kazdağları Milli Parkı Sütüven Şelalesi.jpg
+51	sayfa 2	one	Balıkesir	Hasanboğuldu	elle	yedek kaynak	Lake in Mount Ida, Turkey 2019.jpg
+52	sayfa 2	one	Balıkesir	Şeytan Sofrası	elle	yedek kaynak, benzer: Kuşcenneti Millî Parkı	Şeytan Sofrası Balıkesir.jpg
+53	sayfa 2	one	Bartın	Amasra	wikidata	benzer: Bartın	Amasra, Turkey, Castle, view from the island.jpg
+54	sayfa 2	one	Bartın	İnkumu	wikidata	benzer: Bartın, benzer: Amasra, benzer: Amasra	İnkumu beach, in 2006.jpg
+55	sayfa 2	one	Bilecik	Osmaneli	wikidata	benzer: Söğüt	11500 Osmaneli-Bilecik, Turkey - panoramio (5).jpg
+56	sayfa 2	one	Bursa	Uludağ	wikidata	benzer: Keles, benzer: Nilüfer, benzer: Orhaneli	Uludag.JPG
+57	sayfa 2	one	Bursa	Yeşil Camii	wikidata	beyaz 0.30	Green Mosque in Bursa.jpg
+58	sayfa 2	one	Diyarbakır	Hasan Paşa Hanı	wikidata	benzer: Bismil, benzer: Çüngüş, benzer: Dicle, benzer: Eğil, benzer: Hazro	Hasan Pasha Inn.jpg
+59	sayfa 2	one	Edirne	II. Bayezid Camii	wikidata	benzer: Keşan	20120913 Bayezid II Kulliye Edirne Turkey.jpg
+60	sayfa 2	one	Elazığ	Hazar Gölü	wikidata	benzer: Baskil, benzer: Elazığ, benzer: Sivrice	Lake Hazar and Mount Hazar Baba.jpg
+61	sayfa 3	one	Elazığ	Harput Kalesi	wikidata	beyaz 0.47, benzer: Harput	Festung Harput.jpg
+62	sayfa 3	one	Erzincan	Terzi Baba Türbesi	elle	yedek kaynak	Terzibaba Camii ve Külliyesi 2693.jpg
+63	sayfa 3	one	Erzurum	Çifte Minareli Medrese	wikidata	benzer: Karayazı	Çifte Minareli Medrese (Erzurum) Exterior front side in 2006 3278 straightened.jpg
+64	sayfa 3	one	Gümüşhane	Santa Harabeleri	elle	yedek kaynak	Santa Harabeleri - panoramio.jpg
+65	sayfa 3	one	Gümüşhane	Artabel Gölleri Tabiat Parkı	elle	yedek kaynak	Artabel Gölleri... - panoramio.jpg
+66	sayfa 3	one	Hakkari	Berçelan Yaylası	elle	yedek kaynak	Berçelan Festıvals 01.06.2009 - panoramio.jpg
+67	sayfa 3	one	Hakkari	Sat Gölleri	elle	yedek kaynak	Sat Lakes and reflection, July 2023.jpg
+68	sayfa 3	one	Hatay	Uzun Çarşı	elle	yedek kaynak	Istanbul Uzun Çarşı Caddesi (54526360614).jpg
+69	sayfa 3	one	Isparta	Eğirdir Gölü	wikidata	benzer: Senirkent	Lake Egirdir.jpg
+70	sayfa 3	one	Isparta	Davraz Dağı	wikidata	benzer: Senirkent	DavrazDagi.jpg
+71	sayfa 3	one	Iğdır	Ermeniler Tarafından Katledilen Şehit Türkler Anıt ve Müzesi	wikidata	benzer: Iğdır, benzer: Iğdır	SoykırımAnıtMüze5.jpg
+72	sayfa 3	one	Iğdır	Tuzluca Tuz Mağarası	elle	yedek kaynak	Iğdır Tuzluca Tuz Mağarası 20221213.jpg
+73	sayfa 3	one	Kahramanmaraş	Kahramanmaraş Ulu Camii	vikipedi	indirilemedi	Kahramanmaraş Grand Mosque portal.jpg
+74	sayfa 3	one	Kahramanmaraş	Kahramanmaraş Arkeoloji Müzesi	wikidata	indirilemedi	Kahramanmaras Museum Eingang.jpg
+75	sayfa 3	one	Kahramanmaraş	Kahramanmaraş Kalesi	wikidata	indirilemedi	46000 Çukurhisar-Kahramanmaraş Merkez-Kahramanmaraş, Turkey - panoramio (7).jpg
+76	sayfa 3	one	Karabük	Safranbolu	wikidata	indirilemedi	Safranbolu traditional houses.jpg
+77	sayfa 3	one	Karabük	Cinci Hanı	elle	indirilemedi	Cinci Han, Safranbolu 2014.jpg
+78	sayfa 3	one	Karaman	Taşkale	vikipedi	indirilemedi	Taşkale 05 1998 alter Ortskern.jpg
+79	sayfa 3	one	Karaman	Hatuniye Medresesi	wikidata	indirilemedi	Karaman Hatuniye Medresi 4812.jpg
+80	sayfa 3	one	Karaman	Karaman Kalesi	wikidata	indirilemedi	KaramanKale1.jpg
+81	sayfa 3	one	Kars	Ani	wikidata	indirilemedi	Ani Archeological Site, March 2020 1.jpg
+82	sayfa 3	one	Kars	Sarıkamış	wikidata	indirilemedi	Sarikamish-Atatürk monument.JPG
+83	sayfa 3	one	Kars	Çıldır Gölü	kategori	indirilemedi	Cildir 01.jpg
+84	sayfa 3	one	Kars	Kümbet Camii	wikidata	indirilemedi	Kars, armenische Kathedrale, Heilige-Apostel-Kirche Սուրբ Առաքելոց Եկեղեցի (10. Jhdt.) (40336376592).jpg
+85	sayfa 3	one	Kars	Kars Kalesi	wikidata	indirilemedi	Kars, castello, veduta 01.jpg
+86	sayfa 3	one	Kastamonu	Mahmut Bey Cami	wikidata	indirilemedi	Mahmut Bey Mosque 1642.jpg
+87	sayfa 3	one	Kastamonu	Nasrullah Camii	wikidata	indirilemedi	Nasrullah Mosque, Kastamonu.jpg
+88	sayfa 3	one	Kastamonu	Kastamonu Kalesi	wikidata	indirilemedi	Kastamonu Castle, Turkey.jpg
+89	sayfa 3	one	Kastamonu	Valla kanyonu	vikipedi	indirilemedi	Valla Canyon.jpg
+90	sayfa 3	one	Kayseri	Erciyes Dağı	wikidata	indirilemedi	Turkey.Mount Erciyes01.jpg
+91	sayfa 4	one	Kayseri	Kültepe	wikidata	indirilemedi	KültepeOberstadtPalast.jpg
+92	sayfa 4	one	Kayseri	Talas	vikipedi	indirilemedi	TALAS - panoramio - cankurtaran (3).jpg
+93	sayfa 4	one	Kayseri	Sultansazlığı Milli Parkı	wikidata	indirilemedi	Sultan sazlığı.jpg
+94	sayfa 4	one	Kayseri	Kayseri Kalesi	wikidata	indirilemedi	00 0825 Stadtmauern von Kayseri.jpg
+95	sayfa 4	one	Kayseri	Döner Kümbet	wikidata	indirilemedi	Döner Kümbet 2485.jpg
+96	sayfa 4	one	Kilis	Kilis Müzesi	önceki	indirilemedi	Kilis Mevlevihanesi 03.jpg
+97	sayfa 4	one	Kilis	Kilis Mevlevihanesi	elle	indirilemedi	Exterior of 16th-Century Tekke Mosque - Kilis - Turkey (5772594464).jpg
+98	sayfa 4	one	Kocaeli	Kocaeli Arkeoloji ve Etnografya Müzesi	wikidata	indirilemedi	Kocaeli Arkeoloji ve Etnografya Müzesi ana bina soldan.jpg
+99	sayfa 4	one	Kocaeli	Seka Park	wikidata	indirilemedi	SEKA Parktan Kocaeli Bilim Merkezi ve SEKA Kağıt Müzesi.jpg
+100	sayfa 4	one	Kocaeli	Ormanya	wikidata	indirilemedi	Ormanya (1) 01.jpg
+101	sayfa 4	one	Konya	Çatalhöyük	wikidata	indirilemedi	CatalHoyukSouthArea.JPG
+102	sayfa 4	one	Konya	Mevlana Müzesi	wikidata	indirilemedi	Molavi1.JPG
+103	sayfa 4	one	Konya	Alaeddin Camii	wikidata	indirilemedi	Alaedin Camii.JPG
+104	sayfa 4	one	Konya	Karatay Medresesi	wikidata	indirilemedi	Karatay medresesi.jpg
+105	sayfa 4	one	Konya	İnce Minareli Medrese	wikidata	indirilemedi	Ince Minareli Medrese 01.jpg
+106	sayfa 4	one	Konya	Sille	wikidata	indirilemedi	Sille heart of town 4701.jpg
+107	sayfa 4	one	Konya	Meke Krater Gölü	wikidata	indirilemedi	Lake Meke - Meke Gölü 05.JPG
+108	sayfa 4	one	Kütahya	Aizanoi	wikidata	indirilemedi	Aizanoi Zeus temple 2120.jpg
+109	sayfa 4	one	Kütahya	Kütahya Kalesi	wikidata	indirilemedi	Kütahya hisar-üçler tepesinden.jpg
+110	sayfa 4	one	Kütahya	Merkez, Kütahya'da cami	wikidata	indirilemedi	Kütahya ulu cami.JPG
+111	sayfa 4	one	Kırklareli	Dupnisa Mağarası	wikidata	indirilemedi	Dupnisa Cave, Kirklareli - Ahmet Baris ISITAN.jpg
+112	sayfa 4	one	Kırklareli	İğneada Longoz Ormanları Millî Parkı	wikidata	indirilemedi	İğneadaFloodplainForestsNP (15).JPG
+113	sayfa 4	one	Kırklareli	Kırklareli Müzesi	wikidata	indirilemedi	KırklareliMuseum (1).JPG
+114	sayfa 4	one	Kırklareli	Vize Ayasofya Camii	wikidata	indirilemedi	Vize Hagia Sophia - P1020915.JPG
+115	sayfa 4	one	Kırıkkale	Hasandede	elle	indirilemedi	Hasandede heykeli.jpg
+116	sayfa 4	one	Kırşehir	Seyfe Gölü	wikidata	indirilemedi	Seyfe Gölü 2.JPG
+117	sayfa 4	one	Kırşehir	Kesikköprü	vikipedi	indirilemedi	Kesikkopru45.jpg
+118	sayfa 4	one	Kırşehir	Aşık Paşa Türbesi	wikidata	indirilemedi	Aşık Paşa Türbesi - Tomb Of Ashik Pasha - panoramio.jpg
+119	sayfa 4	one	Malatya	Arslantepe	wikidata	indirilemedi	Arslantepe5.jpg
+120	sayfa 4	one	Malatya	Malatya Müzesi	wikidata	indirilemedi	MalatyaMuseum.jpg
+121	sayfa 5	one	Malatya	Nemrut Dağı Millî Parkı	wikidata	indirilemedi	Conquering the Mountain Nemrut.jpg
+122	sayfa 5	one	Manisa	Sardis	wikidata	indirilemedi	The Bath-Gymnasium complex at Sardis, late 2nd - early 3rd century AD, Sardis, Turkey (17098680002).jpg
+123	sayfa 5	one	Manisa	Muradiye Camii	wikidata	indirilemedi	IzManisaM04.jpg
+124	sayfa 5	one	Manisa	Kula-Salihli Jeoparkı	wikidata	indirilemedi	Kula Volkanik Jeoparkı.jpg
+125	sayfa 5	one	Manisa	Spil Dağı Milli Parkı	vikipedi	indirilemedi	Spil National Park - Spil Milli Parkı.jpg
+126	sayfa 5	one	Manisa	Niobe Kayası	wikidata	indirilemedi	The Weeping Rock in Mount Sipylus, Manisa, Turkey, known as Niobe's Rock, a rock in the shape of a weeping woman, which the ancient Greeks believed to be Niobe (18982976930).jpg
+127	sayfa 5	one	Mardin	Dara	wikidata	indirilemedi	Dara P1030851 20080424091200.JPG
+128	sayfa 5	one	Mardin	Mor Gabriel Manastırı	vikipedi	indirilemedi	Deyrulumur P1040804 20080425103239.JPG
+129	sayfa 5	one	Mardin	Deyrulzafarân Manastırı	wikidata	indirilemedi	Mor Hananyo.jpg
+130	sayfa 5	one	Mardin	Kasımiye Medresesi	wikidata	indirilemedi	Mardin P1050254 20080426114925.JPG
+131	sayfa 5	one	Mardin	Mardin Zinciriye Medresesi	wikidata	indirilemedi	MardinSultanIsaDomes.jpg
+132	sayfa 5	one	Mardin	Mardin Ulu Camii	wikidata	indirilemedi	Ulu cami.jpg
+133	sayfa 5	one	Mersin	Mamure Kalesi	wikidata	indirilemedi	Castle in Mamure, Anamur, Turkey from the Sea.jpg
+134	sayfa 5	one	Mersin	Cennet ve Cehennem	wikidata	indirilemedi	023 Cennetobrugu.07.2006 resize.JPG
+135	sayfa 5	one	Mersin	Uzuncaburç	wikidata	indirilemedi	57608567 - panoramio.jpg
+136	sayfa 5	one	Mersin	Ashab-ı Kehf	elle	indirilemedi	Ashab ı Kehf Nahçivan.jpg
+137	sayfa 5	one	Mersin	Anamurium	elle	indirilemedi	Anamurium, Anamur-Mersin.jpg
+138	sayfa 5	one	Muğla	Halikarnas Mozolesi	wikidata	indirilemedi	The ruins of the Mausoleum at Halicarnassus.jpg
+139	sayfa 5	one	Muğla	Bodrum Kalesi	wikidata	indirilemedi	TurkeyBodrumCastle.jpg
+140	sayfa 5	one	Muğla	Kaunos	wikidata	indirilemedi	DALYAN-KAUNOS - panoramio.jpg
+141	sayfa 5	one	Muğla	Saklıkent Kanyonu	wikidata	indirilemedi	Saklıkent Kanyonu (2).jpg
+142	sayfa 5	one	Muğla	Akyaka	wikidata	indirilemedi	48650 Akyaka-Ula-Muğla, Turkey - panoramio (15).jpg
+143	sayfa 5	one	Muğla	Fethiye Körfezi	wikidata	indirilemedi	Göcek.jpg
+144	sayfa 5	one	Muğla	Kelebekler Vadisi	wikidata	indirilemedi	Butterfly Valley, Fethiye.jpg
+145	sayfa 5	one	Muğla	Ölüdeniz-Kıdrak Tabiat Parkı	önceki	indirilemedi	View to Oludeniz-Kidrak nature park.jpg
+146	sayfa 5	one	Muğla	Dalyan	elle	indirilemedi	Dalyan, Turkey March 2022 - La Boheme, Food Drinks & Boat.jpg
+147	sayfa 5	one	Muş	Malazgirt	vikipedi	indirilemedi	Milazgir.jpg
+148	sayfa 5	one	Muş	Muş Ulu Camii	wikidata	indirilemedi	Muş Ulucamii.jpg
+149	sayfa 5	one	Muş	Haspet Kalesi	wikidata	indirilemedi	Muş Haspet Kalesi in 2006 0526.jpg
+150	sayfa 5	one	Nevşehir	Göreme Tarihî Millî Parkı	wikidata	indirilemedi	00 3598 Felsformation aus vulkanischer Ascheablagerung - Felswohnungen.jpg
+151	sayfa 6	one	Nevşehir	Derinkuyu Yeraltı Şehri	wikidata	indirilemedi	Derinkuyu Underground City 9831 Nevit Enhancer.jpg
+152	sayfa 6	one	Nevşehir	Kaymaklı Yeraltı Şehri	wikidata	indirilemedi	Kaymakli underground city 8870 Nevit Compressor.jpg
+153	sayfa 6	one	Nevşehir	Paşabağ	wikidata	indirilemedi	Pasaba Valley.jpg
+154	sayfa 6	one	Niğde	Alaeddin Camii	wikidata	indirilemedi	Nigde alaaddin cami taci.jpg
+155	sayfa 6	one	Niğde	Aladağlar Millî Parkı	wikidata	indirilemedi	Aladaglar detail.JPG
+156	sayfa 6	one	Niğde	Gümüşler Manastırı	wikidata	indirilemedi	Gumusler Monastery Courtyard 1202.jpg
+157	sayfa 6	one	Niğde	Niğde Kalesi	wikidata	indirilemedi	NigdeKale1.jpg
+158	sayfa 6	one	Ordu	Yason Burnu	wikidata	indirilemedi	2009.05.23 - Iason Church - by Kerem Koç.jpg
+159	sayfa 6	one	Ordu	Boztepe	vikipedi	indirilemedi	Boztepe 1.jpg
+160	sayfa 6	one	Ordu	Paşaoğlu Konağı, Altınordu	önceki	indirilemedi	Ordu - panoramio (19).jpg
+161	sayfa 6	one	Osmaniye	Toprakkale	wikidata	indirilemedi	ToprakkaleOsmaniye.jpg
+162	sayfa 6	one	Osmaniye	Karatepe-Aslantaş Millî Parkı	wikidata	indirilemedi	Karatepe Stadtmauer.JPG
+163	sayfa 6	one	Osmaniye	Kastabala	wikidata	indirilemedi	HierapolisCastabalaBurgberg.jpg
+164	sayfa 6	one	Rize	Zilkale	wikidata	indirilemedi	Zilkale, Çamlıhemşin (cropped).jpg
+165	sayfa 6	one	Rize	Fırtına Deresi	wikidata	indirilemedi	Fırtına Deresi@Rize-Turkey.JPG
+166	sayfa 6	one	Rize	Ayder	vikipedi	indirilemedi	Ayder7.jpg
+167	sayfa 6	one	Rize	Palovit Şelalesi	wikidata	indirilemedi	Palovit Waterfall 04.jpg
+168	sayfa 6	one	Sakarya	Karasu	wikidata	indirilemedi	Karasu (Merkez) - panoramio.jpg
+169	sayfa 6	one	Sakarya	Justinianus Köprüsü	wikidata	indirilemedi	Sangarius Bridge, Justinyen Köprüsü-3.JPG
+170	sayfa 6	one	Sakarya	Sapanca Gölü	wikidata	indirilemedi	TR Sakarya asv2021-10 img01 Lake Sapanca airview.jpg
+171	sayfa 6	one	Sakarya	Acarlar Longozu	wikidata	indirilemedi	Acarlar longozu temmuz2016.jpg
+172	sayfa 6	one	Sakarya	Poyrazlar Gölü	wikidata	indirilemedi	TR Sakarya asv2021-10 img29 Lake Poyrazlar.jpg
+173	sayfa 6	one	Samsun	Kızılırmak Deltası	wikidata	indirilemedi	Kumul.jpg
+174	sayfa 6	one	Samsun	Samsun Müzesi	wikidata	indirilemedi	Samsun Müzesi.jpg
+175	sayfa 6	one	Samsun	Amisos Tepesi	wikidata	indirilemedi	Amisos Tepesi kuzey tümülüsü girişi.JPG
+176	sayfa 6	one	Samsun	Şahinkaya Kanyonu	vikipedi	indirilemedi	Sahinkaya Canyon.jpg
+177	sayfa 6	one	Samsun	Bandırma Vapuru ve Millî Mücadele Parkı Açık Hava Müzesi	wikidata	indirilemedi	Bandırma Vapuru ve Millî Mücadele Parkı Açık Hava Müzesi girişi.JPG
+178	sayfa 6	one	Siirt	Botan Vadisi Millî Parkı	wikidata	indirilemedi	Botan Valley.jpg
+179	sayfa 6	one	Siirt	Siirt Ulu Camii	wikidata	indirilemedi	Siirt Ulu Camii 1761629779.jpg
+180	sayfa 6	one	Siirt	Veysel Karani Türbesi	önceki	indirilemedi	Veysel Karani Türbesi 2026-07-08 19.21.31 1792484553.jpg
+181	sayfa 7	one	Sinop	Tarihî Sinop Cezaevi	wikidata	indirilemedi	Sinop Tarihi Cezaevi 1.JPG
+182	sayfa 7	one	Sinop	Sinop Kalesi	wikidata	indirilemedi	Sinop-Castle.jpg
+183	sayfa 7	one	Sinop	İnceburun Feneri	wikidata	indirilemedi	İnceburun lighthouse.jpg
+184	sayfa 7	one	Sinop	Tatlıca takım şelaleleri	vikipedi	indirilemedi	Erfelek Şelaleleri.jpg
+185	sayfa 7	one	Sinop	Hamsilos Koyu	elle	indirilemedi	Hamsilos koyu, Sinop.jpg
+186	sayfa 7	one	Sivas	Divriği Ulu Camii ve Darüşşifası	wikidata	indirilemedi	Divrigi complex DSCF3028.jpg
+187	sayfa 7	one	Sivas	Gökmedrese	wikidata	indirilemedi	Gök Medrese.jpg
+188	sayfa 7	one	Sivas	Çifte Minareli Medrese	wikidata	indirilemedi	ÇİFTE MİNARE- SİVAS 19072012 - panoramio.jpg
+189	sayfa 7	one	Sivas	Şifaiye Medresesi	wikidata	indirilemedi	Sivas Şifaiye Medrese 8282.jpg
+190	sayfa 7	one	Sivas	Gökpınar Gölü	wikidata	indirilemedi	IMG-20200607-WA0014.jpg
+191	sayfa 7	one	Sivas	Balıklı Kaplıca	elle	indirilemedi	Balikli Kaplica, Kangal - panoramio.jpg
+192	sayfa 7	one	Tekirdağ	Rakoçi Müzesi	wikidata	indirilemedi	Rodostó, Rákóczi Múzeum 2024 03.jpg
+193	sayfa 7	one	Tekirdağ	Uçmakdere	wikidata	indirilemedi	Tekirdağ Kartaltepe Natural Park.jpg
+194	sayfa 7	one	Tekirdağ	Namık Kemal Evi Müzesi	önceki	indirilemedi	Usta park hotel trabzon zicht richting centrum - panoramio.jpg
+195	sayfa 7	one	Tokat	Ballıca Mağarası	wikidata	indirilemedi	Ballica-magarasi 109064.jpg
+196	sayfa 7	one	Tokat	Gökmedrese	wikidata	indirilemedi	Gök Medrese at Tokat.jpg
+197	sayfa 7	one	Tokat	Tokat Kalesi	wikidata	indirilemedi	Tokat Merkez.jpg
+198	sayfa 7	one	Tokat	Taşhan, Tokat	vikipedi	indirilemedi	Tokat-02-turcolive.jpg
+199	sayfa 7	one	Tokat	Zile Kalesi	vikipedi	indirilemedi	Zile kalesi.jpg
+200	sayfa 7	one	Trabzon	Sümela Manastırı	wikidata	indirilemedi	Sümela Manastır.jpg
+201	sayfa 7	one	Trabzon	Ayasofya Camii, Trabzon	wikidata	indirilemedi	Aya Sofya, Trabzon (2673342179).jpg
+202	sayfa 7	one	Trabzon	Uzungöl	wikidata	indirilemedi	Uzungöl lake and town.jpg
+203	sayfa 7	one	Trabzon	Trabzon Kalesi	vikipedi	indirilemedi	Trabzon Kalesi.jpeg
+204	sayfa 7	one	Trabzon	Boztepe, Trabzon	vikipedi	indirilemedi	Ahi Evren Dede Camii, Boztepe Trabzon Ağustos 2011.jpg
+205	sayfa 7	one	Trabzon	Atatürk Köşkü	wikidata	indirilemedi	Atatiurko namas.jpg
+206	sayfa 7	one	Tunceli	Munzur Vadisi Millî Parkı	wikidata	indirilemedi	Ovacik1.jpg
+207	sayfa 7	one	Tunceli	Pertek Kalesi	wikidata	indirilemedi	Pertek Burg1.jpg
+208	sayfa 7	one	Tunceli	Munzur Gözeleri	elle	indirilemedi	Munzur Vadisi Milli Parkı Munzur Gözeleri.jpg
+209	sayfa 7	one	Tunceli	Pülümür Vadisi	elle	indirilemedi	62700 Akdik-Pülümür-Tunceli, Turkey - panoramio.jpg
+210	sayfa 7	one	Uşak	Ulubey Kanyonu	wikidata	indirilemedi	Ulubey Canyon Usak Province Turkey.jpg
+211	sayfa 8	one	Uşak	Blaundos	wikidata	indirilemedi	BlaundosFachwerk.jpg
+212	sayfa 8	one	Uşak	Uşak Arkeoloji Müzesi	wikidata	indirilemedi	Uşak Museum garden in former museum 2335.jpg
+213	sayfa 8	one	Van	Van Gölü	önceki	indirilemedi	Akdamar Island on Lake Van with the Armenian Church of the Holy Cross and Mount Artos in the background.jpg
+214	sayfa 8	one	Van	Akdamar Adası	wikidata	indirilemedi	Akhtamar Island on Lake Van with the Armenian Cathedral of the Holy Cross.jpg
+215	sayfa 8	one	Van	Van Kalesi	wikidata	indirilemedi	Van Fortress From Northwest.JPG
+216	sayfa 8	one	Van	Hoşap Kalesi	wikidata	indirilemedi	Hosap-castle (17).jpg
+217	sayfa 8	one	Van	Muradiye Şelalesi	wikidata	indirilemedi	Muradiye şelalesi3.jpg
+218	sayfa 8	one	Yalova	Termal	vikipedi	indirilemedi	Termal, 77400 Termal-Yalova, Turkey - panoramio.jpg
+219	sayfa 8	one	Yalova	Yalova Atatürk Köşkü	önceki	indirilemedi	Yalova Thermal Baths.jpg
+220	sayfa 8	one	Yalova	Yürüyen Köşk	wikidata	indirilemedi	Atatürk Yürüyen Köşk, Yalova, Türkiye.jpg
+221	sayfa 8	one	Yalova	Sudüşen Şelalesi	wikidata	indirilemedi	Sudüşen Şelalesi-sudusen waterfall.jpg
+222	sayfa 8	one	Yozgat	Yozgat Çamlığı Millî Parkı	wikidata	indirilemedi	Yozgat-çamlığı-milli-parkı.jpg
+223	sayfa 8	one	Yozgat	Çapanoğlu Camii	wikidata	indirilemedi	Çapanoğlu Mosque- 2014-02-11 14-18.JPG
+224	sayfa 8	one	Yozgat	Kerkenes	wikidata	indirilemedi	Kerkenes.jpg
+225	sayfa 8	one	Yozgat	Kral Kızı Hamamı	wikidata	indirilemedi	Sarıkaya Roma Hamamı 4.jpg
+226	sayfa 8	one	Zonguldak	Filyos Çayı	wikidata	indirilemedi	Filyos Bay.jpg
+227	sayfa 8	one	Zonguldak	Gökgöl Mağarası	vikipedi	indirilemedi	Gökgöl gate.jpg
+228	sayfa 8	one	Zonguldak	Karadeniz Ereğli Müzesi	wikidata	indirilemedi	Karadeniz Ereğli Museum Exterior 7672.jpg
+229	sayfa 8	one	Çanakkale	Assos	wikidata	benzer: Biga, benzer: Bozcaada, benzer: Ezine, benzer: Gökçeada	Assos.jpg
+230	sayfa 8	one	Çanakkale	Kale-i Sultaniye	wikidata	beyaz 0.33, benzer: Ayvacık, benzer: Biga, benzer: Bozcaada, benzer: Ezine, benzer: Gökçeada, benzer: Assos	Çanakkale, Turkey. Cimenlik Castle, now military museum - panoramio.jpg
+231	sayfa 8	one	İstanbul	Kapalıçarşı	wikidata	benzer: Sultanbeyli	Ворота Beyazıt .jpg
+232	sayfa 8	one	İstanbul	Kız Kulesi	wikidata	benzer: Fatih, benzer: Galata Kulesi	Istanbul asv2020-02 img53 Maiden's Tower.jpg
+233	sayfa 8	one	İstanbul	Büyükada	wikidata	benzer: Büyükçekmece, benzer: Eyüpsultan, benzer: Kapalıçarşı	Büyükada.JPG
+234	sayfa 8	one	İstanbul	Büyük Çamlıca Tepesi	wikidata	benzer: Eyüpsultan, benzer: Sultanbeyli, benzer: Kapalıçarşı, benzer: Büyükada	Bosphorus Bridge, Istanboul.jpg
+235	sayfa 8	one	İstanbul	Pierre Loti Tepesi	wikidata	benzer: Eyüpsultan, benzer: Sultanbeyli, benzer: Kapalıçarşı, benzer: Büyükada, benzer: Büyük Çamlıca Tepesi	PIER LOTI GECE .2 - panoramio.jpg
+236	sayfa 8	one	İzmir	Tarihî Asansör	wikidata	benzer: Bayraklı	TR Izmir asv2020-02 img52 Asansör.jpg
+237	sayfa 8	one	Şanlıurfa	Göbeklitepe	wikidata	indirilemedi	Göbekli Tepe, Urfa.jpg
+238	sayfa 8	one	Şanlıurfa	Harran	wikidata	indirilemedi	Harran beehive houses (2).JPG
+239	sayfa 8	one	Şanlıurfa	Halfeti	wikidata	indirilemedi	Şanlıurfa halfeti.jpg
+240	sayfa 8	one	Şanlıurfa	Karahantepe	wikidata	indirilemedi	Karahantepe2.jpg
+241	sayfa 9	one	Şanlıurfa	Balıklıgöl	wikidata	indirilemedi	Balıklıgöl Urfa2.jpg
+242	sayfa 9	one	Şanlıurfa	Şanlıurfa Arkeoloji ve Mozaik Müzesi	wikidata	indirilemedi	UrfaMuseumGöbekli.jpg
+243	sayfa 9	one	Şanlıurfa	Şanlıurfa Kalesi	wikidata	indirilemedi	UrfaKale.jpg
+244	sayfa 9	one	Şırnak	Cudi Dağı	wikidata	indirilemedi	Cudi-dagh-tr-1829.jpg
+245	sayfa 9	one	Şırnak	Kızıl Medrese	wikidata	indirilemedi	Medreseya Sor Cizîra Botan 2009 2.JPG
+246	sayfa 9	one	Şırnak	Mem û Zin Türbesi	elle	indirilemedi	Mem u Zin türbesi.jpg
+247	sayfa 9	ilce	Adana	İmamoğlu	vikipedi	benzer: Aladağ	İmamoğlu, Adana 01.JPG
+248	sayfa 9	ilce	Adıyaman	Çelikhan	arama	yedek kaynak	Çelikhan Korucak Köyü.jpg
+249	sayfa 9	ilce	Adıyaman	Gerger	vikipedi	benzer: Çelikhan	Gerger.jpg
+250	sayfa 9	ilce	Afyonkarahisar	Başmakçı	arama	yedek kaynak	Afyon Başmakçı acıgöl.jpg
+251	sayfa 9	ilce	Afyonkarahisar	Dazkırı	arama	yedek kaynak	Sarıkavak Köyü-Dazkırı.jpg
+252	sayfa 9	ilce	Afyonkarahisar	Dinar	arama	yedek kaynak	TCDD DE 24 372 Dinar - Karakuyu.jpg
+253	sayfa 9	ilce	Afyonkarahisar	Evciler	vikipedi	beyaz 0.54, benzer: Başmakçı	Evciler.jpg
+254	sayfa 9	ilce	Afyonkarahisar	İhsaniye	arama	beyaz 0.93, yedek kaynak	Oğulbeyli (İhsaniye).jpg
+255	sayfa 9	ilce	Afyonkarahisar	Kızılören	arama	yedek kaynak	Kızılören 16 09 1972 Kızılören Hanı und Küçük Kızılören Hanı.jpg
+256	sayfa 9	ilce	Afyonkarahisar	Sandıklı	arama	yedek kaynak	Sandıklı Afyon.jpg
+257	sayfa 9	ilce	Afyonkarahisar	Sultandağı	arama	yedek kaynak	İsaklı Han von Westen in Sultandaği; Afyonkarahisar.jpg
+258	sayfa 9	ilce	Aksaray	Ağaçören	arama	yedek kaynak	Avşar, Ağaçören.jpg
+259	sayfa 9	ilce	Aksaray	Eskil	arama	yedek kaynak	Eskil November 2024 01.jpg
+260	sayfa 9	ilce	Aksaray	Ortaköy	kategori	yedek kaynak	Hocabeyli Köyü.jpg
+261	sayfa 9	ilce	Aksaray	Sarıyahşi	arama	yedek kaynak	68700 Bekdik-Sarıyahşi-Aksaray, Turkey - panoramio.jpg
+262	sayfa 9	ilce	Amasya	Hamamözü	arama	yedek kaynak	Hamamözü Amasya 1962.jpg
+263	sayfa 9	ilce	Ankara	Bala	arama	yedek kaynak	Ankara Bala Kesikköprü Barajı.jpg
+264	sayfa 9	ilce	Ankara	Çubuk	arama	yedek kaynak	Aerial view of Çubuk campus of Gazi University.jpg
+265	sayfa 9	ilce	Ankara	Elmadağ	kategori	yedek kaynak, benzer: Çamlıdere	Ankara 1978 Ankara-Elmadağ Louis-Kiefer.jpg
+266	sayfa 9	ilce	Ankara	Evren	arama	yedek kaynak	20240425 132505 Kenan Evren.jpg
+267	sayfa 9	ilce	Ankara	Gölbaşı	arama	yedek kaynak	GÖLBASI PARKDAN CEMAL GÜRSEL CADDESINE BAKIS - panoramio.jpg
+268	sayfa 9	ilce	Ankara	Haymana	vikipedi	benzer: Çamlıdere, benzer: Elmadağ	Haymanaview.jpg
+269	sayfa 9	ilce	Ankara	Kahramankazan	arama	yedek kaynak	Ankara Bolu Yolu, Kahramankazan, 2022 Ağustos-2.jpg
+270	sayfa 9	ilce	Ankara	Kalecik	arama	yedek kaynak	Yalım Köyü Ankara Kalecik 2.jpg
+271	sayfa 10	ilce	Ankara	Mamak	wikidata	benzer: Bala	Ankara asv2021-10 img14 view from Atakule mall.jpg
+272	sayfa 10	ilce	Ankara	Yenimahalle	wikidata	benzer: Çamlıdere, benzer: Elmadağ, benzer: Haymana	Uzaktan Anıtkabir 2010 Etiler Yenimahalle Ankara - panoramio.jpg
+273	sayfa 10	ilce	Antalya	Akseki	arama	yedek kaynak	Akseki Government Office and statues 1.jpg
+274	sayfa 10	ilce	Antalya	Aksu	arama	yedek kaynak	07119 Fettahlı-Aksu-Antalya, Turkey - panoramio (57).jpg
+275	sayfa 10	ilce	Antalya	Alanya	arama	yedek kaynak	Alanya kalesinden -Alanya-ANTALYA - panoramio.jpg
+276	sayfa 10	ilce	Antalya	Demre	arama	yedek kaynak	Unnamed Road, 07570 Kaleüçağız-Demre-Antalya, Turkey - panoramio (14).jpg
+277	sayfa 10	ilce	Antalya	Döşemealtı	kategori	yedek kaynak	Maximianupolis (Kovanlık, Döşemealtı, Antalya) Situationsskizze.jpg
+278	sayfa 10	ilce	Antalya	Gazipaşa	arama	yedek kaynak	Gazipaşa-Alanya Airport Terminal.jpg
+279	sayfa 10	ilce	Antalya	Kepez	kategori	beyaz 0.33, yedek kaynak	Duraliler, Kepez-Antalya, Turkey - panoramio (1).jpg
+280	sayfa 10	ilce	Antalya	Manavgat	arama	yedek kaynak	(MHNT) Lycaena ottomanus - Manavgat, Antalya, Turkey - male dorsal.jpg
+281	sayfa 10	ilce	Ardahan	Ardahan	arama	yedek kaynak	Ardahan - panoramio - Gürsoy Tokgöz (1).jpg
+282	sayfa 10	ilce	Ardahan	Çıldır	arama	yedek kaynak	Ardahan Çıldır Lake.jpg
+283	sayfa 10	ilce	Ardahan	Posof	arama	yedek kaynak, benzer: Damal	ILGAR DAĞI GEÇİDİ - POSOF ardahan - panoramio.jpg
+284	sayfa 10	ilce	Artvin	Artvin	wikidata	beyaz 0.32	Kemalpasa.jpg
+285	sayfa 10	ilce	Artvin	Kemalpaşa	wikidata	beyaz 0.32	Kemalpasa.jpg
+286	sayfa 10	ilce	Artvin	Murgul	arama	yedek kaynak	Murgul Artvin.jpg
+287	sayfa 10	ilce	Aydın	Bozdoğan	kategori	yedek kaynak	Hıdırbaba, 09760 Bozdoğan-Aydın, Turkey - panoramio.jpg
+288	sayfa 10	ilce	Aydın	Buharkent	arama	yedek kaynak	Buharkent station.jpg
+289	sayfa 10	ilce	Aydın	Karacasu	arama	yedek kaynak	Karacasu-Aydın Province, Turkey - panoramio.jpg
+290	sayfa 10	ilce	Aydın	Koçarlı	arama	yedek kaynak	Şahinciler, Koçarlı Motorlu Kaya.jpg
+291	sayfa 10	ilce	Aydın	Kuyucak	arama	yedek kaynak	Kuyucak-Aydın 18 09 1983 Büyük Menderes Graben mit Aydın Dağları (Kara Dağ).jpg
+292	sayfa 10	ilce	Aydın	Sultanhisar	arama	yedek kaynak	Sultanhisar (Aydin) - panoramio.jpg
+293	sayfa 10	ilce	Aydın	Yenipazar	arama	yedek kaynak	09350 Çavdar-Yenipazar-Aydın, Turkey - panoramio - Aydın Avcıoğlu.jpg
+294	sayfa 10	ilce	Ağrı	Diyadin	kategori	yedek kaynak	DİYADİN - panoramio.jpg
+295	sayfa 10	ilce	Ağrı	Tutak	arama	yedek kaynak	Tutak ota.jpg
+296	sayfa 10	ilce	Balıkesir	Bigadiç	arama	yedek kaynak	Fibbia, in oro, epoca bizantina, da bigadiç (balikesir).jpg
+297	sayfa 10	ilce	Balıkesir	Havran	arama	yedek kaynak	Salfit Havran Cultural Center 02.jpg
+298	sayfa 10	ilce	Balıkesir	Karesi	arama	beyaz 0.73, yedek kaynak	Karesi Beyliği ve Karesi Belediyesi.jpg
+299	sayfa 10	ilce	Balıkesir	Savaştepe	kategori	yedek kaynak	Savaştepebld.jpg
+300	sayfa 10	ilce	Balıkesir	Susurluk	arama	yedek kaynak	Susurluk Göbel Kokoreci (Balıkesir Göbel Usûlü Süt Kuzu Kokoreç).jpg
+301	sayfa 11	ilce	Bartın	Amasra	vikipedi	benzer: Bartın	Amasra, Turkey, Castle, view from the island.jpg
+302	sayfa 11	ilce	Bartın	Ulus	arama	yedek kaynak	74600 Arpacık-Ulus-Bartın, Turkey - panoramio.jpg
+303	sayfa 11	ilce	Batman	Beşiri	arama	yedek kaynak	Fire Department of Besiri - panoramio.jpg
+304	sayfa 11	ilce	Batman	Kozluk	arama	yedek kaynak	Kozluk Civarı - panoramio.jpg
+305	sayfa 11	ilce	Bayburt	Aydıntepe	vikipedi	benzer: Bayburt	Bayburt - Aydıntepe Yaylası.jpg
+306	sayfa 11	ilce	Bayburt	Demirözü	arama	yedek kaynak	Demirözübaraj.jpg
+307	sayfa 11	ilce	Bilecik	Gölpazarı	arama	yedek kaynak	11700 Karaağaç-Gölpazarı-Bilecik, Turkey - panoramio.jpg
+308	sayfa 11	ilce	Bilecik	Pazaryeri	arama	yedek kaynak	Alaçatı Pazaryeri Camii (Ayios Konstantinos Rum Kilisesi).jpg
+309	sayfa 11	ilce	Bilecik	Söğüt	arama	yedek kaynak, benzer: Osmaneli, benzer: Pazaryeri	11600 Zemzemiye-Söğüt-Bilecik, Turkey - panoramio.jpg
+310	sayfa 11	ilce	Bolu	Gerede	vikipedi	beyaz 0.36	Gerede Seviller Yaylası.jpg
+311	sayfa 11	ilce	Bolu	Göynük	arama	yedek kaynak, benzer: Bolu	Çubuk Gölü Panorama, Göynük, Bolu 2014-1.jpg
+312	sayfa 11	ilce	Bolu	Kıbrıscık	arama	yedek kaynak	Köroğlu Dağları 29 03 1984 Karacaören Hochfläche von Kıbrıscık.jpg
+313	sayfa 11	ilce	Bolu	Mengen	arama	yedek kaynak	Bolu Mengen Akören Köyü.jpg
+314	sayfa 11	ilce	Burdur	Çavdır	arama	yedek kaynak	Çavdır Barajı, Bayır Çayı üzerinde - panoramio.jpg
+315	sayfa 11	ilce	Burdur	Çeltikçi	arama	yedek kaynak	33940 Çeltikçi-Silifke-Mersin, Turkey - panoramio - Yılmaz Kilim (1).jpg
+316	sayfa 11	ilce	Burdur	Gölhisar	arama	yedek kaynak	Çeşme, 15400 Gölhisar-Burdur, Turkey - panoramio.jpg
+317	sayfa 11	ilce	Burdur	Karamanlı	arama	yedek kaynak	Karamanlı Barajı - panoramio.jpg
+318	sayfa 11	ilce	Burdur	Tefenni	arama	yedek kaynak	Amelanchier parviflora, Tefenni, Burdur, Turkey imported from iNaturalist photo 316513147.jpg
+319	sayfa 11	ilce	Burdur	Yeşilova	arama	yedek kaynak	Yeşilova-12-See-Huette-1996-gje.jpg
+320	sayfa 11	ilce	Bursa	Gürsu	arama	yedek kaynak	Sinan Emlak Gürsu - panoramio.jpg
+321	sayfa 11	ilce	Bursa	İnegöl	kategori	yedek kaynak	İnegöl, Alanyurt.jpg
+322	sayfa 11	ilce	Bursa	Keles	kategori	yedek kaynak	05.2009 DAGDİBİ , EPÇELER - panoramio.jpg
+323	sayfa 11	ilce	Bursa	Kestel	kategori	yedek kaynak	Çınarlı-yol-dudaklı-köyü-kestel-bursa-ön.jpg
+324	sayfa 11	ilce	Bursa	Nilüfer	vikipedi	benzer: Keles	Bursa image.jpg
+325	sayfa 11	ilce	Bursa	Orhaneli	wikidata	benzer: Keles	Orhaneli.JPG
+326	sayfa 11	ilce	Bursa	Orhangazi	arama	yedek kaynak	Karsak Orhangazi Bursa Turkiye - panoramio.jpg
+327	sayfa 11	ilce	Denizli	Babadağ	arama	yedek kaynak	Babadag evacuated-quarter.jpg
+328	sayfa 11	ilce	Denizli	Beyağaç	kategori	yedek kaynak	LakeKartal GlacierValley Beyagac Turkey.jpg
+329	sayfa 11	ilce	Denizli	Çal	kategori	yedek kaynak	Ağlayankaya Waterfall - panoramio.jpg
+330	sayfa 11	ilce	Denizli	Çameli	arama	yedek kaynak	Çameli, elmalı,kepir mahallesi - panoramio.jpg
+331	sayfa 12	ilce	Denizli	Çivril	kategori	yedek kaynak	Civril manzara - panoramio.jpg
+332	sayfa 12	ilce	Denizli	Güney	kategori	yedek kaynak	Selale1 Guney DenizliProvince Turkey.jpg
+333	sayfa 12	ilce	Denizli	Sarayköy	arama	yedek kaynak	Sarayköy station.jpg
+334	sayfa 12	ilce	Denizli	Serinhisar	arama	yedek kaynak	Serinhisar General View.JPG
+335	sayfa 12	ilce	Diyarbakır	Çüngüş	vikipedi	beyaz 0.32, benzer: Bismil	Çüngüş manzara 2014-03-19 19-20.jpg
+336	sayfa 12	ilce	Diyarbakır	Dicle	arama	yedek kaynak, benzer: Bismil, benzer: Çüngüş	Dicle Tepe.jpg
+337	sayfa 12	ilce	Diyarbakır	Eğil	wikidata	benzer: Bismil, benzer: Çüngüş, benzer: Dicle	Gêl.jpg
+338	sayfa 12	ilce	Diyarbakır	Ergani	arama	beyaz 0.35, yedek kaynak	General view of Tevekli, Ergani.JPG
+339	sayfa 12	ilce	Diyarbakır	Hazro	vikipedi	benzer: Bismil, benzer: Çüngüş, benzer: Dicle, benzer: Eğil	Hazro, Diyarbakir.jpg
+340	sayfa 12	ilce	Diyarbakır	Kayapınar	arama	yedek kaynak, benzer: Ergani	Kayapınar Diclekent Bulvarı.jpg
+341	sayfa 12	ilce	Diyarbakır	Kocaköy	arama	yedek kaynak	Kocaköy Harabesi 2.jpg
+342	sayfa 12	ilce	Diyarbakır	Silvan	vikipedi	benzer: Bismil, benzer: Çüngüş, benzer: Dicle, benzer: Eğil, benzer: Hazro	Meyafarqîn.jpg
+343	sayfa 12	ilce	Düzce	Cumayeri	arama	yedek kaynak	Dokuzdeğirmen, 81700 Dokuzdeğirmen-Cumayeri-Düzce, Turkey - panoramio.jpg
+344	sayfa 12	ilce	Düzce	Yığılca	arama	beyaz 0.31, yedek kaynak	Yoğunpelit-Yığılca-Düzce - panoramio.jpg
+345	sayfa 12	ilce	Edirne	Havsa	arama	yedek kaynak	Fatih Caddesi, Havsa.jpg
+346	sayfa 12	ilce	Edirne	İpsala	arama	yedek kaynak	IpsalaBorderCrossingTurkey.JPG
+347	sayfa 12	ilce	Edirne	Keşan	wikidata	benzer: İpsala	Kesan Turkey.JPG
+348	sayfa 12	ilce	Edirne	Lalapaşa	arama	yedek kaynak	Lalapaşa camii.jpg
+349	sayfa 12	ilce	Edirne	Meriç	arama	yedek kaynak	Meriç Nehri ve Meriç Köprüsü 2015.jpg
+350	sayfa 12	ilce	Elazığ	Arıcak	arama	yedek kaynak	Çevrecik, Arıcak.jpg
+351	sayfa 12	ilce	Elazığ	Sivrice	vikipedi	benzer: Elazığ	Hazar Gölü hazar Baba kayak merkezinden görünümü.jpg
+352	sayfa 12	ilce	Erzincan	Çayırlı	arama	yedek kaynak	Caykent, Cayirli, Erzinacn.jpg
+353	sayfa 12	ilce	Erzincan	İliç	arama	yedek kaynak	Ilic Lightning - panoramio.jpg
+354	sayfa 12	ilce	Erzincan	Üzümlü	arama	yedek kaynak	Üzümlü, Mersin Province.jpg
+355	sayfa 12	ilce	Erzurum	Aşkale	arama	yedek kaynak	25500 Bozburun-Aşkale-Erzurum, Turkey - panoramio.jpg
+356	sayfa 12	ilce	Erzurum	Aziziye	arama	yedek kaynak	Erzurum Aziziye Belediye Hizmet Binası.jpg
+357	sayfa 12	ilce	Erzurum	Horasan	arama	yedek kaynak	25800 Tavşancık-Horasan-Erzurum, Turkey - panoramio.jpg
+358	sayfa 12	ilce	Erzurum	Karayazı	arama	yedek kaynak	Fog in mountains of Karayazı in Turkey.jpg
+359	sayfa 12	ilce	Erzurum	Köprüköy	arama	yedek kaynak	COBANDEDE KOPRUSU - ERZURUM KOPRUKOY - panoramio.jpg
+360	sayfa 12	ilce	Erzurum	Pasinler	arama	yedek kaynak	Yastıktepe, Pasinler köyünden bir görüntü.jpg
+361	sayfa 13	ilce	Erzurum	Pazaryolu	arama	yedek kaynak	Pazaryolu 12 09 1984 Landkreiszentrum - eher ein Dorf.jpg
+362	sayfa 13	ilce	Erzurum	Şenkaya	arama	yedek kaynak	Erzurum, Şenkaya, Şoğer deresi - 2005.jpg
+363	sayfa 13	ilce	Eskişehir	Alpu	arama	yedek kaynak	Alpu Train Station.JPG
+364	sayfa 13	ilce	Eskişehir	İnönü	arama	yedek kaynak	İnönü Havacılık Eğitim Merkezi 7.jpg
+365	sayfa 13	ilce	Eskişehir	Mahmudiye	arama	yedek kaynak	Mahmudiye (1829).jpg
+366	sayfa 13	ilce	Gaziantep	İslahiye	arama	yedek kaynak	OSCE PA delegation visiting İslahiye 3 Living Space, Gaziantep Province, 22 May 2024 (53741415484).jpg
+367	sayfa 13	ilce	Gaziantep	Karkamış	kategori	yedek kaynak	Sunset-Gaziantep.IMG 1490.jpg
+368	sayfa 13	ilce	Gaziantep	Nurdağı	vikipedi	benzer: Karkamış	Nurdağı 01.jpg
+369	sayfa 13	ilce	Gaziantep	Şehitkamil	arama	yedek kaynak	Yukarıbeylerbeyi, 27630 Dülük-Şehitkamil-Gaziantep, Turkey - panoramio.jpg
+370	sayfa 13	ilce	Gaziantep	Yavuzeli	arama	yedek kaynak	27970 Küçükkarakuyu-Yavuzeli-Gaziantep, Turkey - panoramio.jpg
+371	sayfa 13	ilce	Giresun	Bulancak	arama	yedek kaynak	Giresun Bulancak Ahmetli Köyü Camisi.jpg
+372	sayfa 13	ilce	Giresun	Çanakçı	arama	yedek kaynak	Çanakçı rock tombs 3 persons abc 6793.jpg
+373	sayfa 13	ilce	Giresun	Dereli	arama	yedek kaynak	Tamdere. Dereli, Giresun 01.jpg
+374	sayfa 13	ilce	Giresun	Doğankent	arama	yedek kaynak	Doğankent Hes.jpg
+375	sayfa 13	ilce	Giresun	Espiye	wikidata	benzer: Alucra	Cibril Village Espiye Giresun Turkey.jpg
+376	sayfa 13	ilce	Giresun	Güce	arama	yedek kaynak	Güce, Giresun 02.jpg
+377	sayfa 13	ilce	Gümüşhane	Kelkit	arama	yedek kaynak	Kelkit, Söğütlü Beldesi manzara.jpg
+378	sayfa 13	ilce	Gümüşhane	Kürtün	arama	yedek kaynak	Gümüşhanenin - kürtün ilçesinin - araköy köyü 2011 - panoramio.jpg
+379	sayfa 13	ilce	Gümüşhane	Torul	arama	yedek kaynak	Hanzara Obasi@Torul-Gumushane-Turkey.JPG
+380	sayfa 13	ilce	Hakkari	Çukurca	kategori	yedek kaynak	Ashitatribe.jpg
+381	sayfa 13	ilce	Hakkari	Derecik	arama	yedek kaynak	Anadağ, Derecik.jpg
+382	sayfa 13	ilce	Hatay	Altınözü	vikipedi	beyaz 0.33	Altınözü.jpg
+383	sayfa 13	ilce	Hatay	Antakya	arama	yedek kaynak, benzer: Hatay	Hatay Antakya Turkey 2013 View.jpg
+384	sayfa 13	ilce	Hatay	Belen	vikipedi	benzer: Antakya	City view of Belen Turkey - panoramio.jpg
+385	sayfa 13	ilce	Hatay	Defne	arama	yedek kaynak	Side Defne Defnem in 2015 6391.jpg
+386	sayfa 13	ilce	Hatay	Dörtyol	arama	yedek kaynak, benzer: Antakya	61300 Dörtyol-Akçaabat-Trabzon, Turkey - panoramio.jpg
+387	sayfa 13	ilce	Hatay	Erzin	arama	yedek kaynak	HATAY ERZIN FLOOD.jpg
+388	sayfa 13	ilce	Hatay	Hassa	arama	yedek kaynak	Hatay Hassa ardıçlı köyü yakınları.jpg
+389	sayfa 13	ilce	Hatay	Kırıkhan	arama	yedek kaynak	Hatay Kırıkhan Gölbaşı.jpg
+390	sayfa 13	ilce	Hatay	Samandağ	vikipedi	benzer: İskenderun	Samandag1.JPG
+391	sayfa 14	ilce	Hatay	Yayladağı	arama	yedek kaynak	Yayladağı dere.JPG
+392	sayfa 14	ilce	Isparta	Aksu	arama	yedek kaynak	Aksu (Isparta, Türkei).jpg
+393	sayfa 14	ilce	Isparta	Atabey	arama	yedek kaynak	Atabey Armağan Medresesi.JPG
+394	sayfa 14	ilce	Isparta	Gönen	arama	yedek kaynak	Gönen–IMG 5607 02.jpg
+395	sayfa 14	ilce	Isparta	Keçiborlu	arama	yedek kaynak	Keçiborlu Tren İstasyonu.jpg
+396	sayfa 14	ilce	Isparta	Senirkent	kategori	yedek kaynak	Scenery from a high spot.jpg
+397	sayfa 14	ilce	Isparta	Sütçüler	arama	yedek kaynak	Sütçüler, 32950 Sütçüler-Isparta, Turkey - panoramio.jpg
+398	sayfa 14	ilce	Isparta	Uluborlu	vikipedi	benzer: Aksu	Uluborlu ve Kapıdağı.jpg
+399	sayfa 14	ilce	Isparta	Yenişarbademli	arama	yedek kaynak	Nationalpark Kızıldağ bei Yenişarbademli; Blick nach Nord.jpg
+400	sayfa 14	ilce	Iğdır	Aralık	arama	az renk 0.73, beyaz 0.89, yedek kaynak	Aralık.jpg
+401	sayfa 14	ilce	Iğdır	Karakoyunlu	arama	yedek kaynak	Karakoyunlu Açık Hava Müzesi.jpg
+402	sayfa 14	ilce	Kahramanmaraş	Afşin	wikidata	indirilemedi	Afşin - panoramio.jpg
+403	sayfa 14	ilce	Kahramanmaraş	Andırın	arama	indirilemedi	Kahramanmaraş - Andırın Road 03.jpg
+404	sayfa 14	ilce	Kahramanmaraş	Dulkadiroğlu	arama	indirilemedi	Kahramanmaraş Dulkadiroglu uzaktan.jpg
+405	sayfa 14	ilce	Kahramanmaraş	Ekinözü	wikidata	indirilemedi	Ciftlikköy-Ekinözü.jpg
+406	sayfa 14	ilce	Kahramanmaraş	Elbistan	vikipedi	indirilemedi	CEYHAN NEHRİ-ELBİSTAN - panoramio.jpg
+407	sayfa 14	ilce	Kahramanmaraş	Göksun	wikidata	indirilemedi	Göksun, Provinz Kahramanmaraş.jpg
+408	sayfa 14	ilce	Kahramanmaraş	Nurhak	arama	indirilemedi	NURHAK - panoramio.jpg
+409	sayfa 14	ilce	Kahramanmaraş	Onikişubat	arama	indirilemedi	Kahramanmaraş Onikişubat Mimarsinan Mahallesi.jpg
+410	sayfa 14	ilce	Kahramanmaraş	Pazarcık	vikipedi	indirilemedi	Pazarcik1.jpg
+411	sayfa 14	ilce	Kahramanmaraş	Türkoğlu	wikidata	indirilemedi	Turkoglu Genel 1 - panoramio.jpg
+412	sayfa 14	ilce	Karabük	Eflani	wikidata	indirilemedi	Eflani.jpg
+413	sayfa 14	ilce	Karabük	Eskipazar	vikipedi	indirilemedi	Hadrianopolis (Paphlagonien) 21.jpg
+414	sayfa 14	ilce	Karabük	Karabük	vikipedi	indirilemedi	Karabuk.jpg
+415	sayfa 14	ilce	Karabük	Ovacık	arama	indirilemedi	Ovacık Town in 2007 9354.jpg
+416	sayfa 14	ilce	Karabük	Safranbolu	vikipedi	indirilemedi	Safranbolu traditional houses.jpg
+417	sayfa 14	ilce	Karabük	Yenice	vikipedi	indirilemedi	YeniceMoschee.jpg
+418	sayfa 14	ilce	Karaman	Ayrancı	arama	indirilemedi	Andıkara neighbourhood of Akpınar village, Ayrancı, Karaman.jpg
+419	sayfa 14	ilce	Karaman	Başyayla	arama	indirilemedi	70700 Bozyaka-Başyayla-Karaman, Turkey - panoramio.jpg
+420	sayfa 14	ilce	Karaman	Ermenek	vikipedi	indirilemedi	Ermenek baraj.jpg
+421	sayfa 15	ilce	Karaman	Karaman	vikipedi	indirilemedi	Karaman street scene 4727.jpg
+422	sayfa 15	ilce	Karaman	Kazımkarabekir	arama	indirilemedi	Kazimkarabekir taş ev.jpg
+423	sayfa 15	ilce	Karaman	Sarıveliler	arama	indirilemedi	Sarıveliler - panoramio.jpg
+424	sayfa 15	ilce	Kars	Akyaka	arama	indirilemedi	Akyaka Evleri-5, Muğla 2015.jpg
+425	sayfa 15	ilce	Kars	Arpaçay	arama	indirilemedi	Göldalı, Arpaçay.jpg
+426	sayfa 15	ilce	Kars	Digor	arama	indirilemedi	Digor skyline.jpg
+427	sayfa 15	ilce	Kars	Kağızman	arama	indirilemedi	Kağızman 09 2002 Blick über das Araxestal auf den Aşağı Dağ 3274 m.jpg
+428	sayfa 15	ilce	Kars	Kars	vikipedi	indirilemedi	Kars collage 1.JPG
+429	sayfa 15	ilce	Kars	Sarıkamış	vikipedi	indirilemedi	Sarikamish-Atatürk monument.JPG
+430	sayfa 15	ilce	Kars	Selim	arama	indirilemedi	Selim Al Deen Muktomoncho.jpg
+431	sayfa 15	ilce	Kars	Susuz	yer	indirilemedi	Aygır gölü.jpg
+432	sayfa 15	ilce	Kastamonu	Abana	wikidata	indirilemedi	Abana in 2005 9119.jpg
+433	sayfa 15	ilce	Kastamonu	Ağlı	arama	indirilemedi	Ağlı district of Kastamonu Province of Turkey.JPG
+434	sayfa 15	ilce	Kastamonu	Araç	vikipedi	indirilemedi	Kovanli2022.jpg
+435	sayfa 15	ilce	Kastamonu	Azdavay	vikipedi	indirilemedi	Azdavay - panoramio.jpg
+436	sayfa 15	ilce	Kastamonu	Bozkurt	vikipedi	indirilemedi	Bozkurt genel.jpg
+437	sayfa 15	ilce	Kastamonu	Cide	vikipedi	indirilemedi	Gideros Bay1.jpg
+438	sayfa 15	ilce	Kastamonu	Çatalzeytin	vikipedi	indirilemedi	KUĞU KÖYÜ - panoramio (3).jpg
+439	sayfa 15	ilce	Kastamonu	Daday	vikipedi	indirilemedi	Daday'ın Sarıçam köyü girişi.jpg
+440	sayfa 15	ilce	Kastamonu	Devrekani	vikipedi	indirilemedi	37700 Karayazıcılar-Devrekani-Kastamonu, Turkey - panoramio (2).jpg
+441	sayfa 15	ilce	Kastamonu	Doğanyurt	vikipedi	indirilemedi	Başköy.jpg
+442	sayfa 15	ilce	Kastamonu	Hanönü	arama	indirilemedi	Hanönü district of Kastamonu Province of Turkey.JPG
+443	sayfa 15	ilce	Kastamonu	İhsangazi	arama	indirilemedi	İhsangazi district of Kastamonu Province of Turkey.JPG
+444	sayfa 15	ilce	Kastamonu	İnebolu	vikipedi	indirilemedi	Inebolu general view 038.jpg
+445	sayfa 15	ilce	Kastamonu	Kastamonu	vikipedi	indirilemedi	Kaleden Cumhuriyet Meydanı ve Çevresi.JPG
+446	sayfa 15	ilce	Kastamonu	Küre	vikipedi	indirilemedi	Küre in 2009 2090.jpg
+447	sayfa 15	ilce	Kastamonu	Pınarbaşı	vikipedi	indirilemedi	Ilısu houses.jpg
+448	sayfa 15	ilce	Kastamonu	Seydiler	arama	indirilemedi	Seydiler district of Kastamonu Province of Turkey.JPG
+449	sayfa 15	ilce	Kastamonu	Şenpazar	arama	indirilemedi	Şenpazar district of Kastamonu Province of Turkey.JPG
+450	sayfa 15	ilce	Kastamonu	Taşköprü	vikipedi	indirilemedi	Taşköprü.jpg
+451	sayfa 16	ilce	Kastamonu	Tosya	wikidata	indirilemedi	Kilkuyu köyü Tosya4.jpg
+452	sayfa 16	ilce	Kayseri	Bünyan	arama	indirilemedi	Bünyan, 38600 Bünyan-Kayseri, Turkey - panoramio.jpg
+453	sayfa 16	ilce	Kayseri	Develi	vikipedi	indirilemedi	DeveliCumhuriyetMeydani.jpg
+454	sayfa 16	ilce	Kayseri	Hacılar	wikidata	indirilemedi	Hacılar 01.jpg
+455	sayfa 16	ilce	Kayseri	İncesu	vikipedi	indirilemedi	Incesu.jpg
+456	sayfa 16	ilce	Kayseri	Kocasinan	kategori	indirilemedi	ERCIYES DAGI.KAYSERI - panoramio.jpg
+457	sayfa 16	ilce	Kayseri	Melikgazi	wikidata	indirilemedi	City of Kayseri under Mount Erciyes - 2014.10 - panoramio.jpg
+458	sayfa 16	ilce	Kayseri	Pınarbaşı	arama	indirilemedi	Pinarbasi.JPG
+459	sayfa 16	ilce	Kayseri	Sarıoğlan	arama	indirilemedi	Sarıoğlan-Bozkır-Konya, Turkey - panoramio.jpg
+460	sayfa 16	ilce	Kayseri	Sarız	kategori	indirilemedi	OTLandschaftSariz.jpg
+461	sayfa 16	ilce	Kayseri	Talas	vikipedi	indirilemedi	TALAS - panoramio - cankurtaran (3).jpg
+462	sayfa 16	ilce	Kayseri	Tomarza	arama	indirilemedi	Kayseri Tomarza Dağları1309 (2).jpg
+463	sayfa 16	ilce	Kayseri	Yahyalı	wikidata	indirilemedi	Yahyalı ilçe merkezi.jpg
+464	sayfa 16	ilce	Kayseri	Yeşilhisar	vikipedi	indirilemedi	Yeşilhisar Kayseri.jpg
+465	sayfa 16	ilce	Kilis	Elbeyli	vikipedi	indirilemedi	Stone house, Alahan, Elbeyli.jpg
+466	sayfa 16	ilce	Kilis	Kilis	arama	indirilemedi	Street Scene with National Election Campaign Banners - Kilis - Turkey (5772609480).jpg
+467	sayfa 16	ilce	Kocaeli	Başiskele	arama	indirilemedi	Başiskele, Kocaeli.jpg
+468	sayfa 16	ilce	Kocaeli	Çayırova	vikipedi	indirilemedi	Beylik-dağından-çayırova-995x498.jpg
+469	sayfa 16	ilce	Kocaeli	Darıca	wikidata	indirilemedi	Darıca Sahili.JPG
+470	sayfa 16	ilce	Kocaeli	Derince	vikipedi	indirilemedi	Derince Merkez Camii.jpg
+471	sayfa 16	ilce	Kocaeli	Dilovası	kategori	indirilemedi	Ada bulusma.jpg
+472	sayfa 16	ilce	Kocaeli	Gebze	vikipedi	indirilemedi	Havadan gebze.JPG
+473	sayfa 16	ilce	Kocaeli	Gölcük	vikipedi	indirilemedi	Gölcük Genel.jpg
+474	sayfa 16	ilce	Kocaeli	İzmit	vikipedi	indirilemedi	İZMİT CLOCK TOWER20200916.jpg
+475	sayfa 16	ilce	Kocaeli	Kandıra	wikidata	indirilemedi	Kerpe Genel Görünüş.jpg
+476	sayfa 16	ilce	Kocaeli	Karamürsel	wikidata	indirilemedi	Karamürsel.jpg
+477	sayfa 16	ilce	Kocaeli	Kartepe	wikidata	indirilemedi	Kartepe İlçesi.jpg
+478	sayfa 16	ilce	Kocaeli	Körfez	vikipedi	indirilemedi	Tilkiler İş Merkezi - panoramio (2).jpg
+479	sayfa 16	ilce	Konya	Ahırlı	wikidata	indirilemedi	Ahırlı 01.jpg
+480	sayfa 16	ilce	Konya	Akören	kategori	indirilemedi	Akviran'ın güney cıkışındaki tepeden - panoramio.jpg
+481	sayfa 17	ilce	Konya	Akşehir	vikipedi	indirilemedi	Aksehir Nasreddin Hoca Monument.jpg
+482	sayfa 17	ilce	Konya	Altınekin	arama	indirilemedi	Konya Ovası 25 09 1972 südlich Altınekin.jpg
+483	sayfa 17	ilce	Konya	Beyşehir	wikidata	indirilemedi	Tas Kopru2.JPG
+484	sayfa 17	ilce	Konya	Bozkır	wikidata	indirilemedi	Bozkir Carsamba Cayi.jpg
+485	sayfa 17	ilce	Konya	Cihanbeyli	arama	indirilemedi	Cihanbeyli 20 09 2003 Wanderarbeiter.jpg
+486	sayfa 17	ilce	Konya	Çeltik	arama	indirilemedi	Kızılırmak Deltası Çeltik Tarlası.jpg
+487	sayfa 17	ilce	Konya	Çumra	vikipedi	indirilemedi	Cumra station.jpg
+488	sayfa 17	ilce	Konya	Derbent	arama	indirilemedi	Derbent-044.jpg
+489	sayfa 17	ilce	Konya	Derebucak	kategori	indirilemedi	Derebucak Kocaharman.JPG
+490	sayfa 17	ilce	Konya	Doğanhisar	arama	indirilemedi	Doğanhisar Belediy.jpg
+491	sayfa 17	ilce	Konya	Ereğli	arama	indirilemedi	Ereğli, Konya, Turkey - panoramio.jpg
+492	sayfa 17	ilce	Konya	Güneysınır	arama	indirilemedi	Kurukavak yakınlarından karadağ. (önde güneysınır) - panoramio.jpg
+493	sayfa 17	ilce	Konya	Hadim	kategori	indirilemedi	Gevne-hadim arası doğal gölet - panoramio.jpg
+494	sayfa 17	ilce	Konya	Halkapınar	kategori	indirilemedi	Çakıllar, 42980 Çakıllar-Halkapınar-Konya, Turkey - panoramio (1).jpg
+495	sayfa 17	ilce	Konya	Hüyük	arama	indirilemedi	Hüyük - panoramio.jpg
+496	sayfa 17	ilce	Konya	Ilgın	wikidata	indirilemedi	Yalburtgesamt.jpg
+497	sayfa 17	ilce	Konya	Kadınhanı	wikidata	indirilemedi	Kadınhanı, Provinz (il) Konya, Türkei.JPG
+498	sayfa 17	ilce	Konya	Karapınar	wikidata	indirilemedi	Karapınar; Meke Gölü.JPG
+499	sayfa 17	ilce	Konya	Karatay	vikipedi	indirilemedi	Turkey.Konya068.jpg
+500	sayfa 17	ilce	Konya	Kulu	arama	indirilemedi	Kulu 15 09 1983 Düden Gölü.jpg
+501	sayfa 17	ilce	Konya	Meram	kategori	indirilemedi	Meram 1 - panoramio.jpg
+502	sayfa 17	ilce	Konya	Sarayönü	wikidata	indirilemedi	General view of Ladik, Sarayönü.jpg
+503	sayfa 17	ilce	Konya	Selçuklu	vikipedi	indirilemedi	Thinminaret.jpg
+504	sayfa 17	ilce	Konya	Seydişehir	vikipedi	indirilemedi	Seydişehir and Taurus Mountains from Ilıca.jpg
+505	sayfa 17	ilce	Konya	Taşkent	wikidata	indirilemedi	Taşkent - panoramio (5).jpg
+506	sayfa 17	ilce	Konya	Yalıhüyük	wikidata	indirilemedi	Yalıhüyük 01.jpg
+507	sayfa 17	ilce	Konya	Yunak	wikidata	indirilemedi	Hacıfakılı, Yunak.jpg
+508	sayfa 17	ilce	Kütahya	Altıntaş	vikipedi	indirilemedi	Altıntaş Ovası 04 2004 Araban-Ova von Emirhaydar aus.jpg
+509	sayfa 17	ilce	Kütahya	Çavdarhisar	wikidata	indirilemedi	Aizanoi.ZeusTemple.jpg
+510	sayfa 17	ilce	Kütahya	Domaniç	arama	indirilemedi	DPÜ Domaniç Hayme Ana Meslek Yüksekokulu.jpg
+511	sayfa 18	ilce	Kütahya	Dumlupınar	vikipedi	indirilemedi	Dumlupınar Atatürk Anıtı.JPG
+512	sayfa 18	ilce	Kütahya	Emet	arama	indirilemedi	DPÜ Emet Meslek Yüksekokulu.jpg
+513	sayfa 18	ilce	Kütahya	Gediz	arama	indirilemedi	Kütahya Gediz Ilıca Kaplıcası - panoramio.jpg
+514	sayfa 18	ilce	Kütahya	Hisarcık	arama	indirilemedi	DPÜ Hisarcık Meslek Yüksekokulu.jpg
+515	sayfa 18	ilce	Kütahya	Kütahya	arama	indirilemedi	Kütahya hisar-üçler tepesinden.jpg
+516	sayfa 18	ilce	Kütahya	Pazarlar	arama	indirilemedi	Agora Pazarlar Drama Church.jpg
+517	sayfa 18	ilce	Kütahya	Simav	kategori	indirilemedi	Simav - panoramio.jpg
+518	sayfa 18	ilce	Kütahya	Tavşanlı	vikipedi	indirilemedi	Tavşanlı Ulu Camii.jpg
+519	sayfa 18	ilce	Kırklareli	Babaeski	vikipedi	indirilemedi	Babaeski Koprusu.JPG
+520	sayfa 18	ilce	Kırklareli	Demirköy	arama	indirilemedi	StrandzhaForest, Demirköy (2).JPG
+521	sayfa 18	ilce	Kırklareli	Kırklareli	vikipedi	indirilemedi	Kırklareli 5195.jpg
+522	sayfa 18	ilce	Kırklareli	Kofçaz	vikipedi	indirilemedi	Kofcaz - panoramio.jpg
+523	sayfa 18	ilce	Kırklareli	Lüleburgaz	vikipedi	indirilemedi	LüleburgazTrainStation (7).jpg
+524	sayfa 18	ilce	Kırklareli	Pehlivanköy	arama	indirilemedi	PehlivanköyTrainStation (8).jpg
+525	sayfa 18	ilce	Kırklareli	Pınarhisar	wikidata	indirilemedi	Pınarhisar - panoramio.jpg
+526	sayfa 18	ilce	Kırklareli	Vize	wikidata	indirilemedi	Vize view - P1020883.JPG
+527	sayfa 18	ilce	Kırıkkale	Bahşılı	arama	indirilemedi	Kızılırmak-Bahşılı - panoramio.jpg
+528	sayfa 18	ilce	Kırıkkale	Çelebi	arama	indirilemedi	Houghton Typ 794.34.475 - Kâtip Çelebi, Kitab-ı cihannüma.jpg
+529	sayfa 18	ilce	Kırıkkale	Delice	arama	indirilemedi	Kırıkkale, Delice Ağustos 2014 - panoramio.jpg
+530	sayfa 18	ilce	Kırıkkale	Karakeçili	arama	indirilemedi	Karakeçili köyü.JPG
+531	sayfa 18	ilce	Kırıkkale	Keskin	arama	indirilemedi	Keskin İmam Hatip Lisesi - panoramio.jpg
+532	sayfa 18	ilce	Kırıkkale	Kırıkkale	vikipedi	indirilemedi	Kırıkkale 1 (2013) - panoramio.jpg
+533	sayfa 18	ilce	Kırıkkale	Sulakyurt	arama	indirilemedi	71900 Deredüzü-Sulakyurt-Kırıkkale, Turkey - panoramio.jpg
+534	sayfa 18	ilce	Kırıkkale	Yahşihan	arama	indirilemedi	Yahşihan Üstyol - panoramio.jpg
+535	sayfa 18	ilce	Kırşehir	Akçakent	arama	indirilemedi	40720 Akçakent-Kırşehir, Turkey - panoramio (6).jpg
+536	sayfa 18	ilce	Kırşehir	Akpınar	arama	indirilemedi	Demirci köy akpınar kırşehir - panoramio.jpg
+537	sayfa 18	ilce	Kırşehir	Boztepe	wikidata	indirilemedi	Sunflower Field 2.jpg
+538	sayfa 18	ilce	Kırşehir	Çiçekdağı	arama	indirilemedi	Road @ Boğazevci, Çiçekdağı, Turkey.jpg
+539	sayfa 18	ilce	Kırşehir	Kaman	wikidata	indirilemedi	Kaman (Kırşehir) Zentraler Platz.JPG
+540	sayfa 18	ilce	Kırşehir	Kırşehir	vikipedi	indirilemedi	Kircenter.jpg
+541	sayfa 19	ilce	Kırşehir	Mucur	vikipedi	indirilemedi	Mucur-Place (1).jpg
+542	sayfa 19	ilce	Malatya	Akçadağ	vikipedi	indirilemedi	Akçadağ.JPG
+543	sayfa 19	ilce	Malatya	Arapgir	arama	indirilemedi	Dried Arapgir köhnü grapes, Malatya 01.jpg
+544	sayfa 19	ilce	Malatya	Battalgazi	wikidata	indirilemedi	Apricot orchards, Malatya 2018-09-29 01.jpg
+545	sayfa 19	ilce	Malatya	Darende	wikidata	indirilemedi	Darende.JPG
+546	sayfa 19	ilce	Malatya	Doğanşehir	arama	indirilemedi	Kurucaova-Doğanşehir-Malatya, Turkey - panoramio.jpg
+547	sayfa 19	ilce	Malatya	Hekimhan	wikidata	indirilemedi	Hekimhan.jpg
+548	sayfa 19	ilce	Malatya	Kale	wikidata	indirilemedi	Kale.jpg
+549	sayfa 19	ilce	Malatya	Kuluncak	yer	indirilemedi	Serinhisar General View.JPG
+550	sayfa 19	ilce	Malatya	Pütürge	arama	indirilemedi	Bayırköy,Pütürge,Malatya,Turkey .jpg
+551	sayfa 19	ilce	Malatya	Yeşilyurt	vikipedi	indirilemedi	Yeşilyurt, Malatya 2018-09-30 04.jpg
+552	sayfa 19	ilce	Manisa	Ahmetli	wikidata	indirilemedi	Ahmetli station.jpg
+553	sayfa 19	ilce	Manisa	Akhisar	wikidata	indirilemedi	Günümüzden Akhisar Genel Görünüm.jpg
+554	sayfa 19	ilce	Manisa	Alaşehir	wikidata	indirilemedi	Biblical Philadelphia, Alaşehir, Turkey (“Seven Churches of Revelation”) (51966166907).jpg
+555	sayfa 19	ilce	Manisa	Demirci	kategori	indirilemedi	Demirci ile Kılavuzlar Köyü Arası - panoramio.jpg
+556	sayfa 19	ilce	Manisa	Gölmarmara	wikidata	indirilemedi	Halime Hatun Religious Complex, Gölmarmara, Turkey.jpg
+557	sayfa 19	ilce	Manisa	Gördes	wikidata	indirilemedi	Gördes Cadde - panoramio - adnan akyol (3).jpg
+558	sayfa 19	ilce	Manisa	Kırkağaç	wikidata	indirilemedi	Kırkagaç.jpg
+559	sayfa 19	ilce	Manisa	Köprübaşı	wikidata	indirilemedi	Köprübaşı - panoramio - adnan akyol.jpg
+560	sayfa 19	ilce	Manisa	Kula	wikidata	indirilemedi	KulaTurkey.jpg
+561	sayfa 19	ilce	Manisa	Salihli	wikidata	indirilemedi	Salihli station.jpg
+562	sayfa 19	ilce	Manisa	Saruhanlı	kategori	indirilemedi	Çamlı yol - panoramio.jpg
+563	sayfa 19	ilce	Manisa	Selendi	wikidata	indirilemedi	Selmanhacılar, Selendi.jpg
+564	sayfa 19	ilce	Manisa	Soma	arama	indirilemedi	सोमक्रयणम् Soma purchase.jpg
+565	sayfa 19	ilce	Manisa	Şehzadeler	wikidata	indirilemedi	Ulu Cami önünden Manisa'nın görünüşü 2010.jpg
+566	sayfa 19	ilce	Manisa	Turgutlu	wikidata	indirilemedi	Resim Turgutlu orta-park.jpg
+567	sayfa 19	ilce	Manisa	Yunusemre	wikidata	indirilemedi	Ulu Cami önünden Manisa'nın görünüşü 2010.jpg
+568	sayfa 19	ilce	Mardin	Artuklu	vikipedi	indirilemedi	Mardin old town.JPG
+569	sayfa 19	ilce	Mardin	Dargeçit	wikidata	indirilemedi	Kerboran.JPG
+570	sayfa 19	ilce	Mardin	Derik	kategori	indirilemedi	Dêra Surp Kevork a Dêrikê 2010.JPG
+571	sayfa 20	ilce	Mardin	Kızıltepe	vikipedi	indirilemedi	Koçhisar Ulu Camii.jpg
+572	sayfa 20	ilce	Mardin	Mazıdağı	wikidata	indirilemedi	Shemrex 2010.JPG
+573	sayfa 20	ilce	Mardin	Midyat	vikipedi	indirilemedi	Mor Barsomo church, Midyat.jpg
+574	sayfa 20	ilce	Mardin	Nusaybin	vikipedi	indirilemedi	Nusaybin city hall.jpg
+575	sayfa 20	ilce	Mardin	Ömerli	arama	indirilemedi	Ömerli 11 04 2004 Getreidefelder auf dem Tur Abdin.jpg
+576	sayfa 20	ilce	Mardin	Savur	wikidata	indirilemedi	Stewr.jpg
+577	sayfa 20	ilce	Mardin	Yeşilli	arama	indirilemedi	Şirinevler 26 05 2010 Dorf in der Yeşilli-Senke.jpg
+578	sayfa 20	ilce	Mersin	Akdeniz	vikipedi	indirilemedi	Mersin Akdeniz..jpg
+579	sayfa 20	ilce	Mersin	Anamur	wikidata	indirilemedi	Anamurvonosten.JPG
+580	sayfa 20	ilce	Mersin	Aydıncık	vikipedi	indirilemedi	View of Aydıncık from Taşmasa.JPG
+581	sayfa 20	ilce	Mersin	Bozyazı	wikidata	indirilemedi	Bozyazı (Mersin).jpg
+582	sayfa 20	ilce	Mersin	Çamlıyayla	vikipedi	indirilemedi	View of Çamlıyayla.jpg
+583	sayfa 20	ilce	Mersin	Erdemli	vikipedi	indirilemedi	Dağlı Castle, Mersin Province.jpg
+584	sayfa 20	ilce	Mersin	Gülnar	vikipedi	indirilemedi	Gülnar, Mersin, Turkey 3.jpg
+585	sayfa 20	ilce	Mersin	Mezitli	wikidata	indirilemedi	Ancient Soli Pompeipolis.jpg
+586	sayfa 20	ilce	Mersin	Mut	wikidata	indirilemedi	Mut, Mersin..JPG
+587	sayfa 20	ilce	Mersin	Silifke	vikipedi	indirilemedi	Ayaş sahil-Mersin - panoramio.jpg
+588	sayfa 20	ilce	Mersin	Tarsus	vikipedi	indirilemedi	Ulucami, Tarsus, Mersin Province.jpg
+589	sayfa 20	ilce	Mersin	Toroslar	arama	indirilemedi	Toroslar, Mersin.jpg
+590	sayfa 20	ilce	Mersin	Yenişehir	vikipedi	indirilemedi	Mersin Yenişehir shore.JPG
+591	sayfa 20	ilce	Muğla	Bodrum	vikipedi	indirilemedi	Sunset over Bodrum I.jpg
+592	sayfa 20	ilce	Muğla	Dalaman	wikidata	indirilemedi	Merkez, Dalaman 2010-09-22.jpg
+593	sayfa 20	ilce	Muğla	Datça	wikidata	indirilemedi	Datça.jpg
+594	sayfa 20	ilce	Muğla	Fethiye	wikidata	indirilemedi	Fethiye 3.jpg
+595	sayfa 20	ilce	Muğla	Kavaklıdere	wikidata	indirilemedi	Kavaklıdere, Muğla - 2.jpg
+596	sayfa 20	ilce	Muğla	Köyceğiz	vikipedi	indirilemedi	Lake and town 2019 G01.jpg
+597	sayfa 20	ilce	Muğla	Marmaris	wikidata	indirilemedi	Marmaris 2.JPG
+598	sayfa 20	ilce	Muğla	Menteşe	kategori	indirilemedi	Yenuşendere-Muğla 29 09 1991 Doğu Menteşe Dağları.jpg
+599	sayfa 20	ilce	Muğla	Milas	wikidata	indirilemedi	Milas Çarşısı 01.jpg
+600	sayfa 20	ilce	Muğla	Ortaca	arama	indirilemedi	Ortaca bazar - panoramio (1).jpg
+601	sayfa 21	ilce	Muğla	Seydikemer	wikidata	indirilemedi	Saklıkent'e Bakış.jpg
+602	sayfa 21	ilce	Muğla	Ula	wikidata	indirilemedi	Montage of Ula, 2022.jpg
+603	sayfa 21	ilce	Muğla	Yatağan	wikidata	indirilemedi	Yatağan meydanı ( r. nazilli ) - panoramio.jpg
+604	sayfa 21	ilce	Muş	Bulanık	arama	indirilemedi	49510 Çataklı-Bulanık-Muş, Turkey - panoramio.jpg
+605	sayfa 21	ilce	Muş	Hasköy	arama	indirilemedi	Ardahan Yaylası 09 1984 Ackerstreifenfluren am Hang bei Hasköy.jpg
+606	sayfa 21	ilce	Muş	Korkut	kategori	indirilemedi	Gelirli, 49800 Pınarüstü-Korkut-Muş, Turkey - panoramio.jpg
+607	sayfa 21	ilce	Muş	Malazgirt	vikipedi	indirilemedi	Milazgir.jpg
+608	sayfa 21	ilce	Muş	Muş	vikipedi	indirilemedi	Mush 1213.jpg
+609	sayfa 21	ilce	Muş	Varto	kategori	indirilemedi	Gimgim- panorama.jpg
+610	sayfa 21	ilce	Nevşehir	Acıgöl	wikidata	indirilemedi	Acıgol, Nevsehir, Turkey-minamie.jpg
+611	sayfa 21	ilce	Nevşehir	Avanos	arama	indirilemedi	Avanos 01.jpg
+612	sayfa 21	ilce	Nevşehir	Derinkuyu	vikipedi	indirilemedi	Derinkuyu Underground City 9831 Nevit Enhancer.jpg
+613	sayfa 21	ilce	Nevşehir	Gülşehir	arama	indirilemedi	Gülşehir church of St. John 08.jpg
+614	sayfa 21	ilce	Nevşehir	Hacıbektaş	arama	indirilemedi	Atatürk Anıtı- Hacıbektaş - panoramio.jpg
+615	sayfa 21	ilce	Nevşehir	Kozaklı	kategori	indirilemedi	Kozaklı Belediyesi - panoramio.jpg
+616	sayfa 21	ilce	Nevşehir	Nevşehir	wikidata	indirilemedi	Nevsehirpanorama.jpg
+617	sayfa 21	ilce	Nevşehir	Ürgüp	vikipedi	indirilemedi	Urgup ilcesi gorunum.jpg
+618	sayfa 21	ilce	Niğde	Altunhisar	arama	indirilemedi	Altunhisar01.jpg
+619	sayfa 21	ilce	Niğde	Bor	vikipedi	indirilemedi	Bor, Niğde, Turkey - panoramio.jpg
+620	sayfa 21	ilce	Niğde	Çamardı	wikidata	indirilemedi	Rocky hills, Çamardı 03.jpg
+621	sayfa 21	ilce	Niğde	Çiftlik	arama	indirilemedi	Melendiz Dağı 01 04 1984 Çiftlik Caldera.jpg
+622	sayfa 21	ilce	Niğde	Niğde	vikipedi	indirilemedi	Nigde Kale 1228.jpg
+623	sayfa 21	ilce	Niğde	Ulukışla	vikipedi	indirilemedi	Ulukisla, Nigde 01.jpg
+624	sayfa 21	ilce	Ordu	Akkuş	arama	indirilemedi	Gedik Cadde, Akkuş, Ordu (46477).jpg
+625	sayfa 21	ilce	Ordu	Altınordu	arama	indirilemedi	ORDU ALTINORDU HALK EĞİTİMİ MERKEZİ 2026.jpg
+626	sayfa 21	ilce	Ordu	Aybastı	vikipedi	indirilemedi	Aybastı Merkez.jpg
+627	sayfa 21	ilce	Ordu	Çamaş	vikipedi	indirilemedi	Camas Asagi Pazar 01.jpg
+628	sayfa 21	ilce	Ordu	Fatsa	vikipedi	indirilemedi	Fatsa Sahil.jpg
+629	sayfa 21	ilce	Ordu	Gölköy	vikipedi	indirilemedi	Gölköy 04.JPG
+630	sayfa 21	ilce	Ordu	Gülyalı	kategori	indirilemedi	Turkey222.jpg
+631	sayfa 22	ilce	Ordu	Gürgentepe	arama	indirilemedi	Waterfall in Akören, Gürgentepe, Ordu Province, Turkey.jpg
+632	sayfa 22	ilce	Ordu	İkizce	arama	indirilemedi	Merkez-ikizce 6.jpg
+633	sayfa 22	ilce	Ordu	Korgan	arama	indirilemedi	Beypınarı, Korgan, Ordu 01.jpg
+634	sayfa 22	ilce	Ordu	Kumru	arama	indirilemedi	52800 Çatılı-Kumru-Ordu, Turkey - panoramio.jpg
+635	sayfa 22	ilce	Ordu	Mesudiye	arama	indirilemedi	52900 Derebaşı-Mesudiye-Ordu, Turkey - panoramio.jpg
+636	sayfa 22	ilce	Ordu	Perşembe	arama	indirilemedi	Meanders in Highland Perşembe, Ordu 01.jpg
+637	sayfa 22	ilce	Ordu	Ulubey	vikipedi	indirilemedi	Ordu'nun güzelliği.jpg
+638	sayfa 22	ilce	Ordu	Ünye	kategori	indirilemedi	Aya Nikola island, Ünye, Turkey.jpg
+639	sayfa 22	ilce	Osmaniye	Bahçe	arama	indirilemedi	Bahçe, Osmaniye tepeden görünüm.JPG
+640	sayfa 22	ilce	Osmaniye	Düziçi	arama	indirilemedi	Düziçi, Osmaniye, Turkey - panoramio.jpg
+641	sayfa 22	ilce	Osmaniye	Hasanbeyli	vikipedi	indirilemedi	SavrandaKale1.jpg
+642	sayfa 22	ilce	Osmaniye	Kadirli	vikipedi	indirilemedi	Karatepe Stadtmauer.JPG
+643	sayfa 22	ilce	Osmaniye	Osmaniye	vikipedi	indirilemedi	Osmaniyenin genel görüntüsü.jpg
+644	sayfa 22	ilce	Osmaniye	Toprakkale	arama	indirilemedi	ToprakkaleOsmaniye.jpg
+645	sayfa 22	ilce	Rize	Ardeşen	vikipedi	indirilemedi	Sırt Yaylası ve Dua Tepe (Sirt Plateau and Dua Mountain) - Rize.jpg
+646	sayfa 22	ilce	Rize	Çamlıhemşin	vikipedi	indirilemedi	Rizemountain2.jpg
+647	sayfa 22	ilce	Rize	Çayeli	arama	indirilemedi	Rize çayeli okul caddesi.JPG
+648	sayfa 22	ilce	Rize	Derepazarı	vikipedi	indirilemedi	Derepazarı,panoromik.JPG
+649	sayfa 22	ilce	Rize	Fındıklı	wikidata	indirilemedi	Fındıklı, Rize.jpg
+650	sayfa 22	ilce	Rize	Güneysu	arama	indirilemedi	Asmalıırmak Köyü-Güneysu - panoramio.jpg
+651	sayfa 22	ilce	Rize	Hemşin	vikipedi	indirilemedi	Firtina Deresi @ CamliHemsin.JPG
+652	sayfa 22	ilce	Rize	İkizdere	vikipedi	indirilemedi	Asagi Cagirankaya Yaylasi.jpg
+653	sayfa 22	ilce	Rize	Kalkandere	arama	indirilemedi	Yeşilköy, Kalkandere.jpg
+654	sayfa 22	ilce	Rize	Pazar	vikipedi	indirilemedi	Kizkalesi4.jpg
+655	sayfa 22	ilce	Rize	Rize	vikipedi	indirilemedi	Rize'den bir görünüm.jpg
+656	sayfa 22	ilce	Sakarya	Adapazarı	wikidata	indirilemedi	Sakarya Müzesi1.jpg
+657	sayfa 22	ilce	Sakarya	Akyazı	wikidata	indirilemedi	Hoca Residence - panoramio.jpg
+658	sayfa 22	ilce	Sakarya	Arifiye	arama	indirilemedi	TR Sakarya asv2021-10 img02 Arifiye station.jpg
+659	sayfa 22	ilce	Sakarya	Erenler	kategori	indirilemedi	Yazılı Köyünde Karlı Bir Kış Günü.jpg
+660	sayfa 22	ilce	Sakarya	Ferizli	wikidata	indirilemedi	Ferizli, 54110 Ferizli-Sakarya, Turkey - panoramio.jpg
+661	sayfa 23	ilce	Sakarya	Geyve	kategori	indirilemedi	Geyve Boğazı.jpg
+662	sayfa 23	ilce	Sakarya	Hendek	wikidata	indirilemedi	Ismihanoğlu - panoramio - 54Yalcin54.jpg
+663	sayfa 23	ilce	Sakarya	Karasu	arama	indirilemedi	Natural reserve near Denizköy, Karasu, Sakarya.jpg
+664	sayfa 23	ilce	Sakarya	Kaynarca	vikipedi	indirilemedi	Sakarya Kaynarca (3).jpg
+665	sayfa 23	ilce	Sakarya	Kocaali	arama	indirilemedi	Aktaş köyü , Kocaali, Sakarya.JPG
+666	sayfa 23	ilce	Sakarya	Pamukova	wikidata	indirilemedi	Pamukovah1.jpg
+667	sayfa 23	ilce	Sakarya	Sapanca	arama	indirilemedi	Restaurant on Sapanca Lake.jpg
+668	sayfa 23	ilce	Sakarya	Serdivan	wikidata	indirilemedi	Serdivan, Sakarya.jpg
+669	sayfa 23	ilce	Sakarya	Söğütlü	arama	indirilemedi	Söğütlü Mağara.jpg
+670	sayfa 23	ilce	Sakarya	Taraklı	wikidata	indirilemedi	Taraklı view - panoramio.jpg
+671	sayfa 23	ilce	Samsun	19 Mayıs	vikipedi	indirilemedi	19 Mayıs Saat Kulesi.jpg
+672	sayfa 23	ilce	Samsun	Alaçam	wikidata	indirilemedi	Alacam.jpg
+673	sayfa 23	ilce	Samsun	Asarcık	kategori	indirilemedi	Dağcılar, Asarcık'tan bir görüntü.jpg
+674	sayfa 23	ilce	Samsun	Atakum	vikipedi	indirilemedi	Samsun.jpg
+675	sayfa 23	ilce	Samsun	Ayvacık	wikidata	indirilemedi	Ayvacık Saat Kulesi.jpg
+676	sayfa 23	ilce	Samsun	Bafra	arama	indirilemedi	55400 Doğankaya-Bafra-Samsun, Turkey - panoramio.jpg
+677	sayfa 23	ilce	Samsun	Canik	kategori	indirilemedi	Samsun Valiliği, İlkadım ve Canik.jpg
+678	sayfa 23	ilce	Samsun	Çarşamba	vikipedi	indirilemedi	Çarşamba ilçesinden görünüm.JPG
+679	sayfa 23	ilce	Samsun	Havza	arama	indirilemedi	Çeltek, Havza.jpg
+680	sayfa 23	ilce	Samsun	İlkadım	wikidata	indirilemedi	Samsun Atatürk Bulvarı - panoramio.jpg
+681	sayfa 23	ilce	Samsun	Kavak	arama	indirilemedi	Karadağ, Kavak (1).jpg
+682	sayfa 23	ilce	Samsun	Ladik	arama	indirilemedi	Bolat köyü Ladik Samsun 2009.jpg
+683	sayfa 23	ilce	Samsun	Salıpazarı	wikidata	indirilemedi	Alan Salıpazarı.jpg
+684	sayfa 23	ilce	Samsun	Tekkeköy	kategori	indirilemedi	Tekkekoy cycle path.jpeg
+685	sayfa 23	ilce	Samsun	Terme	arama	indirilemedi	Üstgecitten görünüm , terme , samsun , turkey - panoramio.jpg
+686	sayfa 23	ilce	Samsun	Vezirköprü	arama	indirilemedi	Şahinkaya Kanyonu, Vezirköprü, Samsun.jpg
+687	sayfa 23	ilce	Samsun	Yakakent	arama	indirilemedi	Yakakent - panoramio.jpg
+688	sayfa 23	ilce	Siirt	Baykan	arama	indirilemedi	Baykan, Elizabeth "Erzsebet" - Hungary - DPLA - e87e77e0f301ec30d8d20e647b176969.jpg
+689	sayfa 23	ilce	Siirt	Eruh	wikidata	indirilemedi	Eruh district.jpg
+690	sayfa 23	ilce	Siirt	Kurtalan	wikidata	indirilemedi	Kurtalan.jpg
+691	sayfa 24	ilce	Siirt	Pervari	wikidata	indirilemedi	Beğendik - panoramio - newsstar (2).jpg
+692	sayfa 24	ilce	Siirt	Siirt	wikidata	indirilemedi	Different color of botan valley river in summer and small village (in the middle) ahead.jpg
+693	sayfa 24	ilce	Siirt	Şirvan	kategori	indirilemedi	Şirvan.jpg
+694	sayfa 24	ilce	Siirt	Tillo	wikidata	indirilemedi	Tillo-Sêrt 2017.jpg
+695	sayfa 24	ilce	Sinop	Ayancık	arama	indirilemedi	Ayancık, Sinop Province, Turkey - panoramio.jpg
+696	sayfa 24	ilce	Sinop	Boyabat	vikipedi	indirilemedi	Boyabat From hills 9028.jpg
+697	sayfa 24	ilce	Sinop	Dikmen	arama	indirilemedi	Dikmen Vadisi, Ankara 3.jpg
+698	sayfa 24	ilce	Sinop	Erfelek	arama	indirilemedi	Erfelek Barajı Erfelek, Sinop.jpg
+699	sayfa 24	ilce	Sinop	Gerze	arama	indirilemedi	Gerze Sinop - 21426140633.jpg
+700	sayfa 24	ilce	Sinop	Sinop	vikipedi	indirilemedi	Sinop Overview 2009.JPG
+701	sayfa 24	ilce	Sinop	Türkeli	arama	indirilemedi	Madeleine Bernstorff und Gonca Türkeli-Dehnert.jpg
+702	sayfa 24	ilce	Sivas	Akıncılar	arama	indirilemedi	Sivas Akıncılar Onarı Köyü.jpg
+703	sayfa 24	ilce	Sivas	Altınyayla	wikidata	indirilemedi	Altınyayla.jpg
+704	sayfa 24	ilce	Sivas	Divriği	wikidata	indirilemedi	Divrigi,Kale-S.jpg
+705	sayfa 24	ilce	Sivas	Doğanşar	arama	indirilemedi	Doğanşar Alan Köyü Camii Açılışı.jpg
+706	sayfa 24	ilce	Sivas	Gemerek	arama	indirilemedi	Seyrantepe (Gemerek).jpg
+707	sayfa 24	ilce	Sivas	Gürün	vikipedi	indirilemedi	Gürün Merkez.jpg
+708	sayfa 24	ilce	Sivas	Hafik	arama	indirilemedi	Hafik 09 1992 Kurudeniz Gölleri Gewitterstimmung.jpg
+709	sayfa 24	ilce	Sivas	İmranlı	arama	indirilemedi	İmranlı 08 1991 Gipskarst mit Wacholdervegetation.jpg
+710	sayfa 24	ilce	Sivas	Kangal	vikipedi	indirilemedi	Kangal,Moschee1.jpg
+711	sayfa 24	ilce	Sivas	Koyulhisar	arama	indirilemedi	Koyulhisar İlçe Emniyet Amirliği.jpg
+712	sayfa 24	ilce	Sivas	Sivas	vikipedi	indirilemedi	Sivas Cumhuriyet Meydanı in 2011 8145.jpg
+713	sayfa 24	ilce	Sivas	Suşehri	vikipedi	indirilemedi	Collage of Suşehri.jpg
+714	sayfa 24	ilce	Sivas	Şarkışla	arama	indirilemedi	Yapıaltın Barajı (Şarkışla).jpg
+715	sayfa 24	ilce	Sivas	Ulaş	arama	indirilemedi	Sivas Ulaş Karaşar Köyü Camii.jpg
+716	sayfa 24	ilce	Sivas	Yıldızeli	wikidata	indirilemedi	YÜCEBACA,YILDIZELİ - panoramio.jpg
+717	sayfa 24	ilce	Sivas	Zara	vikipedi	indirilemedi	Mosque, Zara 2017-07-02 01-1.jpg
+718	sayfa 24	ilce	Tekirdağ	Çerkezköy	vikipedi	indirilemedi	2016.10-446-021a aerial view Çerkezköy District,Turkey thu06oct2016-1414h UTC+2(CEST).jpg
+719	sayfa 24	ilce	Tekirdağ	Çorlu	wikidata	indirilemedi	EmlakKonutFraBroen.jpg
+720	sayfa 24	ilce	Tekirdağ	Ergene	arama	indirilemedi	Ergene vadisi C-2 ÇORLU - panoramio.jpg
+721	sayfa 25	ilce	Tekirdağ	Hayrabolu	arama	indirilemedi	Hayrabolu Dessert.jpg
+722	sayfa 25	ilce	Tekirdağ	Kapaklı	arama	indirilemedi	Kapaklı Mosque, Kapaklı, Akhisar, Manisa, Türkiye.jpg
+723	sayfa 25	ilce	Tekirdağ	Malkara	arama	indirilemedi	Malkara missile.jpg
+724	sayfa 25	ilce	Tekirdağ	Marmaraereğlisi	arama	indirilemedi	MarmaraEreğlisi (1).jpg
+725	sayfa 25	ilce	Tekirdağ	Muratlı	wikidata	indirilemedi	MuratlıTrainStation (3).jpg
+726	sayfa 25	ilce	Tekirdağ	Saray	arama	indirilemedi	Saray, Tekirdağ - mosque in central square - P1020957.JPG
+727	sayfa 25	ilce	Tekirdağ	Süleymanpaşa	wikidata	indirilemedi	Sahil peyzaj.jpg
+728	sayfa 25	ilce	Tekirdağ	Şarköy	wikidata	indirilemedi	Sarkoymeydan.jpg
+729	sayfa 25	ilce	Tokat	Almus	vikipedi	indirilemedi	ALMUS BARAJI TOKAT - panoramio.jpg
+730	sayfa 25	ilce	Tokat	Artova	arama	indirilemedi	Tokat Artova Aktaş Köyü Yaylası.jpg
+731	sayfa 25	ilce	Tokat	Başçiftlik	vikipedi	indirilemedi	Yazıcık hevekseden görünüm.jpg
+732	sayfa 25	ilce	Tokat	Erbaa	yer	indirilemedi	Erbaa-akca-fidi-silahtar-omer-pasa-camii 76 0 0.jpg
+733	sayfa 25	ilce	Tokat	Niksar	vikipedi	indirilemedi	Niksar,KaleSW.jpg
+734	sayfa 25	ilce	Tokat	Pazar	vikipedi	indirilemedi	Kaz Gölü-Tokat.jpg
+735	sayfa 25	ilce	Tokat	Reşadiye	vikipedi	indirilemedi	Reşadiye ova.jpg
+736	sayfa 25	ilce	Tokat	Tokat	arama	indirilemedi	Tokat panorama 2012.JPG
+737	sayfa 25	ilce	Tokat	Turhal	arama	indirilemedi	Tokat Turhal Manzara.jpg
+738	sayfa 25	ilce	Tokat	Zile	vikipedi	indirilemedi	Zile gece.jpg
+739	sayfa 25	ilce	Trabzon	Akçaabat	vikipedi	indirilemedi	Ortamahalle.jpg
+740	sayfa 25	ilce	Trabzon	Araklı	wikidata	indirilemedi	Araklı.jpg
+741	sayfa 25	ilce	Trabzon	Arsin	arama	indirilemedi	Yeşilyalı Arsin.jpg
+742	sayfa 25	ilce	Trabzon	Beşikdüzü	vikipedi	indirilemedi	Blacksea.jpg
+743	sayfa 25	ilce	Trabzon	Çarşıbaşı	wikidata	indirilemedi	Tarsus Eski Cami exterior in 2005 4420.jpg
+744	sayfa 25	ilce	Trabzon	Çaykara	vikipedi	indirilemedi	Uzungöl, Trabzon.jpg
+745	sayfa 25	ilce	Trabzon	Dernekpazarı	vikipedi	indirilemedi	Trabzon Kazankıran Yaylası.jpg
+746	sayfa 25	ilce	Trabzon	Düzköy	vikipedi	indirilemedi	Düzkoy, villaggio Büyük, campi coltivati con covoni di granoturco.jpg
+747	sayfa 25	ilce	Trabzon	Hayrat	vikipedi	indirilemedi	A view from Yarlı, Hayrat.JPG
+748	sayfa 25	ilce	Trabzon	Köprübaşı	kategori	indirilemedi	(25.08.2012) - (TRABZON - KÖPRÜBAŞI - Fidanlı Mahallesi - Kutluca Mevki) - panoramio.jpg
+749	sayfa 25	ilce	Trabzon	Maçka	vikipedi	indirilemedi	61750 Hamsiköy-Maçka-Trabzon, Turkey - panoramio (1).jpg
+750	sayfa 25	ilce	Trabzon	Of	vikipedi	indirilemedi	61830 Darılı-Of-Trabzon, Turkey - panoramio.jpg
+751	sayfa 26	ilce	Trabzon	Ortahisar	vikipedi	indirilemedi	Trabzon view from Kızlar Manastırı 4839.jpg
+752	sayfa 26	ilce	Trabzon	Sürmene	vikipedi	indirilemedi	Trabzon Kazangıran Yaylası Yolu.jpg
+753	sayfa 26	ilce	Trabzon	Şalpazarı	vikipedi	indirilemedi	Trabzon, Şalpazarı, Iskenderli -- Irgat.jpg
+754	sayfa 26	ilce	Trabzon	Tonya	vikipedi	indirilemedi	Tonya (Kadıralak Yaylasından Görünüm)-3.jpg
+755	sayfa 26	ilce	Trabzon	Vakfıkebir	vikipedi	indirilemedi	Trabzon Vakfıkebir ishaklı Köyünden Vakfıkebire Bakış - panoramio.jpg
+756	sayfa 26	ilce	Trabzon	Yomra	arama	indirilemedi	Maden, Özdil - Yomra, Trabzon.jpg
+757	sayfa 26	ilce	Tunceli	Hozat	arama	indirilemedi	Tunceli hozat altınçevre köyü - panoramio.jpg
+758	sayfa 26	ilce	Tunceli	Nazımiye	kategori	indirilemedi	Nazımiye surroundings in 2006 9485.jpg
+759	sayfa 26	ilce	Tunceli	Ovacık	vikipedi	indirilemedi	Munzur Vadisi Milli Parkı Munzur Gözeleri.jpg
+760	sayfa 26	ilce	Tunceli	Pertek	vikipedi	indirilemedi	Pertek-b.jpg
+761	sayfa 26	ilce	Tunceli	Pülümür	arama	indirilemedi	62700 Akdik-Pülümür-Tunceli, Turkey - panoramio.jpg
+762	sayfa 26	ilce	Tunceli	Tunceli	wikidata	indirilemedi	Tunceli.jpg
+763	sayfa 26	ilce	Uşak	Banaz	kategori	indirilemedi	Banaz, Uşak ©Abdullah Kiyga - panoramio.jpg
+764	sayfa 26	ilce	Uşak	Eşme	vikipedi	indirilemedi	Esme Train Station Turkey.jpg
+765	sayfa 26	ilce	Uşak	Karahallı	vikipedi	indirilemedi	Lydian Cilandiras Bridge Karahalli Usak Province Turkey.jpg
+766	sayfa 26	ilce	Uşak	Sivaslı	vikipedi	indirilemedi	Sebaste Ruins Sivasli UsakProvince Turkey.jpg
+767	sayfa 26	ilce	Uşak	Ulubey	wikidata	indirilemedi	Ulubey Canyon Usak Province Turkey.jpg
+768	sayfa 26	ilce	Uşak	Uşak	vikipedi	indirilemedi	Uşak Kurtuluş Anıtı ve Atatürk Heykeli.jpg
+769	sayfa 26	ilce	Van	Bahçesaray	arama	indirilemedi	Bahcesaray mosque.jpg
+770	sayfa 26	ilce	Van	Başkale	arama	indirilemedi	VAN BAŞKALE YANAL KURDISTAN - panoramio.jpg
+771	sayfa 26	ilce	Van	Çaldıran	arama	indirilemedi	Çaldıran street.jpg
+772	sayfa 26	ilce	Van	Çatak	arama	indirilemedi	Van Çatak Bilgi Köyü.jpg
+773	sayfa 26	ilce	Van	Edremit	vikipedi	indirilemedi	Göle Nazır Ağaçlık Alan, Van - Edremit.jpg
+774	sayfa 26	ilce	Van	Erciş	arama	indirilemedi	Erciş, Van.jpg
+775	sayfa 26	ilce	Van	Gevaş	wikidata	indirilemedi	Gevaş Türbe 02.JPG
+776	sayfa 26	ilce	Van	Gürpınar	arama	indirilemedi	Cavuştepe 25 05 2010 Gürpınar Ovası.jpg
+777	sayfa 26	ilce	Van	İpekyolu	vikipedi	indirilemedi	Van kalesi.jpg
+778	sayfa 26	ilce	Van	Muradiye	wikidata	indirilemedi	Muradiye-Waterfall 02.JPG
+779	sayfa 26	ilce	Van	Özalp	wikidata	indirilemedi	Özalp1.jpg
+780	sayfa 26	ilce	Van	Saray	arama	indirilemedi	Saray - Saray Belediye Binası - 20250602125447.jpg
+781	sayfa 27	ilce	Van	Tuşba	wikidata	indirilemedi	Tuşba Genel görünüm.jpg
+782	sayfa 27	ilce	Yalova	Altınova	vikipedi	indirilemedi	Hersek golu 1.jpg
+783	sayfa 27	ilce	Yalova	Armutlu	vikipedi	indirilemedi	Armutlu 7005.jpg
+784	sayfa 27	ilce	Yalova	Çınarcık	vikipedi	indirilemedi	Çınarcık - panoramio (39).jpg
+785	sayfa 27	ilce	Yalova	Çiftlikköy	arama	indirilemedi	Çiftlikköy.jpg
+786	sayfa 27	ilce	Yalova	Termal	vikipedi	indirilemedi	Termal, 77400 Termal-Yalova, Turkey - panoramio.jpg
+787	sayfa 27	ilce	Yalova	Yalova	vikipedi	indirilemedi	Departing Yalova.JPG
+788	sayfa 27	ilce	Yozgat	Akdağmadeni	vikipedi	indirilemedi	Akdagmadeni market street.jpg
+789	sayfa 27	ilce	Yozgat	Aydıncık	arama	indirilemedi	Yenikaş, Aydıncık Develik.jpg
+790	sayfa 27	ilce	Yozgat	Boğazlıyan	arama	indirilemedi	Melanocorypha calandra, Bogazliyan 1.jpg
+791	sayfa 27	ilce	Yozgat	Çandır	arama	indirilemedi	Çandır, Mersin.jpg
+792	sayfa 27	ilce	Yozgat	Sarıkaya	wikidata	indirilemedi	Sarıkaya Hamamı.jpg
+793	sayfa 27	ilce	Yozgat	Sorgun	wikidata	indirilemedi	Ayrıdam.jpg
+794	sayfa 27	ilce	Yozgat	Şefaatli	vikipedi	indirilemedi	Iklim şefaatli.jpg
+795	sayfa 27	ilce	Yozgat	Yozgat	arama	indirilemedi	Yozgat 2014.jpg
+796	sayfa 27	ilce	Zonguldak	Alaplı	arama	indirilemedi	Alapli 7790.jpg
+797	sayfa 27	ilce	Zonguldak	Çaycuma	vikipedi	indirilemedi	General view of Çaycuma.JPG
+798	sayfa 27	ilce	Zonguldak	Devrek	vikipedi	indirilemedi	Devrek 66.JPG
+799	sayfa 27	ilce	Zonguldak	Ereğli	vikipedi	indirilemedi	Ereğli panoramic.jpg
+800	sayfa 27	ilce	Zonguldak	Gökçebey	arama	indirilemedi	Filyos ecopark gokcebey.jpg
+801	sayfa 27	ilce	Zonguldak	Kozlu	vikipedi	indirilemedi	Kozlu - panoramio.jpg
+802	sayfa 27	ilce	Zonguldak	Zonguldak	kategori	indirilemedi	Zonguldak Station.JPG
+803	sayfa 27	ilce	Çanakkale	Bayramiç	arama	yedek kaynak	Kazdağı 07 2004 Bayramıç Barajı 2.jpg
+804	sayfa 27	ilce	Çanakkale	Biga	vikipedi	benzer: Ayvacık	Biga Kaymakamlığı–IMG 5368~2.jpg
+805	sayfa 27	ilce	Çanakkale	Bozcaada	wikidata	benzer: Ayvacık, benzer: Biga	Bozcaada, Çanakkale Province.jpg
+806	sayfa 27	ilce	Çanakkale	Çanakkale	arama	yedek kaynak	Çanakkale Deniz manzarası.jpg
+807	sayfa 27	ilce	Çanakkale	Ezine	vikipedi	benzer: Ayvacık, benzer: Bozcaada	Troie - Tumulus d'Uvecik.jpg
+808	sayfa 27	ilce	Çanakkale	Gökçeada	wikidata	benzer: Ayvacık, benzer: Bozcaada, benzer: Ezine	Gökçeada manzarası (Araşa dağından).jpg
+809	sayfa 27	ilce	Çanakkale	Yenice	arama	yedek kaynak	17550 Hıdırlar-Yenice-Çanakkale, Turkey - panoramio.jpg
+810	sayfa 27	ilce	Çankırı	Bayramören	arama	yedek kaynak	Bayramören - panoramio.jpg
+811	sayfa 28	ilce	Çankırı	Kızılırmak	arama	yedek kaynak	Karaömer, Kızılırmak.jpg
+812	sayfa 28	ilce	Çankırı	Korgun	arama	yedek kaynak	Köroğlu Dağları 09 1984 bei Korgun.jpg
+813	sayfa 28	ilce	Çankırı	Orta	arama	yedek kaynak	Orta sjön, Orta, Italien.jpg
+814	sayfa 28	ilce	Çankırı	Yapraklı	arama	yedek kaynak	Çakırlar, Yapraklı.jpg
+815	sayfa 28	ilce	Çorum	Bayat	arama	yedek kaynak	Yeniköy, Bayat (2).jpg
+816	sayfa 28	ilce	Çorum	Çorum	arama	yedek kaynak	Çorum Inner city streets 3254.jpg
+817	sayfa 28	ilce	Çorum	Laçin	arama	yedek kaynak	Kapılı kaya laçin çorum - panoramio.jpg
+818	sayfa 28	ilce	Çorum	Ortaköy	kategori	yedek kaynak	Incesu Canyon.jpg
+819	sayfa 28	ilce	Çorum	Osmancık	arama	yedek kaynak	19500 Kargı-Osmancık-Çorum, Turkey - panoramio.jpg
+820	sayfa 28	ilce	Çorum	Uğurludağ	arama	yedek kaynak	Küçükerikli, Uğurludağ.jpg
+821	sayfa 28	ilce	İstanbul	Bahçelievler	kategori	yedek kaynak	Yenibosna, Bahçelievler İstanbul Zaman gazetesi genel müdürlüğü binası.JPG
+822	sayfa 28	ilce	İstanbul	Bayrampaşa	kategori	yedek kaynak	Bayrampaşa TEM bağlantı yolu - panoramio.jpg
+823	sayfa 28	ilce	İstanbul	Beylikdüzü	arama	yedek kaynak	Beylikdüzü metrobüs durağı - panoramio.jpg
+824	sayfa 28	ilce	İstanbul	Büyükçekmece	wikidata	benzer: Adalar	Büyükçekmece'den Gürpınar Beylikdüzü'ne Bakış, Ekim 2013 - panoramio (1).jpg
+825	sayfa 28	ilce	İstanbul	Fatih	wikidata	beyaz 0.44	The Blue Mosque.JPG
+826	sayfa 28	ilce	İstanbul	Kağıthane	wikidata	benzer: Büyükçekmece	İstanbul view from İstanbul Sapphire observation deck Aug 2014, p13.JPG
+827	sayfa 28	ilce	İstanbul	Sultanbeyli	wikidata	benzer: Eyüpsultan	Sultanbeyli, Sultanbeyli-İstanbul, Turkey - panoramio.jpg
+828	sayfa 28	ilce	İstanbul	Şile	kategori	yedek kaynak	Şile - Turkey.jpg
+829	sayfa 28	ilce	İstanbul	Üsküdar	arama	yedek kaynak	M5 Üsküdar Meydanı.jpg
+830	sayfa 28	ilce	İzmir	Bayraklı	kategori	yedek kaynak	Mt Yamanlar.jpg
+831	sayfa 28	ilce	İzmir	Bergama	wikidata	benzer: Bayraklı	Bergama, Turkey.jpg
+832	sayfa 28	ilce	İzmir	Beydağ	arama	yedek kaynak	Beydag Food Centre - geograph.org.uk - 5809156.jpg
+833	sayfa 28	ilce	İzmir	Buca	wikidata	benzer: Bergama	İzmir Buca Mevlana heykeli ve mesire alanından Buca ilçesinin kuş bakışı görünümü 6.jpg
+834	sayfa 28	ilce	İzmir	Foça	wikidata	benzer: Bayraklı, benzer: Bergama, benzer: Buca	Foça square.jpg
+835	sayfa 28	ilce	İzmir	Gaziemir	kategori	yedek kaynak	Izmir cevre yolu 6 - panoramio.jpg
+836	sayfa 28	ilce	İzmir	Kınık	arama	yedek kaynak	Kınık Höyük 05.jpg
+837	sayfa 28	ilce	İzmir	Konak	vikipedi	benzer: Buca	View of Konak Square.jpg
+838	sayfa 28	ilce	İzmir	Seferihisar	wikidata	benzer: Bayraklı, benzer: Bergama, benzer: Foça	Sığacık.jpg
+839	sayfa 28	ilce	İzmir	Torbalı	kategori	yedek kaynak	Torbalı in Spring, İzmir - panoramio.jpg
+840	sayfa 28	ilce	Şanlıurfa	Akçakale	arama	indirilemedi	Akçakale, Çıldır District.jpg
+841	sayfa 29	ilce	Şanlıurfa	Birecik	wikidata	indirilemedi	Crusader Castle on the banks of the Euprates.jpg
+842	sayfa 29	ilce	Şanlıurfa	Bozova	vikipedi	indirilemedi	63850 Karapınar-Bozova-Şanlıurfa, Turkey - panoramio.jpg
+843	sayfa 29	ilce	Şanlıurfa	Ceylanpınar	wikidata	indirilemedi	Belediyeparkı.jpg
+844	sayfa 29	ilce	Şanlıurfa	Eyyübiye	kategori	indirilemedi	Aşaği yazıcı köyü şanlıurfa turkey - panoramio.jpg
+845	sayfa 29	ilce	Şanlıurfa	Halfeti	vikipedi	indirilemedi	Halfeti on the Euphrates.jpg
+846	sayfa 29	ilce	Şanlıurfa	Haliliye	kategori	indirilemedi	Haliliye Göbeklitepeden Urfa Vadisi Bakış 2015.JPG
+847	sayfa 29	ilce	Şanlıurfa	Harran	wikidata	indirilemedi	Harran beehive houses (1).JPG
+848	sayfa 29	ilce	Şanlıurfa	Hilvan	arama	indirilemedi	Hasan Ağaç - Hilvan - Urfa - Politika - siyaset.jpg
+849	sayfa 29	ilce	Şanlıurfa	Karaköprü	arama	indirilemedi	Karaköprü Yolu... - panoramio.jpg
+850	sayfa 29	ilce	Şanlıurfa	Siverek	vikipedi	indirilemedi	Takoran Kanyonu.jpg
+851	sayfa 29	ilce	Şanlıurfa	Suruç	vikipedi	indirilemedi	Suruç town hall.jpg
+852	sayfa 29	ilce	Şanlıurfa	Viranşehir	vikipedi	indirilemedi	Mardin yolu - Viranşehir, Şanlıurfa.jpg
+853	sayfa 29	ilce	Şırnak	Beytüşşebap	arama	indirilemedi	Beytüşşebap dere.jpg
+854	sayfa 29	ilce	Şırnak	Cizre	vikipedi	indirilemedi	Cizre-July2012-01.JPG
+855	sayfa 29	ilce	Şırnak	İdil	kategori	indirilemedi	Church of the Virgin Mary in Azech (İdil).jpg
+856	sayfa 29	ilce	Şırnak	Silopi	arama	indirilemedi	Silopi, 73400 Silopi-Şırnak, Turkey - panoramio.jpg
+857	sayfa 29	ilce	Şırnak	Şırnak	wikidata	indirilemedi	Şırnak şehir görünümü.jpg
+858	sayfa 29	ilce	Şırnak	Uludere	wikidata	indirilemedi	73600 Ortasu-Uludere-Şırnak, Turkey - panoramio.jpg
+859	sayfa 29	yer	Adana	Ayaş Kalesi	maddesiz	beyaz 0.58, yedek kaynak	LANGLOIS(1861) p167 - VUE D AIAS ET DU GOLFE D'ISSUS.jpg
+860	sayfa 29	yer	Adana	Askeri Rüştiye Mektebi	maddesiz	yedek kaynak	Askeri Rüştiye Mektebi 2026-10-04 14.10.58 1791139164.jpg
+861	sayfa 29	yer	Adıyaman	Nemrut Dağı Millî Parkı	kategori	yedek kaynak	Mount Nemrut National Park 02.jpg
+862	sayfa 29	yer	Adıyaman	Kahta Kalesi	wikidata	az renk 0.78	1F5A2142 kopya.jpg
+863	sayfa 29	yer	Afyonkarahisar	Amorium	wikidata	benzer: Emirdağ	Amorion, Unterstadt.jpg
+864	sayfa 29	yer	Afyonkarahisar	Akdağ (Denizli)	wikidata	benzer: Evciler	Civril manzara - panoramio.jpg
+865	sayfa 29	yer	Afyonkarahisar	Yumruktepe	maddesiz	yedek kaynak	Beyköy 02.jpg
+866	sayfa 29	yer	Afyonkarahisar	Frig Vadisi	maddesiz	yedek kaynak	Phrygien.jpg
+867	sayfa 29	yer	Aksaray	Manastır Vadisi	maddesiz	yedek kaynak	GüzelyurtKlostertal.jpg
+868	sayfa 29	yer	Amasya	Amasya Kalesi	wikidata	benzer: Suluova	Amasya Kalesi 01.jpg
+869	sayfa 29	yer	Amasya	Kunç Köprüsü	maddesiz	yedek kaynak	Kunç Köprüsü 2015-09-29 13.41.16 1792516293.JPG
+870	sayfa 29	yer	Amasya	Şehzadeler Müzesi	maddesiz	yedek kaynak	Şehzadeler Müzesi.jpg
+871	sayfa 30	yer	Amasya	Hazeranlar Konağı	maddesiz	yedek kaynak	Hazeranlar Konağı 2015-09-29 07.55.19 1792515899.JPG
+872	sayfa 30	yer	Ankara	Ancyra	maddesiz	yedek kaynak	MonumentumAncyranum28Nov2004.jpg
+873	sayfa 30	yer	Ankara	Tümülüs MM (Gordion)	maddesiz	yedek kaynak, benzer: Çamlıdere, benzer: Elmadağ, benzer: Haymana, benzer: Yenimahalle, benzer: Ankara Kalesi	Tumulus of King Midas 02.jpg
+874	sayfa 30	yer	Ankara	Mariegordus	maddesiz	yedek kaynak	Ruins of Roman temple at Mariegordus.jpg
+875	sayfa 30	yer	Antalya	Saklıkent Kanyonu	kategori	yedek kaynak	SAKLIKENT KANYONU.jpg
+876	sayfa 30	yer	Antalya	Tyche Tapınağı (Side)	maddesiz	yedek kaynak	Side Handelsagora.jpg
+877	sayfa 30	yer	Antalya	Patara Tiyatrosu	maddesiz	yedek kaynak	Patara Theatre Seats 2013 4636.jpg
+878	sayfa 30	yer	Antalya	Opramoas Mozolesi	maddesiz	yedek kaynak	Rhodiapolis Opramoas Tomb in 2016 0521 02.jpg
+879	sayfa 30	yer	Antalya	Olympos Köprüsü	maddesiz	yedek kaynak	Olympos Köprüsü yıkıntıları 2.jpg
+880	sayfa 30	yer	Antalya	Şatırlı Roma Köprüsü	maddesiz	yedek kaynak	Silyon Antik kent 1760555914.jpg
+881	sayfa 30	yer	Antalya	Olympos Ceneviz Kalesi	maddesiz	yedek kaynak	Olympos Genoan fortress in 2016 0552.jpg
+882	sayfa 30	yer	Antalya	Ehmedek Kalesi	maddesiz	yedek kaynak	View of Ehmedek Castle from the Southwest, Alanya, Türkiye.jpg
+883	sayfa 30	yer	Antalya	Teimiussa Kalesi	maddesiz	yedek kaynak	Üçağız View of remains of Theimussa 0060.jpg
+884	sayfa 30	yer	Antalya	Antiocheia Ad Cragum Ortaçağ Kalesi	maddesiz	yedek kaynak	Walls of antiocha.jpg
+885	sayfa 30	yer	Antalya	Perge Helenistik Kapı	maddesiz	yedek kaynak	Perge Helenistik Kapı.jpg
+886	sayfa 30	yer	Antalya	Arykanda Podyumlu Tapınak	maddesiz	yedek kaynak	Arykanda Building with circular stairs 4993.jpg
+887	sayfa 30	yer	Antalya	Arykanda Bouleuterion	maddesiz	yedek kaynak	Arykanda Bouleuterion 5040.jpg
+888	sayfa 30	yer	Antalya	Arykanda Büyük Bazilika	maddesiz	yedek kaynak	Arykanda Basilica 4955.jpg
+889	sayfa 30	yer	Antalya	Arykanda Nişli Yapı	maddesiz	yedek kaynak	Arycanda Building with niches 3840.jpg
+890	sayfa 30	yer	Antalya	Arykanda Şarap İşliği	maddesiz	yedek kaynak	Arykanda Wine pressing house 4864.jpg
+891	sayfa 30	yer	Antalya	Antalya Etnografya Müzesi	maddesiz	yedek kaynak	Antalya Etnografya Museum.jpg
+892	sayfa 30	yer	Ardahan	Ilgar Dağı	önceki	benzer: Damal, benzer: Damal	ILGAR DAĞI GEÇİDİ - POSOF ardahan - panoramio.jpg
+893	sayfa 30	yer	Aydın	Lade Adası	maddesiz	yedek kaynak, benzer: Karpuzlu	Lade 1.jpg
+894	sayfa 30	yer	Aydın	Magnesia ad Maeandrum Artemis Tapınağı	maddesiz	yedek kaynak	Магнесия на Меандре. Храм Артемиды Левкофрины.jpg
+895	sayfa 30	yer	Aydın	Zeus Sosipolis Tapınağı	maddesiz	yedek kaynak	Statue of Athena Parthenos from the Library of Pergamon with the temple of Zeus Sosipolis from Magnesia on the Maeander in the background, Pergamon Museum Berlin (8404209815).jpg
+896	sayfa 30	yer	Aydın	Alexandreion (Priene)	maddesiz	yedek kaynak	Alexandreion Priene 1.jpg
+897	sayfa 30	yer	Aydın	Magnesia Theatron	maddesiz	yedek kaynak	TheaterMagnesia1.jpg
+898	sayfa 30	yer	Aydın	Magnesia Stadyumu	maddesiz	yedek kaynak	Magnesia Stadium.jpg
+899	sayfa 30	yer	Aydın	Didyma Artemis Tapınağı	maddesiz	yedek kaynak	Didyma Artemistempel Fundament.jpg
+900	sayfa 30	yer	Aydın	Kese Dağı	maddesiz	yedek kaynak	Kuşadası Atatürk.JPG
+901	sayfa 31	yer	Aydın	Güney Agora (Milet)	maddesiz	yedek kaynak	Model of Market Gate of Miletus.jpg
+902	sayfa 31	yer	Aydın	Poseidon Altarı (Milet)	maddesiz	yedek kaynak	Didyma Poseidon Altar.jpg
+903	sayfa 31	yer	Aydın	Kuzey Agora (Milet)	maddesiz	yedek kaynak, benzer: Karpuzlu, benzer: Lade Adası	Miletus Northern Agora.JPG
+904	sayfa 31	yer	Aydın	Didyma Stadyumu	maddesiz	yedek kaynak	Didyma Stadion.jpg
+905	sayfa 31	yer	Aydın	Kuşadası Oleatrium'u	maddesiz	yedek kaynak	Kuşadası 2013-03-28a.jpg
+906	sayfa 31	yer	Aydın	Atburgazı Kalesi	maddesiz	yedek kaynak	Atburgazı 1.jpg
+907	sayfa 31	yer	Aydın	Büyük İkiz Ada Kalesi	maddesiz	yedek kaynak	Bafa (1).jpg
+908	sayfa 31	yer	Aydın	Milet Bizans Kalesi	maddesiz	yedek kaynak	Milet Bizans Kalesi 2022-08-05 18.34.55 1792181632.JPG
+909	sayfa 31	yer	Aydın	Neapolis / Marathesion	maddesiz	yedek kaynak, benzer: Aydın	Neapolis Marathesion 2026-08-19 11.18.26 1791506868.jpg
+910	sayfa 31	yer	Balıkesir	Marmara Adası	wikidata	benzer: Cunda Adası	Marmara Island aerial view.jpg
+911	sayfa 31	yer	Balıkesir	Taksiyarhis Kilisesi, Ayvalık	maddesiz	yedek kaynak	Taksiyarhis Kilisesi, Ayvalık 2025-08-26 09-27-44.jpg
+912	sayfa 31	yer	Balıkesir	Bandırma Müzesi	maddesiz	yedek kaynak	Bandırma Müzesi'nde bir lahit.jpg
+913	sayfa 31	yer	Balıkesir	Ayvalık Rahmi M. Koç Müzesi	maddesiz	yedek kaynak	Ayvalık Rahmi M. Koç Müzesi 2026-09-15 12.56.09 1789587538.jpeg
+914	sayfa 31	yer	Bartın	Tavşan Adası, Bartın	wikidata	benzer: Bartın, benzer: Amasra, benzer: Amasra, benzer: İnkumu	Amasra adası.JPG
+915	sayfa 31	yer	Bartın	Amasra Feneri	wikidata	benzer: Bartın	Amasra feneri.jpg
+916	sayfa 31	yer	Bartın	Kemer Köprü, Bartın	maddesiz	yedek kaynak	Kemer Köprü, Bartın.jpg
+917	sayfa 31	yer	Bartın	Bartın Kent Müzesi	maddesiz	yedek kaynak	Bartın Kent Müzesi 2021-06-02 21.18.53 1791551740.jpg
+918	sayfa 31	yer	Bartın	Gürcüoluk Mağarası	maddesiz	yedek kaynak	Gürcüoluk Mağarası 2024-08-31 15.52.38 1791553092.jpg
+919	sayfa 31	yer	Bilecik	Bilecik Saat Kulesi	önceki	beyaz 0.37	Bilecik merkez tarihi saat kulesi.jpg
+920	sayfa 31	yer	Bitlis	Nazik Gölü	wikidata	benzer: Süphan Dağı	Lake Nazik.jpg
+921	sayfa 31	yer	Bitlis	Emir Bayındır Köprüsü	maddesiz	yedek kaynak	Emir Bayındır Köprüsü.jpg
+922	sayfa 31	yer	Bolu	Akşemseddin Türbesi	maddesiz	yedek kaynak	Akshamsaddin's Tomb at Goynuk.jpg
+923	sayfa 31	yer	Bolu	Seben Kaya Evleri	maddesiz	yedek kaynak	Seben Kaya Evleri 2022-11-05 13.56.26 1791981178.jpg
+924	sayfa 31	yer	Bursa	Misya	önceki	benzer: Keles, benzer: Orhaneli, benzer: Uludağ	Zeleia.jpg
+925	sayfa 31	yer	Bursa	İznik Gölü	wikidata	benzer: Keles	Sahildeniznik.jpg
+926	sayfa 31	yer	Bursa	Gemlik Körfezi	wikidata	benzer: İnegöl, benzer: Misya	Mudanya 09.jpg
+927	sayfa 31	yer	Bursa	Hünkâr Köşkü	arama	yedek kaynak	Bursa-hünkar köşkü - panoramio.jpg
+928	sayfa 31	yer	Bursa	Somuncu Baba Camii	arama	yedek kaynak	Somuncu Baba Tomb and Mosque 05.jpg
+929	sayfa 31	yer	Bursa	Boyacı Kulluğu Köprüsü	maddesiz	yedek kaynak	Bursa Boyacıkulluğu Köprüsü 2014 0042.jpg
+930	sayfa 31	yer	Bursa	Setbaşı Köprüsü	maddesiz	yedek kaynak	Setbaşı Köprüsü (2025).jpg
+931	sayfa 32	yer	Bursa	Muradiye Medresesi	maddesiz	yedek kaynak	MURADİYE CAMİ MEDRESESİ - panoramio.jpg
+932	sayfa 32	yer	Bursa	Adranos Kalesi	maddesiz	yedek kaynak	Adranos Kalesi 2026-06-05 01.52.08 1783188422.jpeg
+933	sayfa 32	yer	Bursa	Muradiye Mezar Taşları Müzesi	maddesiz	yedek kaynak	Mezar taşları.jpg
+934	sayfa 32	yer	Bursa	İznik Türk İslam Eserleri Müzesi	maddesiz	yedek kaynak	Türk islam eserleri müzesi.jpg
+935	sayfa 32	yer	Bursa	Roma Köprüsü, Karamazak	maddesiz	yedek kaynak	NAMAZGAH TARİHİ KÖPRÜ - panoramio.jpg
+936	sayfa 32	yer	Bursa	Hadrianoi	maddesiz	yedek kaynak	Hadrianoi 2026-06-05 15.34.15 1783188465.jpeg
+937	sayfa 32	yer	Bursa	Kılıç Kalkan Evi Müzesi, Bursa	maddesiz	yedek kaynak	Kılıç Kalkan Evi Müzesi, Bursa 2017-06-14 15.43.46 1791470999.JPG
+938	sayfa 32	yer	Bursa	Bursa Darphanesi	maddesiz	yedek kaynak, benzer: Yeşil Camii	Bursa Darphanesi 2022-11-15 17.55.39 1793475756.JPG
+939	sayfa 32	yer	Bursa	Burgos	maddesiz	yedek kaynak	Burgos 2026-06-23 11.45.32 1783186894.jpeg
+940	sayfa 32	yer	Diyarbakır	Hazreti Süleyman Camii	wikidata	benzer: Kayapınar	HzSuleymanCamiDiyarbakir1.jpg
+941	sayfa 32	yer	Diyarbakır	Eğil Kalesi	maddesiz	yedek kaynak	Eğil Asur Kalesi.jpg
+942	sayfa 32	yer	Edirne	Arif Ağa Camii	wikidata	benzer: Keşan, benzer: II. Bayezid Camii	Arif Ağa Camii 30.JPG
+943	sayfa 32	yer	Edirne	Beylerbeyi Camii	wikidata	benzer: İpsala, benzer: Keşan	Beylerbeyi Camii, Edirne - 2025 (3).jpg
+944	sayfa 32	yer	Elazığ	İzzet Paşa Camii	wikidata	benzer: Sivrice, benzer: Hazar Gölü	Elazig Izzetpascha-Moschee.jpg
+945	sayfa 32	yer	Elazığ	Keban Baraj Gölü	wikidata	benzer: Baskil	Keban barajı-Keban-Elazığ - panoramio.jpg
+946	sayfa 32	yer	Elazığ	Harput Ulu Camii	wikidata	beyaz 0.34	Minarett Ulu Camii Harput.jpg
+947	sayfa 32	yer	Erzurum	Tortum Kalesi	wikidata	benzer: Aziziye, benzer: Köprüköy	Fortress of Tortom 2.jpg
+948	sayfa 32	yer	Erzurum	Taş Köprü, Davalı Yaylası	maddesiz	yedek kaynak	Taş Köprü, Davalı Yaylası 2.jpg
+949	sayfa 32	yer	Eskişehir	Eskişehir Surp Yerrortutyun Kilisesi	wikidata	benzer: Kurşunlu Camii	Heilige-Dreieinigkeits-Kirche; Sivrihisar, Eskişehir; 01.jpg
+950	sayfa 32	yer	Eskişehir	Metin Yurdanur Açık Hava Heykel Müzesi	maddesiz	beyaz 0.30, yedek kaynak	Metin Yurdanur Açık Hava Heykel Müzesi 2019-08-18 13.10.00 1792429236.JPG
+951	sayfa 32	yer	Eskişehir	Midas Şehri	maddesiz	yedek kaynak	Midas Şehri 2026-10-08 23.45.43 1791492361.jpg
+952	sayfa 32	yer	Gaziantep	Gaziantep Oyun ve Oyuncak Müzesi	maddesiz	yedek kaynak	Gaziantep Toy Museum Building in 2014 2883.jpg
+953	sayfa 32	yer	Gaziantep	Gaziantep Savunması Ve Kahramanlık Panoraması Müzesi	maddesiz	yedek kaynak, benzer: Karkamış, benzer: Nurdağı	Gaziantep Savunması Ve Kahramanlık Panoraması Müzesi 2026-10-22 14.49.01 1792923372.jpg
+954	sayfa 32	yer	Giresun	Sis Dağı	önceki	benzer: Görele, benzer: Giresun Adası	Sisdağı yaylasının Alacapazarı yaylasından görünümü.jpg
+955	sayfa 32	yer	Giresun	Şebinkarahisar Kalesi	wikidata	benzer: Alucra, benzer: Espiye, benzer: Keşap	Castle of Şebinkarahisar 2017-07-02 01-1.jpg
+956	sayfa 32	yer	Giresun	Şeyh Keramettin Camii	wikidata	benzer: Giresun Adası, benzer: Sis Dağı	Mosque of Sheikh Keramettin.jpg
+957	sayfa 32	yer	Gümüşhane	Torul Kalesi	wikidata	beyaz 0.32	Torul Kalesi Cam Seyir Terası.jpg
+958	sayfa 32	yer	Hatay	Kel Dağı	wikidata	benzer: Samandağ	Jebel Aqra (Kel Dağı, Mount Casius), 2008.jpg
+959	sayfa 32	yer	Isparta	Gölcük Gölü	önceki	indirilemedi	Golcuk 2072.jpg
+960	sayfa 32	yer	Isparta	Kovada Gölü	wikidata	indirilemedi	Southern end of Lake Kovada (Kovada Gölü), March 2024 05.jpg
+961	sayfa 33	yer	Isparta	Dündar Bey Medresesi	wikidata	indirilemedi	Eğirdir Dündar Bey Medresesi and Hızır Bey Camii 3009.jpg
+962	sayfa 33	yer	Isparta	Antiokheia Augustus Tapınağı	maddesiz	yedek kaynak	Antioch in Pisidia Augustus Temple 2948.jpg
+963	sayfa 33	yer	Isparta	Antiokheia Nymphaeum	maddesiz	yedek kaynak	Antioch of Pisidia 2898.jpg
+964	sayfa 33	yer	Isparta	Antiokheia Roma Hamamı	maddesiz	yedek kaynak	Antioch of Pisidia 2888.jpg
+965	sayfa 33	yer	Kahramanmaraş	Binboğa Dağları	wikidata	indirilemedi	DALLIKAVAKTAN BİNBOĞA - panoramio.jpg
+966	sayfa 33	yer	Kahramanmaraş	Ashâb-ı Kehf Külliyesi	wikidata	indirilemedi	Eshab-ı Kehf - panoramio.jpg
+967	sayfa 33	yer	Kahramanmaraş	Kahramanmaraş Abdülhamid Han Camii	vikipedi	indirilemedi	Abdülhamit Han Cami - panoramio.jpg
+968	sayfa 33	yer	Kahramanmaraş	Ahır Dağı	wikidata	indirilemedi	Ahir Mt - Ahir Dağı, Kahramanmaraş 2017-05-12 01-1.jpg
+969	sayfa 33	yer	Kahramanmaraş	Kahramanmaraş Kent Kurtuluş Müzesi	wikidata	indirilemedi	Kahramanmaraş Liberation Museum entrance.jpg
+970	sayfa 33	yer	Kahramanmaraş	Menzelet Baraj Gölü	vikipedi	indirilemedi	Kahramanmaras menzeletgolu 2018.jpg
+971	sayfa 33	yer	Kahramanmaraş	Tanır Yazıtı	vikipedi	indirilemedi	Tanır Inschrift01.jpg
+972	sayfa 33	yer	Kahramanmaraş	Hurman Kalesi	wikidata	indirilemedi	Hurman Kalesi03.jpg
+973	sayfa 33	yer	Karabük	Kazdağlı Camii	wikidata	indirilemedi	Safranbolu Kazdağlı Camii in 2006 8244.jpg
+974	sayfa 33	yer	Karabük	Hadrianapolis (Paflagonya)	wikidata	indirilemedi	Hadrianapolis Ancient City Karabük 16.jpg
+975	sayfa 33	yer	Karabük	İzzet Mehmet Paşa Camii	wikidata	indirilemedi	İzzet Mehmet Mosque in Safranbolu, Karabük Province.jpg
+976	sayfa 33	yer	Karabük	İncekaya Su Kemeri	wikidata	indirilemedi	İncekaya Su kemeri (2013) - panoramio.jpg
+977	sayfa 33	yer	Karabük	Gazi Süleyman Paşa Camii, Safranbolu	wikidata	indirilemedi	Eski Camii, Safranbolu.jpg
+978	sayfa 33	yer	Karabük	Safranbolu Saat Kulesi	wikidata	indirilemedi	Safranbolu Saat Kulesi.JPG
+979	sayfa 33	yer	Karabük	Sare Hanım Çeşmesi	wikidata	indirilemedi	Haci Sare Hanım Cesmesi Safranbolu 2025.jpg
+980	sayfa 33	yer	Karabük	Şükrü Efendi Çeşmesi	önceki	indirilemedi	Şükrü Efendi Çeşmesi (33616).jpg
+981	sayfa 33	yer	Karabük	Safranbolu Kent Tarih Müzesi	maddesiz	indirilemedi	Safranbolu kent tarihi müzesi.jpg
+982	sayfa 33	yer	Karabük	Köprü, Safranbolu	maddesiz	indirilemedi	Safranbolu köprü-1.jpg
+983	sayfa 33	yer	Karaman	Derbe	wikidata	indirilemedi	DAVIS(1879) p329 SITE OF DERBE, KARAJH DAGH MOUNTAINS IN THE DISTANCE.jpg
+984	sayfa 33	yer	Karaman	Ermenek Ulu Cami	wikidata	indirilemedi	Ermenek Ulu Cami 5116.jpg
+985	sayfa 33	yer	Karaman	Binbirkilise	wikidata	indirilemedi	Binbirkilise1.jpg
+986	sayfa 33	yer	Karaman	Karaman Müzesi	wikidata	indirilemedi	Karaman Müze 02.jpg
+987	sayfa 33	yer	Karaman	Aktekke Camii	wikidata	indirilemedi	Karaman 4776.jpg
+988	sayfa 33	yer	Karaman	Alaeddin Bey Türbesi	wikidata	indirilemedi	Karaman 4849.jpg
+989	sayfa 33	yer	Kars	Şirakavan	wikidata	indirilemedi	Surp Prkich, Shirakavan.jpg
+990	sayfa 33	yer	Kars	Arpaçay Baraj Gölü	wikidata	indirilemedi	Ախուրյանի ջրամբարը12.jpg
+991	sayfa 34	yer	Kars	Beşkilise	vikipedi	indirilemedi	Khtzkonk Monastery, Kars.jpg
+992	sayfa 34	yer	Kars	Menuçihr Camii	wikidata	indirilemedi	Ani, rovine, complesso di manuçehr, 1071-1072, moschea 02.jpg
+993	sayfa 34	yer	Kars	Mren Katedrali	wikidata	indirilemedi	Cathedral of Mren and surroundings 30.jpg
+994	sayfa 34	yer	Kars	Horomos Manastırı	vikipedi	indirilemedi	Horomos Monastery 13.jpg
+995	sayfa 34	yer	Kars	Aziz Gregory Tigran Honents Kilisesi	wikidata	indirilemedi	20110419 Saint Gregory (Tigran Honents) Ani Turkey.jpg
+996	sayfa 34	yer	Kars	Ani Kutsal Havariler Kilisesi	önceki	indirilemedi	Ani- kiliseler.jpg
+997	sayfa 34	yer	Kars	III. Murat Köprüsü	maddesiz	indirilemedi	Daş körpü Qars.jpg
+998	sayfa 34	yer	Kars	Ani Kalesi	maddesiz	indirilemedi	Ani qala divarları (1).jpg
+999	sayfa 34	yer	Kastamonu	Küre Dağları Millî Parkı	wikidata	indirilemedi	Küre Dağları Güllüce Köyü Kanyonu 2014-06-15 19-58.jpeg
+1000	sayfa 34	yer	Kastamonu	Abonuteikhos	wikidata	indirilemedi	03 Inebolu2005 0804 133337a(AydinTiryaki).JPG
+1001	sayfa 34	yer	Kastamonu	Pompeiopolis	önceki	indirilemedi	Soli Pompeiopolis 20141116 02.jpg
+1002	sayfa 34	yer	Kastamonu	Gideros	wikidata	indirilemedi	Cide gideros.jpg
+1003	sayfa 34	yer	Kastamonu	Kastamonu Hükûmet Konağı	önceki	indirilemedi	Governor's office Kastamonu Province.jpg
+1004	sayfa 34	yer	Kastamonu	Kerempe Feneri	wikidata	indirilemedi	Kerempe Feneri.jpg
+1005	sayfa 34	yer	Kastamonu	Kastamonu Arkeoloji Müzesi	wikidata	indirilemedi	Kastamonu Archaeological Museum 8760.jpg
+1006	sayfa 34	yer	Kastamonu	Atatürk ve Şerife Bacı Anıtı	vikipedi	indirilemedi	Atatürk and Şerife Bacı Monument.jpg
+1007	sayfa 34	yer	Kayseri	Surp Krikor Lusavoriç Kilisesi, Kayseri	wikidata	indirilemedi	Kayseri Surp Kirkor Lusavoric Armenian Church nave under balcony 2152.jpg
+1008	sayfa 34	yer	Kayseri	Palas Tuzla Gölü	önceki	indirilemedi	Lake Tuzla Palas in June.jpg
+1009	sayfa 34	yer	Kayseri	Hunad Hatun Camii	wikidata	indirilemedi	Hunat Hatun Külliyesi.jpg
+1010	sayfa 34	yer	Kayseri	Soğanlı Vadisi	wikidata	indirilemedi	Soganli Valley Cappadocia.JPG
+1011	sayfa 34	yer	Kayseri	Kayseri Arkeoloji Müzesi	wikidata	indirilemedi	Kayseri Archaeological Museum General view in 2023 5154.jpg
+1012	sayfa 34	yer	Kayseri	Sahabiye Medresesi	wikidata	indirilemedi	Kayseri Hunat Hatun - panoramio.jpg
+1013	sayfa 34	yer	Kayseri	Sultan Hanı	wikidata	indirilemedi	Öküz Mehmed Pasha Caravanserai, Kuşadası 01.jpg
+1014	sayfa 34	yer	Kayseri	Fraktin Kabartması	wikidata	indirilemedi	Felsrelief von Firaktin.jpg
+1015	sayfa 34	yer	Kayseri	Nesa	maddesiz	indirilemedi	Nesza 06.jpg
+1016	sayfa 34	yer	Kayseri	Kaniş	maddesiz	indirilemedi	Kanis 05.jpg
+1017	sayfa 34	yer	Kayseri	Abdullah Gül Kütüphanesi	maddesiz	indirilemedi	Abdullah Gül Museum and Library (2).jpg
+1018	sayfa 34	yer	Kilis	Oylum Höyük	wikidata	indirilemedi	OylumHüyük1.jpg
+1019	sayfa 34	yer	Kocaeli	Nicomedia	önceki	indirilemedi	Nicomedia, Bythinia, Izmit, Turkey (39153593001).jpg
+1020	sayfa 34	yer	Kocaeli	İzmit Körfezi	önceki	indirilemedi	Izmit körfezi *©Abdullah Kiyga - panoramio.jpg
+1021	sayfa 35	yer	Kocaeli	Osmangazi Köprüsü	wikidata	indirilemedi	Osman Gazi Bridge1.JPG
+1022	sayfa 35	yer	Kocaeli	Kefken Adası	wikidata	indirilemedi	Kefken adası 2.jpg
+1023	sayfa 35	yer	Kocaeli	İzmit Saat Kulesi	önceki	indirilemedi	İzmit Saat Kulesi.jpg
+1024	sayfa 35	yer	Kocaeli	Pertev Paşa Camii	vikipedi	indirilemedi	Yeni cuma camii (1) 06.jpg
+1025	sayfa 35	yer	Kocaeli	Hannibal Anıtı	wikidata	indirilemedi	Hanibal's Tomb Gebze 19022022 01.jpg
+1026	sayfa 35	yer	Kocaeli	Çoban Mustafa Paşa Camii	wikidata	indirilemedi	Coban mustafa Pasa Camii - panoramio.jpg
+1027	sayfa 35	yer	Kocaeli	Hereke Halı ve Dokuma Fabrikası	maddesiz	indirilemedi	HEREKE, osmanlı dokuma fabrikası (AĞAÇSIZ) ^©Abdullah Kiyga - panoramio.jpg
+1028	sayfa 35	yer	Kocaeli	Hünkâr Çayırı Köprüsü	maddesiz	indirilemedi	Çayırova Hünkâr Köprüsü güney cephesi.jpg
+1029	sayfa 35	yer	Konya	Beyşehir Gölü	önceki	indirilemedi	Beysehir from Lake Beysehir.jpg
+1030	sayfa 35	yer	Konya	Kilistra	vikipedi	indirilemedi	Kilistra lystra33.JPG
+1031	sayfa 35	yer	Konya	Anadolu Yaylası	wikidata	indirilemedi	Erciyes From Aktepe Goreme.JPG
+1032	sayfa 35	yer	Konya	Eşrefoğlu Camii	wikidata	indirilemedi	Esrefoglu7.jpg
+1033	sayfa 35	yer	Konya	Selimiye Camii	wikidata	indirilemedi	Selimiye Mosque - Selimiye Camii, Konya.jpg
+1034	sayfa 35	yer	Konya	Kubadabad Sarayı	wikidata	indirilemedi	Beşehir Gölü 18 09 1991 Kubadabad Sarayı Palastruinen.jpg
+1035	sayfa 35	yer	Konya	Karapınar Düzlüğü	wikidata	indirilemedi	Karapınar; Meke Gölü.JPG
+1036	sayfa 35	yer	Konya	Aziziye Camii	wikidata	indirilemedi	Aziziye Mosque, Konya, Turkey.jpg
+1037	sayfa 35	yer	Konya	Fasıllar Anıtı	maddesiz	indirilemedi	Fasillar.jpg
+1038	sayfa 35	yer	Konya	Yalburt	maddesiz	indirilemedi	Yalburt14-17.jpg
+1039	sayfa 35	yer	Konya	Sille Köprüsü	maddesiz	indirilemedi	Konya sille köprü.jpg
+1040	sayfa 35	yer	Konya	Sille Şapeli	maddesiz	indirilemedi	Sille Şapeli 1.jpg
+1041	sayfa 35	yer	Konya	Nasrettin Hoca Arkeoloji ve Etnografya Müzesi	maddesiz	indirilemedi	Nasrettin Hoca Arkeoloji ve Etnografya Müzesi binası.jpg
+1042	sayfa 35	yer	Konya	Şeytan Köprüsü, Sille	maddesiz	indirilemedi	Şeytan Köprüsü, Sille.jpg
+1043	sayfa 35	yer	Kütahya	Penkalas Köprüsü	wikidata	indirilemedi	AizanoiBrücke.jpg
+1044	sayfa 35	yer	Kütahya	Kütahya Arkeoloji Müzesi	wikidata	indirilemedi	Vacidiye giriş.JPG
+1045	sayfa 35	yer	Kütahya	Rüstem Paşa Medresesi	wikidata	indirilemedi	Rüstem paşa medresesi.jpg
+1046	sayfa 35	yer	Kütahya	Kütahya Çinili Cami	wikidata	indirilemedi	Kütahya çinili cami.JPG
+1047	sayfa 35	yer	Kütahya	İshak Fakih Camii	wikidata	indirilemedi	Ishak fakih genel.JPG
+1048	sayfa 35	yer	Kütahya	Timurtaş Paşa Camii	wikidata	indirilemedi	Takvacılar dış.JPG
+1049	sayfa 35	yer	Kütahya	Kossuth Evi Müzesi	wikidata	indirilemedi	Kossuth Lajos statue.JPG
+1050	sayfa 35	yer	Kütahya	Dumlupınar Şehitliği	wikidata	indirilemedi	Dumlupınar-şehitlik 1.JPG
+1051	sayfa 36	yer	Kütahya	Kütahya Çini Müzesi	maddesiz	indirilemedi	Yakub bey külliyesi (2).JPG
+1052	sayfa 36	yer	Kütahya	Kütahya Jeoloji Müzesi	maddesiz	indirilemedi	Şengül hamamı (3).jpg
+1053	sayfa 36	yer	Kütahya	Roma Köprüsü 26	maddesiz	indirilemedi	Roma Köprüsü - Aizanoi Antik Kent.jpg
+1054	sayfa 36	yer	Kütahya	Aizanoi Meter Steunene Kutsal Alanı	maddesiz	indirilemedi	Kütahya aizanoi panorama.jpg
+1055	sayfa 36	yer	Kırklareli	Mahya Dağı	wikidata	indirilemedi	Mahya Dagi peak - right.JPG
+1056	sayfa 36	yer	Kırklareli	Sokollu Mehmed Paşa Camii	wikidata	indirilemedi	Lüleburgaz Sokollu Mehmet Paşa exterior 0059.jpg
+1057	sayfa 36	yer	Kırklareli	Limanköy Feneri	önceki	indirilemedi	LimanköyLighthouse, Demirköy.JPG
+1058	sayfa 36	yer	Kırklareli	Aya Nikola Manastırı, Vize	wikidata	indirilemedi	Aya Nikola Kilisesi... - panoramio.jpg
+1059	sayfa 36	yer	Kırklareli	Büyük Cami Çeşmesi	wikidata	indirilemedi	Kirklareli buyuk camii cesmesi 02.jpg
+1060	sayfa 36	yer	Kırklareli	Babaeski Köprüsü	wikidata	indirilemedi	Babaeski Koprusu.JPG
+1061	sayfa 36	yer	Kırklareli	Kadı Ali Fountain	wikidata	indirilemedi	Kirklareli kadi ali cesmesi 01.jpg
+1062	sayfa 36	yer	Kırklareli	Kayyumoğlu Çeşmesi	wikidata	indirilemedi	Kayyumoğlu Çeşmesi 02.jpg
+1063	sayfa 36	yer	Kırklareli	Vize Kalesi	maddesiz	indirilemedi	Vize Kalesi Burcu 2.jpg
+1064	sayfa 36	yer	Kırklareli	Lüleburgaz Kalesi	maddesiz	indirilemedi	Lüleburgaz - Lüleburgaz Kalesi Kalıntıları - 20250531143211.jpg
+1065	sayfa 36	yer	Kırklareli	Kıyıköy Kalesi	maddesiz	indirilemedi	Kıyıköy Castle 04.jpg
+1066	sayfa 36	yer	Kırklareli	Kırklareli Sağlık Tarihi Evi	maddesiz	indirilemedi	Kırklareli - Kırklareli Sağlık Tarihi Evi - 20250601153635.jpg
+1067	sayfa 36	yer	Kırklareli	Ali Rıza Efendi Kültür Evi	maddesiz	indirilemedi	Ali Rıza Efendi Kültür Evi - 01.jpg
+1068	sayfa 36	yer	Kırıkkale	Büklükale	wikidata	indirilemedi	Büklükale 01.jpg
+1069	sayfa 36	yer	Kırıkkale	Çeşnigir Köprüsü	wikidata	indirilemedi	Cesnigir paradise3.jpg
+1070	sayfa 36	yer	Kırıkkale	Kırıkkale Nur Camii	wikidata	indirilemedi	Kırıkkale Merkez Nur Camii.jpg
+1071	sayfa 36	yer	Kırşehir	Kaman Kalehöyük	wikidata	indirilemedi	Kaman-Kalehöyük1.JPG
+1072	sayfa 36	yer	Kırşehir	Cacabey Medresesi	wikidata	indirilemedi	Cacabey.jpg
+1073	sayfa 36	yer	Kırşehir	Üçayak Kilisesi	wikidata	indirilemedi	Üçayak Gesamt.jpg
+1074	sayfa 36	yer	Kırşehir	Ahi Evran Zaviyesi	wikidata	indirilemedi	Kirahievran.jpg
+1075	sayfa 36	yer	Kırşehir	Kırşehir Müzesi	önceki	indirilemedi	Ankara Displays in Ankara Vakıf Eserleri Müzesi Carpet from Central Anatolia, Kirşehir in 2014 12.jpg
+1076	sayfa 36	yer	Kırşehir	Malkaya	wikidata	indirilemedi	Malkaya04.jpg
+1077	sayfa 36	yer	Kırşehir	Kaman Kalehöyük Arkeoloji Müzesi	wikidata	indirilemedi	Kaman-Kalehöyük01.jpg
+1078	sayfa 36	yer	Kırşehir	Yassıhöyük	önceki	indirilemedi	Yassıhöyük 05.jpg
+1079	sayfa 36	yer	Malatya	Malatya Ulu Cami	wikidata	indirilemedi	Great Mosque of Malatya 5727 (4842732874).jpg
+1080	sayfa 36	yer	Malatya	Malatya Yeni Camii	wikidata	indirilemedi	Malatya Yeni Camii 2008.jpg
+1081	sayfa 37	yer	Malatya	Taşhoron Kilisesi	wikidata	indirilemedi	Armenische oder aramäische Taschchoron-Kirche.jpg
+1082	sayfa 37	yer	Malatya	Tohma Kanyonu	vikipedi	indirilemedi	Tohma kanyonu- tohma canyon - panoramio.jpg
+1083	sayfa 37	yer	Malatya	Kızılhisar Dağı	wikidata	indirilemedi	Serinhisar General View.JPG
+1084	sayfa 37	yer	Malatya	Malatya Fotoğraf Makinesi Müzesi	önceki	indirilemedi	Malatya Fotoğraf Makinesi Müzesi 2017-11-24 08.53.53 1791824497.jpg
+1085	sayfa 37	yer	Malatya	Günpınar Şelalesi	wikidata	indirilemedi	Günpınar Waterfall Nature Park, Malatya, Darende.jpg
+1086	sayfa 37	yer	Malatya	Turgut Özal Tabiat Parkı	vikipedi	indirilemedi	Tabiat park.jpg
+1087	sayfa 37	yer	Malatya	Sugeçti Eski Köprüsü	maddesiz	indirilemedi	Suceyin taş köprüsü.jpg
+1088	sayfa 37	yer	Manisa	Thiatira	wikidata	indirilemedi	Columns of Thiatira.jpg
+1089	sayfa 37	yer	Manisa	Spil Dağı	wikidata	indirilemedi	Mount Sipylus Manisa Turkey Atalani Lake.jpg
+1090	sayfa 37	yer	Manisa	Marmara Gölü	wikidata	indirilemedi	Marmara gölü.jpg
+1091	sayfa 37	yer	Manisa	Bozdağlar	önceki	indirilemedi	Bozdağlar 15 05 1988 Nordseite mit Schneeresten.jpg
+1092	sayfa 37	yer	Manisa	Aigai	wikidata	indirilemedi	AigaiMarkthalle1.jpg
+1093	sayfa 37	yer	Manisa	Philadelphia (Lidya)	wikidata	indirilemedi	Alaşehir Church of St. John 2.jpg
+1094	sayfa 37	yer	Manisa	Kula Tepeleri	wikidata	indirilemedi	The scoria cone at the Kula Volcano.JPG
+1095	sayfa 37	yer	Manisa	Sardes Sinagogu	wikidata	indirilemedi	Sardis Synagogue, late 3rd century AD, Sardis, Lydia, Turkey (19331773400).jpg
+1096	sayfa 37	yer	Mardin	Mor Evgin Manastırı	wikidata	indirilemedi	Kloster Mor Augin.jpg
+1097	sayfa 37	yer	Mardin	Mardin Kalesi	wikidata	indirilemedi	Mardin, Turkey.JPG
+1098	sayfa 37	yer	Mardin	Mardin Müzesi	wikidata	indirilemedi	Mardin P1050137 20080426105032.JPG
+1099	sayfa 37	yer	Mardin	Boncuklu Tarla	wikidata	indirilemedi	Boncuklu Tarla, Dargecit Neolithic temple.jpg
+1100	sayfa 37	yer	Mardin	Mor Yakup Kilisesi	wikidata	indirilemedi	Mar Jacob Church, Nisibis.jpg
+1101	sayfa 37	yer	Mardin	Mor Yakup Manastırı	wikidata	indirilemedi	Das Kloster von Mor Jakob.jpg
+1102	sayfa 37	yer	Mardin	Meryem Ana Kilisesi	wikidata	indirilemedi	El Hadra 26 05 2010 Marienkirche.jpg
+1103	sayfa 37	yer	Mardin	Zeynel Abidin Camii	vikipedi	indirilemedi	Zeynel Abidin Mosque Nusaybin.jpg
+1104	sayfa 37	yer	Mardin	Mardin Sakıp Sabancı Kent Müzesi	maddesiz	indirilemedi	Mardin Sakıp Sabancı Mardin Kent Müzesi in 2025 0830 06.jpg
+1105	sayfa 37	yer	Mardin	Dargeçit Köprüsü	maddesiz	indirilemedi	Dargeçit Köprüsü.jpg
+1106	sayfa 37	yer	Mersin	Soli	wikidata	indirilemedi	ViransehirSäulen.jpg
+1107	sayfa 37	yer	Mersin	Namrun Kalesi	önceki	indirilemedi	Namrun-Castle-20240801 123841.jpg
+1108	sayfa 37	yer	Mersin	Korykos	wikidata	indirilemedi	Fortressarmenians5.jpg
+1109	sayfa 37	yer	Mersin	Aziz Pavlus Kilisesi	vikipedi	indirilemedi	Tarsus Saint Paul's Church.jpg
+1110	sayfa 37	yer	Mersin	Dana Adası	wikidata	indirilemedi	Dana ada.jpg
+1111	sayfa 38	yer	Mersin	Elaiussa Sebaste	wikidata	indirilemedi	Elaiussa Sebaste, Cilicia, Turkey (39344774672).jpg
+1112	sayfa 38	yer	Mersin	Kız Kalesi	wikidata	indirilemedi	Korykos - Kızkalesi 01 (cropped).jpg
+1113	sayfa 38	yer	Mersin	Alahan Manastırı	wikidata	indirilemedi	Alahan Monastery, Mersin Province.jpg
+1114	sayfa 38	yer	Mersin	Paslı	maddesiz	indirilemedi	Pasl1i.jpg
+1115	sayfa 38	yer	Mersin	Örendibi	maddesiz	indirilemedi	Örendibi 08.jpg
+1116	sayfa 38	yer	Mersin	Mezitli Köprüsü	maddesiz	indirilemedi	Mezitli Köprüsü 2022-04-28.jpg
+1117	sayfa 38	yer	Mersin	Mersin Devlet Resim Heykel Müzesi ve Galerisi	maddesiz	indirilemedi	Mersin Devlet Resim Heykel Mzesi ve Galerisi 2021-10-20 1760387742.jpeg
+1118	sayfa 38	yer	Mersin	İz Bırakanlar Müzesi, Mersin	maddesiz	indirilemedi	Z Brakanlar Mzesi Mersin 2025-12-24 1766583021.jpeg
+1119	sayfa 38	yer	Mersin	Roma Köprüsü, Kayrakkeşli	maddesiz	indirilemedi	Kızılasma Köprüsü.jpg
+1120	sayfa 38	yer	Mersin	Özel Mustafa Erim Mersin Kent Tarihi Müzesi	maddesiz	indirilemedi	Özel Mustafa Erim Mersin Kent Tarihi Müzesi 2026-10-07 21.44.56 1791398804.jpeg
+1121	sayfa 38	yer	Mersin	Danyal Peygamber Makamı Roma Köprüsü	maddesiz	indirilemedi	Danyal Peygamber Makamı Roma Köprüsü 2026-06-19 17.36.05 1793474329.JPG
+1122	sayfa 38	yer	Muğla	Halikarnassos	önceki	indirilemedi	HalicarnassusRuins.jpg
+1123	sayfa 38	yer	Muğla	Letoon	wikidata	indirilemedi	Letoon Temple Area 2019.jpg
+1124	sayfa 38	yer	Muğla	Knidos	wikidata	indirilemedi	Knidos-Häfen.jpg
+1125	sayfa 38	yer	Muğla	Gemiler Adası	wikidata	indirilemedi	Gemiler Adası kalıntıları.jpg
+1126	sayfa 38	yer	Muğla	Köyceğiz Gölü	wikidata	indirilemedi	Lac de Köycegiz (2838926571).jpg
+1127	sayfa 38	yer	Muğla	Sedir Adası	vikipedi	indirilemedi	Sedir - panoramio.jpg
+1128	sayfa 38	yer	Muğla	Pinara	wikidata	indirilemedi	Pinara Amphitheatre Fethiye Mugla Turkiye.JPG
+1129	sayfa 38	yer	Muğla	Tlos	wikidata	indirilemedi	Tlos.jpg
+1130	sayfa 38	yer	Muğla	Apollo Karneios Tapınağı (Knidos)	maddesiz	indirilemedi	Ruines et colonnes éparses à Cnide.JPG
+1131	sayfa 38	yer	Muğla	Dişlice Adası	maddesiz	indirilemedi	Dişlice Adası Marmaris Hisarönü - panoramio.jpg
+1132	sayfa 38	yer	Muğla	Zeytin Adası	maddesiz	indirilemedi	Zeytin Adası.jpg
+1133	sayfa 38	yer	Muğla	Bardakçı Plajı	maddesiz	indirilemedi	Bardakçı Beach.jpg
+1134	sayfa 38	yer	Muğla	Gümbet Plajı	maddesiz	indirilemedi	Gümbet Beach.jpg
+1135	sayfa 38	yer	Muğla	Delikada	maddesiz	indirilemedi	Delikada Ada from Iztuzu Beach.jpg
+1136	sayfa 38	yer	Muğla	Bozukkale	maddesiz	indirilemedi	Bozukkale.jpg
+1137	sayfa 38	yer	Muğla	Kızılkaya Kalesi	maddesiz	indirilemedi	Kızılkaya Kalesi.jpg
+1138	sayfa 38	yer	Muğla	Halikarnas Balıkçısı Mezarı ve Müzesi	maddesiz	indirilemedi	Halikarnas Balıkçısı Mezarı, Anı Evi ve Bitkiliği.jpg
+1139	sayfa 38	yer	Muğla	Herakleia Athena Tapınağı	maddesiz	indirilemedi	Herakleia Athena Tapınağı.jpg
+1140	sayfa 38	yer	Muğla	Kadı Kalesi	maddesiz	indirilemedi	Kadı Kalesi 2022-08-06 12.05.46 1792182227.JPG
+1141	sayfa 39	yer	Muğla	Thera	maddesiz	indirilemedi	Thera 2022-08-16 15.07.58 1792226669.JPG
+1142	sayfa 39	yer	Muş	Akdoğan Gölü	wikidata	indirilemedi	Akdogangolugunbatimi.jpg
+1143	sayfa 39	yer	Muş	Surp Garabet Manastırı, Muş	wikidata	indirilemedi	Mush St. Karapet Monastery.jpg
+1144	sayfa 39	yer	Muş	Kutsal Havariler Manastırı	önceki	indirilemedi	Arakelots12.jpg
+1145	sayfa 39	yer	Muş	Surp Marine Kilisesi	wikidata	indirilemedi	Surb Marine Church of Mush 01.jpg
+1146	sayfa 39	yer	Muş	Göztepe Dağı	vikipedi	indirilemedi	Kolibaba.jpg
+1147	sayfa 39	yer	Muş	Ağperig Manastırı	wikidata	indirilemedi	Aghperig Monastery in the Sasun Mountains, East Anatolia 03.jpg
+1148	sayfa 39	yer	Muş	Malazgirt Meydan Muharebesi Tarihî Millî Parkı	vikipedi	indirilemedi	IMG-20210619-WA0033.jpg
+1149	sayfa 39	yer	Muş	Alaeddin Bey Camii	wikidata	indirilemedi	Muş Alaeddin Bey Camii in 2005 1058.jpg
+1150	sayfa 39	yer	Nevşehir	Kapadokya	wikidata	indirilemedi	Cappadocia Aerial View (6998755984).jpg
+1151	sayfa 39	yer	Nevşehir	Zelve Ören Yeri	wikidata	indirilemedi	Zelve Cappadocia.JPG
+1152	sayfa 39	yer	Nevşehir	Hacı Bektaş-ı Veli Türbesi	wikidata	indirilemedi	Hacibektas-01-mihalorel.jpg
+1153	sayfa 39	yer	Nevşehir	Acıgöl-Nevşehir	önceki	indirilemedi	Acigöl18 09 1972 Vulkankuppen bei Acıgöl (Nevşehir).jpg
+1154	sayfa 39	yer	Nevşehir	Karşı Kilise	wikidata	indirilemedi	JohannesAlteFresken.jpg
+1155	sayfa 39	yer	Nevşehir	Mehmet Şakir Paşa Medresesi	wikidata	indirilemedi	Mustafapaşa-Façade de la medersa (1).jpg
+1156	sayfa 39	yer	Nevşehir	Nevşehir Müzesi	wikidata	indirilemedi	Nevşehir museum in 2019 1556.jpg
+1157	sayfa 39	yer	Nevşehir	Aşk Vadisi, Kapadokya	wikidata	indirilemedi	Bagildere Love Valley Cappadocia 1520259 60 61 Compressor HDR lvl Nevit.jpg
+1158	sayfa 39	yer	Nevşehir	Gomeda Vadisi	maddesiz	indirilemedi	Gomeda Vadisi (9).jpg
+1159	sayfa 39	yer	Nevşehir	Ortahisar Kalesi	maddesiz	indirilemedi	Cappadocia March 2006.jpg
+1160	sayfa 39	yer	Nevşehir	Tatlarin Yeraltı Şehri	maddesiz	indirilemedi	Tatlarin 01.jpg
+1161	sayfa 39	yer	Nevşehir	Çardak Yeraltı Şehri	maddesiz	indirilemedi	J22 281 Çardak, Wohnraum.jpg
+1162	sayfa 39	yer	Niğde	Tuvana Krallığı	wikidata	indirilemedi	Tuwanuwa - Tyana - Kemerhisar.jpg
+1163	sayfa 39	yer	Niğde	Demirkazık Dağı	wikidata	indirilemedi	Demirkazik Crest of Aladag Mountains in Nigde Turkey.jpg
+1164	sayfa 39	yer	Niğde	Göllü Dağ	wikidata	indirilemedi	Göllüdağın krater gölü.JPG
+1165	sayfa 39	yer	Niğde	Niğde Arkeoloji Müzesi	wikidata	indirilemedi	NigdeMuseum1.jpg
+1166	sayfa 39	yer	Niğde	Narlıgöl	wikidata	indirilemedi	Narlıgöl Krater Gölü.jpg
+1167	sayfa 39	yer	Niğde	Kınık Höyük	wikidata	indirilemedi	Kınık Höyük 09.jpg
+1168	sayfa 39	yer	Niğde	Hüdâvent Hatun Türbesi	wikidata	indirilemedi	Hüdâvend Hatun Kümbeti.jpg
+1169	sayfa 39	yer	Niğde	Niğde Saat Kulesi	wikidata	indirilemedi	Niğde saat kulesi.jpg
+1170	sayfa 39	yer	Ordu	Hoynat Adası	wikidata	indirilemedi	Hoynat Adası.jpg
+1171	sayfa 40	yer	Ordu	Bolaman Kalesi	wikidata	indirilemedi	Hazinedaroğlu Mansion, Fatsa.jpg
+1172	sayfa 40	yer	Ordu	Ohtamış Şelalesi	önceki	indirilemedi	Ordu ulubey ohtamis şelalesi.jpg
+1173	sayfa 40	yer	Ordu	Ulugöl	vikipedi	indirilemedi	Ordu gölköy.jpg
+1174	sayfa 40	yer	Ordu	Gaga Gölü	önceki	indirilemedi	Gaga Gölü, Fatsa, Ordu - panoramio.jpg
+1175	sayfa 40	yer	Ordu	Taşbaşı Kilisesi	wikidata	indirilemedi	Taşbaşı Kilise'sinin genel görünümü.jpg
+1176	sayfa 40	yer	Ordu	Hazinedaroğlu Konağı	önceki	indirilemedi	Hazinedaroğlu Mansion, Fatsa II.jpg
+1177	sayfa 40	yer	Ordu	Saray Camii	wikidata	indirilemedi	Saray Camii II, 2023.jpg
+1178	sayfa 40	yer	Osmaniye	Karatepe-Arslantaş	önceki	indirilemedi	KaratepeBefestigung.jpg
+1179	sayfa 40	yer	Osmaniye	Alacami	wikidata	indirilemedi	Kadirli Ala Mosque.jpg
+1180	sayfa 40	yer	Osmaniye	Savranda Kalesi	wikidata	indirilemedi	SavrandaKale2.jpg
+1181	sayfa 40	yer	Osmaniye	Hemite Kalesi	wikidata	indirilemedi	Amouda Castle, Osmaniye 08.jpg
+1182	sayfa 40	yer	Osmaniye	Karatepe-Aslantaş Açık Hava Müzesi	wikidata	indirilemedi	Karatepe Museum.jpg
+1183	sayfa 40	yer	Osmaniye	Hemite Kaya Anıtı	wikidata	indirilemedi	Hemite4.jpg
+1184	sayfa 40	yer	Osmaniye	Düldül Dağı	wikidata	indirilemedi	Düldül Dağı - Mount Düldül 06.JPG
+1185	sayfa 40	yer	Osmaniye	Osmaniye Saat Kulesi	wikidata	indirilemedi	Osmaniye Clock Tower in 2011 1594.jpg
+1186	sayfa 40	yer	Rize	Kaçkar Dağı	wikidata	indirilemedi	KackarDagi fromNorth hory.jpg
+1187	sayfa 40	yer	Rize	Hemşin	wikidata	indirilemedi	La verdure d'Hemşin (Bilen köyü).jpg
+1188	sayfa 40	yer	Rize	Rize Atatürk Evi Müzesi	wikidata	indirilemedi	Rize Atatürk House and Ethnography museum in 2006 4586.jpg
+1189	sayfa 40	yer	Rize	Ardeşen Kilisesi	wikidata	indirilemedi	Ruins of Georgian church in Ardeşen, Rize, Lazistan.jpg
+1190	sayfa 40	yer	Rize	Rize Kalesi	wikidata	indirilemedi	Entrance of the Castle of Rize, Rize, Turkey.JPG
+1191	sayfa 40	yer	Rize	Pokut Yaylası	vikipedi	indirilemedi	Pokut Yaylası 4.jpg
+1192	sayfa 40	yer	Rize	Kaçkar Dağları Millî Parkı	wikidata	indirilemedi	A waterfall in forest.jpg
+1193	sayfa 40	yer	Rize	Atina (Pontus)	önceki	indirilemedi	Atina-Pazar, Rize, Lazistan ქ. ათინა, ლაზეთი.jpg
+1194	sayfa 40	yer	Sakarya	Sakarya Müzesi	wikidata	indirilemedi	TR Sakarya asv2021-10 img13 Local museum.jpg
+1195	sayfa 40	yer	Sakarya	Doğançay Şelalesi	wikidata	indirilemedi	Doğançay Şelalesi.jpg
+1196	sayfa 40	yer	Sakarya	Deprem Müzesi	wikidata	indirilemedi	TR Sakarya asv2021-10 img08 Earthquake Museum.jpg
+1197	sayfa 40	yer	Sakarya	Seyifler Kalesi	wikidata	indirilemedi	Seyifler Kalesi2.JPG
+1198	sayfa 40	yer	Sakarya	Taşkısığı Gölü	vikipedi	indirilemedi	Taşkısığı Köyü.JPG
+1199	sayfa 40	yer	Sakarya	Karasu Kalesi	wikidata	indirilemedi	Karasu kalesi2.JPG
+1200	sayfa 40	yer	Sakarya	Harmantepe Kalesi	vikipedi	indirilemedi	Harmantepe Kalesi3.JPG
+1201	sayfa 41	yer	Sakarya	Ali Fuat Paşa Kuvayı Milliye Müzesi	wikidata	indirilemedi	Ali Fuat Cebesoy Müzesi.jpg
+1202	sayfa 41	yer	Sakarya	Reisler Okçular Gölü	maddesiz	indirilemedi	Reisler Okçular Lake at Sakarya Kaynarca (10).jpg
+1203	sayfa 41	yer	Sakarya	Paşalar Kalesi	maddesiz	indirilemedi	Paşalar Kalesi, Pamukova, Sakarya.jpg
+1204	sayfa 41	yer	Samsun	Nerik	vikipedi	indirilemedi	Oymaağac Höyük 01.jpg
+1205	sayfa 41	yer	Samsun	Ladik Gölü	wikidata	indirilemedi	Ladik golunde gunbatimi2.jpg
+1206	sayfa 41	yer	Samsun	Onur Anıtı	wikidata	indirilemedi	Onur Anıtı.JPG
+1207	sayfa 41	yer	Samsun	Bandırma Vapuru	wikidata	indirilemedi	Bandirma-edited.jpg
+1208	sayfa 41	yer	Samsun	Göğceli Camii	wikidata	indirilemedi	Göğceli Camii.JPG
+1209	sayfa 41	yer	Samsun	Büyük Camii	wikidata	indirilemedi	Büyük Camii.jpg
+1210	sayfa 41	yer	Samsun	Samsun Merkez Camii	wikidata	indirilemedi	Samsun Merkez Camii.jpg
+1211	sayfa 41	yer	Samsun	Gazi Müzesi	wikidata	indirilemedi	Mantıka Palas, 1938 (2).jpg
+1212	sayfa 41	yer	Samsun	Amisos	maddesiz	indirilemedi	Amisos Tepesi'nde kuzey tümülüsü.JPG
+1213	sayfa 41	yer	Samsun	Çetinkaya Köprüsü	maddesiz	indirilemedi	Çetinkaya Köprüsü 2015-09-30 13.50.05 1792524907.JPG
+1214	sayfa 41	yer	Siirt	İsmail Fakirullah Türbesi	wikidata	indirilemedi	Ibrahim hakkı shrine in siirt tillo.jpg
+1215	sayfa 41	yer	Siirt	Siirt Saat Kulesi	vikipedi	indirilemedi	Siirt Saat Kulesi 8416.jpg
+1216	sayfa 41	yer	Siirt	Çarpiran I. Köprü	wikidata	indirilemedi	Arpiran I. Kpr 1761631754.jpg
+1217	sayfa 41	yer	Siirt	Çarpiran II. Köprü	wikidata	indirilemedi	Arpiran II. Kpr 1761631585.jpg
+1218	sayfa 41	yer	Sinop	Alaeddin Camii	wikidata	indirilemedi	Alaattin Keykubat Camii 1214.jpg
+1219	sayfa 41	yer	Sinop	Pervane Medresesi	wikidata	indirilemedi	Pervane Medresesi.JPG
+1220	sayfa 41	yer	Sinop	Sinop Arkeoloji Müzesi	wikidata	indirilemedi	Sinop Museum entrance.jpg
+1221	sayfa 41	yer	Sinop	İnceburun	önceki	indirilemedi	İnceburun.JPG
+1222	sayfa 41	yer	Sinop	Balatlar Kilisesi	wikidata	indirilemedi	Balatlarchurch.JPG
+1223	sayfa 41	yer	Sinop	Boztepe Yarımadası	önceki	indirilemedi	ADA GENEL GORUNUS - panoramio.jpg
+1224	sayfa 41	yer	Sinop	Boyabat Kalesi	wikidata	indirilemedi	Boyabat Kalesi 9026.jpg
+1225	sayfa 41	yer	Sinop	Diyojen Heykeli	wikidata	indirilemedi	Diogenes statue in Sinop-full.jpg
+1226	sayfa 41	yer	Sivas	Sivas Ulu Camii	wikidata	indirilemedi	035 Ulucami.07.2006 resize.JPG
+1227	sayfa 41	yer	Sivas	Sarissa	wikidata	indirilemedi	KusakliHügel.JPG
+1228	sayfa 41	yer	Sivas	Eğri Köprü	wikidata	indirilemedi	161 Egriköprü.07.2006 resize.JPG
+1229	sayfa 41	yer	Sivas	Buruciye Medresesi	önceki	indirilemedi	Çifte minare-Kale camii -Buruciye medresesi-Sivas - panoramio.jpg
+1230	sayfa 41	yer	Sivas	Sivas Atatürk ve Kongre Müzesi	wikidata	indirilemedi	004 KongreMüzesi.07.2006 resize.JPG
+1231	sayfa 42	yer	Sivas	Sivas Arkeoloji Müzesi	wikidata	indirilemedi	Sivas Museum 01.jpg
+1232	sayfa 42	yer	Sivas	Tekeli Dağı	vikipedi	indirilemedi	Tekeli Dağı.jpg
+1233	sayfa 42	yer	Sivas	Şarkışla Ulu Camii	wikidata	indirilemedi	Şarkışla Ulu Cami.jpg
+1234	sayfa 42	yer	Sivas	Aşağı Hamam Köprüsü	maddesiz	indirilemedi	Aşağı hamam köprüsü.jpg
+1235	sayfa 42	yer	Sivas	Kız Köprüsü, Divriği	maddesiz	indirilemedi	Kız köprüsü.jpg
+1236	sayfa 42	yer	Tekirdağ	Malkara	önceki	indirilemedi	Hemit 5.jpg
+1237	sayfa 42	yer	Tekirdağ	Perinthos	vikipedi	indirilemedi	Tekirdağ Müzesi-6.JPG
+1238	sayfa 42	yer	Tekirdağ	Bisanthe	önceki	indirilemedi	Monnaie - Bronze, Bisanthe, Thrace - btv1b85863739 (1 of 2).jpg
+1239	sayfa 42	yer	Tekirdağ	Kutman Şarap Müzesi	wikidata	indirilemedi	KutmanWineMuseum (1).jpg
+1240	sayfa 42	yer	Tekirdağ	Tekirdağ Arkeoloji ve Etnografya Müzesi	wikidata	indirilemedi	Tekirdağ Museum of Archaeology and Ethnography (02).JPG
+1241	sayfa 42	yer	Tekirdağ	Hora Feneri	wikidata	indirilemedi	Hora Feneri.jpg
+1242	sayfa 42	yer	Tekirdağ	Kara Mustafa Paşa Köprüsü	wikidata	indirilemedi	Çorlu - Kara Mustafa Pasha Bridge - 20250531112133.jpg
+1243	sayfa 42	yer	Tokat	Gaziura	vikipedi	indirilemedi	KINGS of CAPPADOCIA. Ariarathes I. 333-322 BC.jpg
+1244	sayfa 42	yer	Tokat	Maşat Höyük	wikidata	indirilemedi	Masat2.jpg
+1245	sayfa 42	yer	Tokat	Tokat Müzesi	wikidata	indirilemedi	Tokat Müzesi binasının dış görünümü.jpg
+1246	sayfa 42	yer	Tokat	Ali Paşa Camii	wikidata	indirilemedi	Tokat,AliPasha1.jpg
+1247	sayfa 42	yer	Tokat	Hatuniye Camii	wikidata	indirilemedi	Hatuniye Mosque in Tokat (14042640138).jpg
+1248	sayfa 42	yer	Tokat	Zinav	önceki	indirilemedi	Zinav Lake.jpg
+1249	sayfa 42	yer	Tokat	Silahtar Ömer Paşa Camii	wikidata	indirilemedi	Erbaa-akca-fidi-silahtar-omer-pasa-camii 76 0 0.jpg
+1250	sayfa 42	yer	Tokat	Takyeciler Cami	wikidata	indirilemedi	Tokat Takyeciler mosque 8100.jpg
+1251	sayfa 42	yer	Trabzon	Fatih Camii	wikidata	indirilemedi	Fatih Cami Ocak 2016.jpg
+1252	sayfa 42	yer	Trabzon	Yeni Cuma Camii	wikidata	indirilemedi	Trebisonda, ex-chiesa di sant'eugenio, oggi nuova moschea del venerdì, esterno 02.jpg
+1253	sayfa 42	yer	Trabzon	Trabzon Müzesi	wikidata	indirilemedi	Trabzon museum.jpg
+1254	sayfa 42	yer	Trabzon	Küçük Ayvasıl Kilisesi	wikidata	indirilemedi	Trebisonda, chiesa bizatina di s. anna, 01.jpg
+1255	sayfa 42	yer	Trabzon	Vazelon Manastırı	wikidata	indirilemedi	Kloster Vazelon Hauptgebaeude Juli 2014.jpg
+1256	sayfa 42	yer	Trabzon	Kaymaklı Manastırı	wikidata	indirilemedi	Kaymakli-place.jpg
+1257	sayfa 42	yer	Trabzon	Nissalı Aziz Gregor Kilisesi (Trabzon)	wikidata	indirilemedi	St. Gregory, Trebizond.jpg
+1258	sayfa 42	yer	Trabzon	Altındere Millî Parkı	wikidata	indirilemedi	Sümela manastırı02.jpg
+1259	sayfa 42	yer	Trabzon	Kalecik Kalesi, Araklı	maddesiz	indirilemedi	Kalecik Kalesi, Araklı 2024-07-31 11.51.12 1793262211.jpg
+1260	sayfa 42	yer	Tunceli	Düzgün Baba	wikidata	indirilemedi	Düzgünbaba - panoramio.jpg
+1261	sayfa 43	yer	Tunceli	Singeç Köprüsü	vikipedi	indirilemedi	The opening ceremony of Singeç Bridge.jpg
+1262	sayfa 43	yer	Tunceli	Tunceli Müzesi	wikidata	indirilemedi	Dersim Müzesi, Tunceli.jpg
+1263	sayfa 43	yer	Uşak	Uşak Ulu Camii	wikidata	indirilemedi	Uşak Ulu Camii1.jpg
+1264	sayfa 43	yer	Uşak	Clandras Köprüsü	wikidata	indirilemedi	Lydian Cilandiras Bridge Karahalli Usak Province Turkey.jpg
+1265	sayfa 43	yer	Uşak	Burma Camii	wikidata	indirilemedi	Burma Camii1.jpg
+1266	sayfa 43	yer	Uşak	Karaali Camii	wikidata	indirilemedi	Karaali Camii1.jpg
+1267	sayfa 43	yer	Uşak	Bulkaz Dağı	vikipedi	indirilemedi	BULKAZ DAĞLARI.jpg
+1268	sayfa 43	yer	Uşak	Nais (Lidya)	vikipedi	indirilemedi	Lydia circa 50 AD - English legend.jpg
+1269	sayfa 43	yer	Uşak	Uşak Atatürk Anıtı	önceki	indirilemedi	Uşak Atatürk Ve Kurtuluş Anıtı - Monument for Atatürk and Independence 2345.jpg
+1270	sayfa 43	yer	Van	Tuşpa	wikidata	indirilemedi	Urartu Van Cliff 1.jpg
+1271	sayfa 43	yer	Van	Akdamar Kilisesi	wikidata	indirilemedi	00 0390 Lake Van, church on Akdamar Island.jpg
+1272	sayfa 43	yer	Van	Kuş Adası	önceki	indirilemedi	Ruins of Armenian Мonastery, Arter Island, Lake Van, General view - panoramio.jpg
+1273	sayfa 43	yer	Van	Erçek Gölü	wikidata	indirilemedi	Erchek Lake.jpg
+1274	sayfa 43	yer	Van	Gıduts Manastırı	wikidata	indirilemedi	Ktuts monastery 1986.jpg
+1275	sayfa 43	yer	Van	Çarpanak Adası	önceki	indirilemedi	Carpanak Adasi Giduts Manastiri.jpg
+1276	sayfa 43	yer	Van	Artos Dağı	önceki	indirilemedi	Çiyayê Artos.jpg
+1277	sayfa 43	yer	Van	Yedi Kilise	wikidata	indirilemedi	Ejmiadzin Cathedral2.jpg
+1278	sayfa 43	yer	Van	Amiuk	maddesiz	indirilemedi	Van Lake, Side of Amik Castle.jpg
+1279	sayfa 43	yer	Van	Eski Van şehri	maddesiz	indirilemedi	Old City Van 2009.JPG
+1280	sayfa 43	yer	Yalova	Armutlu Yarımadası	wikidata	indirilemedi	Armutlu 7005.jpg
+1281	sayfa 43	yer	Yalova	Yalova Deprem Anıtı	wikidata	indirilemedi	YalovaEarthquakeMonument (3).JPG
+1282	sayfa 43	yer	Yalova	Harmankaya Tabiat Parkı	vikipedi	indirilemedi	Harmankaya Tabiat Parkı.jpg
+1283	sayfa 43	yer	Yalova	Bozburun Feneri	wikidata	indirilemedi	Bozburun Lighthouse, Armutlu.jpg
+1284	sayfa 43	yer	Yalova	Erikli Şelalesi (Yalova-Teşvikiye)	vikipedi	indirilemedi	Erikli şelalesi.jpg
+1285	sayfa 43	yer	Yozgat	Alişar Höyüğü	wikidata	indirilemedi	Alişar Höyük 02.jpg
+1286	sayfa 43	yer	Yozgat	Tavium	önceki	indirilemedi	Büyüknefes (Tavium) 2014-02-11 14-31.jpg
+1287	sayfa 43	yer	Yozgat	Yozgat Müzesi	wikidata	indirilemedi	YOZGAT NİZAMOĞLU KONAĞI ETNOĞRAFYA MÜZESİ.jpg
+1288	sayfa 43	yer	Yozgat	Çadır Höyük	önceki	indirilemedi	Çadır Höyük.jpg
+1289	sayfa 43	yer	Yozgat	Uşaklı Höyük	wikidata	indirilemedi	Uşaklı Höyük 07.jpg
+1290	sayfa 43	yer	Yozgat	Yozgat Saat Kulesi	wikidata	indirilemedi	Yozgat Clock Tower 3997.jpg
+1291	sayfa 44	yer	Yozgat	Bahadın Saat Kulesi	wikidata	indirilemedi	Bahadın Saat Kulesi.jpg
+1292	sayfa 44	yer	Zonguldak	Heraclea Pontica	wikidata	indirilemedi	An ancient Greek colony Chersonesos (2005-08-070) (186658508).jpg
+1293	sayfa 44	yer	Zonguldak	Cehennemağzı Mağarası	wikidata	indirilemedi	Zonguldak Cehennem Ağzı Mağaraları.jpg
+1294	sayfa 44	yer	Zonguldak	Zonguldak Feneri	wikidata	indirilemedi	Zonguldak Lighthouse.JPG
+1295	sayfa 44	yer	Zonguldak	Cales	önceki	indirilemedi	Cales Coves looking West.JPG
+1296	sayfa 44	yer	Zonguldak	Filyos Kalesi	wikidata	indirilemedi	Filyos Kalesi 2020-10-11 16.56.05 1791978892.jpg
+1297	sayfa 44	yer	Çanakkale	Athena Tapınağı (Assos)	maddesiz	yedek kaynak	Assos (1995) 19 (7902773580).jpg
+1298	sayfa 44	yer	Çanakkale	Gökçeada Lagünü	maddesiz	yedek kaynak	Gökçeada Tuz Gölü.jpg
+1299	sayfa 44	yer	Çanakkale	Asar Kalesi	arama	beyaz 0.31, yedek kaynak, benzer: Ezine, benzer: Gökçeada	Fındık Asar Kale 1793890894.JPG
+1300	sayfa 44	yer	Çanakkale	Tuz Gölü	maddesiz	beyaz 0.47, yedek kaynak, benzer: Çanakkale	Anzac Cove and salt lake anzak koyu ve tuz gölü - panoramio.jpg
+1301	sayfa 44	yer	Çanakkale	Behram Kale	maddesiz	yedek kaynak	Behram Kale 2026-09-15 10.27.57 1789477397.jpeg
+1302	sayfa 44	yer	Çorum	Alacahöyük Müzesi	maddesiz	yedek kaynak	Alacahöyük Museum 01.jpg
+1303	sayfa 44	yer	İstanbul	Adalar	vikipedi	benzer: Büyükçekmece	Princes islands.jpg
+1304	sayfa 44	yer	İstanbul	Haliç	wikidata	benzer: Eyüpsultan, benzer: Büyük Çamlıca Tepesi, benzer: Pierre Loti Tepesi	Istanbul panorama (16293921746).jpg
+1305	sayfa 44	yer	İstanbul	15 Temmuz Şehitler Köprüsü	wikidata	benzer: Büyük Çamlıca Tepesi, benzer: Pierre Loti Tepesi, benzer: Haliç	Bosphorus Bridge1.JPG
+1306	sayfa 44	yer	İstanbul	Yavuz Sultan Selim Köprüsü	wikidata	benzer: Sultanbeyli, benzer: Kapalıçarşı, benzer: Büyük Çamlıca Tepesi, benzer: Pierre Loti Tepesi	Yavuz Sultan Selim Bridge1.JPG
+1307	sayfa 44	yer	İzmir	İzmir Körfezi	önceki	benzer: Beydağ, benzer: Selçuk	Breakwater S Head light at Izmir Harbour, Izmir, Turkey.jpg
+1308	sayfa 44	yer	İzmir	Nimfeo (İzmir)	maddesiz	yedek kaynak	Laskaris Palace 02.jpg
+1309	sayfa 44	yer	İzmir	Athena Tapınağı (Bergama)	maddesiz	yedek kaynak	Pergamon Sanctuary of Athena from SW.jpg
+1310	sayfa 44	yer	İzmir	Dionysos Tapınağı (Bergama)	maddesiz	yedek kaynak	Pergamon Dionysos temple 0036.jpg
+1311	sayfa 44	yer	İzmir	Hera Tapınağı (Bergama)	maddesiz	indirilemedi	Pergamon Tempel der Hera.JPG
+1312	sayfa 44	yer	İzmir	Demeter Tapınağı (Bergama)	maddesiz	indirilemedi	Pergamon Demeterheiligtum.JPG
+1313	sayfa 44	yer	İzmir	Selçuk Efes Kent Belleği	maddesiz	indirilemedi	Selçuk Efes Kent Belleği Müzesi.jpg
+1314	sayfa 44	yer	İzmir	Ulucami Köprüsü	maddesiz	indirilemedi	Bergama Ulucami Köprüsü.jpg
+1315	sayfa 44	yer	İzmir	Üç Kemer Köprüsü	maddesiz	indirilemedi	Three Arch Bridge, Bergama.jpg
+1316	sayfa 44	yer	İzmir	Tabak Köprüsü, Bergama	maddesiz	indirilemedi	Bergama Bridge 139.jpg
+1317	sayfa 44	yer	İzmir	Çeşme Kent Müzesi	maddesiz	indirilemedi	Çeşme Kent Müzesi 2024-09-04 13.50.23 1793278997.JPG
+1318	sayfa 44	yer	İzmir	Bayındır Kent Müzesi	maddesiz	indirilemedi	Bayındır Kent Müzesi 2025-08-31 12.46.05 1792959779.JPG
+1319	sayfa 44	yer	Şanlıurfa	Edessa	wikidata	indirilemedi	Urfa Castle 01.jpg
+1320	sayfa 44	yer	Şanlıurfa	Sultantepe Höyüğü	wikidata	indirilemedi	Sultantepe1.jpg
+1321	sayfa 45	yer	Şanlıurfa	Tek Tek Dağları Millî Parkı	wikidata	indirilemedi	Sumatar1.jpg
+1322	sayfa 45	yer	Şanlıurfa	Şanlıurfa Ulu Camii	wikidata	indirilemedi	Urfa Ulu Camii minaret 8945.jpg
+1323	sayfa 45	yer	Şanlıurfa	Şanlıurfa Müzesi	wikidata	indirilemedi	Şanlıurfa Müzesi.jpg
+1324	sayfa 45	yer	Şanlıurfa	Soğmatar Harabeleri	wikidata	indirilemedi	Sumatar9.jpg
+1325	sayfa 45	yer	Şanlıurfa	Hacınebi Höyüğü	wikidata	indirilemedi	Hacinebi1.jpg
+1326	sayfa 45	yer	Şanlıurfa	Haran	wikidata	indirilemedi	Harranruins1.jpg
+1327	sayfa 45	yer	Şırnak	Cizre Kalesi	wikidata	indirilemedi	Kela Cizîrê 2009.jpg
+1328	sayfa 45	yer	Şırnak	Nuh Türbesi (Cizre, Türkiye)	wikidata	indirilemedi	Noah-Mausoleum-Cizre-Turkey-August-2009-7.jpg
+1329	sayfa 45	yer	Şırnak	Cizre Ulu Camii	wikidata	indirilemedi	Mizgefta Mezin a Cizîra Botan 2009 2.JPG
+1330	sayfa 45	yer	Şırnak	Kasrik Köprüsü	wikidata	indirilemedi	Kasrik Köprüsü.jpg
+1331	sayfa 45	yer	Şırnak	Kasrik Kalesi	wikidata	indirilemedi	Kasrik Kalesi.jpg
+1332	sayfa 45	il	Adana	Adana	wikidata		Dilekkaya, Kocakışla, 01500 Dilekkaya-Kozan-Adana, Turkey - panoramio.jpg
+1333	sayfa 45	il	Adıyaman	Adıyaman	wikidata		AdiyamanView.jpg
+1334	sayfa 45	il	Afyonkarahisar	Afyonkarahisar	wikidata		Burgberg Afyonkarahisar 01.jpg
+1335	sayfa 45	il	Aksaray	Aksaray	wikidata		AksarayClockTower.jpg
+1336	sayfa 45	il	Amasya	Amasya	wikidata		Yeşilırmak2.jpg
+1337	sayfa 45	il	Ankara	Ankara	wikidata		Ankara (16290014657).jpg
+1338	sayfa 45	il	Antalya	Antalya	wikidata		Antalya Bight.jpg
+1339	sayfa 45	il	Ardahan	Ardahan	wikidata		Ardahan - panoramio - Gürsoy Tokgöz (1).jpg
+1340	sayfa 45	il	Artvin	Artvin	wikidata		AÇÜ Şehir Yerleşkesi.jpg
+1341	sayfa 45	il	Aydın	Aydın	wikidata		Aydın, Turkey 03.jpg
+1342	sayfa 45	il	Ağrı	Ağrı	wikidata		Ağrı-Şehir-Merkezinden-Caddeden-Binaların-Görünümü.jpg
+1343	sayfa 45	il	Bartın	Bartın	wikidata		Bartın 45.JPG
+1344	sayfa 45	il	Batman	Batman	wikidata		Batman(city).jpg
+1345	sayfa 45	il	Bayburt	Bayburt	wikidata		Bayburt, 69000 Bayburt Merkez-Bayburt, Turkey - panoramio (4).jpg
+1346	sayfa 45	il	Bilecik	Bilecik	wikidata		Bilecik.jpg
+1347	sayfa 45	il	Bingöl	Bingöl	wikidata		Bingolcitycenter.jpg
+1348	sayfa 45	il	Bitlis	Bitlis	wikidata		Bêdlis.jpg
+1349	sayfa 45	il	Bolu	Bolu	wikidata		Köroğlu Dağları 29 03 1984 Değirmenözü-Yayla.jpg
+1350	sayfa 45	il	Burdur	Burdur	wikidata		Burdur manzara - panoramio.jpg
+1351	sayfa 46	il	Denizli	Denizli	wikidata		TR Denizli asv2020-02 img11 view from Teleferik viewpoint.jpg
+1352	sayfa 46	il	Düzce	Düzce	wikidata		Düzce-435.jpg
+1353	sayfa 46	il	Edirne	Edirne	wikidata		Edirne at sunrise 21 52 30 274000.jpeg
+1354	sayfa 46	il	Elazığ	Elazığ	wikidata		Elazığ City Center.jpg
+1355	sayfa 46	il	Erzincan	Erzincan	wikidata		Erzincanmerkezi.jpg
+1356	sayfa 46	il	Eskişehir	Eskişehir	wikidata		Eskişehirdetekne.JPG
+1357	sayfa 46	il	Gaziantep	Gaziantep	wikidata		Gaziantepskyline.jpg
+1358	sayfa 46	il	Giresun	Giresun	wikidata		Giresun Turkey.jpg
+1359	sayfa 46	il	Gümüşhane	Gümüşhane	wikidata		Gümüşhane Genel.JPG
+1360	sayfa 46	il	Hakkari	Hakkari	wikidata		Hakkari.jpg
+1361	sayfa 46	il	Hatay	Hatay	wikidata		Antakya - 2011-04-10.jpg
+1362	sayfa 46	il	Isparta	Isparta	wikidata		DaglardanIsparta.jpg
+1363	sayfa 46	il	Iğdır	Iğdır	wikidata		Iğdır ve Ağrı Dağı.jpg
+1364	sayfa 46	il	Çanakkale	Çanakkale	wikidata		Havadan cnk.jpg
+1365	sayfa 46	il	Çankırı	Çankırı	wikidata		General view of Çankırı.jpeg
+1366	sayfa 46	il	Çorum	Çorum	wikidata		CorumMuseum1.jpg
+1367	sayfa 46	il	İzmir	İzmir	wikidata		Skyscrapers in Izmir - Turkey.jpg
+1368	sayfa 46	one	Adana	Seyhan Barajı ve Hidroelektrik Santrali	wikidata		Seyhan Barajı.jpg
+1369	sayfa 46	one	Adana	Taşköprü	wikidata		Taşköprü'nün Panoramik Fotoğrafı.jpg
+1370	sayfa 46	one	Adana	Varda Köprüsü	wikidata		Varda Railway Viaduct, Karaisalı 01.JPG
+1371	sayfa 46	one	Adana	Adana Arkeoloji Müzesi	wikidata		Adana Archaeology Museum (34243633532) (2).jpg
+1372	sayfa 46	one	Adıyaman	Nemrut Dağı	wikidata		Nemrut Mountain Peak.JPG
+1373	sayfa 46	one	Adıyaman	Cendere Köprüsü	wikidata		Severan Bridge, Turkey 02.jpg
+1374	sayfa 46	one	Adıyaman	Karakuş Tümülüsü	wikidata		Tumulus of Karakus 01.jpg
+1375	sayfa 46	one	Adıyaman	Arsameia	wikidata		Nemrut Dag area A Commagene carving.jpg
+1376	sayfa 46	one	Adıyaman	Adıyaman Müzesi	wikidata		Museum Adıyaman Außenansicht.jpg
+1377	sayfa 46	one	Afyonkarahisar	Frigya	vikipedi		Göbekli tepe.JPG
+1378	sayfa 46	one	Afyonkarahisar	Ayazini	vikipedi		AyazinKirche4.jpg
+1379	sayfa 46	one	Afyonkarahisar	Afyonkarahisar Ulu Camii	wikidata		Afyonkarahisar Ulu Camii Exterior 1881.jpg
+1380	sayfa 46	one	Afyonkarahisar	Afyonkarahisar Arkeoloji Müzesi	wikidata		Museum Afyonkarahisar 01.jpg
+1381	sayfa 47	one	Afyonkarahisar	Afyonkarahisar Kalesi	wikidata		Afyonkarahisar Kalesi havadan.jpg
+1382	sayfa 47	one	Aksaray	Tuz Gölü	wikidata		Lake Tuz, Turkey (Unsplash O0uCm1WLnA0).jpg
+1383	sayfa 47	one	Aksaray	Hasandağı	wikidata		Vulkan Hasan Bagi.jpg
+1384	sayfa 47	one	Aksaray	Ihlara	wikidata		Ihlara - 25936870521.jpg
+1385	sayfa 47	one	Aksaray	Selime Katedrali	wikidata		Selime Cathedral.jpg
+1386	sayfa 47	one	Amasya	Boraboy Gölü	önceki		Borabay PIC00017-1.JPG
+1387	sayfa 47	one	Amasya	Kral Kaya Mezarları	wikidata		Amasya-Pontisches Grab-02.JPG
+1388	sayfa 47	one	Amasya	Amasya Arkeoloji ve Mumya Müzesi	wikidata		Amasya Museum 01.jpg
+1389	sayfa 47	one	Amasya	Bayezid Paşa Camii	wikidata		Amasya Bayezıt Paşa Mosque 7581.jpg
+1390	sayfa 47	one	Amasya	Amasya Yalıboyu Evleri	önceki		Amasya (Amasya Evleri) - panoramio.jpg
+1391	sayfa 47	one	Ankara	Anıtkabir	wikidata		Ankara asv2021-10 img04 Anıtkabir.jpg
+1392	sayfa 47	one	Ankara	Gordion	wikidata		Ruins of Gordion 3.JPG
+1393	sayfa 47	one	Ankara	Anadolu Medeniyetleri Müzesi	wikidata		Museum of Anatolian Civilizations001.jpg
+1394	sayfa 47	one	Ankara	Kocatepe Camii	wikidata		Ankara asv2021-10 img40 Kocatepe Mosque.jpg
+1395	sayfa 47	one	Ankara	Atakule	wikidata		Ankara asv2021-10 img10 Atakule.jpg
+1396	sayfa 47	one	Ankara	Ankara Kalesi	wikidata		Ankara Castle.jpg
+1397	sayfa 47	one	Ankara	Hamamönü	önceki		Hamamönü (6477376115).jpg
+1398	sayfa 47	one	Antalya	Perge	wikidata		Perge city overview.jpg
+1399	sayfa 47	one	Antalya	Aspendos	wikidata		Aspendos Amphitheatre.jpg
+1400	sayfa 47	one	Antalya	Termessos	wikidata		Termessos - Theater.jpg
+1401	sayfa 47	one	Antalya	Olimpos	wikidata		OlimposBeach.jpg
+1402	sayfa 47	one	Antalya	Düden Şelalesi	wikidata		Lower Duden Falls.jpg
+1403	sayfa 47	one	Antalya	Hadrian Kapısı	wikidata		Hadrian Kapısı (4).JPG
+1404	sayfa 47	one	Antalya	Antalya Müzesi	wikidata		Turkey-2622 (2216327975).jpg
+1405	sayfa 47	one	Antalya	Konyaaltı Plajı	wikidata		Konyaaltı Plajı - panoramio.jpg
+1406	sayfa 47	one	Antalya	Kaleiçi	wikidata		Antalya Kaleiçi.jpg
+1407	sayfa 47	one	Ardahan	Çıldır Gölü	önceki		Cildir 02.jpg
+1408	sayfa 47	one	Ardahan	Şeytan Kalesi	wikidata		16. qajis cixe.JPG
+1409	sayfa 47	one	Ardahan	Ardahan Kalesi	önceki		Ardahan 2011 Ardahan Kalesi über der Kura 084.jpg
+1410	sayfa 47	one	Artvin	Artvin Kalesi	wikidata		Artvin Castle 4046.jpg
+1411	sayfa 48	one	Artvin	Karagöl	wikidata		Karagol in Borcka.jpg
+1412	sayfa 48	one	Artvin	Karagöl	wikidata		Karagöl in Şavşat 10.jpg
+1413	sayfa 48	one	Aydın	Milet	wikidata		The Theater of Miletus.jpg
+1414	sayfa 48	one	Aydın	Afrodisias	wikidata		Aphrodisias turkey.jpg
+1415	sayfa 48	one	Aydın	Priene	wikidata		Temple of Athena at Priene.jpg
+1416	sayfa 48	one	Aydın	Dilek Yarımadası - Büyük Menderes Deltası Millî Parkı	wikidata		Kuşadası from Milli Park.jpg
+1417	sayfa 48	one	Ağrı	Ağrı Dağı	wikidata		00 2399 Mount Ararat, Turkey.jpg
+1418	sayfa 48	one	Ağrı	İshak Paşa Sarayı	wikidata		00 3411 İshak Paşa Sarayı - Turkey.jpg
+1419	sayfa 48	one	Ağrı	Meteor çukuru	wikidata		Turecko Meteor Cukuru (05).jpg
+1420	sayfa 48	one	Balıkesir	Kyzikos	wikidata		Bandirma Cyzicus 2874.jpg
+1421	sayfa 48	one	Balıkesir	Cunda Adası	wikidata		View from Cunda Island.jpg
+1422	sayfa 48	one	Balıkesir	Manyas Kuşgölü	wikidata		Manyas1.JPG
+1423	sayfa 48	one	Balıkesir	Adramytteion	wikidata		Burhaniye Tarihi.JPG
+1424	sayfa 48	one	Balıkesir	Kuşcenneti Millî Parkı	wikidata		Kirli Cennet.jpg
+1425	sayfa 48	one	Balıkesir	Taksiyarhis Kilisesi	wikidata		Taksiyarhis Kilisesi.JPG
+1426	sayfa 48	one	Balıkesir	Kazdağı Millî Parkı	wikidata		KazDaglariTabiat.jpg
+1427	sayfa 48	one	Bartın	Güzelcehisar	wikidata		Self time in Güzelcehisar.jpg
+1428	sayfa 48	one	Bartın	Amasra Kalesi	wikidata		Amasra 193.JPG
+1429	sayfa 48	one	Batman	Hasankeyf	wikidata		Bajarê Heskîfê.jpg
+1430	sayfa 48	one	Batman	Batman Müzesi	wikidata		Batman Müzesi.jpg
+1431	sayfa 48	one	Batman	Malabadi Köprüsü	wikidata		Malabadi Bridge 2.jpg
+1432	sayfa 48	one	Bayburt	Baksı Müzesi	wikidata		Baksimuseum.jpg
+1433	sayfa 48	one	Bayburt	Bayburt Kalesi	wikidata		Bayburt kalesi.JPG
+1434	sayfa 48	one	Bilecik	Şeyh Edebali Türbesi	wikidata		Edebaliturbesi.jpg
+1435	sayfa 48	one	Bilecik	Orhan Gazi Camii	wikidata		Bilecik Orhan Gazi Cami 1757.jpg
+1436	sayfa 48	one	Bingöl	Bingöl (Solhan) Yüzen Adaları	wikidata		Yüzen adalar ve bulut.jpg
+1437	sayfa 48	one	Bitlis	Süphan Dağı	wikidata		Suphan 01.jpg
+1438	sayfa 48	one	Bitlis	Nemrut Gölü	wikidata		NemrutVolcano15.jpg
+1439	sayfa 48	one	Bitlis	Ahlat Selçuklu Mezarlığı	wikidata		Ancient tombstones in the historical cemetery of Selcuk Turks from 12th century, in the town of Ahlat, Turkey.jpg
+1440	sayfa 48	one	Bitlis	Bitlis Kalesi	wikidata		Bitlis Kalesi, Bitlis.jpg
+1441	sayfa 49	one	Bitlis	Bitlis Ulu Camii	wikidata		Bitlis Ulu Camii 1663.jpg
+1442	sayfa 49	one	Bolu	Mudurnu	wikidata		Mudurnu june 2019 2825 panorama.jpg
+1443	sayfa 49	one	Bolu	Abant Gölü	vikipedi		Abant Bolu Province.jpg
+1444	sayfa 49	one	Bolu	Yedigöller Millî Parkı	wikidata		TR Yedigöller asv2021-10 img16.jpg
+1445	sayfa 49	one	Bolu	Kartalkaya	wikidata		Kartalkaya.jpg
+1446	sayfa 49	one	Burdur	Sagalassos	vikipedi		Sagalassos1.jpg
+1447	sayfa 49	one	Burdur	Salda Gölü	önceki		Saldives Reflection.jpg
+1448	sayfa 49	one	Burdur	Burdur Müzesi	wikidata		Museum Burdur 01.jpg
+1449	sayfa 49	one	Burdur	İnsuyu mağarası	wikidata		İnsuyu2.jpg
+1450	sayfa 49	one	Bursa	Bursa Ulu Camii	wikidata		71 Bursa la Grande Moschea (Edited).jpg
+1451	sayfa 49	one	Bursa	Cumalıkızık	wikidata		Cumalıkızık 7121.jpg
+1452	sayfa 49	one	Bursa	Ayasofya Camii, İznik	wikidata		Iznik, aya sofia, esterno 01.jpg
+1453	sayfa 49	one	Bursa	Yeşil Türbe	wikidata		Turkey-1353 (2216628788).jpg
+1454	sayfa 49	one	Bursa	Koza Hanı	wikidata		Kozahan -silk bazaar-Main gate - panoramio.jpg
+1455	sayfa 49	one	Bursa	Osman Gazi Türbesi	wikidata		Osman Gazi Türbesi 2017-06-25 18.16.43 1791276819.JPG
+1456	sayfa 49	one	Denizli	Pamukkale	wikidata		Pamukkale, Denizli 2026 68.jpg
+1457	sayfa 49	one	Denizli	Hierapolis	wikidata		The Roman theatre, built in the 2nd century AD under Hadrian on the ruins of an earlier theatre, later renovated under Septimius Severus, Hierapolis, Turkey - 17033895960.jpg
+1458	sayfa 49	one	Denizli	Laodikeia	wikidata		Sütun.jpg
+1459	sayfa 49	one	Denizli	Tripolis ad Meaendrum	wikidata		Tripolis in Phrygia Buldan Denizli2.jpg
+1460	sayfa 49	one	Denizli	Kaklık Mağarası	wikidata		Kaklık Cave - panoramio.jpg
+1461	sayfa 49	one	Diyarbakır	Hevsel Bahçeleri	wikidata		Tigris River At Diyarbakir.JPG
+1462	sayfa 49	one	Diyarbakır	Diyarbakır Kalesi	wikidata		Diyarbakr Western City Wall.JPG
+1463	sayfa 49	one	Diyarbakır	Ulu Camii	wikidata		Great Mosque, Diyarbakir.jpg
+1464	sayfa 49	one	Diyarbakır	Zerzevan Kalesi	wikidata		Zerzevan Kalesi Kilise.jpg
+1465	sayfa 49	one	Diyarbakır	Dicle Köprüsü	wikidata		Dehderî.jpg
+1466	sayfa 49	one	Düzce	Akçakoca	wikidata		Akçakoca Eski Ev - panoramio.jpg
+1467	sayfa 49	one	Düzce	Samandere Şelalesi Tabiat Anıtı	wikidata		Samandere Şelalesi Tabiat Anıtı - Ağustos 2013 IMG 9443 hamdigumus.jpg
+1468	sayfa 49	one	Düzce	Efteni Gölü	wikidata		Duzce-efteni-golu.JPG
+1469	sayfa 49	one	Düzce	Güzeldere Şelalesi Tabiat Parkı	vikipedi		Güzeldere şelalesi.jpg
+1470	sayfa 49	one	Edirne	Selimiye Camii	wikidata		Edirne 7333 Nevit.JPG
+1471	sayfa 50	one	Edirne	Eski Camii (Edirne)	wikidata		Eski Cami hdr.jpg
+1472	sayfa 50	one	Edirne	Üç Şerefeli Cami	wikidata		Edirne view of Üç Şerefeli Mosque (cropped).jpg
+1473	sayfa 50	one	Edirne	Edirne Sarayı	wikidata		CihannümaKasrıEdirne.JPG
+1474	sayfa 50	one	Edirne	Meriç Köprüsü	wikidata		MeriçBridgeEdirne.JPG
+1475	sayfa 50	one	Edirne	Ali Paşa Çarşısı	wikidata		AliPaşaÇarşısıEdirne (2).JPG
+1476	sayfa 50	one	Elazığ	Harput	wikidata		Harput kalesi-Harput-Elazığ - panoramio.jpg
+1477	sayfa 50	one	Erzincan	Kemaliye	wikidata		Kemaliye - Eğin.JPG
+1478	sayfa 50	one	Erzincan	Altıntepe	wikidata		Altintepe-apadanaW.jpg
+1479	sayfa 50	one	Erzincan	Gürlevik Şelalesi	wikidata		Girlevik Waterfall, Erzincan, Turkey.jpg
+1480	sayfa 50	one	Erzincan	Karanlık Kanyon	wikidata		Canyone 2 (32828345).jpeg
+1481	sayfa 50	one	Erzurum	Palandöken Dağı	wikidata		Palandoken Erzurum 2009.JPG
+1482	sayfa 50	one	Erzurum	Tortum Şelalesi	wikidata		Tortum Waterfall (2).jpg
+1483	sayfa 50	one	Erzurum	Yakutiye Medresesi	wikidata		Erzurum, madrasa yakutiye, 1310, esterno 01.jpg
+1484	sayfa 50	one	Erzurum	Üç Kümbetler	wikidata		Erzurum, sito delle tre tombe (üç kümbetler) 04.jpg
+1485	sayfa 50	one	Erzurum	Erzurum Kalesi	wikidata		Citadel of Erzurum.JPG
+1486	sayfa 50	one	Eskişehir	Kurşunlu Camii	wikidata		Eskişehir Kurşunlu Külliyesi 1619.jpg
+1487	sayfa 50	one	Eskişehir	Sazova Bilim Kültür ve Sanat Parkı	wikidata		Sazova Parkı... - panoramio.jpg
+1488	sayfa 50	one	Eskişehir	Odunpazarı Modern Müze	wikidata		Eskisehir Odunpazari Art Museum.jpg
+1489	sayfa 50	one	Eskişehir	Midas Anıtı (Yazılıkaya)	wikidata		MidasSehri.Tomb.jpg
+1490	sayfa 50	one	Gaziantep	Gaziantep Kalesi	wikidata		AntepKale2 (cropped).jpg
+1491	sayfa 50	one	Gaziantep	Zeugma Mozaik Müzesi	wikidata		Zeugma museum.jpg
+1492	sayfa 50	one	Gaziantep	Rumkale	wikidata		Hromkla Halfeti.jpg
+1493	sayfa 50	one	Gaziantep	Bakırcılar Çarşısı	wikidata		A jam-packed bazaar in Gaziantep Türkiye.jpg
+1494	sayfa 50	one	Gaziantep	Emine Göğüş Mutfak Müzesi	önceki		Gaziantep Devr-i Alem money museum in 2011 1642.jpg
+1495	sayfa 50	one	Gaziantep	Zincirli Bedesten	önceki		Zincirli Bedesten Gaziantep TÜRKİYE - panoramio (1).jpg
+1496	sayfa 50	one	Giresun	Giresun Adası	wikidata		Giresun Adasi (Amazon Island) Giresun Turkey.jpg
+1497	sayfa 50	one	Giresun	Giresun Kalesi	wikidata		GİRESUN KALESİ.jpg
+1498	sayfa 50	one	Gümüşhane	Karaca Mağarası	wikidata		Karaca Mağarası (13).jpg
+1499	sayfa 50	one	Gümüşhane	Tomara Şelalesi	wikidata		Tomara Şelalesi... - panoramio.jpg
+1500	sayfa 50	one	Hakkari	Hakkâri Cilo ve Sat Dağları Millî Parkı	vikipedi		Ikiyaka Daglari yuksekova-crop.jpg
+1501	sayfa 51	one	Hakkari	Meydan Medresesi	önceki		Meydan Medresesi.jpg
+1502	sayfa 51	one	Hatay	Aziz Petrus Kilisesi	wikidata		Antioch Saint Pierre Church Front.JPG
+1503	sayfa 51	one	Hatay	Hatay Arkeoloji Müzesi	wikidata		Hatay Archaeology Museum, Antakya, Turkey (35454860543).jpg
+1504	sayfa 51	one	Hatay	Habib-i Neccar Camii	wikidata		Habib-i-Neccar Camii-composite.jpg
+1505	sayfa 51	one	Hatay	Musa Ağacı	önceki		HATAY SAMANDAĞ HIDIRBEY-MUSA AĞACI EYLÜL 2011 - panoramio.jpg
+1506	sayfa 51	one	Isparta	Kovada Gölü Millî Parkı	wikidata		Lake Kovada.jpg
+1507	sayfa 51	one	Isparta	Yazılı Kanyon	wikidata		Yazılı kanyaon - panoramio.jpg
+1508	sayfa 51	one	Isparta	Adada	vikipedi		Adada Antik Kenti.jpg
+1509	sayfa 51	one	Iğdır	Iğdır Ovası	wikidata		Երեւանի համայնապատկեր արշալոյսին.JPG
+1510	sayfa 51	one	Çanakkale	Troya	wikidata		Walls of Troy (2).jpg
+1511	sayfa 51	one	Çanakkale	Bozcaada	wikidata		Bozcaada 021.jpg
+1512	sayfa 51	one	Çanakkale	Çanakkale Savaşları Gelibolu Tarihî Alanı	önceki		Çanakkale Savaşları Gelibolu Tarihi Alanı.jpg
+1513	sayfa 51	one	Çankırı	Ilgaz Dağı Millî Parkı	wikidata		Ilgaz Dağı.jpg
+1514	sayfa 51	one	Çankırı	Çankırı Büyük Camii	wikidata		Büyükcamih.JPG
+1515	sayfa 51	one	Çankırı	Çankırı Kalesi	önceki		Çankırı (Kaleden).jpg
+1516	sayfa 51	one	Çankırı	Çankırı Tuz Mağarası Tarihi	wikidata		Çankırı Salt Cave.jpg
+1517	sayfa 51	one	Çorum	Hattuşa	wikidata		Lion Gate, Hattusa 13 (cropped).jpg
+1518	sayfa 51	one	Çorum	Alacahöyük	wikidata		Sphinx Gate, Alaca Höyük 02.jpg
+1519	sayfa 51	one	Çorum	Yazılıkaya	wikidata		Chamber A, Yazilikaya 01.jpg
+1520	sayfa 51	one	Çorum	Çorum Müzesi	wikidata		CorumMuseum1.jpg
+1521	sayfa 51	one	İstanbul	Ayasofya	wikidata		Hagia Sophia Mars 2013.jpg
+1522	sayfa 51	one	İstanbul	Sultanahmet Camii	wikidata		Exterior of Sultan Ahmed I Mosque in Istanbul, Turkey 002.jpg
+1523	sayfa 51	one	İstanbul	Topkapı Sarayı	wikidata		Topkapi Palace Seen From Harem.JPG
+1524	sayfa 51	one	İstanbul	Süleymaniye Camii	wikidata		SüleymaniyeMosqueIstanbul (cropped).jpg
+1525	sayfa 51	one	İstanbul	Galata Kulesi	wikidata		Istanbul asv2020-02 img48 Galata Tower.jpg
+1526	sayfa 51	one	İstanbul	Dolmabahçe Sarayı	wikidata		Palacio de Dolmabahçe, Estambul, Turquía, 2024-09-29, DD 24.jpg
+1527	sayfa 51	one	İstanbul	Yerebatan Sarnıcı	wikidata		Cisterna Basílica, Estambul, Turquía, 2024-09-28, DD 58-60 HDR.jpg
+1528	sayfa 51	one	İstanbul	Ortaköy Camii	wikidata		Istanbul asv2020-02 img61 Ortaköy Mosque.jpg
+1529	sayfa 51	one	İstanbul	İstiklal Caddesi	wikidata		Istanbul, İstiklâl Caddesi, 2023.jpg
+1530	sayfa 51	one	İstanbul	İstanbul Arkeoloji Müzeleri	wikidata		Istanbularcheology.jpg
+1531	sayfa 52	one	İstanbul	Rumeli Hisarı	wikidata		Twierdza Rumeli Istambuł RB1.jpg
+1532	sayfa 52	one	İstanbul	Mısır Çarşısı	wikidata		Spice Bazaar Istanbul Feb 2020, img 2.jpg
+1533	sayfa 52	one	İstanbul	Balat	wikidata		Balat houses.jpg
+1534	sayfa 52	one	İstanbul	Atik Mustafa Paşa Camii	wikidata		AtikMustafaPashaMosque20072612 02.jpg
+1535	sayfa 52	one	İstanbul	Anemas zindanları	wikidata		Vlah bed1.jpg
+1536	sayfa 52	one	İstanbul	Moda	wikidata		Kadiköymodadtrassenbahn.jpg
+1537	sayfa 52	one	İzmir	Efes	wikidata		Ephesus Celsus Library Façade.jpg
+1538	sayfa 52	one	İzmir	Alaçatı	wikidata		Cesme-streets.JPG
+1539	sayfa 52	one	İzmir	İzmir Saat Kulesi	wikidata		Izmir square clock tower.jpg
+1540	sayfa 52	one	İzmir	Şirince	wikidata		Şirince - panoramio (1).jpg
+1541	sayfa 52	one	İzmir	Kadifekale	wikidata		Kadifekale IzmirTurkey EUnluBlogspot.jpg
+1542	sayfa 52	one	İzmir	İzmir Agorası	wikidata		Agora of Smyrna.jpg
+1543	sayfa 52	one	İzmir	Kemeraltı	wikidata		TR Izmir asv2020-02 img06 Kemeraltı.jpg
+1544	sayfa 52	one	İzmir	Çeşme Kalesi	wikidata		Çeşme Kalesi, İzmir, 2020 07.jpg
+1545	sayfa 52	one	İzmir	Kordon	wikidata		TR Izmir asv2020-02 img16 Alsancak seaside.jpg
+1546	sayfa 52	one	İzmir	Bergama Akropolü	wikidata		Pergamon 6.jpg
+1547	sayfa 52	ilce	Adana	Aladağ	wikidata		Aladağ - panoramio.jpg
+1548	sayfa 52	ilce	Adana	Ceyhan	vikipedi		Kurtkulağı Kervansarayı - Kurtkulağı Caravanserai 04.jpg
+1549	sayfa 52	ilce	Adana	Çukurova	wikidata		Adana1.jpg
+1550	sayfa 52	ilce	Adana	Feke	vikipedi		Feke, Adana 01.jpg
+1551	sayfa 52	ilce	Adana	Karaisalı	wikidata		Karaisalı - Adana 01.JPG
+1552	sayfa 52	ilce	Adana	Karataş	wikidata		Port of Karataş 03.jpg
+1553	sayfa 52	ilce	Adana	Kozan	vikipedi		Kozan view from castle hill 3136.jpg
+1554	sayfa 52	ilce	Adana	Pozantı	wikidata		Pozantı01.jpg
+1555	sayfa 52	ilce	Adana	Saimbeyli	wikidata		Saimbeyli, Adana.JPG
+1556	sayfa 52	ilce	Adana	Sarıçam	wikidata		Sarıçam, new buildings..jpg
+1557	sayfa 52	ilce	Adana	Seyhan	vikipedi		Adana, Reşatbey Mh., Seyhan-Adana, Turkey - panoramio (39).jpg
+1558	sayfa 52	ilce	Adana	Tufanbeyli	wikidata		Ortaköy ve Pekmezli, Tufanbeyli 2016 02-1.jpg
+1559	sayfa 52	ilce	Adana	Yumurtalık	vikipedi		Yumurtalık (Ayas) Beach.jpg
+1560	sayfa 52	ilce	Adana	Yüreğir	wikidata		Adana Yüreğir Kışla TOKİ Konutları 01.jpg
+1561	sayfa 53	ilce	Adıyaman	Adıyaman	vikipedi		AdiyamanUhrturm.jpg
+1562	sayfa 53	ilce	Adıyaman	Besni	vikipedi		Sence.JPG
+1563	sayfa 53	ilce	Adıyaman	Gölbaşı	vikipedi		Gölbaşı - panoramio.jpg
+1564	sayfa 53	ilce	Adıyaman	Kahta	vikipedi		Kahta-castle.jpg
+1565	sayfa 53	ilce	Adıyaman	Samsat	vikipedi		AdiyamanWiki.JPG
+1566	sayfa 53	ilce	Adıyaman	Sincik	vikipedi		AdiyamanWiki.JPG
+1567	sayfa 53	ilce	Afyonkarahisar	Afyonkarahisar	vikipedi		Burgberg Afyonkarahisar 02.jpg
+1568	sayfa 53	ilce	Afyonkarahisar	Bayat	vikipedi		Bayat (Afyonkarahisar).jpg
+1569	sayfa 53	ilce	Afyonkarahisar	Bolvadin	wikidata		Kırık Minare.jpg
+1570	sayfa 53	ilce	Afyonkarahisar	Çay	yer		Loeffler.jpg
+1571	sayfa 53	ilce	Afyonkarahisar	Çobanlar	wikidata		Çobanlar.jpg
+1572	sayfa 53	ilce	Afyonkarahisar	Emirdağ	wikidata		Emirdag eski hamam.jpg
+1573	sayfa 53	ilce	Afyonkarahisar	İscehisar	vikipedi		İscehisar 03.jpg
+1574	sayfa 53	ilce	Afyonkarahisar	Sinanpaşa	yer		Dumlupınar Şehitliği.jpg
+1575	sayfa 53	ilce	Afyonkarahisar	Şuhut	wikidata		Atatürk'sHouseŞuhut (2).JPG
+1576	sayfa 53	ilce	Aksaray	Aksaray	vikipedi		I Love Aksaray - Aksaray Meydanı.jpg
+1577	sayfa 53	ilce	Aksaray	Güzelyurt	vikipedi		Lived on and the living.jpg
+1578	sayfa 53	ilce	Aksaray	Sultanhanı	wikidata		Sultanhani (2025).jpg
+1579	sayfa 53	ilce	Amasya	Amasya	vikipedi		Yeşilırmak2.jpg
+1580	sayfa 53	ilce	Amasya	Gümüşhacıköy	vikipedi		Gümüşhacıköy - 05 Amasya.jpg
+1581	sayfa 53	ilce	Amasya	Merzifon	vikipedi		Merzifon-June2016 (1).jpg
+1582	sayfa 53	ilce	Amasya	Suluova	vikipedi		Akdağ güneş batışı - panoramio.jpg
+1583	sayfa 53	ilce	Amasya	Taşova	vikipedi		Alpaslan Köyü.jpg
+1584	sayfa 53	ilce	Ankara	Akyurt	vikipedi		Akyurt Ankara 01.jpg
+1585	sayfa 53	ilce	Ankara	Altındağ	wikidata		Kale, Altındağ.jpg
+1586	sayfa 53	ilce	Ankara	Ayaş	vikipedi		Ayaş-Panorama.JPG
+1587	sayfa 53	ilce	Ankara	Beypazarı	vikipedi		3X0A6495 Beypazarı.jpg
+1588	sayfa 53	ilce	Ankara	Çamlıdere	vikipedi		Ankara Çamlıdere - panoramio.jpg
+1589	sayfa 53	ilce	Ankara	Çankaya	vikipedi		Ankara asv2021-10 img70 Kızılay Square.jpg
+1590	sayfa 53	ilce	Ankara	Etimesgut	wikidata		Montage of Etimesgut.jpg
+1591	sayfa 54	ilce	Ankara	Güdül	vikipedi		Ankara Gudul 05900 nevit.jpg
+1592	sayfa 54	ilce	Ankara	Keçiören	wikidata		A view of the Keçiören.JPG
+1593	sayfa 54	ilce	Ankara	Kızılcahamam	wikidata		Infrared 02600-kizilcahamam-tm-n-db.jpg
+1594	sayfa 54	ilce	Ankara	Nallıhan	wikidata		Nallıhan Davutoğlan Kuş Cenneti - Renkli Dağ ve Bataklığa Vuran Silüeti.jpg
+1595	sayfa 54	ilce	Ankara	Polatlı	vikipedi		Ruins of Gordion 3.JPG
+1596	sayfa 54	ilce	Ankara	Pursaklar	wikidata		Countryside of Ankara - panoramio.jpg
+1597	sayfa 54	ilce	Ankara	Sincan	wikidata		Harikalar Diyari Gulliver Lilliputians 06034 nevit.jpg
+1598	sayfa 54	ilce	Ankara	Şereflikoçhisar	vikipedi		Kale (1).jpg
+1599	sayfa 54	ilce	Antalya	Elmalı	vikipedi		Historic streets of Elmalı, Antalya.jpg
+1600	sayfa 54	ilce	Antalya	Finike	vikipedi		Finike Dron Görüntüsü.jpg
+1601	sayfa 54	ilce	Antalya	Gündoğmuş	vikipedi		Gundogmus-42-1.jpg
+1602	sayfa 54	ilce	Antalya	İbradı	wikidata		Ormana'da ahşap minare - panoramio.jpg
+1603	sayfa 54	ilce	Antalya	Kaş	wikidata		Patara Dünen.jpg
+1604	sayfa 54	ilce	Antalya	Kemer	wikidata		Kemer Antalya TÜRKİYE - panoramio (11).jpg
+1605	sayfa 54	ilce	Antalya	Konyaaltı	wikidata		Falezlerden Antalya Konyaaltı Plajına doğru bir görünüm.jpg
+1606	sayfa 54	ilce	Antalya	Korkuteli	vikipedi		Korkuteli; Blick auf die Stadt.jpg
+1607	sayfa 54	ilce	Antalya	Kumluca	vikipedi		Kumluca.JPG
+1608	sayfa 54	ilce	Antalya	Muratpaşa	wikidata		Kaleiçi görünümü.JPG
+1609	sayfa 54	ilce	Antalya	Serik	wikidata		Serik, Turkey - City Center next to Dolmusstop.jpg
+1610	sayfa 54	ilce	Ardahan	Damal	vikipedi		Damal.JPG
+1611	sayfa 54	ilce	Ardahan	Göle	vikipedi		Gole.jpg
+1612	sayfa 54	ilce	Ardahan	Hanak	vikipedi		Hanak.JPG
+1613	sayfa 54	ilce	Artvin	Ardanuç	wikidata		Ardanuc.jpg
+1614	sayfa 54	ilce	Artvin	Arhavi	wikidata		Arhavi government building.jpg
+1615	sayfa 54	ilce	Artvin	Borçka	wikidata		Artvin- Borçka İlçesi.jpg
+1616	sayfa 54	ilce	Artvin	Hopa	wikidata		Centre of Hopa, province of Artvin, Turkey.jpg
+1617	sayfa 54	ilce	Artvin	Şavşat	vikipedi		Şavşat ilçe görünüm.jpg
+1618	sayfa 54	ilce	Artvin	Yusufeli	wikidata		Yusufeli.jpg
+1619	sayfa 54	ilce	Aydın	Çine	wikidata		Bağlarbaşı, Çine.jpg
+1620	sayfa 54	ilce	Aydın	Didim	wikidata		Didim RB10.jpg
+1621	sayfa 55	ilce	Aydın	Efeler	vikipedi		TrallesBögen.jpg
+1622	sayfa 55	ilce	Aydın	Germencik	vikipedi		GERMENCIK (Anayol) - panoramio.jpg
+1623	sayfa 55	ilce	Aydın	İncirliova	vikipedi		Incirliova - Deve & Dana sucuklari - panoramio.jpg
+1624	sayfa 55	ilce	Aydın	Karpuzlu	vikipedi		Alinda Karpuzlu Aydin Turkey.jpg
+1625	sayfa 55	ilce	Aydın	Köşk	vikipedi		Aydin KÖSK - panoramio.jpg
+1626	sayfa 55	ilce	Aydın	Kuşadası	wikidata		Kuşadası Overlook.jpg
+1627	sayfa 55	ilce	Aydın	Nazilli	vikipedi		Nazilli belediyesi.jpg
+1628	sayfa 55	ilce	Aydın	Söke	vikipedi		Söke'den genel bir görünüm 2010.jpg
+1629	sayfa 55	ilce	Ağrı	Ağrı	vikipedi		00 3411 İshak Paşa Sarayı - Turkey.jpg
+1630	sayfa 55	ilce	Ağrı	Doğubayazıt	wikidata		Ishak Pasha Palace 001.jpg
+1631	sayfa 55	ilce	Ağrı	Eleşkirt	vikipedi		Zêdka (Eleşkirt), Agirî.jpg
+1632	sayfa 55	ilce	Ağrı	Hamur	wikidata		Ağrı,HAMUR,Ekincik köyü.jpg
+1633	sayfa 55	ilce	Ağrı	Patnos	vikipedi		Second biggest Mount of Turkey.jpg
+1634	sayfa 55	ilce	Ağrı	Taşlıçay	yer		St John the Baptists monastery of Bagavan.jpg
+1635	sayfa 55	ilce	Balıkesir	Altıeylül	vikipedi		Atatürk Parkı.JPG
+1636	sayfa 55	ilce	Balıkesir	Ayvalık	wikidata		Ayvalik seafront.jpg
+1637	sayfa 55	ilce	Balıkesir	Balya	wikidata		Balya Belediyesi.jpg
+1638	sayfa 55	ilce	Balıkesir	Bandırma	vikipedi		Cumhuriyet Meydanı–IMG 6306.jpg
+1639	sayfa 55	ilce	Balıkesir	Burhaniye	wikidata		Sokak burhaniye.JPG
+1640	sayfa 55	ilce	Balıkesir	Dursunbey	wikidata		Sokak burhaniye.JPG
+1641	sayfa 55	ilce	Balıkesir	Edremit	wikidata		Altinoluk.jpg
+1642	sayfa 55	ilce	Balıkesir	Erdek	wikidata		Erdek.jpg
+1643	sayfa 55	ilce	Balıkesir	Gömeç	wikidata		Town center of Gömeç.jpg
+1644	sayfa 55	ilce	Balıkesir	Gönen	vikipedi		Gönen–IMG 5607 02.jpg
+1645	sayfa 55	ilce	Balıkesir	Kepsut	wikidata		General view of Recepköy, Kepsut.jpg
+1646	sayfa 55	ilce	Balıkesir	Manyas	wikidata		Manyas İmam Hatip Camii.jpg
+1647	sayfa 55	ilce	Balıkesir	Marmara	vikipedi		Topaga-ova.jpg
+1648	sayfa 55	ilce	Balıkesir	Sındırgı	vikipedi		Düğünlerde çerez atma ritüeli.jpg
+1649	sayfa 55	ilce	Bartın	Bartın	vikipedi		Bartin SehirMerkezi.jpg
+1650	sayfa 55	ilce	Batman	Batman	vikipedi		Batman(city).jpg
+1651	sayfa 56	ilce	Batman	Gercüş	wikidata		Kercewsê.jpg
+1652	sayfa 56	ilce	Batman	Hasankeyf	vikipedi		Hasankeyf.JPG
+1653	sayfa 56	ilce	Batman	Sason	vikipedi		Sason 2012.JPG
+1654	sayfa 56	ilce	Bayburt	Bayburt	vikipedi		Bayburt Clock Tower (16034875507).jpg
+1655	sayfa 56	ilce	Bilecik	Bilecik	wikidata		Bilecik.jpg
+1656	sayfa 56	ilce	Bilecik	Bozüyük	vikipedi		Kasımpaşa Mosque, Bozuyuk, Turkey.jpg
+1657	sayfa 56	ilce	Bilecik	Osmaneli	vikipedi		11500 Osmaneli-Bilecik, Turkey - panoramio (5).jpg
+1658	sayfa 56	ilce	Bilecik	Yenipazar	yer		Harmankaya Kanyonu.jpg
+1659	sayfa 56	ilce	Bingöl	Bingöl	vikipedi		Bingolcitycenter.jpg
+1660	sayfa 56	ilce	Bingöl	Genç	vikipedi		Dere Siwan Colig.jpg
+1661	sayfa 56	ilce	Bingöl	Kiğı	vikipedi		Piltanmosque.jpg
+1662	sayfa 56	ilce	Bingöl	Solhan	vikipedi		Yüzen Ada.jpg
+1663	sayfa 56	ilce	Bingöl	Yayladere	vikipedi		Yayladere.JPG
+1664	sayfa 56	ilce	Bingöl	Yedisu	wikidata		Yedisu.jpg
+1665	sayfa 56	ilce	Bitlis	Adilcevaz	vikipedi		Adilcevaz-genel-fotograf.jpg
+1666	sayfa 56	ilce	Bitlis	Ahlat	vikipedi		Ahlat Kümbet 0725.jpg
+1667	sayfa 56	ilce	Bitlis	Bitlis	vikipedi		BitlisKaleAlti.jpg
+1668	sayfa 56	ilce	Bitlis	Güroymak	vikipedi		Nemrut Krater Gölü 01.jpg
+1669	sayfa 56	ilce	Bitlis	Mutki	vikipedi		Motkê.jpg
+1670	sayfa 56	ilce	Bitlis	Tatvan	vikipedi		Tatvan (view from Nemrut).jpg
+1671	sayfa 56	ilce	Bolu	Bolu	vikipedi		TR Bolu asv2021-10 img23 Beyazıt Mosque.jpg
+1672	sayfa 56	ilce	Bolu	Mudurnu	vikipedi		Mudurnu june 2019 2825 panorama.jpg
+1673	sayfa 56	ilce	Bolu	Seben	vikipedi		Seben Sulama Göleti - panoramio.jpg
+1674	sayfa 56	ilce	Bolu	Yeniçağa	vikipedi		Yeniçağa Kuşcenneti.jpg
+1675	sayfa 56	ilce	Burdur	Ağlasun	vikipedi		Blick auf Ağlasun.jpg
+1676	sayfa 56	ilce	Burdur	Altınyayla	vikipedi		DİRMİL CAMİ - panoramio.jpg
+1677	sayfa 56	ilce	Burdur	Bucak	wikidata		Bucak 01.jpg
+1678	sayfa 56	ilce	Burdur	Burdur	vikipedi		Burdur manzara - panoramio.jpg
+1679	sayfa 56	ilce	Burdur	Kemer	vikipedi		Belenli Göleti - panoramio.jpg
+1680	sayfa 56	ilce	Bursa	Büyükorhan	wikidata		Ericekkoyu.jpg
+1681	sayfa 57	ilce	Bursa	Gemlik	vikipedi		Gemlik limanı gemlik bursa - panoramio.jpg
+1682	sayfa 57	ilce	Bursa	İznik	vikipedi		İznik Lake.jpg
+1683	sayfa 57	ilce	Bursa	Karacabey	vikipedi		Karacabey Meydanı.jpg
+1684	sayfa 57	ilce	Bursa	Mudanya	wikidata		Mudanya panorama.jpg
+1685	sayfa 57	ilce	Bursa	Mustafakemalpaşa	wikidata		TEKEL BAYIRI SARI SOKAK ÖNÜ - panoramio.jpg
+1686	sayfa 57	ilce	Bursa	Osmangazi	vikipedi		Ulucami,Bursa - panoramio.jpg
+1687	sayfa 57	ilce	Bursa	Yenişehir	vikipedi		Yoyvoda camii.jpg
+1688	sayfa 57	ilce	Bursa	Yıldırım	wikidata		Yeşil camii -Bursa - panoramio.jpg
+1689	sayfa 57	ilce	Denizli	Acıpayam	wikidata		Acıpayam ‘Havuzlu Park’ - panoramio.jpg
+1690	sayfa 57	ilce	Denizli	Baklan	wikidata		Baklan General View.jpg
+1691	sayfa 57	ilce	Denizli	Bekilli	vikipedi		Statue Young women harvesting grapes Bekilli Denizli Turkey.jpg
+1692	sayfa 57	ilce	Denizli	Bozkurt	vikipedi		Karagol1 Bozkurt Denizli Turkey.jpg
+1693	sayfa 57	ilce	Denizli	Buldan	wikidata		Buldan1.jpg
+1694	sayfa 57	ilce	Denizli	Çardak	wikidata		Hanabad Caravanserai Cardak.jpg
+1695	sayfa 57	ilce	Denizli	Honaz	vikipedi		Honaz İlçesi ve Honaz Dağı.jpg
+1696	sayfa 57	ilce	Denizli	Merkezefendi	wikidata		Denizli belediyesi.jpg
+1697	sayfa 57	ilce	Denizli	Pamukkale	wikidata		PAMUKKALE - panoramio.jpg
+1698	sayfa 57	ilce	Denizli	Tavas	wikidata		Tavas Genel Gorunus 2.JPG
+1699	sayfa 57	ilce	Diyarbakır	Bağlar	vikipedi		SENTO CADDESİ - panoramio.jpg
+1700	sayfa 57	ilce	Diyarbakır	Bismil	vikipedi		Bismil.jpg
+1701	sayfa 57	ilce	Diyarbakır	Çermik	wikidata		Çêrmûk.jpg
+1702	sayfa 57	ilce	Diyarbakır	Çınar	vikipedi		Çinar 2012.JPG
+1703	sayfa 57	ilce	Diyarbakır	Kulp	vikipedi		Pasûr.jpg
+1704	sayfa 57	ilce	Diyarbakır	Lice	vikipedi		Lice girişi.jpg
+1705	sayfa 57	ilce	Diyarbakır	Sur	wikidata		Diyarbakir walls.JPG
+1706	sayfa 57	ilce	Diyarbakır	Yenişehir	vikipedi		Yenişehir, Diyarbakır Granit Park.JPG
+1707	sayfa 57	ilce	Düzce	Akçakoca	vikipedi		AKÇAKOCA, Düzce, Turkey - Murat Özsoy 37.jpg
+1708	sayfa 57	ilce	Düzce	Düzce	vikipedi		645x344-1573480687396.jpg
+1709	sayfa 57	ilce	Düzce	Gölyaka	vikipedi		Düzce, Pürenni Yaylası Yolu - panoramio.jpg
+1710	sayfa 57	ilce	Düzce	Kaynaşlı	vikipedi		Boludağı-Varan Tesislerinden Otoyola Bakış - panoramio.jpg
+1711	sayfa 58	ilce	Edirne	Edirne	vikipedi		Selimiye Mosque and The Statue of Architect Sinan - panoramio.jpg
+1712	sayfa 58	ilce	Edirne	Enez	vikipedi		Enez - panoramio (5).jpg
+1713	sayfa 58	ilce	Edirne	Uzunköprü	vikipedi		Uzunköprü (2).jpg
+1714	sayfa 58	ilce	Elazığ	Ağın	vikipedi		The Euphrates River in Turkey in Agın (52032008249).jpg
+1715	sayfa 58	ilce	Elazığ	Alacakaya	wikidata		ALACAKAYA SORİ BÖLGESİ.jpg
+1716	sayfa 58	ilce	Elazığ	Baskil	wikidata		Apricot trees in Baskil.JPG
+1717	sayfa 58	ilce	Elazığ	Elazığ	vikipedi		Elazig Izzetpascha-Moschee.jpg
+1718	sayfa 58	ilce	Elazığ	Karakoçan	wikidata		Karakocan1.jpg
+1719	sayfa 58	ilce	Elazığ	Keban	vikipedi		Elazığ Keban Barajı.jpg
+1720	sayfa 58	ilce	Elazığ	Maden	wikidata		Maden1end.jpg
+1721	sayfa 58	ilce	Elazığ	Palu	vikipedi		Palo 2019.jpg
+1722	sayfa 58	ilce	Erzincan	Erzincan	vikipedi		Erzincanmerkezi.jpg
+1723	sayfa 58	ilce	Erzincan	Kemah	wikidata		Kemah, Erzincan Province.jpg
+1724	sayfa 58	ilce	Erzincan	Kemaliye	wikidata		Fıratın Gölgesinde Kemaliye.jpg
+1725	sayfa 58	ilce	Erzincan	Refahiye	vikipedi		Erzincan Refahiye.jpg
+1726	sayfa 58	ilce	Erzincan	Tercan	vikipedi		Tercan,han1.jpg
+1727	sayfa 58	ilce	Erzurum	Hınıs	vikipedi		Köprüköy, ponte di Çobandede, 1160 ca., 03.jpg
+1728	sayfa 58	ilce	Erzurum	İspir	vikipedi		IspirCastle.jpg
+1729	sayfa 58	ilce	Erzurum	Narman	vikipedi		Narman peri 4.JPG
+1730	sayfa 58	ilce	Erzurum	Oltu	vikipedi		Oltu1.jpg
+1731	sayfa 58	ilce	Erzurum	Olur	vikipedi		Olur ilçe hastanesi.JPG
+1732	sayfa 58	ilce	Erzurum	Palandöken	wikidata		Palandoken Erzurum 2009.JPG
+1733	sayfa 58	ilce	Erzurum	Tekman	vikipedi		Tekman - panoramio.jpg
+1734	sayfa 58	ilce	Erzurum	Tortum	vikipedi		Tortum-center.jpg
+1735	sayfa 58	ilce	Erzurum	Uzundere	wikidata		Uzundere1.jpg
+1736	sayfa 58	ilce	Erzurum	Yakutiye	wikidata		ERZURUM - panoramio.jpg
+1737	sayfa 58	ilce	Eskişehir	Çifteler	wikidata		Eskişehir Çifteler.jpg
+1738	sayfa 58	ilce	Eskişehir	Han	vikipedi		MidasSehri.Tomb.jpg
+1739	sayfa 58	ilce	Eskişehir	Mihalıççık	wikidata		Mihalıççık Şelalesi Eskişehir.jpg
+1740	sayfa 58	ilce	Eskişehir	Odunpazarı	wikidata		Eskişehir odunpazarı evleri.jpg
+1741	sayfa 59	ilce	Eskişehir	Seyitgazi	wikidata		Seyitgazi, Eskişehir 13.jpg
+1742	sayfa 59	ilce	Eskişehir	Sivrihisar	wikidata		Sivrihisar01.JPG
+1743	sayfa 59	ilce	Eskişehir	Tepebaşı	wikidata		Tepebasi Belediyesi Hizmet Binasi.jpg
+1744	sayfa 59	ilce	Gaziantep	Araban	yer		Karasu2.jpeg
+1745	sayfa 59	ilce	Gaziantep	Nizip	vikipedi		15 July Democracy Square, Nizip.IMG 2423.jpg
+1746	sayfa 59	ilce	Gaziantep	Oğuzeli	vikipedi		Gaziantep Oğuzelli IMG 0179.jpg
+1747	sayfa 59	ilce	Gaziantep	Şahinbey	vikipedi		Şahinbey, Gaziantep.jpg
+1748	sayfa 59	ilce	Giresun	Alucra	vikipedi		Giresun-Alucra-2.JPG
+1749	sayfa 59	ilce	Giresun	Eynesil	vikipedi		Eynesil.jpg
+1750	sayfa 59	ilce	Giresun	Giresun	vikipedi		Kapu Mosque 2.jpg
+1751	sayfa 59	ilce	Giresun	Görele	vikipedi		Bozcaali mahallesinden Görele nin görünümü- 2014-02-04 07-23.jpg
+1752	sayfa 59	ilce	Giresun	Keşap	vikipedi		Keşap - Giresun 2018-08-19 03.jpg
+1753	sayfa 59	ilce	Giresun	Şebinkarahisar	wikidata		Şebinkarahisar.jpg
+1754	sayfa 59	ilce	Giresun	Tirebolu	vikipedi		Tirebolu.JPG
+1755	sayfa 59	ilce	Giresun	Yağlıdere	vikipedi		Yağlıdere view.jpg
+1756	sayfa 59	ilce	Gümüşhane	Gümüşhane	vikipedi		Gümüşhane Genel.JPG
+1757	sayfa 59	ilce	Gümüşhane	Köse	vikipedi		Köse Barajı... - panoramio.jpg
+1758	sayfa 59	ilce	Gümüşhane	Şiran	yer		Tomara Şelalesi... - panoramio.jpg
+1759	sayfa 59	ilce	Hakkari	Hakkari	wikidata		Hakkari.jpg
+1760	sayfa 59	ilce	Hakkari	Şemdinli	wikidata		Şemzina.jpg
+1761	sayfa 59	ilce	Hakkari	Yüksekova	wikidata		Yüksekova 01.JPG
+1762	sayfa 59	ilce	Hatay	Arsuz	vikipedi		Hatay, Arsuz, Yat Limanı.jpg
+1763	sayfa 59	ilce	Hatay	İskenderun	wikidata		City View of Iskenderun Turkey - panoramio.jpg
+1764	sayfa 59	ilce	Hatay	Payas	vikipedi		Sokollu Mehmet Pasha caravanserai.jpg
+1765	sayfa 59	ilce	Hatay	Reyhanlı	vikipedi		Reyhanlı.jpg
+1766	sayfa 59	ilce	Isparta	Eğirdir	vikipedi		EGİRDİR GÖLÜ.jpg
+1767	sayfa 59	ilce	Isparta	Gelendost	vikipedi		Ertokuş Han 01.jpg
+1768	sayfa 59	ilce	Isparta	Isparta	vikipedi		DaglardanIsparta.jpg
+1769	sayfa 59	ilce	Isparta	Şarkikaraağaç	yer		Nationalpark Kızıldağ bei Yenişarbademli; Blick nach Nord.jpg
+1770	sayfa 59	ilce	Isparta	Yalvaç	vikipedi		Yalvaç Müzesi.jpg
+1771	sayfa 60	ilce	Iğdır	Iğdır	vikipedi		Iğdır ve Ağrı Dağı.jpg
+1772	sayfa 60	ilce	Iğdır	Tuzluca	vikipedi		Tuzluca girişi.jpg
+1773	sayfa 60	ilce	Çanakkale	Ayvacık	wikidata		Assos.jpg
+1774	sayfa 60	ilce	Çanakkale	Çan	vikipedi		Keçiağılı Mahallesi.JPG
+1775	sayfa 60	ilce	Çanakkale	Eceabat	wikidata		Eceabat Kilitbahir Fortress.JPG
+1776	sayfa 60	ilce	Çanakkale	Gelibolu	wikidata		Gelibolu.JPG
+1777	sayfa 60	ilce	Çanakkale	Lapseki	vikipedi		Lapseki havadan.jpg
+1778	sayfa 60	ilce	Çankırı	Çankırı	vikipedi		General view of Çankırı.jpeg
+1779	sayfa 60	ilce	Çankırı	Çerkeş	vikipedi		Çerkeş - panoramio.jpg
+1780	sayfa 60	ilce	Çankırı	Eldivan	vikipedi		General view of Eldivan.jpeg
+1781	sayfa 60	ilce	Çankırı	Ilgaz	wikidata		HilmiAyhanPoppyFieldsMountIlgazCankiriTurkey.jpg
+1782	sayfa 60	ilce	Çankırı	Kurşunlu	vikipedi		Kurşunlu Kalesi 02.jpg
+1783	sayfa 60	ilce	Çankırı	Şabanözü	yer		Çankırı Müzesi İstiklal Yolu bilgilenirme panosu.jpg
+1784	sayfa 60	ilce	Çorum	Alaca	vikipedi		Alaca Höyük 01.jpg
+1785	sayfa 60	ilce	Çorum	Boğazkale	vikipedi		Ḫattuša Großer Tempel 01.jpg
+1786	sayfa 60	ilce	Çorum	İskilip	vikipedi		ISKILIP Kale 1024.jpg
+1787	sayfa 60	ilce	Çorum	Kargı	vikipedi		Kargi.jpg
+1788	sayfa 60	ilce	Çorum	Mecitözü	vikipedi		Mecitözü 01.jpg
+1789	sayfa 60	ilce	Çorum	Sungurlu	vikipedi		Sungurlu ulu camii.jpg
+1790	sayfa 60	ilce	İstanbul	Adalar	vikipedi		Princes islands.jpg
+1791	sayfa 60	ilce	İstanbul	Arnavutköy	wikidata		Aerial view of Arnavutköy.jpg
+1792	sayfa 60	ilce	İstanbul	Ataşehir	wikidata		Batı Atasehir 31-07-2016.jpg
+1793	sayfa 60	ilce	İstanbul	Avcılar	wikidata		Avcılar Sahili... - panoramio.jpg
+1794	sayfa 60	ilce	İstanbul	Bağcılar	vikipedi		Collage of Bağcılar.jpg
+1795	sayfa 60	ilce	İstanbul	Bakırköy	vikipedi		Bakırköy, Istanbul.jpg
+1796	sayfa 60	ilce	İstanbul	Başakşehir	vikipedi		Istanbule Bahçeşehir gölet park.jpg
+1797	sayfa 60	ilce	İstanbul	Beşiktaş	wikidata		Besiktas Montage.jpg
+1798	sayfa 60	ilce	İstanbul	Beykoz	wikidata		Istanbulun köylerinden by ismail soytekinoğlu - panoramio.jpg
+1799	sayfa 60	ilce	İstanbul	Beyoğlu	wikidata		Istiklal busy afternoon.JPG
+1800	sayfa 60	ilce	İstanbul	Çatalca	vikipedi		Istanbul çayalca yalıköy açıkları.jpg
+1801	sayfa 61	ilce	İstanbul	Çekmeköy	wikidata		Cekmekoy-belediye binasi.jpg
+1802	sayfa 61	ilce	İstanbul	Esenler	wikidata		Esenler-İstanbul, Turkey - panoramio.jpg
+1803	sayfa 61	ilce	İstanbul	Esenyurt	wikidata		Haramidere Gökdelenler Bölgesi Esenyurt İstanbul.JPG
+1804	sayfa 61	ilce	İstanbul	Eyüpsultan	wikidata		Cuerno de Oro desde el mirador Pierre Loti Café (Eyüp Sultan).jpg
+1805	sayfa 61	ilce	İstanbul	Gaziosmanpaşa	vikipedi		Gaziosmanpasa Istanbul Cumhuriyet Meydani.jpg
+1806	sayfa 61	ilce	İstanbul	Güngören	wikidata		Atatürk cad. - panoramio.jpg
+1807	sayfa 61	ilce	İstanbul	Kadıköy	wikidata		Kadıköy p1.JPG
+1808	sayfa 61	ilce	İstanbul	Kartal	wikidata		Kartal, Istanbul.jpg
+1809	sayfa 61	ilce	İstanbul	Küçükçekmece	wikidata		Lake Küçükçekmece at Golden Hour.jpg
+1810	sayfa 61	ilce	İstanbul	Maltepe	wikidata		İdealtepe, Kadir Çavuş Sk. No-1, 34841 Maltepe-İstanbul, Turkey - panoramio.jpg
+1811	sayfa 61	ilce	İstanbul	Pendik	wikidata		Pendik wiki.jpg
+1812	sayfa 61	ilce	İstanbul	Sancaktepe	vikipedi		SancaktepeStadium (8).jpg
+1813	sayfa 61	ilce	İstanbul	Sarıyer	wikidata		İstanbul 5655.jpg
+1814	sayfa 61	ilce	İstanbul	Silivri	wikidata		Silivri Yukarıdan.jpg
+1815	sayfa 61	ilce	İstanbul	Sultangazi	wikidata		Sultangazi 2012 February Snow Day - panoramio.jpg
+1816	sayfa 61	ilce	İstanbul	Şişli	wikidata		İstanbul view from İstanbul Sapphire observation deck Aug 2014, p12.JPG
+1817	sayfa 61	ilce	İstanbul	Tuzla	wikidata		Tuzla Sahil.jpg
+1818	sayfa 61	ilce	İstanbul	Ümraniye	wikidata		Umraniye Kirishane.jpg
+1819	sayfa 61	ilce	İstanbul	Zeytinburnu	wikidata		Dikilitaş.JPG
+1820	sayfa 61	ilce	İzmir	Aliağa	wikidata		Aliağa - www.alto.org.tr - panoramio.jpg
+1821	sayfa 61	ilce	İzmir	Balçova	wikidata		IzBalçovaU05.jpg
+1822	sayfa 61	ilce	İzmir	Bayındır	vikipedi		Aerial view of Bayındır, Izmir.jpg
+1823	sayfa 61	ilce	İzmir	Bornova	wikidata		Izmir manzarası.jpg
+1824	sayfa 61	ilce	İzmir	Çeşme	wikidata		Cesme-streets.JPG
+1825	sayfa 61	ilce	İzmir	Çiğli	wikidata		Çiğli station.JPG
+1826	sayfa 61	ilce	İzmir	Dikili	vikipedi		Atarna(Atarneus) Dikili Turkey.jpg
+1827	sayfa 61	ilce	İzmir	Güzelbahçe	wikidata		Yalı, Güzelbahçe 01.jpg
+1828	sayfa 61	ilce	İzmir	Karabağlar	wikidata		Izmir atatürk eğitim ve araştırma hastanesi - panoramio.jpg
+1829	sayfa 61	ilce	İzmir	Karaburun	wikidata		Faik Sarikaya Karaburun Bodrum Koyu.jpg
+1830	sayfa 61	ilce	İzmir	Karşıyaka	wikidata		Karşıyaka Bazaar Street 2015.jpg
+1831	sayfa 62	ilce	İzmir	Kemalpaşa	wikidata		Kemalpaşa in winter.jpg
+1832	sayfa 62	ilce	İzmir	Menderes	vikipedi		Kemalpaşa, Menderes 2008.jpg
+1833	sayfa 62	ilce	İzmir	Menemen	vikipedi		Menemen, İzmir, Turkey.jpg
+1834	sayfa 62	ilce	İzmir	Narlıdere	wikidata		Izmir Korfezi - Izmir Bay - panoramio.jpg
+1835	sayfa 62	ilce	İzmir	Ödemiş	wikidata		Hacı Abdi Ağa Mosque.jpg
+1836	sayfa 62	ilce	İzmir	Selçuk	wikidata		Selçuk Belediye Başkanlığı (2025).jpg
+1837	sayfa 62	ilce	İzmir	Tire	vikipedi		Dere kahve by qokay - panoramio.jpg
+1838	sayfa 62	ilce	İzmir	Urla	vikipedi		Iskele Quay Urla Turkey.jpg
+1839	sayfa 62	yer	Adana	Misis	wikidata		MisisBrücke.jpg
+1840	sayfa 62	yer	Adana	Ayas	wikidata		Yumurtalik2.jpg
+1841	sayfa 62	yer	Adana	Adana Ulu Camii	wikidata		Ulucamimeyavuz2008 12 26 01.JPG
+1842	sayfa 62	yer	Adana	Çineköy yazıtı	wikidata		AdanaMuseumCineköy.jpg
+1843	sayfa 62	yer	Adana	Şar	wikidata		Sar-Comana.jpg
+1844	sayfa 62	yer	Adana	Yağ Camii	wikidata		Adana Yağ Mosque, 2005.jpg
+1845	sayfa 62	yer	Adana	Akyatan Gölü	wikidata		Akyatan Lagoon 02.jpg
+1846	sayfa 62	yer	Adana	Surp Boğos Kilisesi	wikidata		Adana Saint Paul Catholic Church.jpg
+1847	sayfa 62	yer	Adıyaman	Atatürk Baraj Gölü	önceki		Atatürk barajı - panoramio.jpg
+1848	sayfa 62	yer	Adıyaman	Perre	wikidata		Perrhe1.jpg
+1849	sayfa 62	yer	Adıyaman	Adıyaman Ulu Camii	wikidata		Adyamanulucami.jpg
+1850	sayfa 62	yer	Adıyaman	Alman Köprüsü	wikidata		Alman köprüsü.jpg
+1851	sayfa 62	yer	Adıyaman	Bekir Bey Hamamı	wikidata		Bekirbey hamamı.jpg
+1852	sayfa 62	yer	Adıyaman	Kâhta Köprüsü	wikidata		Cendere köprüsü.jpg
+1853	sayfa 62	yer	Afyonkarahisar	Akşehir Gölü	wikidata		Gökyüzünün Aynası.jpg
+1854	sayfa 62	yer	Afyonkarahisar	Apameia Kibotos	wikidata		8.23 Apameia.jpg
+1855	sayfa 62	yer	Afyonkarahisar	Eber Gölü	wikidata		Eber Lake.jpg
+1856	sayfa 62	yer	Afyonkarahisar	Dokimeion	vikipedi		Roman - Garland Sarcophagus - Walters 2329.jpg
+1857	sayfa 62	yer	Afyonkarahisar	Şuhut Atatürk Evi	wikidata		Atatürk'sHouseŞuhut.JPG
+1858	sayfa 62	yer	Afyonkarahisar	Karamık Gölü	wikidata		Loeffler.jpg
+1859	sayfa 62	yer	Aksaray	Ihlara Vadisi	wikidata		Ihlara.jpg
+1860	sayfa 62	yer	Aksaray	Nyssa	wikidata		Harmandalı - Nysse.jpg
+1861	sayfa 63	yer	Aksaray	Kızıl Kilise	wikidata		Kızıl kilise.jpg
+1862	sayfa 63	yer	Aksaray	Sultan Hanı	wikidata		Turkey.Aksaray014.jpg
+1863	sayfa 63	yer	Aksaray	Ağzıkara Han	wikidata		Ağzıkarahan 01.jpg
+1864	sayfa 63	yer	Aksaray	Acemhöyük	vikipedi		Acemhöyük03.jpg
+1865	sayfa 63	yer	Aksaray	Aksaray Müzesi	wikidata		Aksaray Museum01.jpg
+1866	sayfa 63	yer	Aksaray	Aksaray Ulu Camii	wikidata		Aksaray ulu camii.jpg
+1867	sayfa 63	yer	Amasya	Merzifonlu Kara Mustafa Paşa Camii	wikidata		Kara Mustafa Pasa Mosque.jpg
+1868	sayfa 63	yer	Amasya	İkinci Beyazıt Camii	wikidata		Amasya-Mosque-04.JPG
+1869	sayfa 63	yer	Amasya	Amasya Ulu Camii	wikidata		Amasya-Mosque-06.JPG
+1870	sayfa 63	yer	Amasya	Büyük Ağa Medresesi	wikidata		Amasya-Kapı-Ağası-Medrese-02.JPG
+1871	sayfa 63	yer	Amasya	Oluz Höyük	wikidata		Oluz Höyük 02.jpg
+1872	sayfa 63	yer	Amasya	Harşena Dağı	wikidata		Amasya'daki tarihi evler ve Kral Kaya Mezarları.jpg
+1873	sayfa 63	yer	Amasya	Ferhat ile Şirin Anıtı	wikidata		Ferhat ile Şirin, Amasya.jpg
+1874	sayfa 63	yer	Ankara	Augustus Tapınağı	wikidata		Monumento de Ancira, Ankara, Turquía, 2024-10-03, DD 48.jpg
+1875	sayfa 63	yer	Ankara	Ankara Garı	wikidata		Ankara asv2021-10 img19 Railway station.jpg
+1876	sayfa 63	yer	Ankara	Ankara Etnografya Müzesi	wikidata		Ankara asv2021-10 img62 Ethnography Museum.jpg
+1877	sayfa 63	yer	Ankara	Ankara Resim ve Heykel Müzesi	wikidata		Ankara asv2021-10 img64 Arts and Sculpture Museum.jpg
+1878	sayfa 63	yer	Ankara	Arslanhane Camii	wikidata		Ankara Arslanhani Camii Aussen.JPG
+1879	sayfa 63	yer	Ankara	Hacı Bayram Camii	wikidata		Haci Bayram Mosque 02.jpg
+1880	sayfa 63	yer	Ankara	Ankara Roma Hamamı	wikidata		Baños romanos, Ankara, Turquía, 2024-10-03, DD 40-44 PAN.jpg
+1881	sayfa 63	yer	Ankara	Devlet Mezarlığı	wikidata		Devlet Mezarlığı Otağ.JPG
+1882	sayfa 63	yer	Antalya	Likya	önceki		Likya yolunda antink kent.jpg
+1883	sayfa 63	yer	Antalya	Pamfilya	önceki		Aspendos Su Kemeri.jpg
+1884	sayfa 63	yer	Antalya	Ksantos	wikidata		Entrance into theatre of Xanthos.jpg
+1885	sayfa 63	yer	Antalya	Myra	wikidata		Myra theatre.jpg
+1886	sayfa 63	yer	Antalya	Uluburun batığı	wikidata		Uluburun1.jpg
+1887	sayfa 63	yer	Antalya	Faselis	wikidata		Phaselis axb01.jpg
+1888	sayfa 63	yer	Antalya	Yivli Minare	wikidata		Yivli Minare Mosque 04.jpg
+1889	sayfa 63	yer	Antalya	Alanya Kalesi	wikidata		Alanya kale.jpg
+1890	sayfa 63	yer	Ardahan	Aktaş Gölü	wikidata		კარწახი.jpg
+1891	sayfa 64	yer	Ardahan	Ali Manastırı	wikidata		1891 - Алъ. Развалини церкви съ юго-восточной стороны.jpg
+1892	sayfa 64	yer	Ardahan	Tskarostavi Kilisesi	vikipedi		Javakheti Tskarostavi kathedral 1.jpg
+1893	sayfa 64	yer	Ardahan	Mere Kilisesi	wikidata		Mere Kilisesi.jpg
+1894	sayfa 64	yer	Ardahan	Zegani Kilisesi	vikipedi		Ermakov. № 12481 Zaqi church ruins.jpg
+1895	sayfa 64	yer	Ardahan	Tuya Kalesi	wikidata		Tuya Kalesi 1761633050.jpg
+1896	sayfa 64	yer	Ardahan	Gölbelen Köyü Camii	vikipedi		The interior of Urta - Takaishvili, 1902.jpg
+1897	sayfa 64	yer	Artvin	Opiza Manastırı	wikidata		Opiza2011.jpg
+1898	sayfa 64	yer	Artvin	Othta Eklesia	wikidata		Dörtkilise-in2.jpg
+1899	sayfa 64	yer	Artvin	İşhani Manastırı	wikidata		Ishxani1.jpg
+1900	sayfa 64	yer	Artvin	Hatila Vadisi Millî Parkı	vikipedi		Artvin Hatila Vadisi manzarası- Ağustos 2018.jpg
+1901	sayfa 64	yer	Artvin	Karagöl Sahara Millî Parkı	wikidata		Karagöl-Sahara National Park entrance.jpg
+1902	sayfa 64	yer	Artvin	Parehi Manastırı	wikidata		Parekhi2.jpg
+1903	sayfa 64	yer	Artvin	Handzta Manastırı	wikidata		Khandzta.jpg
+1904	sayfa 64	yer	Artvin	Dolishane Kilisesi	wikidata		Doliskana-southeast.jpg
+1905	sayfa 64	yer	Aydın	Karya	wikidata		0132 Theater in Caunos.jpg
+1906	sayfa 64	yer	Aydın	Didyma	wikidata		Didim RB10.jpg
+1907	sayfa 64	yer	Aydın	Magnesia	wikidata		Магнесия на Меандре. Пропилеи.jpg
+1908	sayfa 64	yer	Aydın	Bafa Gölü	wikidata		Bafa lake1.JPG
+1909	sayfa 64	yer	Aydın	Myus	wikidata		Myus1.jpg
+1910	sayfa 64	yer	Aydın	İlyas Bey Camii	wikidata		Mosque Ilyas Bey exterior.JPG
+1911	sayfa 64	yer	Aydın	Alabanda	wikidata		Alabanda Bouleuterion.JPG
+1912	sayfa 64	yer	Aydın	Panionion	wikidata		Panionium theatre.jpg
+1913	sayfa 64	yer	Ağrı	Tendürek Dağı	wikidata		The Structure Claimed to be the Noah's Ark near the Mount Ararat in Turkey.jpg
+1914	sayfa 64	yer	Ağrı	Balık Gölü	önceki		BALIK GÖLÜ ( ARALIK 2022).jpg
+1915	sayfa 64	yer	Ağrı	Kösedağ	wikidata		Kosedax.jpg
+1916	sayfa 64	yer	Ağrı	Bagavan	wikidata		St John the Baptists monastery of Bagavan.jpg
+1917	sayfa 64	yer	Ağrı	Alaşkert Ovası	wikidata		Zêdka (Eleşkirt), Agirî.jpg
+1918	sayfa 64	yer	Ağrı	Doğubayazıt Sazlığı	vikipedi		Karabulak 19 09 2012 Becken von Doğubayazıt Ararat.jpg
+1919	sayfa 64	yer	Ağrı	Ağrı Dağı Millî Parkı	önceki		Büyük ve Küçük Ağrı Dağı.jpg
+1920	sayfa 64	yer	Ağrı	Doğubayazıt Kalesi	wikidata		Doğubeyazit Castle 4958 17092012.jpg
+1921	sayfa 65	yer	Balıkesir	Aiolis	wikidata		Izmir016.jpg
+1922	sayfa 65	yer	Balıkesir	Avşa	vikipedi		Sunset at Avşa Island, Turkey.jpg
+1923	sayfa 65	yer	Balıkesir	Paşalimanı Adası	wikidata		Paşalimanı.jpg
+1924	sayfa 65	yer	Balıkesir	Antandros	wikidata		Antandros3.jpg
+1925	sayfa 65	yer	Balıkesir	Zağnos Paşa Camii	wikidata		Zağanos Paşa Mosque outside, Balıkesir, Turkiye 2023.jpg
+1926	sayfa 65	yer	Balıkesir	Güvercin Köprüsü	wikidata		Aesepus Bridge 3.JPG
+1927	sayfa 65	yer	Balıkesir	Balıkesir Kuvay-ı Milliye Müzesi	wikidata		Balıkesir Museum.JPG
+1928	sayfa 65	yer	Bartın	Amasra Müzesi	wikidata		Amasra Museum.jpg
+1929	sayfa 65	yer	Bartın	Kuşkayası Anıtı	wikidata		Amasra 134.JPG
+1930	sayfa 65	yer	Bartın	Kemere Köprüsü	wikidata		Kemere Bridge, Turkey.jpg
+1931	sayfa 65	yer	Bartın	Kemerdere Köprüsü	wikidata		Kemerdere Köprüsü 2025-12-21 12.05.24 1791551925.jpg
+1932	sayfa 65	yer	Bartın	Yenihan Köprüsü	wikidata		Yenihan Köprüsü 2023-04-15 17.13.45 1791553304.jpg
+1933	sayfa 65	yer	Bartın	Orduyeri Köprüsü	wikidata		Orduyeri Köprüsü 2022-01-24 16.04.55 1791550270.jpg
+1934	sayfa 65	yer	Batman	Zeynel Bey Türbesi	wikidata		Zeynel Bey Mausoleum, Hasankeyf.jpg
+1935	sayfa 65	yer	Batman	Mereto Dağı	wikidata		Girê Diran Mereto Shimeshîr Sason 2012.JPG
+1936	sayfa 65	yer	Batman	Eski Köprü (Hasankeyf)	wikidata		Heskîf 2012.jpg
+1937	sayfa 65	yer	Batman	Raman Dağı	vikipedi		Raman Dağı 01.jpg
+1938	sayfa 65	yer	Batman	Batman Saat Kulesi	wikidata		Batman Saat Kulesi1.jpg
+1939	sayfa 65	yer	Batman	Hasankeyf Ulu Camii	wikidata		Hasankeyf Ulu Camii 1888.jpg
+1940	sayfa 65	yer	Bayburt	Varzahan Manastırı	vikipedi		Varzahan village Lynch's 1898.jpg
+1941	sayfa 65	yer	Bayburt	Kop Dağı Müdafaası Tarihî Millî Parkı	vikipedi		KOP GEÇİDİ 2.jpg
+1942	sayfa 65	yer	Bayburt	Bayburt Ulu Camii	wikidata		Bayburt Ulu Camii İçi 2.jpg
+1943	sayfa 65	yer	Bayburt	Kenan Yavuz Etnografya Müzesi	wikidata		Ev dış 13.jpg
+1944	sayfa 65	yer	Bayburt	Bayburt Saat Kulesi	wikidata		Bayburt Clock Tower (16034875507).jpg
+1945	sayfa 65	yer	Bilecik	Harmankaya Kanyonu Tabiat Parkı	wikidata		Harmankaya Kanyonu.jpg
+1946	sayfa 65	yer	Bilecik	Ertuğrul Gazi Türbesi	wikidata		Ertuğrul Gazi Türbesi.JPG
+1947	sayfa 65	yer	Bilecik	Söğüt Ertuğrul Gazi Müzesi	wikidata		Ertuğrul Gazi Müzesi.JPG
+1948	sayfa 65	yer	Bilecik	Osmaneli Aya Yorgi Kilisesi	wikidata		Osmaneli Aya Yorgi Kilisesi 1 (cropped).jpg
+1949	sayfa 65	yer	Bingöl	Sülbüs Dağı	wikidata		Sülbüs Dağı'nın Dersim-Cıvrak mevkiinden görünümü 2013-11-30 20-50.JPG
+1950	sayfa 65	yer	Bingöl	33 Şehit Anıtı	wikidata		33 Şehit Anıtı Bingöl 1.jpg
+1951	sayfa 66	yer	Bingöl	Gerendal Gölü	wikidata		Gerendallake.jpg
+1952	sayfa 66	yer	Bitlis	Nemrut Dağı	wikidata		Nemrut Vulcano.jpg
+1953	sayfa 66	yer	Bitlis	Aygır Gölü	önceki		Süphan Dağı ve Aygır Gölü.jpg
+1954	sayfa 66	yer	Bitlis	Emir Bayındır Mescidi	wikidata		Tomba e moschea dell'emiro bayindir, 1477-1481, 00.jpg
+1955	sayfa 66	yer	Bitlis	Nemrut Kalderası	wikidata		Nemrut Krateri.jpg
+1956	sayfa 66	yer	Bitlis	Emir Bayındır Kümbeti	wikidata		Tomba e moschea dell'emiro bayindir, 1477-1481, 04.jpg
+1957	sayfa 66	yer	Bitlis	İskenderpaşa Camii	vikipedi		İskender Paşa Camii (Ahlat).jpg
+1958	sayfa 66	yer	Bitlis	Ahlat Müzesi	wikidata		Bitlis Ahlat Müzesi.jpg
+1959	sayfa 66	yer	Bolu	Bolu Müzesi	wikidata		TR Bolu asv2021-10 img14 Bolu Museum.jpg
+1960	sayfa 66	yer	Bolu	Abant Gölü Millî Parkı	wikidata		Bolu Abant Tabiat Parkı Havadan Görünüm Sonbahar - Türkiye.jpg
+1961	sayfa 66	yer	Bolu	Sülük Gölü	wikidata		Tree stumps in Sülüklügöl 05.jpg
+1962	sayfa 66	yer	Bolu	Sünnet Gölü	önceki		Sünnet Lake.jpg
+1963	sayfa 66	yer	Bolu	Yeniçağa Gölü	önceki		Yeniçağa Gölü 2.Masalrota.jpg
+1964	sayfa 66	yer	Bolu	Gölcük Gölü	wikidata		Abant'ta Gün Doğumu-24082019.jpg
+1965	sayfa 66	yer	Bolu	Gazi Süleyman Paşa Camii, Göynük	wikidata		Bolu Göynük Gazi Süleyman Paşa Camii.jpg
+1966	sayfa 66	yer	Bolu	Çubuklu Gölü	vikipedi		Çubuk gölü1.jpg
+1967	sayfa 66	yer	Burdur	Burdur Gölü	önceki		Burdur lake.jpg
+1968	sayfa 66	yer	Burdur	Kibira	wikidata		Kibyra Theatre 9919.jpg
+1969	sayfa 66	yer	Burdur	Kremna	wikidata		KremnaAntikKenti1.jpg
+1970	sayfa 66	yer	Burdur	Karataş Gölü	vikipedi		Karataş'tan Bademli - panoramio.jpg
+1971	sayfa 66	yer	Burdur	Antoninler Çeşmesi	wikidata		Antoninler Cesmesi 3.JPG
+1972	sayfa 66	yer	Burdur	Gölhisar Gölü	önceki		Gölhisar Lake.jpg
+1973	sayfa 66	yer	Burdur	Burdur Saat Kulesi	wikidata		Burdur Clock tower 3232.jpg
+1974	sayfa 66	yer	Burdur	Akgöl	wikidata		Lake Akgöl and the surrounding plains, March 2024 04.jpg
+1975	sayfa 66	yer	Bursa	Nikaia	wikidata		Nicaea theatre 990.jpg
+1976	sayfa 66	yer	Bursa	Emir Sultan Camii	wikidata		Emir Sultan Camii 7067.jpg
+1977	sayfa 66	yer	Bursa	Muradiye Külliyesi	wikidata		Muradiye Complex 01.jpg
+1978	sayfa 66	yer	Bursa	İznik Yeşil Cami	wikidata		İznik Yeşil Cami.JPG
+1979	sayfa 66	yer	Bursa	Uluabat Gölü	wikidata		Gölyazi 03 Ulubat.JPG
+1980	sayfa 66	yer	Denizli	Kolossai	wikidata		TR Colossae site asv2020-02 img08.jpg
+1981	sayfa 67	yer	Denizli	Honaz Dağı	wikidata		Honaz İlçesi ve Honaz Dağı.jpg
+1982	sayfa 67	yer	Denizli	Acıgöl	wikidata		Afyon Başmakçı acıgöl.jpg
+1983	sayfa 67	yer	Denizli	Işıklı Gölü	wikidata		Lake Isikli Civril DenizliProvince Turkey.jpg
+1984	sayfa 67	yer	Denizli	Beycesultan	wikidata		Beycesultan.jpg
+1985	sayfa 67	yer	Denizli	Hierapolis Plutoniumu	önceki		The Temple of Apollo built in the 3rd century AD using stone blocks from the older temple, Hierapolis, Phrygia, Turkey (32332234786).jpg
+1986	sayfa 67	yer	Denizli	Babadağ (Denizli Dağı)	wikidata		Babadag-Türkei.jpg
+1987	sayfa 67	yer	Denizli	Güney Şelalesi	wikidata		Selale3 Guney DenizliProvince Turkey.jpg
+1988	sayfa 67	yer	Diyarbakır	Surp Giragos Ermeni Kilisesi	vikipedi		SurpGiragosDiyarbakir2022.jpg
+1989	sayfa 67	yer	Diyarbakır	Şeyh Mutahhar Camii	wikidata		Minareya Çarling Amed 2010.JPG
+1990	sayfa 67	yer	Diyarbakır	Dicle Tüneli	wikidata		Ausgang des Tigristunnels.jpg
+1991	sayfa 67	yer	Diyarbakır	Behram Paşa Camii	wikidata		Diyarbakır Behram Paşa Camisi.jpg
+1992	sayfa 67	yer	Diyarbakır	Diyarbakır Arkeoloji Müzesi	wikidata		Diyarbakır İçkale Archaeological exhibits in 2024 0253.jpg
+1993	sayfa 67	yer	Diyarbakır	Meryem Ana Süryani Kadim Kilisesi	wikidata		Dêra Meryemê 2 2010.JPG
+1994	sayfa 67	yer	Diyarbakır	Hassuni Mağaraları	wikidata		Şikevtên Hesûnê.jpg
+1995	sayfa 67	yer	Düzce	Prusias ad Hypium	wikidata		Prusias ad Hypium 10.jpg
+1996	sayfa 67	yer	Düzce	Konuralp Müzesi	wikidata		Prusias ad Hypium 46.jpg
+1997	sayfa 67	yer	Düzce	Akçakoca Kalesi	wikidata		Akçakoca Ceneviz Kalesi mesire yeri.jpeg
+1998	sayfa 67	yer	Düzce	Konuralp	vikipedi		Konuralp village 7441 (cropped).jpg
+1999	sayfa 67	yer	Düzce	Akçakoca Merkez Camii	wikidata		Akçakoca Camii (4997269718).jpg
+2000	sayfa 67	yer	Düzce	Akçakoca Saat Kulesi	wikidata		Akçakoca Saat Kulesi 2026-10-25 09.46.45 1792911788.jpeg
+2001	sayfa 67	yer	Düzce	Aydınpınar Şelalesi	önceki		Aydınpınar Waterfalls Nature Park, Düzce, Turkey - Murat Özsoy 02.jpg
+2002	sayfa 67	yer	Düzce	Roma Köprüsü, Konuralp	wikidata		Roma Köprüsü, Konuralp 2022-11-21 15.42.45 1792253583.JPG
+2003	sayfa 67	yer	Edirne	Edirne Büyük Sinagogu	wikidata		GrandSynagogueEdirne (2).JPG
+2004	sayfa 67	yer	Edirne	Uzunköprü	wikidata		Uzunköprü the Long Bridge approach from north 6365.jpg
+2005	sayfa 67	yer	Edirne	Sveti Konstantin-Elena Kilisesi	wikidata		Sts. Constantine and Helen Church (Edirne), Front.jpg
+2006	sayfa 67	yer	Edirne	Defterdar Mustafa Paşa Camii	wikidata		Defterdar Mustafa Paşa Camii, Edirne 22.JPG
+2007	sayfa 67	yer	Edirne	Atik Ali Paşa Camii	wikidata		Atik Ali Paşa Camii, Edirne 22.JPG
+2008	sayfa 67	yer	Edirne	Rüstem Paşa Kervansarayı	wikidata		Kervansaray Hotel - panoramio (1).jpg
+2009	sayfa 67	yer	Elazığ	Elâzığ Protestan Kilisesi	wikidata		Elazığ 66.jpg
+2010	sayfa 67	yer	Elazığ	Elazığ Surp Asdvadsadzin Kilisesi	wikidata		Surp Asdvadzadzin Kilisesi Dışı.jpg
+2011	sayfa 68	yer	Elazığ	Alacalı Cami	önceki		Harput Alacalı Mosque 9542.jpg
+2012	sayfa 68	yer	Elazığ	Maden Saat Kulesi	vikipedi		Maden Saat Kulesi ve Hükümet Konağı.jpg
+2013	sayfa 68	yer	Elazığ	Hazarbaba	önceki		Hazarbaba.jpg
+2014	sayfa 68	yer	Erzincan	Erzincan Ovası	önceki		Erzincan Ovası 18 06 1988 bei Altıntepe.jpg
+2015	sayfa 68	yer	Erzincan	Aprank Manastırı	wikidata		Aprank or Surb David Monastery Surb Hovanes Church01.jpg
+2016	sayfa 68	yer	Erzincan	Kemah Kalesi	vikipedi		5-Tarihi Kemah Kalesi.jpg
+2017	sayfa 68	yer	Erzincan	Erzincan Müzesi	wikidata		Erzincanmuseum.jpg
+2018	sayfa 68	yer	Erzurum	Oşki	wikidata		Oshki4.jpg
+2019	sayfa 68	yer	Erzurum	Bana Manastırı	wikidata		Bana cathedral - Şenkaya.jpg
+2020	sayfa 68	yer	Erzurum	Hahuli Manastırı	wikidata		77. xaxuli.JPG
+2021	sayfa 68	yer	Erzurum	Erzurum Ulu Camii	wikidata		Erzurum Ulu Camii dış görünüm.jpg
+2022	sayfa 68	yer	Erzurum	Tortum Gölü	wikidata		Tortum Lake.jpg
+2023	sayfa 68	yer	Erzurum	Rüstem Paşa Kervansarayı	wikidata		Erzurum-Taşhan.jpg
+2024	sayfa 68	yer	Erzurum	Çobandede Köprüsü	wikidata		Köprüköy, ponte di Çobandede, 1160 ca., 03.jpg
+2025	sayfa 68	yer	Eskişehir	Pessinus	wikidata		Pessinus Ancient City - 2.jpg
+2026	sayfa 68	yer	Eskişehir	Sivrihisar Ulu Cami	wikidata		Sivrihisar Ulu Camii 2041.jpg
+2027	sayfa 68	yer	Eskişehir	Eskişehir Alaaddin Camii	wikidata		Alaaddin Camii Eskişehir.jpg
+2028	sayfa 68	yer	Eskişehir	Seyit Battal Gazi Camii	wikidata		Mosque and Tomb, Seyit Battal Gazi Külliyesi.jpg
+2029	sayfa 68	yer	Eskişehir	Eskişehir Arkeoloji Müzesi	wikidata		Eskişehir Eti Archaeology Museum building.jpg
+2030	sayfa 68	yer	Eskişehir	Lületaşı Müzesi	vikipedi		Meerschaumpfeife.jpg
+2031	sayfa 68	yer	Eskişehir	Reşadiye Camii	wikidata		Eskişehir Merkez camii.jpg
+2032	sayfa 68	yer	Gaziantep	Zeugma	wikidata		Zeugma.jpg
+2033	sayfa 68	yer	Gaziantep	Kurtuluş Camii	wikidata		Gaziantep Kurtuluş Mosque in 2007 0423.jpg
+2034	sayfa 68	yer	Gaziantep	Yesemek Taş Ocağı ve Heykel Atölyesi	wikidata		Yesemekgesamt.jpg
+2035	sayfa 68	yer	Gaziantep	Gaziantep Arkeoloji Müzesi	wikidata		Gaziantep Museum Stele Gözlühöyük.jpg
+2036	sayfa 68	yer	Gaziantep	Boyacı Camii	önceki		Boyacı Camii.jpg
+2037	sayfa 68	yer	Gaziantep	Şirvani Camii	wikidata		Gaziantep Şirvani Cami 4471.jpg
+2038	sayfa 68	yer	Gaziantep	Alaüddevle Camii	wikidata		Gaziantep - panoramio - HALUK COMERTEL (3).jpg
+2039	sayfa 68	yer	Gaziantep	Tilmen Höyük	wikidata		Tilmen4.jpg
+2040	sayfa 68	yer	Giresun	Şebinkarahisar Atatürk Evi Müzesi	wikidata		Şebinkarahisar ATATÜRK Evi ve Müzesi.jpg
+2041	sayfa 69	yer	Giresun	Tirebolu Kalesi	vikipedi		Tirebolu.JPG
+2042	sayfa 69	yer	Giresun	Giresun Müzesi	vikipedi		Giresun Museum (Gogora Church).jpg
+2043	sayfa 69	yer	Giresun	Taşhanlar (yapı)	wikidata		Taşhan.jpg
+2044	sayfa 69	yer	Giresun	Licese Kilisesi	vikipedi		Asarcık, Şebinkarahisar 2017-07-07 04-4.jpg
+2045	sayfa 69	yer	Gümüşhane	Satala	wikidata		Satala, Roman legionary base, used by XVI Flavia Firma and XV Apollinaris, Cappadocia, Turkey - 52933824022.jpg
+2046	sayfa 69	yer	Gümüşhane	Patara (Kapadokya)	önceki		Patara-ruins.jpg
+2047	sayfa 69	yer	Gümüşhane	Limni Gölü	wikidata		Lake Limni aerial view 01.jpg
+2048	sayfa 69	yer	Gümüşhane	İmera Manastırı	vikipedi		İmera Manastırı Yolu... - panoramio.jpg
+2049	sayfa 69	yer	Hakkari	Cilo Dağı	wikidata		Cilo... - panoramio.jpg
+2050	sayfa 69	yer	Hakkari	Nehri Köprüsü, Şemdinli	vikipedi		Beğirdi köprüsü .. Osmanlı zamanında yapılan doğudaki ilk bağlantı.. - panoramio.jpg
+2051	sayfa 69	yer	Hatay	Aççana Höyük	wikidata		Archaeological site of Alalakh (Tell Atchana).JPG
+2052	sayfa 69	yer	Hatay	İssos	önceki		İssos Harabeleri - panoramio.jpg
+2053	sayfa 69	yer	Hatay	Seleucia Pieria	wikidata		Column plinths, Seleucia Pieria.jpg
+2054	sayfa 69	yer	Hatay	Musa Dağı	wikidata		Musa Dagh Stadtmulde.JPG
+2055	sayfa 69	yer	Hatay	Amik Ovası	wikidata		Amik Ovası'nın Amanoslar'dan görünümü.jpg
+2056	sayfa 69	yer	Hatay	Bakras Kalesi	wikidata		Baghras2.jpg
+2057	sayfa 69	yer	Hatay	Tell Tayinat Höyüğü	wikidata		Tayinat Flyover (Photo credit Murat Akar).jpg
+2058	sayfa 69	yer	Isparta	Antiokheia (Pisidya)	wikidata		Antiocheia in Psidia.jpg
+2059	sayfa 69	yer	Isparta	Pınargözü Mağarası	wikidata		Pınargözü-ISPARTA-TURKEY.jpg
+2060	sayfa 69	yer	Isparta	Kızıldağ Millî Parkı	önceki		Nationalpark Kızıldağ bei Yenişarbademli; Blick nach Nord.jpg
+2061	sayfa 69	yer	Isparta	Isparta Müzesi	wikidata		Isparta museum front 5005.jpg
+2062	sayfa 69	yer	Isparta	Eğirdir Kalesi	wikidata		Eğirdir Castle.jpg
+2063	sayfa 69	yer	Iğdır	Küçük Ağrı Dağı	wikidata		Little Ararat.jpg
+2064	sayfa 69	yer	Iğdır	Büyük Ağrı Dağı	wikidata		Closeup of large peak of Mount Ararat.jpg
+2065	sayfa 69	yer	Iğdır	Iğdır Kervansarayı	wikidata		Kervansaray giriş kapısı - panoramio (1).jpg
+2066	sayfa 69	yer	Çanakkale	Gökçeada	wikidata		Gokceada5.JPG
+2067	sayfa 69	yer	Çanakkale	1915 Çanakkale Köprüsü	wikidata		1915 Çanakkale Bridge2.JPG
+2068	sayfa 69	yer	Çanakkale	Bababurnu	wikidata		LAMBART(1897) p127 CAPE BABA, ASIA MINOR.jpg
+2069	sayfa 69	yer	Çanakkale	Alexandria Troas	wikidata		Troas Therme 2.JPG
+2070	sayfa 69	yer	Çanakkale	Saros Körfezi	önceki		Edirne Keşan Saros Körfezi.jpg
+2071	sayfa 70	yer	Çanakkale	Troya Müzesi	wikidata		Museum of Troy (53022400001).jpg
+2072	sayfa 70	yer	Çanakkale	Çanakkale Şehitleri Anıtı	wikidata		Onderkokturk-canakkale01.jpg
+2073	sayfa 70	yer	Çanakkale	Parion	önceki		Ruines d'un Monument carré à Parium - Choiseul-gouffier Gabriel Florent Auguste De - 1822.jpg
+2074	sayfa 70	yer	Çankırı	İnandıktepe	wikidata		Museum of Anatolian Civilizations049 kopie1.jpg
+2075	sayfa 70	yer	Çankırı	İstiklâl Yolu Tarihî Millî Parkı	wikidata		Çankırı Müzesi İstiklal Yolu bilgilenirme panosu.jpg
+2076	sayfa 70	yer	Çankırı	Anadynata	vikipedi		Kurşunlu Kalesi 02.jpg
+2077	sayfa 70	yer	Çankırı	Çankırı Müzesi	wikidata		Çankırı Müzesi.jpg
+2078	sayfa 70	yer	Çankırı	Ali Bey Camii	wikidata		Medrese Ali Bey Camii 5524.JPG
+2079	sayfa 70	yer	Çorum	Şapinuva	wikidata		Sapinuwa3.jpg
+2080	sayfa 70	yer	Çorum	Kapılıkaya Kaya Mezarı	wikidata		Kırkdilim kapılıkaya.jpg
+2081	sayfa 70	yer	Çorum	Hattuşa Yeşil Taşı	wikidata		Hattusa Green Stone (cropped).jpg
+2082	sayfa 70	yer	Çorum	Osmancık II. Beyazıt Köprüsü	wikidata		Osmancık1.jpg
+2083	sayfa 70	yer	Çorum	Eskiyapar Höyüğü	wikidata		Eskiyapar 05.jpg
+2084	sayfa 70	yer	Çorum	Boğazköy-Alacahöyük Tarihî Millî Parkı	wikidata		Lion Gate, Hattusa 01.jpg
+2085	sayfa 70	yer	Çorum	Çorum Saat Kulesi	wikidata		Saat kulesi^Çorum - panoramio.jpg
+2086	sayfa 70	yer	Çorum	Boğazköy Müzesi	wikidata		Museum Hattusa - Boğazköy Museum, Boğazköy, Çorum, Turkey 01.jpg
+2087	sayfa 70	yer	İstanbul	Beyoğlu	wikidata		Istiklal busy afternoon.JPG
+2088	sayfa 70	yer	İstanbul	Babıali	önceki		DSC04009 Istanbul - La Sublime Porta - Foto G. Dall'Orto 25-5-2006.jpg
+2089	sayfa 70	yer	İstanbul	Taksim Meydanı	vikipedi		Istanbul Taksim Square (54515155507).jpg
+2090	sayfa 70	yer	İstanbul	Kariye Camii	wikidata		Chora Church 2024.jpg
+2091	sayfa 70	yer	İzmir	Artemis Tapınağı	wikidata		Ephesos.jpg
+2092	sayfa 70	yer	İzmir	Pergamon	wikidata		Temple of Trajan, Pergamon 01.jpg
+2093	sayfa 70	yer	İzmir	Celsus Kütüphanesi	önceki		Celsus Kütüphanesi, 2019 02.jpg
+2094	sayfa 70	yer	İzmir	Meryem Ana Evi	wikidata		House of the Virgin Mary.jpg
+2095	sayfa 70	yer	İzmir	Phokaia	wikidata		Ancient theatre Foça525.jpg
+2096	sayfa 70	yer	İzmir	Klazomenai	önceki		Klazomenai (Liman Tepe) Early Bronze Age fortification wall.jpg
+2097	sayfa 70	yer	İzmir	Teos	wikidata		Teos, Sığacık.jpg

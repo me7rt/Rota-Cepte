@@ -1,0 +1,182 @@
+Adana	Aladağ	İmamoğlu
+Adana	Aladağ	Sabancı Merkez Camii
+Adana	İmamoğlu	Sabancı Merkez Camii
+Adıyaman	Çelikhan	Gerger
+Afyonkarahisar	Başmakçı	Evciler
+Afyonkarahisar	Emirdağ	Amorium
+Afyonkarahisar	Evciler	Akdağ (Denizli)
+Amasya	Suluova	Amasya Kalesi
+Ankara	Bala	Mamak
+Ankara	Çamlıdere	Elmadağ
+Ankara	Çamlıdere	Haymana
+Ankara	Çamlıdere	Yenimahalle
+Ankara	Çamlıdere	Tümülüs MM (Gordion)
+Ankara	Elmadağ	Haymana
+Ankara	Elmadağ	Yenimahalle
+Ankara	Elmadağ	Tümülüs MM (Gordion)
+Ankara	Haymana	Yenimahalle
+Ankara	Haymana	Tümülüs MM (Gordion)
+Ankara	Yenimahalle	Tümülüs MM (Gordion)
+Ankara	Ankara Kalesi	Tümülüs MM (Gordion)
+Ardahan	Damal	Posof
+Ardahan	Damal	Ilgar Dağı
+Ardahan	Posof	Damal
+Ardahan	Damal	Ilgar Dağı
+Aydın	Aydın	Neapolis / Marathesion
+Aydın	Karpuzlu	Lade Adası
+Aydın	Karpuzlu	Kuzey Agora (Milet)
+Aydın	Lade Adası	Kuzey Agora (Milet)
+Balıkesir	Cunda Adası	Ayvalık Adaları Tabiat Parkı
+Balıkesir	Cunda Adası	Marmara Adası
+Balıkesir	Kuşcenneti Millî Parkı	Şeytan Sofrası
+Bartın	Bartın	Amasra
+Bartın	Bartın	Amasra
+Bartın	Bartın	İnkumu
+Bartın	Bartın	Tavşan Adası, Bartın
+Bartın	Bartın	Amasra Feneri
+Bartın	Amasra	İnkumu
+Bartın	Amasra	Tavşan Adası, Bartın
+Bartın	Amasra	İnkumu
+Bartın	Amasra	Tavşan Adası, Bartın
+Bartın	İnkumu	Tavşan Adası, Bartın
+Bayburt	Bayburt	Aydıntepe
+Bilecik	Osmaneli	Söğüt
+Bilecik	Pazaryeri	Söğüt
+Bilecik	Söğüt	Osmaneli
+Bitlis	Süphan Dağı	Nazik Gölü
+Bolu	Bolu	Göynük
+Bursa	İnegöl	Gemlik Körfezi
+Bursa	Keles	Nilüfer
+Bursa	Keles	Orhaneli
+Bursa	Keles	Uludağ
+Bursa	Keles	Misya
+Bursa	Keles	İznik Gölü
+Bursa	Nilüfer	Uludağ
+Bursa	Orhaneli	Uludağ
+Bursa	Orhaneli	Misya
+Bursa	Uludağ	Misya
+Bursa	Yeşil Camii	Bursa Darphanesi
+Bursa	Misya	Gemlik Körfezi
+Çanakkale	Çanakkale	Tuz Gölü
+Çanakkale	Ayvacık	Biga
+Çanakkale	Ayvacık	Bozcaada
+Çanakkale	Ayvacık	Ezine
+Çanakkale	Ayvacık	Gökçeada
+Çanakkale	Ayvacık	Kale-i Sultaniye
+Çanakkale	Biga	Bozcaada
+Çanakkale	Biga	Assos
+Çanakkale	Biga	Kale-i Sultaniye
+Çanakkale	Bozcaada	Ezine
+Çanakkale	Bozcaada	Gökçeada
+Çanakkale	Bozcaada	Assos
+Çanakkale	Bozcaada	Kale-i Sultaniye
+Çanakkale	Ezine	Gökçeada
+Çanakkale	Ezine	Assos
+Çanakkale	Ezine	Kale-i Sultaniye
+Çanakkale	Ezine	Asar Kalesi
+Çanakkale	Gökçeada	Assos
+Çanakkale	Gökçeada	Kale-i Sultaniye
+Çanakkale	Gökçeada	Asar Kalesi
+Çanakkale	Assos	Kale-i Sultaniye
+Diyarbakır	Bismil	Çüngüş
+Diyarbakır	Bismil	Dicle
+Diyarbakır	Bismil	Eğil
+Diyarbakır	Bismil	Hazro
+Diyarbakır	Bismil	Silvan
+Diyarbakır	Bismil	Hasan Paşa Hanı
+Diyarbakır	Çüngüş	Dicle
+Diyarbakır	Çüngüş	Eğil
+Diyarbakır	Çüngüş	Hazro
+Diyarbakır	Çüngüş	Silvan
+Diyarbakır	Çüngüş	Hasan Paşa Hanı
+Diyarbakır	Dicle	Eğil
+Diyarbakır	Dicle	Hazro
+Diyarbakır	Dicle	Silvan
+Diyarbakır	Dicle	Hasan Paşa Hanı
+Diyarbakır	Eğil	Hazro
+Diyarbakır	Eğil	Silvan
+Diyarbakır	Eğil	Hasan Paşa Hanı
+Diyarbakır	Ergani	Kayapınar
+Diyarbakır	Hazro	Silvan
+Diyarbakır	Hazro	Hasan Paşa Hanı
+Diyarbakır	Kayapınar	Hazreti Süleyman Camii
+Edirne	İpsala	Keşan
+Edirne	İpsala	Beylerbeyi Camii
+Edirne	Keşan	II. Bayezid Camii
+Edirne	Keşan	Arif Ağa Camii
+Edirne	Keşan	Beylerbeyi Camii
+Edirne	II. Bayezid Camii	Arif Ağa Camii
+Elazığ	Baskil	Hazar Gölü
+Elazığ	Baskil	Keban Baraj Gölü
+Elazığ	Elazığ	Sivrice
+Elazığ	Elazığ	Hazar Gölü
+Elazığ	Sivrice	Hazar Gölü
+Elazığ	Sivrice	İzzet Paşa Camii
+Elazığ	Hazar Gölü	İzzet Paşa Camii
+Elazığ	Harput	Harput Kalesi
+Erzurum	Aziziye	Tortum Kalesi
+Erzurum	Karayazı	Çifte Minareli Medrese
+Erzurum	Köprüköy	Tortum Kalesi
+Eskişehir	Kurşunlu Camii	Eskişehir Surp Yerrortutyun Kilisesi
+Gaziantep	Karkamış	Nurdağı
+Gaziantep	Karkamış	Gaziantep Savunması Ve Kahramanlık Panoraması Müzesi
+Gaziantep	Nurdağı	Gaziantep Savunması Ve Kahramanlık Panoraması Müzesi
+Giresun	Alucra	Espiye
+Giresun	Alucra	Şebinkarahisar Kalesi
+Giresun	Espiye	Şebinkarahisar Kalesi
+Giresun	Görele	Sis Dağı
+Giresun	Keşap	Şebinkarahisar Kalesi
+Giresun	Giresun Adası	Sis Dağı
+Giresun	Giresun Adası	Şeyh Keramettin Camii
+Giresun	Sis Dağı	Şeyh Keramettin Camii
+Hatay	Hatay	Antakya
+Hatay	Antakya	Belen
+Hatay	Antakya	Dörtyol
+Hatay	İskenderun	Samandağ
+Hatay	Samandağ	Kel Dağı
+Iğdır	Iğdır	Ermeniler Tarafından Katledilen Şehit Türkler Anıt ve Müzesi
+Iğdır	Iğdır	Ermeniler Tarafından Katledilen Şehit Türkler Anıt ve Müzesi
+Isparta	Aksu	Uluborlu
+Isparta	Senirkent	Eğirdir Gölü
+Isparta	Senirkent	Davraz Dağı
+İstanbul	Adalar	Büyükçekmece
+İstanbul	Büyükçekmece	Kağıthane
+İstanbul	Büyükçekmece	Büyükada
+İstanbul	Büyükçekmece	Adalar
+İstanbul	Eyüpsultan	Sultanbeyli
+İstanbul	Eyüpsultan	Büyükada
+İstanbul	Eyüpsultan	Büyük Çamlıca Tepesi
+İstanbul	Eyüpsultan	Pierre Loti Tepesi
+İstanbul	Eyüpsultan	Haliç
+İstanbul	Fatih	Kız Kulesi
+İstanbul	Sultanbeyli	Kapalıçarşı
+İstanbul	Sultanbeyli	Büyük Çamlıca Tepesi
+İstanbul	Sultanbeyli	Pierre Loti Tepesi
+İstanbul	Sultanbeyli	Yavuz Sultan Selim Köprüsü
+İstanbul	Galata Kulesi	Kız Kulesi
+İstanbul	Kapalıçarşı	Büyükada
+İstanbul	Kapalıçarşı	Büyük Çamlıca Tepesi
+İstanbul	Kapalıçarşı	Pierre Loti Tepesi
+İstanbul	Kapalıçarşı	Yavuz Sultan Selim Köprüsü
+İstanbul	Büyükada	Büyük Çamlıca Tepesi
+İstanbul	Büyükada	Pierre Loti Tepesi
+İstanbul	Büyük Çamlıca Tepesi	Pierre Loti Tepesi
+İstanbul	Büyük Çamlıca Tepesi	Haliç
+İstanbul	Büyük Çamlıca Tepesi	15 Temmuz Şehitler Köprüsü
+İstanbul	Büyük Çamlıca Tepesi	Yavuz Sultan Selim Köprüsü
+İstanbul	Pierre Loti Tepesi	Haliç
+İstanbul	Pierre Loti Tepesi	15 Temmuz Şehitler Köprüsü
+İstanbul	Pierre Loti Tepesi	Yavuz Sultan Selim Köprüsü
+İstanbul	Haliç	15 Temmuz Şehitler Köprüsü
+İzmir	Bayraklı	Bergama
+İzmir	Bayraklı	Foça
+İzmir	Bayraklı	Seferihisar
+İzmir	Bayraklı	Tarihî Asansör
+İzmir	Bergama	Buca
+İzmir	Bergama	Foça
+İzmir	Bergama	Seferihisar
+İzmir	Beydağ	İzmir Körfezi
+İzmir	Buca	Foça
+İzmir	Buca	Konak
+İzmir	Foça	Seferihisar
+İzmir	Selçuk	İzmir Körfezi
