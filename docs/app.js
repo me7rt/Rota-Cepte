@@ -3,7 +3,7 @@
    Veri docs/data altında; GitHub Actions'ta Wikidata, Vikipedi ve Commons'tan hazırlanır (scripts/uret.mjs). */
 (function () {
   "use strict";
-  const SURUM = "6.5.1";
+  const SURUM = "6.6";
   // "6.5.1'de", "6.5'te", "6.6'da": sürüm numarasına Türkçe bulunma eki
   const surumEk = (v) => ({ 0: "da", 1: "de", 2: "de", 3: "te", 4: "te", 5: "te", 6: "da", 7: "de", 8: "de", 9: "da" })[String(v).slice(-1)] || "de";
   if (window.ikDoldur) ikDoldur();

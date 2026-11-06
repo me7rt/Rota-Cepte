@@ -1,6 +1,6 @@
 {
   "name": "rotacepte",
-  "version": "6.5.1",
+  "version": "6.6.0",
   "private": true,
   "description": "81 il ve tüm ilçeler için gezi rehberi: canlı konum, harita, fotoğraf ve bilgi",
   "author": "Mert Turanlıoğlu",
@@ -9,7 +9,6 @@
     "start": "npx serve docs"
   },
   "dependencies": {
-    "@capacitor-community/background-geolocation": "1.3.1",
     "@capacitor-community/text-to-speech": "6.1.0",
     "@capacitor/app": "^7.0.0",
     "@capacitor/core": "^7.0.0",
