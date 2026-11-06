@@ -1,0 +1,10 @@
+{
+ "ciftemin3": ["Twin Minaret Madrasa Erzurum", "bitmap", 6, 1400],
+ "ciftemin4": ["Cifte Minareli Erzurum", "bitmap", 6, 1400],
+ "ciftemin5": ["Erzurum medrese minare", "bitmap", 6, 1400],
+ "yakutiye2": ["Yakutiye Medresesi", "bitmap", 4, 1400],
+ "erzkis": ["Erzurum kış kar", "bitmap", 6, 1600],
+ "palandoken3": ["Palandöken kayak merkezi", "bitmap", 6, 1600],
+ "kayak": ["Palandoken skiing", "bitmap", 6, 1600],
+ "oltu": ["Oltu taşı", "bitmap", 3, 800]
+}

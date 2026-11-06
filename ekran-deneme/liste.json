@@ -1,0 +1,392 @@
+[
+ {
+  "ad": "foto-kart.png",
+  "grup": "Paylaşım",
+  "baslik": "Fotoğraflı yer paylaşımı",
+  "cift": null
+ },
+ {
+  "ad": "ana",
+  "grup": "Ana sayfa",
+  "baslik": "Ana sayfa",
+  "cift": "once-ana"
+ },
+ {
+  "ad": "ana2",
+  "grup": "Ana sayfa",
+  "baslik": "Ana sayfa, aşağısı",
+  "cift": "once-ana2"
+ },
+ {
+  "ad": "ana3",
+  "grup": "Ana sayfa",
+  "baslik": "Ana sayfa, daha aşağısı",
+  "cift": "once-ana3"
+ },
+ {
+  "ad": "il",
+  "grup": "İl sayfası",
+  "baslik": "İl sayfası",
+  "cift": "once-il"
+ },
+ {
+  "ad": "hava",
+  "grup": "İl sayfası",
+  "baslik": "Hava durumu",
+  "cift": "once-hava"
+ },
+ {
+  "ad": "detay",
+  "grup": "Yer kartı",
+  "baslik": "Gittiğin yerin kartı",
+  "cift": "once-detay"
+ },
+ {
+  "ad": "detay2",
+  "grup": "Yer kartı",
+  "baslik": "Kartın devamı",
+  "cift": "once-detay2"
+ },
+ {
+  "ad": "gezilerim",
+  "grup": "Gezilerim",
+  "baslik": "Gezilerim",
+  "cift": "once-gezilerim"
+ },
+ {
+  "ad": "gezilerim2",
+  "grup": "Gezilerim",
+  "baslik": "Gezilerim, aşağısı",
+  "cift": "once-gezilerim2"
+ },
+ {
+  "ad": "yeni-kart",
+  "grup": "Yenilikler",
+  "baslik": "Sürüm 6.5'te yeni kartı",
+  "cift": null
+ },
+ {
+  "ad": "sana-ozel",
+  "grup": "Ana sayfa",
+  "baslik": "Sana özel öneriler",
+  "cift": null
+ },
+ {
+  "ad": "pas-ozet",
+  "grup": "Ana sayfa",
+  "baslik": "Pasaport özeti",
+  "cift": null
+ },
+ {
+  "ad": "ay-kart",
+  "grup": "Ana sayfa",
+  "baslik": "Kasım'da nereye?",
+  "cift": null
+ },
+ {
+  "ad": "pas-kapak",
+  "grup": "Gezi pasaportu",
+  "baslik": "Pasaport kapağı ve unvan",
+  "cift": null
+ },
+ {
+  "ad": "pas-sayfa0",
+  "grup": "Gezi pasaportu",
+  "baslik": "Marmara sayfası",
+  "cift": null
+ },
+ {
+  "ad": "pas-sayfa4",
+  "grup": "Gezi pasaportu",
+  "baslik": "Karadeniz sayfası",
+  "cift": null
+ },
+ {
+  "ad": "pas-sira",
+  "grup": "Gezi pasaportu",
+  "baslik": "Sıradaki damga",
+  "cift": null
+ },
+ {
+  "ad": "sevdik",
+  "grup": "Gezilerim",
+  "baslik": "En sevdiğin yerler",
+  "cift": null
+ },
+ {
+  "ad": "pas-paylas.png",
+  "grup": "Gezi pasaportu",
+  "baslik": "Paylaşım görseli",
+  "cift": null
+ },
+ {
+  "ad": "il-damga",
+  "grup": "Gezi pasaportu",
+  "baslik": "İl sayfasında damga",
+  "cift": null
+ },
+ {
+  "ad": "ata1",
+  "grup": "Atatürk'ün izinde",
+  "baslik": "Sayfanın başı",
+  "cift": null
+ },
+ {
+  "ad": "ata2",
+  "grup": "Atatürk'ün izinde",
+  "baslik": "Tarih sıralı duraklar",
+  "cift": null
+ },
+ {
+  "ad": "ata3",
+  "grup": "Atatürk'ün izinde",
+  "baslik": "Atatürk evleri",
+  "cift": null
+ },
+ {
+  "ad": "ata4",
+  "grup": "Atatürk'ün izinde",
+  "baslik": "Sayfanın sonu",
+  "cift": null
+ },
+ {
+  "ad": "oyun1",
+  "grup": "Hangi ilde?",
+  "baslik": "Soru",
+  "cift": null
+ },
+ {
+  "ad": "oyun2",
+  "grup": "Hangi ilde?",
+  "baslik": "Cevaptan sonra",
+  "cift": null
+ },
+ {
+  "ad": "oyun3",
+  "grup": "Hangi ilde?",
+  "baslik": "Sonuç",
+  "cift": null
+ },
+ {
+  "ad": "cark1",
+  "grup": "Şans çarkı",
+  "baslik": "Çark",
+  "cift": null
+ },
+ {
+  "ad": "cark2",
+  "grup": "Şans çarkı",
+  "baslik": "Çıkan il",
+  "cift": null
+ },
+ {
+  "ad": "cark3",
+  "grup": "Şans çarkı",
+  "baslik": "Çıkan ilin kartı",
+  "cift": null
+ },
+ {
+  "ad": "yol-mola",
+  "grup": "Yol üstü keşif",
+  "baslik": "Mola planı",
+  "cift": null
+ },
+ {
+  "ad": "hava-altin",
+  "grup": "İl sayfası",
+  "baslik": "Altın saat sırasında hava kutusu",
+  "cift": null
+ },
+ {
+  "ad": "gun00",
+  "grup": "Özel günler",
+  "baslik": "10 Kasım: saygı kartı",
+  "cift": null
+ },
+ {
+  "ad": "gun01",
+  "grup": "Özel günler",
+  "baslik": "10 Kasım: ana sayfa şeridi",
+  "cift": null
+ },
+ {
+  "ad": "kart01.png",
+  "grup": "Tebrik kartları",
+  "baslik": "10 Kasım",
+  "cift": null
+ },
+ {
+  "ad": "gun02",
+  "grup": "Özel günler",
+  "baslik": "24 Kasım Öğretmenler Günü",
+  "cift": null
+ },
+ {
+  "ad": "kart02.png",
+  "grup": "Tebrik kartları",
+  "baslik": "24 Kasım Öğretmenler Günü",
+  "cift": null
+ },
+ {
+  "ad": "gun03",
+  "grup": "Özel günler",
+  "baslik": "Regaip Kandili",
+  "cift": null
+ },
+ {
+  "ad": "kart03.png",
+  "grup": "Tebrik kartları",
+  "baslik": "Regaip Kandili",
+  "cift": null
+ },
+ {
+  "ad": "gun04",
+  "grup": "Özel günler",
+  "baslik": "Miraç Kandili",
+  "cift": null
+ },
+ {
+  "ad": "kart04.png",
+  "grup": "Tebrik kartları",
+  "baslik": "Miraç Kandili",
+  "cift": null
+ },
+ {
+  "ad": "gun05",
+  "grup": "Özel günler",
+  "baslik": "Berat Kandili",
+  "cift": null
+ },
+ {
+  "ad": "kart05.png",
+  "grup": "Tebrik kartları",
+  "baslik": "Berat Kandili",
+  "cift": null
+ },
+ {
+  "ad": "gun06",
+  "grup": "Özel günler",
+  "baslik": "6 Şubat anma günü",
+  "cift": null
+ },
+ {
+  "ad": "gun07",
+  "grup": "Özel günler",
+  "baslik": "Ramazan ayı",
+  "cift": null
+ },
+ {
+  "ad": "kart07.png",
+  "grup": "Tebrik kartları",
+  "baslik": "Ramazan ayı",
+  "cift": null
+ },
+ {
+  "ad": "gun08",
+  "grup": "Özel günler",
+  "baslik": "Kadir Gecesi",
+  "cift": null
+ },
+ {
+  "ad": "kart08.png",
+  "grup": "Tebrik kartları",
+  "baslik": "Kadir Gecesi",
+  "cift": null
+ },
+ {
+  "ad": "gun09",
+  "grup": "Özel günler",
+  "baslik": "Ramazan Bayramı",
+  "cift": null
+ },
+ {
+  "ad": "kart09.png",
+  "grup": "Tebrik kartları",
+  "baslik": "Ramazan Bayramı",
+  "cift": null
+ },
+ {
+  "ad": "gun10",
+  "grup": "Özel günler",
+  "baslik": "İstiklal Marşı'nın kabulü",
+  "cift": null
+ },
+ {
+  "ad": "kart10.png",
+  "grup": "Tebrik kartları",
+  "baslik": "İstiklal Marşı'nın kabulü",
+  "cift": null
+ },
+ {
+  "ad": "gun11",
+  "grup": "Özel günler",
+  "baslik": "18 Mart Çanakkale Zaferi",
+  "cift": null
+ },
+ {
+  "ad": "kart11.png",
+  "grup": "Tebrik kartları",
+  "baslik": "18 Mart Çanakkale Zaferi",
+  "cift": null
+ },
+ {
+  "ad": "gun12",
+  "grup": "Özel günler",
+  "baslik": "23 Nisan",
+  "cift": null
+ },
+ {
+  "ad": "kart12.png",
+  "grup": "Tebrik kartları",
+  "baslik": "23 Nisan",
+  "cift": null
+ },
+ {
+  "ad": "gun13",
+  "grup": "Özel günler",
+  "baslik": "Anneler Günü",
+  "cift": null
+ },
+ {
+  "ad": "kart13.png",
+  "grup": "Tebrik kartları",
+  "baslik": "Anneler Günü",
+  "cift": null
+ },
+ {
+  "ad": "gun14",
+  "grup": "Özel günler",
+  "baslik": "19 Mayıs ve Kurban Bayramı",
+  "cift": null
+ },
+ {
+  "ad": "kart14.png",
+  "grup": "Tebrik kartları",
+  "baslik": "19 Mayıs ve Kurban Bayramı",
+  "cift": null
+ },
+ {
+  "ad": "gun15",
+  "grup": "Özel günler",
+  "baslik": "30 Ağustos Zafer Bayramı",
+  "cift": null
+ },
+ {
+  "ad": "kart15.png",
+  "grup": "Tebrik kartları",
+  "baslik": "30 Ağustos Zafer Bayramı",
+  "cift": null
+ },
+ {
+  "ad": "gun16",
+  "grup": "Özel günler",
+  "baslik": "29 Ekim Cumhuriyet Bayramı",
+  "cift": null
+ },
+ {
+  "ad": "kart16.png",
+  "grup": "Tebrik kartları",
+  "baslik": "29 Ekim Cumhuriyet Bayramı",
+  "cift": null
+ }
+]

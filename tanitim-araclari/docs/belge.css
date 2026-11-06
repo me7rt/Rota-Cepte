@@ -1,0 +1,31 @@
+/* Rota Cepte · © 2026 Mert Turanlıoğlu · Gizlilik, lisanslar ve koşullar sayfaları
+   Renkler uygulamanın temalarıyla aynı (Radix Colors, MIT) */
+@font-face{font-family:"Manrope";font-style:normal;font-weight:200 800;font-display:swap;src:url(vendor/font/manrope-latin-wght-normal.woff2) format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Manrope";font-style:normal;font-weight:200 800;font-display:swap;src:url(vendor/font/manrope-latin-ext-wght-normal.woff2) format("woff2");
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+:root{color-scheme:light dark;--bg:#f6eee7;--card:#fefdfc;--line:#ebdaca;--fg:#1f2d5c;--muted:#815e46;--a:#ba3117}
+:root[data-tema="ege"]{--bg:#def7f9;--card:#fafdfe;--line:#b5e9f0;--fg:#0d3c48;--muted:#5f6563;--a:#0f7088}
+:root[data-tema="karadeniz"]{--bg:#e9f6e9;--card:#fbfefb;--line:#c9e8ca;--fg:#203c25;--muted:#60655f;--a:#287137}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#11131f;--card:#141726;--line:#253974;--fg:#d6e1ff;--muted:#b0b4ba;--a:#ff977d}
+  :root[data-tema="ege"]{--bg:#0b161a;--card:#101b20;--line:#004558;--fg:#b6ecf7;--muted:#adb5b2;--a:#4ccce6}
+  :root[data-tema="karadeniz"]{--bg:#0e1511;--card:#141a15;--line:#25482d;--fg:#c2f0c2;--muted:#afb5ad;--a:#71d083}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 "Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+main{max-width:680px;margin:0 auto;padding:max(16px,env(safe-area-inset-top)) 16px 48px}
+.ust{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.ust a{display:inline-flex;align-items:center;min-height:44px;font-weight:700;text-decoration:none}
+h1{font-size:26px;line-height:1.2;letter-spacing:-.02em;margin:8px 0 4px}
+h2{font-size:18px;line-height:1.3;margin:0 0 8px}
+h3{font-size:16px;margin:14px 0 4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 6px;margin-top:14px}
+p,li{margin:0 0 12px}
+ul,ol{padding-left:22px;margin:0 0 12px}
+small,.not{color:var(--muted)}
+.not{font-size:14px}
+a{color:var(--a);overflow-wrap:anywhere}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:0 0 14px}
+th,td{text-align:left;vertical-align:top;padding:8px 6px;border-top:1px solid var(--line)}
+th{font-weight:800}

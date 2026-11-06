@@ -1,0 +1,26 @@
+name: Gecici gorsel toplama
+on:
+  push:
+    branches: [claude/project-thread-oje5uw]
+    paths: [.github/workflows/gecici-gorsel.yml, .github/gorsel-topla.py, .github/gorsel-sorgu-a.json, .github/gorsel-sorgu-b.json]
+permissions:
+  contents: write
+jobs:
+  topla:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      matrix:
+        parti: [{ad: a, dal: video-deneme-12}, {ad: b, dal: video-deneme-13}]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Yeni adaylar
+        run: python3 .github/gorsel-topla.py cikti "$(cat .github/gorsel-sorgu-${{ matrix.parti.ad }}.json)" 2400
+      - name: video-deneme dalina koy
+        run: |
+          cd cikti
+          git init -q -b video-deneme
+          git config user.name "Mert Turanlıoğlu"
+          git config user.email "me7rtt@gmail.com"
+          git add . && git commit -qm "Kısa video görsel adayları"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:${{ matrix.parti.dal }}

@@ -1,0 +1,29 @@
+name: Nufus guncelle (TUIK)
+# Yılda bir, TÜİK Şubat'ta yeni nüfus sonuçlarını açıkladıktan sonra elle çalıştır.
+# İl nüfuslarını data/tuik-nufus.json'a yazar, sonra "Veri hazirla" iş akışını başlatır.
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: write
+jobs:
+  nufus:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: TUIK il nufuslarini al
+        run: python3 scripts/tuik-nufus.py
+      - name: main dalina yukle ve veriyi yeniden uret
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "Mert Turanlıoğlu"
+          git config user.email "me7rtt@gmail.com"
+          git add data/tuik-nufus.json
+          if git commit -m "İl nüfusları TÜİK'ten güncellendi (otomatik)"; then
+            git push origin HEAD:main
+            gh workflow run veri.yml --ref main
+          else
+            echo "Nüfuslar zaten güncel"
+          fi

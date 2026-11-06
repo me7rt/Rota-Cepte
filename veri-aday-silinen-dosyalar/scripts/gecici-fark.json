@@ -1,0 +1,1059 @@
+[
+{
+"g": "ilk",
+"il": "Afyonkarahisar",
+"ad": "Acıgöl",
+"p": "c/ca/Aci_Lake.jpg",
+"w": 4160
+},
+{
+"g": "ilk",
+"il": "Ankara",
+"ad": "Opera Sahnesi",
+"p": "7/7f/AnkaraStateOpera2.JPG",
+"w": 1688
+},
+{
+"g": "ilk",
+"il": "Ankara",
+"ad": "Altınpark",
+"p": "c/c6/Alt%C4%B1npark_vadi_2014.jpg",
+"w": 1280
+},
+{
+"g": "ilk",
+"il": "Ankara",
+"ad": "Sultan Alaeddin Camii",
+"p": "e/ea/Ankara_asv2021-10_img34_Sultan_Alaeddin_Mosque.jpg",
+"w": 4969
+},
+{
+"g": "ilk",
+"il": "Aydın",
+"ad": "Kese Dağı",
+"p": "e/e3/Ku%C5%9Fadas%C4%B1_Atat%C3%BCrk.JPG",
+"w": 2844
+},
+{
+"g": "ilk",
+"il": "Batman",
+"ad": "Mereto Dağı",
+"p": "a/a9/Gir%C3%AA_Diran_Mereto_Shimesh%C3%AEr_Sason_2012.JPG",
+"w": 4592
+},
+{
+"g": "ilk",
+"il": "Bursa",
+"ad": "Uluumay Osmanlı Halk Kıyafetleri ve Takıları Müzesi",
+"p": "a/a5/Bursa_Ulumay_museum_2006_0034.jpg",
+"w": 4288
+},
+{
+"g": "ilk",
+"il": "Bursa",
+"ad": "Bursa Kent Müzesi",
+"p": "d/d7/ESK%C4%B0_ADL%C4%B0YE_-%C5%9EEH%C4%B0R_MUZES%C4%B0_-_panoramio.jpg",
+"w": 2382
+},
+{
+"g": "ilk",
+"il": "Bursa",
+"ad": "Bursa Göç Tarihi Müzesi",
+"p": "b/b5/Merinosakmbursa2017_%28cropped%29.jpg",
+"w": 2021
+},
+{
+"g": "ilk",
+"il": "Bursa",
+"ad": "Panorama 1326 Bursa Fetih Müzesi",
+"p": "5/53/Bursa_Panorama_1326_Bursa_Conquest_Museum_2018_0039.jpg",
+"w": 4928
+},
+{
+"g": "ilk",
+"il": "Çorum",
+"ad": "Çorum Kalesi",
+"p": "f/ff/CorumKale1.jpg",
+"w": 5184
+},
+{
+"g": "ilk",
+"il": "Diyarbakır",
+"ad": "Keçi Burcu",
+"p": "7/75/City_Wall_and_Battlements_-_Diyarbakir_-_Turkey_%285777328071%29.jpg",
+"w": 3456
+},
+{
+"g": "ilk",
+"il": "Diyarbakır",
+"ad": "Dağ Kapı",
+"p": "7/7c/Diyarbakir-Town_Wall_Northern_Gate.jpeg",
+"w": 1600
+},
+{
+"g": "ilk",
+"il": "Edirne",
+"ad": "Lozan Anıtı",
+"p": "1/15/TreatyOfLausanneMonumentEdirne.JPG",
+"w": 2352
+},
+{
+"g": "ilk",
+"il": "Elazığ",
+"ad": "Hazarbaba",
+"p": "0/0f/Hazarbaba.jpg",
+"w": 1200
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Rum Mehmet Paşa Camii",
+"p": "1/1f/Rum_Mehmed_Pasha_Mosque%2C_%C3%9Csk%C3%BCdar.jpg",
+"w": 2576
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Kont Ostrorog Yalısı",
+"p": "9/90/Ostrorog.jpg",
+"w": 2816
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Abud Efendi Yalısı",
+"p": "1/1c/%D9%82%D8%B5%D8%B1_%D9%86%D9%88%D8%B1_%D9%88_%D9%85%D9%87%D9%86%D8%AF.JPG",
+"w": 3264
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Muhsinizade Yalısı",
+"p": "4/42/Istanbul_Bosphorus_IMG_7305_1725.jpg",
+"w": 2762
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Kıbrıslı Yalısı",
+"p": "1/12/K%C4%B1br%C4%B1sl%C4%B1_Yal%C4%B1s%C4%B1.jpg",
+"w": 2816
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Surp Santuht Kilisesi",
+"p": "d/dc/Surp_Santuht_Kilisesi_2024-03-16_16.49.36_1793270915.JPG",
+"w": 3000
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Neşet Suyu Tabiat Parkı",
+"p": "0/03/Ne%C5%9Fetsuyu_Nature_Park4.jpg",
+"w": 3264
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Sokullu Mehmet Paşa Darülkurrası",
+"p": "2/28/Sokullu_Mehmet_Pa%C5%9Fa_Daru%27l_Kurras%C4%B1.jpg",
+"w": 2016
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Tuğlacı Camii",
+"p": "5/50/Tu%C4%9Flac%C4%B1_ba%C5%9F%C4%B1_camii_-_panoramio.jpg",
+"w": 2560
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Tütüncü Mehmet Efendi Camii",
+"p": "b/ba/T%C3%BCt%C3%BCnc%C3%BC_Mehmet_Efendi_Camii%2C_Kad%C4%B1k%C3%B6y.jpg",
+"w": 2404
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Adnan Menderes Anıt Mezarı",
+"p": "2/2b/Adnan_menderes_mezar.jpg",
+"w": 1707
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Sultan Mustafa Camii",
+"p": "4/42/20131207_Istanbul_098.jpg",
+"w": 2976
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Kâzım Karabekir Paşa Müzesi",
+"p": "3/3f/2021-02-01_Karabekir_Museum_3.jpg",
+"w": 3024
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Caferağa Camii",
+"p": "e/e9/Cafer_A%C4%9Fa_Camii.jpg",
+"w": 2711
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Rıza Bey Yalısı",
+"p": "5/57/Istanbul_Bosphorus_IMG_7777_1920.jpg",
+"w": 3029
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Hayrettin Çavuş Türbesi",
+"p": "6/6c/Hayrettin_%C3%87avu%C5%9F_T%C3%BCrbesi_1.jpg",
+"w": 1200
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Şehzade Numan Çeşmesi",
+"p": "d/dc/%C5%9Eehzade_Numan_%C3%87e%C5%9Fmesi.jpg",
+"w": 1200
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "İbnü'l-Emin Ahmed Ağa Çeşmesi",
+"p": "b/b3/%C4%B0bn%27%C3%BCl_Emin_Ahmet_A%C4%9Fa_%C3%87e%C5%9Fmesi.JPG",
+"w": 1197
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Bet Yaakov Sinagogu",
+"p": "b/b0/Adalar_6974.jpg",
+"w": 2576
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Yaşam Vadisi",
+"p": "a/a0/Beylikduzu_Yesil_Vadi_Ya%C5%9Fam_Vadisi_Botanik_Sehir_Parki_Nisan_2014_-_26.jpg",
+"w": 5406
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Yenikapı Mevlevihanesi",
+"p": "6/60/Yenikap%C4%B1_Mevlevihanesi_2021.jpg",
+"w": 4000
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Büyükada Saat Kulesi",
+"p": "a/a9/IstanbulPrinceIslandSq.jpg",
+"w": 2576
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Afife Hatun Tekkesi",
+"p": "b/b3/Afife_Hatun_Tekkesi-Ey%C3%BCp.jpg",
+"w": 2032
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Posta ve Telgraf Nazırı İzzet Efendi Türbesi",
+"p": "4/46/Telgraf_Naz%C4%B1r%C4%B1_%C4%B0zzet_Efendi_T%C3%BCrbesi-Ey%C3%BCp.jpg",
+"w": 1509
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "İshak Ağa Çeşmesi",
+"p": "5/5c/Ishak-aga-cesmesi-fountain.jpg",
+"w": 3190
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Kartal Belediyesi Masal Müzesi",
+"p": "8/89/20250306_Kartal_Masal_M%C3%BCzesi_01.jpg",
+"w": 1920
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "II. Abdülhamit Çeşmesi",
+"p": "9/92/II._Abd%C3%BClhamid_%C3%87e%C5%9Fmesi_%28%C5%9Ei%C5%9Fli%29.jpg",
+"w": 4000
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Paşabahçe Cam Fabrikası",
+"p": "7/75/Pa%C5%9Fabah%C3%A7e_Cam_Fabrikas%C4%B1%2C_Pa%C5%9Fabah%C3%A7e%2C_Beykoz%2C_%C4%B0stanbul_2024.jpg",
+"w": 6000
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Turgut Özal Anıt Mezarı",
+"p": "c/c2/Turgut_Ozal_An%C4%B1t_Mezar%C4%B1.jpg",
+"w": 3472
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Vezir Mehmet Paşa Çeşmesi",
+"p": "7/7e/K%C3%BC%C3%A7%C3%BCk%C3%A7ekmece_-_Vezir_Mehmet_Pa%C5%9Fa_%C3%87e%C5%9Fmesi_-_20250621121138.jpg",
+"w": 4032
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Ayazma Sokak Çeşmesi",
+"p": "0/05/Ayazma_Sokak_%C3%87e%C5%9Fmesi.jpg",
+"w": 5184
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Küçükçekmece Hamidiye Çeşmesi",
+"p": "c/c6/K%C3%BC%C3%A7%C3%BCk%C3%A7ekmece_-_Kucukcekmece_Hamidiye_Fountain_-_20250621121427.jpg",
+"w": 4032
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Çoban Çeşmesi",
+"p": "6/69/%C3%87oban%C3%A7e%C5%9Fme_%28Yenibosna%29.jpg",
+"w": 4032
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "15 Temmuz Millet Bahçesi",
+"p": "e/e4/15_Temmuz_Park%C4%B1.jpg",
+"w": 5184
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Uzun Kemer",
+"p": "a/a3/Mimar_Sinan_Uzun_Kemer_Uzun_Aquaduct.jpg",
+"w": 3000
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Çatalca Mübadele Müzesi",
+"p": "4/41/%C3%87atalca_M%C3%BCbadele_M%C3%BCzesi_%C3%96n_Cephe.jpg",
+"w": 3264
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Ahmet Pir Edirnevi Türbesi",
+"p": "c/c8/Ahmet_Pir_Edirnevi_T%C3%BCrbesi_2026-07-15_14.45.13_1791237565.JPG",
+"w": 2400
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Kazlı Çeşme",
+"p": "8/82/20240411_Kazl%C4%B1%C3%A7e%C5%9Fme_1_%28cropped%29.jpg",
+"w": 1866
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "İshak Ağa Çeşmesi",
+"p": "b/b5/%C4%B0shak_A%C4%9Fa_Fountain%2C_Beykoz_Meadow-1.jpg",
+"w": 5184
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "İshak Ağa Çeşmesi",
+"p": "5/55/%C4%B0shak_A%C4%9Fa_%C3%87e%C5%9Fmesi%2C_Orta%C3%A7e%C5%9Fme.jpg",
+"w": 5059
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "İstanbul Robot Müzesi",
+"p": "2/2b/Robotmuseum.jpg",
+"w": 4032
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Beykoz Cam ve Billur Müzesi",
+"p": "0/0e/BGCM_21.jpg",
+"w": 4032
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Derviş Paşa Çeşmesi",
+"p": "b/b3/20240411_Dervi%C5%9F_Pa%C5%9Fa_%C3%87e%C5%9Fmesi_3.jpg",
+"w": 4080
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Erikli Baba Tekkesi",
+"p": "5/58/20240410_Erikli_Baba_Dergah%C4%B1_3.jpg",
+"w": 1932
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Takkeci İbrahim Ağa Camii",
+"p": "8/8e/Istanbul_Takkeci_Ibrahim_Cavus_Mosque_exterior_in_2014_6637.jpg",
+"w": 4928
+},
+{
+"g": "ilk",
+"il": "İstanbul",
+"ad": "Beşiktaş Kedi Müzesi",
+"p": "5/5e/Istanbul_Cat_Museum_03.jpg",
+"w": 4284
+},
+{
+"g": "ilk",
+"il": "İzmir",
+"ad": "Çandarlı Körfezi",
+"p": "2/25/Yenifocageneral.jpg",
+"w": 894
+},
+{
+"g": "ilk",
+"il": "İzmir",
+"ad": "İzmir Milli Kütüphane",
+"p": "a/a4/%C4%B0zmir_Milli_K%C3%BCt%C3%BCphanesi3.jpg",
+"w": 930
+},
+{
+"g": "ilk",
+"il": "İzmir",
+"ad": "Opera İzmir",
+"p": "3/3c/%C4%B0zmir_opera_binas%C4%B1_%282%29.jpg",
+"w": 2722
+},
+{
+"g": "ilk",
+"il": "İzmir",
+"ad": "Çeşme Kent Müzesi",
+"p": "f/f6/%C3%87e%C5%9Fme_Kent_M%C3%BCzesi_2024-09-04_13.50.23_1793278997.JPG",
+"w": 3000
+},
+{
+"g": "ilk",
+"il": "Karabük",
+"ad": "Hadrianapolis",
+"p": "a/a7/Hadrianapolis_Dec_2025_02.jpg",
+"w": 4000
+},
+{
+"g": "ilk",
+"il": "Kocaeli",
+"ad": "Nicomedia",
+"p": "c/c4/Nicomedia%2C_Bythinia%2C_Izmit%2C_Turkey_%2839153593001%29.jpg",
+"w": 4928
+},
+{
+"g": "ilk",
+"il": "Kütahya",
+"ad": "Tavşanlı Höyük",
+"p": "3/39/Tav%C5%9Fanl%C4%B1_H%C3%B6y%C3%BCk_aerial_view_%28Fidan_2021%2C_Figure_2%29.jpg",
+"w": 1384
+},
+{
+"g": "ilk",
+"il": "Malatya",
+"ad": "Kızılhisar Dağı",
+"p": "8/83/Serinhisar_General_View.JPG",
+"w": 1014
+},
+{
+"g": "ilk",
+"il": "Mersin",
+"ad": "Danyal Peygamber Makamı Roma Köprüsü",
+"p": "4/4f/Danyal_Peygamber_Makam%C4%B1_Roma_K%C3%B6pr%C3%BCs%C3%BC_2026-06-19_17.36.05_1793474329.JPG",
+"w": 6240
+},
+{
+"g": "ilk",
+"il": "Muğla",
+"ad": "Muğla Ulu Camii",
+"p": "4/4b/Mu%C4%9Fla_Ulu_Camii_5850.jpg",
+"w": 4288
+},
+{
+"g": "ilk",
+"il": "Muğla",
+"ad": "Akyarlar",
+"p": "0/0f/Akyarlar-Bodrum-Mu%C4%9Fla%2C_Turcja_-_panoramio.jpg",
+"w": 4138
+},
+{
+"g": "ilk",
+"il": "Sinop",
+"ad": "Sinop Saat Kulesi",
+"p": "2/2f/SINOP.SAAT_KULESI_-_panoramio.jpg",
+"w": 3264
+},
+{
+"g": "ilk",
+"il": "Trabzon",
+"ad": "Kalecik Kalesi, Araklı",
+"p": "4/42/Kalecik_Kalesi%2C_Arakl%C4%B1_2024-07-31_11.51.12_1793262211.jpg",
+"w": 1920
+},
+{
+"g": "one",
+"il": "Adana",
+"ad": "Sabancı Merkez Camii",
+"p": "b/b0/Adana_Merkez_Camii.jpg",
+"w": 2048
+},
+{
+"g": "ilk",
+"il": "Adıyaman",
+"ad": "Atatürk Baraj Gölü",
+"p": "e/ee/Atat%C3%BCrk_baraj%C4%B1_-_panoramio.jpg",
+"w": 2304
+},
+{
+"g": "one",
+"il": "Afyonkarahisar",
+"ad": "Ayazini",
+"p": "1/10/AyazinKirche4.jpg",
+"w": 1987
+},
+{
+"g": "kapak",
+"il": "Afyonkarahisar",
+"ad": "KAPAK Afyonkarahisar",
+"p": "b/bf/Ayazini_village_and_the_ancient_settlements_in_the_background.jpg",
+"w": 4032
+},
+{
+"g": "one",
+"il": "Ağrı",
+"ad": "Ağrı Dağı",
+"p": "2/28/00_2399_Mount_Ararat%2C_Turkey.jpg",
+"w": 3300
+},
+{
+"g": "ilk",
+"il": "Ağrı",
+"ad": "Ağrı Dağı Millî Parkı",
+"p": "c/cb/B%C3%BCy%C3%BCk_ve_K%C3%BC%C3%A7%C3%BCk_A%C4%9Fr%C4%B1_Da%C4%9F%C4%B1.jpg",
+"w": 2592
+},
+{
+"g": "kapak",
+"il": "Ağrı",
+"ad": "KAPAK Ağrı",
+"p": "9/93/00_3411_%C4%B0shak_Pa%C5%9Fa_Saray%C4%B1_-_Turkey.jpg",
+"w": 3000
+},
+{
+"g": "one",
+"il": "Aksaray",
+"ad": "Tuz Gölü",
+"p": "7/77/Lake_Tuz%2C_Turkey_%28Unsplash_O0uCm1WLnA0%29.jpg",
+"w": 5184
+},
+{
+"g": "kapak",
+"il": "Aksaray",
+"ad": "KAPAK Aksaray",
+"p": "b/ba/Selime_Cathedral.jpg",
+"w": 3523
+},
+{
+"g": "one",
+"il": "Antalya",
+"ad": "Düden Şelalesi",
+"p": "f/ff/Lower_Duden_Falls.jpg",
+"w": 2832
+},
+{
+"g": "ilk",
+"il": "Antalya",
+"ad": "Aperlae",
+"p": "d/d7/Aperlae_walls.jpg",
+"w": 4032
+},
+{
+"g": "kapak",
+"il": "Antalya",
+"ad": "KAPAK Antalya",
+"p": "6/60/Aspendos_Amphitheatre.jpg",
+"w": 4256
+},
+{
+"g": "one",
+"il": "Ardahan",
+"ad": "Çıldır Gölü",
+"p": "b/b9/Cildir_02.jpg",
+"w": 4368
+},
+{
+"g": "kapak",
+"il": "Aydın",
+"ad": "KAPAK Aydın",
+"p": "c/ca/Aphrodisias_turkey.jpg",
+"w": 1200
+},
+{
+"g": "one",
+"il": "Balıkesir",
+"ad": "Kazdağı Millî Parkı",
+"p": "e/eb/KazDaglariTabiat.jpg",
+"w": 1280
+},
+{
+"g": "ilk",
+"il": "Balıkesir",
+"ad": "Avşa",
+"p": "0/04/Sunset_at_Av%C5%9Fa_Island%2C_Turkey.jpg",
+"w": 2592
+},
+{
+"g": "kapak",
+"il": "Batman",
+"ad": "KAPAK Batman",
+"p": "8/89/Malabadi_Bridge_2.jpg",
+"w": 4000
+},
+{
+"g": "kapak",
+"il": "Bitlis",
+"ad": "KAPAK Bitlis",
+"p": "a/a9/NemrutVolcano15.jpg",
+"w": 4368
+},
+{
+"g": "kapak",
+"il": "Bolu",
+"ad": "KAPAK Bolu",
+"p": "4/46/TR_Yedig%C3%B6ller_asv2021-10_img16.jpg",
+"w": 7680
+},
+{
+"g": "one",
+"il": "Burdur",
+"ad": "Salda Gölü",
+"p": "a/aa/Saldives_Reflection.jpg",
+"w": 4288
+},
+{
+"g": "kapak",
+"il": "Bursa",
+"ad": "KAPAK Bursa",
+"p": "1/19/Cumal%C4%B1k%C4%B1z%C4%B1k_7121.jpg",
+"w": 2576
+},
+{
+"g": "ilk",
+"il": "Çanakkale",
+"ad": "Saros Körfezi",
+"p": "f/f6/Edirne_Ke%C5%9Fan_Saros_K%C3%B6rfezi.jpg",
+"w": 4160
+},
+{
+"g": "one",
+"il": "Çankırı",
+"ad": "Çankırı Tuz Mağarası",
+"p": "1/18/%C3%87ank%C4%B1r%C4%B1_Salt_Cave.jpg",
+"w": 4000
+},
+{
+"g": "kapak",
+"il": "Çankırı",
+"ad": "KAPAK Çankırı",
+"p": "d/da/Ilgaz_Da%C4%9F%C4%B1.jpg",
+"w": 1928
+},
+{
+"g": "kapak",
+"il": "Diyarbakır",
+"ad": "KAPAK Diyarbakır",
+"p": "8/87/Dehder%C3%AE.jpg",
+"w": 1280
+},
+{
+"g": "kapak",
+"il": "Düzce",
+"ad": "KAPAK Düzce",
+"p": "e/ef/G%C3%BCzeldere_%C5%9Felalesi.jpg",
+"w": 2592
+},
+{
+"g": "kapak",
+"il": "Erzincan",
+"ad": "KAPAK Erzincan",
+"p": "8/89/Girlevik_Waterfall%2C_Erzincan%2C_Turkey.jpg",
+"w": 2543
+},
+{
+"g": "kapak",
+"il": "Eskişehir",
+"ad": "KAPAK Eskişehir",
+"p": "5/51/MidasSehri.Tomb.jpg",
+"w": 2023
+},
+{
+"g": "ilk",
+"il": "Gaziantep",
+"ad": "Boyacı Camii",
+"p": "1/16/Boyac%C4%B1_Camii.jpg",
+"w": 4000
+},
+{
+"g": "ilk",
+"il": "Gaziantep",
+"ad": "Dülük",
+"p": "1/15/Gaziantep_Zeugma_museum_D%C3%BCl%C3%BCk_mosaic_in_2019_4083b.jpg",
+"w": 7834
+},
+{
+"g": "ilk",
+"il": "Gaziantep",
+"ad": "Hışva Han",
+"p": "7/73/Gaziantep_Castle_View_outside_H%C4%B1%C5%9Fvahan_as_ruin_in_2004_8294.jpg",
+"w": 3008
+},
+{
+"g": "kapak",
+"il": "Gaziantep",
+"ad": "KAPAK Gaziantep",
+"p": "f/f3/Hromkla_Halfeti.jpg",
+"w": 760
+},
+{
+"g": "ilk",
+"il": "Hatay",
+"ad": "İssos",
+"p": "c/cd/%C4%B0ssos_Harabeleri_-_panoramio.jpg",
+"w": 1600
+},
+{
+"g": "kapak",
+"il": "Hatay",
+"ad": "KAPAK Hatay",
+"p": "5/54/Antioch_Saint_Pierre_Church_Front.JPG",
+"w": 1600
+},
+{
+"g": "kapak",
+"il": "Iğdır",
+"ad": "KAPAK Iğdır",
+"p": "6/61/I%C4%9Fd%C4%B1r_Tuzluca_Tuz_Ma%C4%9Faras%C4%B1_20221213.jpg",
+"w": 3000
+},
+{
+"g": "kapak",
+"il": "İstanbul",
+"ad": "KAPAK İstanbul",
+"p": "2/2f/Ayasofya_2026-03-25_23.51.34_1793114864.jpg",
+"w": 4032
+},
+{
+"g": "one",
+"il": "İzmir",
+"ad": "Bergama Akropolü",
+"p": "7/79/Paolo_Monti_-_Serie_fotografica_%28Bergama%2C_1962%29_-_BEIC_6336764.jpg",
+"w": 1280
+},
+{
+"g": "ilk",
+"il": "İzmir",
+"ad": "İzmir Körfezi",
+"p": "5/50/Breakwater_S_Head_light_at_Izmir_Harbour%2C_Izmir%2C_Turkey.jpg",
+"w": 3264
+},
+{
+"g": "ilk",
+"il": "İzmir",
+"ad": "Yenifoça",
+"p": "e/e8/Yenifoca_habor..jpg",
+"w": 1800
+},
+{
+"g": "ilk",
+"il": "İzmir",
+"ad": "Kız Kulesi",
+"p": "2/21/Laskaris_Palace_03.jpg",
+"w": 3561
+},
+{
+"g": "kapak",
+"il": "İzmir",
+"ad": "KAPAK İzmir",
+"p": "8/84/Ephesus_Celsus_Library_Fa%C3%A7ade.jpg",
+"w": 9163
+},
+{
+"g": "kapak",
+"il": "Kahramanmaraş",
+"ad": "KAPAK Kahramanmaraş",
+"p": "d/d9/46000_%C3%87ukurhisar-Kahramanmara%C5%9F_Merkez-Kahramanmara%C5%9F%2C_Turkey_-_panoramio_%287%29.jpg",
+"w": 2896
+},
+{
+"g": "kapak",
+"il": "Karabük",
+"ad": "KAPAK Karabük",
+"p": "0/08/Safranbolu_traditional_houses.jpg",
+"w": 2304
+},
+{
+"g": "kapak",
+"il": "Karaman",
+"ad": "KAPAK Karaman",
+"p": "a/a1/Karaman_Hatuniye_Medresesi_3433.jpg",
+"w": 2560
+},
+{
+"g": "one",
+"il": "Kars",
+"ad": "Çıldır Gölü",
+"p": "2/25/Cildir_01.jpg",
+"w": 4368
+},
+{
+"g": "ilk",
+"il": "Kars",
+"ad": "Horomos Manastırı",
+"p": "8/87/Horomos_Monastery_13.jpg",
+"w": 3264
+},
+{
+"g": "kapak",
+"il": "Kars",
+"ad": "KAPAK Kars",
+"p": "c/c0/Kars%2C_castello%2C_veduta_01.jpg",
+"w": 6720
+},
+{
+"g": "kapak",
+"il": "Kastamonu",
+"ad": "KAPAK Kastamonu",
+"p": "2/2e/Valla_Canyon.jpg",
+"w": 4608
+},
+{
+"g": "ilk",
+"il": "Kayseri",
+"ad": "Palas Tuzla Gölü",
+"p": "4/47/Lake_Tuzla_Palas_in_June.jpg",
+"w": 6000
+},
+{
+"g": "ilk",
+"il": "Kırşehir",
+"ad": "Yassıhöyük",
+"p": "2/23/Yass%C4%B1h%C3%B6y%C3%BCk_05.jpg",
+"w": 5184
+},
+{
+"g": "kapak",
+"il": "Kırşehir",
+"ad": "KAPAK Kırşehir",
+"p": "5/56/A%C5%9F%C4%B1k_Pa%C5%9Fa_T%C3%BCrbesi_-_Tomb_Of_Ashik_Pasha_-_panoramio.jpg",
+"w": 2816
+},
+{
+"g": "kapak",
+"il": "Kilis",
+"ad": "KAPAK Kilis",
+"p": "c/c2/Exterior_of_16th-Century_Tekke_Mosque_-_Kilis_-_Turkey_%285772594464%29.jpg",
+"w": 2304
+},
+{
+"g": "ilk",
+"il": "Kocaeli",
+"ad": "İzmit Körfezi",
+"p": "5/5e/Izmit_k%C3%B6rfezi_%2A%C2%A9Abdullah_Kiyga_-_panoramio.jpg",
+"w": 2587
+},
+{
+"g": "kapak",
+"il": "Konya",
+"ad": "KAPAK Konya",
+"p": "d/d7/Molavi1.JPG",
+"w": 3456
+},
+{
+"g": "kapak",
+"il": "Kütahya",
+"ad": "KAPAK Kütahya",
+"p": "4/44/Aizanoi_Zeus_temple_2120.jpg",
+"w": 4256
+},
+{
+"g": "kapak",
+"il": "Malatya",
+"ad": "KAPAK Malatya",
+"p": "5/5f/Conquering_the_Mountain_Nemrut.jpg",
+"w": 6240
+},
+{
+"g": "ilk",
+"il": "Manisa",
+"ad": "Bozdağlar",
+"p": "e/e9/Bozda%C4%9Flar_15_05_1988_Nordseite_mit_Schneeresten.jpg",
+"w": 5331
+},
+{
+"g": "kapak",
+"il": "Mardin",
+"ad": "KAPAK Mardin",
+"p": "6/65/Dara_P1030851_20080424091200.JPG",
+"w": 3072
+},
+{
+"g": "ilk",
+"il": "Mersin",
+"ad": "Namrun Kalesi",
+"p": "7/70/Namrun-Castle-20240801_123841.jpg",
+"w": 3500
+},
+{
+"g": "one",
+"il": "Muğla",
+"ad": "Dalyan",
+"p": "0/02/Dalyan%2C_Turkey_March_2022_-_La_Boheme%2C_Food_Drinks_%26_Boat.jpg",
+"w": 3833
+},
+{
+"g": "ilk",
+"il": "Muğla",
+"ad": "Halikarnassos",
+"p": "3/37/HalicarnassusRuins.jpg",
+"w": 4288
+},
+{
+"g": "ilk",
+"il": "Muğla",
+"ad": "Karaada",
+"p": "a/a7/Karaada_Smugglers_Bay_-_Ka%C3%A7ak%C3%A7%C4%B1lar_Koyu_-_panoramio.jpg",
+"w": 2032
+},
+{
+"g": "kapak",
+"il": "Muğla",
+"ad": "KAPAK Muğla",
+"p": "c/c5/View_to_Oludeniz-Kidrak_nature_park.jpg",
+"w": 5354
+},
+{
+"g": "ilk",
+"il": "Nevşehir",
+"ad": "Acıgöl-Nevşehir",
+"p": "f/f1/Acig%C3%B6l18_09_1972_Vulkankuppen_bei_Ac%C4%B1g%C3%B6l_%28Nev%C5%9Fehir%29.jpg",
+"w": 2395
+},
+{
+"g": "kapak",
+"il": "Nevşehir",
+"ad": "KAPAK Nevşehir",
+"p": "f/f0/Pasaba_Valley.jpg",
+"w": 4032
+},
+{
+"g": "kapak",
+"il": "Niğde",
+"ad": "KAPAK Niğde",
+"p": "7/7f/Aladaglar_detail.JPG",
+"w": 1600
+},
+{
+"g": "kapak",
+"il": "Ordu",
+"ad": "KAPAK Ordu",
+"p": "1/13/Boztepe_1.jpg",
+"w": 4032
+},
+{
+"g": "kapak",
+"il": "Rize",
+"ad": "KAPAK Rize",
+"p": "b/b0/Zilkale0.jpg",
+"w": 11111
+},
+{
+"g": "one",
+"il": "Sakarya",
+"ad": "Poyrazlar Gölü",
+"p": "f/fd/TR_Sakarya_asv2021-10_img29_Lake_Poyrazlar.jpg",
+"w": 7874
+},
+{
+"g": "kapak",
+"il": "Şanlıurfa",
+"ad": "KAPAK Şanlıurfa",
+"p": "a/a8/Bal%C4%B1kl%C4%B1g%C3%B6l_Urfa2.jpg",
+"w": 2592
+},
+{
+"g": "kapak",
+"il": "Şırnak",
+"ad": "KAPAK Şırnak",
+"p": "d/d5/K%C4%B1rm%C4%B1z%C4%B1_Medrese_2.jpg",
+"w": 4928
+},
+{
+"g": "one",
+"il": "Tekirdağ",
+"ad": "Uçmakdere",
+"p": "2/2c/Tekirda%C4%9F_Kartaltepe_Natural_Park.jpg",
+"w": 5472
+},
+{
+"g": "kapak",
+"il": "Tekirdağ",
+"ad": "KAPAK Tekirdağ",
+"p": "2/2c/Tekirda%C4%9F_Kartaltepe_Natural_Park.jpg",
+"w": 5472
+},
+{
+"g": "kapak",
+"il": "Van",
+"ad": "KAPAK Van",
+"p": "3/37/Akhtamar_Island_on_Lake_Van_with_the_Armenian_Cathedral_of_the_Holy_Cross.jpg",
+"w": 1200
+},
+{
+"g": "kapak",
+"il": "Yalova",
+"ad": "KAPAK Yalova",
+"p": "3/37/Atat%C3%BCrk_Y%C3%BCr%C3%BCyen_K%C3%B6%C5%9Fk%2C_Yalova%2C_T%C3%BCrkiye.jpg",
+"w": 3024
+},
+{
+"g": "kapak",
+"il": "Yozgat",
+"ad": "KAPAK Yozgat",
+"p": "b/bd/Yozgat-%C3%A7aml%C4%B1%C4%9F%C4%B1-milli-park%C4%B1.jpg",
+"w": 640
+},
+{
+"g": "kapak",
+"il": "Zonguldak",
+"ad": "KAPAK Zonguldak",
+"p": "1/11/Filyos_Bay.jpg",
+"w": 1818
+}
+]

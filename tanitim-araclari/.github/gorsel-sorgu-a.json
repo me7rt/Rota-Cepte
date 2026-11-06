@@ -1,0 +1,12 @@
+{
+ "alaeddin2": ["Alaaddin Camii Konya", "bitmap", 5, 1600],
+ "alaeddin3": ["Alaeddin Hill Konya", "bitmap", 4, 1600],
+ "etliekmek2": ["etli ekmek", "bitmap", 5, 800],
+ "mevlanagece": ["Mevlana Museum night", "bitmap", 4, 1600],
+ "mevlanaic": ["Mevlana Museum interior tomb", "bitmap", 5, 1600],
+ "uludag3": ["Uludağ kayak", "bitmap", 5, 1600],
+ "uludag4": ["Uludag winter snow Bursa", "bitmap", 5, 1600],
+ "uludag5": ["Bursa Uludağ teleferik", "bitmap", 5, 1600],
+ "bursakar": ["Bursa snow", "bitmap", 4, 1600],
+ "kestane": ["kestane şekeri", "bitmap", 3, 800]
+}
