@@ -1296,6 +1296,13 @@ button.mrow:active{background:var(--surface2)}
 .ilsira{display:flex;gap:8px;margin:0 0 10px}
 .ilsira button{padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
 .ilsira button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.ilsira button{min-height:44px}
+.ilbolge{overflow-x:auto;scrollbar-width:none;margin:0 -16px 10px;padding:0 16px 2px}
+.ilbolge::-webkit-scrollbar{display:none}
+.ilbolge button{flex:none;white-space:nowrap}
+.ils.satir{display:flex;flex-direction:column;gap:8px}
+.ils.satir .row small{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.plaka{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;font-weight:800;margin-right:4px;flex:none}
 .ayarlar>summary{list-style:none;cursor:pointer}
 .ayarlar>summary::-webkit-details-marker{display:none}
 .ayarlar>summary span{display:flex;flex-direction:column}
@@ -1411,3 +1418,42 @@ html.gm-acik,html.gm-acik body{overflow:hidden}
 .pev.git{background:var(--pri);color:var(--on-pri,#fff);border-color:transparent}.pev.git svg{color:inherit}
 .pev.kay{flex:none;width:46px}
 .pev span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* acil yardım */
+.acilpill{display:inline-flex;align-items:center;gap:6px;min-height:44px;margin:0 0 10px;padding:0 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.acilpill svg{color:#d93a2b}
+.acilv{display:flex;flex-direction:column;gap:12px}
+.acara{display:flex;align-items:center;justify-content:center;gap:14px;min-height:76px;border-radius:20px;background:#d93a2b;color:#fff;font-weight:800;font-size:22px;text-decoration:none;padding:14px}
+.acara small{display:block;font-size:13px;font-weight:700;opacity:.92}
+.acnot{margin:-2px 0 0;color:var(--muted);font-size:13px;text-align:center}
+.ackart{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);padding:14px;display:flex;flex-direction:column;gap:8px}
+.ackart h3{margin:0;font-size:15px;display:flex;gap:8px;align-items:center}
+.ackart p{margin:0;color:var(--muted);font-size:13.5px}
+.ackart ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;font-size:14px}
+.ackoor{font-variant-numeric:tabular-nums;font-size:18px;font-weight:800;user-select:text;-webkit-user-select:text}
+.acdug{display:flex;gap:8px;flex-wrap:wrap}
+.acdug .btn{min-height:44px}
+.acet{font-size:11px;font-weight:800;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:1px 7px;white-space:nowrap;margin-left:auto}
+.acet.ok{color:#1f8a4c;border-color:#1f8a4c}
+.acsatir{display:flex;align-items:center;gap:12px;min-height:56px;padding:6px 0;border-top:1px solid var(--line);color:var(--fg);text-decoration:none}
+.ackart h3 + .acsatir{border-top:0}
+.aci{width:40px;height:40px;border-radius:12px;background:var(--surface2);display:grid;place-items:center;flex:none}
+.acsatir small{display:block;color:var(--muted);font-size:13px}
+
+/* kültür koçu */
+.koc{margin:12px 0;border:1px solid #c9952b;background:color-mix(in srgb,#f5c96b 16%,var(--surface));border-radius:var(--r-m)}
+.koc summary,.kocb summary{list-style:none;display:flex;align-items:center;gap:12px;min-height:56px;padding:8px 12px;cursor:pointer}
+.koc summary::-webkit-details-marker,.kocb summary::-webkit-details-marker{display:none}
+.koc summary>svg:first-child{color:#b07a12;flex:none}
+.koc summary span,.kocb summary .rt{flex:1;min-width:0}
+.koc summary b,.kocb summary b{display:block}
+.koc summary small,.kocb summary small{display:block;color:var(--muted);font-size:13px}
+.koc[open] summary>svg:last-child,.kocb[open] summary>svg:last-child{transform:rotate(180deg)}
+.koc ul,.kocb ul{list-style:none;margin:0;padding:0 14px 14px;display:flex;flex-direction:column;gap:8px}
+.kmad{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.kmad svg{flex:none;margin-top:2px}
+.kmad.ok svg{color:#1f8a4c}.kmad.no svg{color:#d93a2b}
+.kocb{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l)}
+.kocb summary{font-weight:700}
+.kocgiris,.kocnot{margin:0;color:var(--muted);font-size:14px}
+.kocnot{font-size:12.5px}

@@ -46,10 +46,11 @@
     "© 2026 Mert Turanlıoğlu · Tüm hakları saklıdır": "© 2026 Mert Turanlıoğlu · All rights reserved",
     "Fotoğraflar ve Vikipedi metinleri kendi lisanslarıyla kullanılır.": "Photos and Wikipedia texts are used under their own licenses.",
     "Geri": "Back", "Rotan nereye?": "Where to?",
-    "Konumumu kullan": "Use my location", "Konum kapalı": "Location off", "Konum açık": "Location on", "Konum aranıyor…": "Finding location…",
+    "Konumumu kullan": "Use my location", "Konum kapalı": "Location off", "Konumu aç": "Turn on location", "Konum açık": "Location on", "Konum aranıyor…": "Finding location…",
     // ana sayfa
     "İl, ilçe ya da yer ara… (ör. Uşak)": "Search a province, district or place… (e.g. Cappadocia)",
     "Şehir, müze, plaj, antik kent ara…": "Search a city, museum, beach, ancient site…",
+    "İl, ilçe ya da yer ara: Efes, Nemrut…": "Search a province, town or place: Ephesus, Nemrut…", "Bölge": "Region", "Tümü": "All", "Acil yardım": "Emergency help", "Kültür koçu": "Culture coach", "Cami, çay, bahşiş, pazarlık, Ramazan": "Mosques, tea, tipping, bargaining, Ramadan", "112, konumum, en yakın hastane ve eczane": "112, my location, nearest hospital and pharmacy",
     "Öne çıkan iller": "Featured provinces", "Tüm iller (81)": "All provinces (81)", "Tüm iller": "All provinces", "Daha az göster": "Show less", "Plaka": "Plate no.",
     "Ayarlar ve hakkında": "Settings and about", "Sesli rehber": "Audio guide", "Dil, tema, sürüm, gizlilik, lisanslar": "Language, theme, version, privacy, licences",
     "Aramayı temizle": "Clear search",

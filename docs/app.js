@@ -7,6 +7,15 @@
   // "6.5.1'de", "6.5'te", "6.6'da": sürüm numarasına Türkçe bulunma eki
   const surumEk = (v) => ({ 0: "da", 1: "de", 2: "de", 3: "te", 4: "te", 5: "te", 6: "da", 7: "de", 8: "de", 9: "da" })[String(v).slice(-1)] || "de";
   if (window.ikDoldur) ikDoldur();
+  // Paylaşılan link Android tarayıcıda açıldıysa uygulama yüklü değildir (yüklüyse Android linki doğrudan uygulamaya verir): Google Play'e yönlendir
+  const PAYLASIM_YOLU = /^#\/(il\/[^/]+\/yer\/|liste\/|yol\/)/;
+  try {
+    const yerli = window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() !== "web";
+    if (!yerli && location.hostname === "me7rt.github.io" && /Android/i.test(navigator.userAgent) && PAYLASIM_YOLU.test(location.hash) && !/[?&]web\b/.test(location.search)) {
+      location.replace("https://play.google.com/store/apps/details?id=io.github.me7rt.rotacepte");
+      return;
+    }
+  } catch (e) { /* yönlendirme yapılamazsa web sürümü açılır */ }
   // MapTiler harita anahtarı (boşsa OpenStreetMap kullanılır)
   const HARITA_ANAHTAR = "pI5pMuHAI4gLw3aqy35G";
 
@@ -220,12 +229,13 @@
 
   // ---------- konum ----------
   document.querySelector("#locBtn .locik").innerHTML = ik("locate-fixed", 16);
+  $("kocEn").hidden = DIL !== "en"; // turist için kültür koçu ana sayfada da görünür
   function stopLocation() {
     if (watchId !== null) navigator.geolocation.clearWatch(watchId);
     watchId = null; me = null; homeMe = null; konumBekleyen = [];
     try { localStorage.setItem("gezi-konum-kapali", "1"); } catch (e) {}
     $("locBtn").classList.remove("on");
-    $("locText").textContent = T("Konum kapalı");
+    $("locText").textContent = T("Konumu aç");
     $("nearSub").textContent = T("Konumunu aç, sana en yakın gezilecek yerleri sıralayalım");
     if (meMarker && layer) { layer.removeLayer(meMarker); meMarker = null; }
     if (open) renderFacts(open);
@@ -257,7 +267,7 @@
         if (watchId !== null) navigator.geolocation.clearWatch(watchId);
         watchId = null; me = null; homeMe = null; konumBekleyen = [];
         $("locBtn").classList.remove("on");
-        $("locText").textContent = T("Konum kapalı");
+        $("locText").textContent = T("Konumu aç");
         toast(T("Konum izni verilmedi. Ayarlardan izin verebilirsin."));
       },
       { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
@@ -298,7 +308,7 @@
     $("tema").hidden = v !== "tema";
     $("rota").hidden = v !== "rota";
     $("yol").hidden = v !== "yol";
-    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark", "planlar", "muzekart"]) $(x).hidden = v !== x;
+    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark", "planlar", "muzekart", "acil", "kultur"]) $(x).hidden = v !== x;
     $("ataturk").hidden = v !== "ataturk";
     $("rozet").hidden = v !== "rozet";
     $("listem").hidden = v !== "listem";
@@ -307,6 +317,7 @@
     $("plan").hidden = true;
     $("back").hidden = v === "home" || v === "listem" || v === "rozet" || (view && view.mode === "near");
     $("dilHizli").hidden = v !== "home";
+    $("acilPill").hidden = !(view && view.mode === "near");
     if (degisti || v === "city") window.scrollTo(0, 0);
     navAktif();
   }
@@ -352,6 +363,8 @@
       if (h[0] === "kartlar") return await showKartlar();
       if (h[0] === "oyun") return await showOyun();
       if (h[0] === "cark") return showCark();
+      if (h[0] === "acil") return showAcil();
+      if (h[0] === "kultur") return showKultur();
       if (h[0] === "ozet") { history.replaceState(null, "", "#/rozetler"); route(); setTimeout(() => yilOzeti(+h[1] || 0), 600); return; }
       if (h[0] === "rozetler") { view = { mode: "rozet" }; show("rozet"); $("eyebrow").textContent = T("Gezi haritan ve rozetler"); $("title").textContent = T("Gezilerim"); renderGez(); return; }
       if (h[0] === "listem") { view = { mode: "listem" }; show("listem"); $("eyebrow").textContent = "Rota Cepte"; $("title").textContent = T("Gideceğim yerler"); renderFav(); return; }
@@ -475,6 +488,90 @@
     $("gezList").innerHTML = a.map((x) =>
       `<li><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${thumb(x.f, x.k)}<span class="rt"><b>${esc(kayitAd(x))}</b><small>${esc(x.il)}${x.t ? " · " + new Date(x.t).toLocaleDateString(DIL === "en" ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" }) : ""}</small></span><span class="km ok">${ik("circle-check", 20)}</span></button></li>`).join("");
   }
+  // İl kartlarındaki kısa tanıtım (her ilin en bilinen yerleri, verideki adlarla kontrol edildi)
+  const KANCA = {
+    "adana": ["Taşköprü ve Seyhan kıyısı", "Taşköprü bridge and the Seyhan riverside"],
+    "adiyaman": ["Nemrut'ta gün doğumu", "Sunrise on Mount Nemrut"],
+    "afyonkarahisar": ["Kayalık kale ve Frig Vadisi", "A clifftop castle and the Phrygian Valley"],
+    "agri": ["İshak Paşa Sarayı ve Ağrı Dağı", "Ishak Pasha Palace and Mount Ararat"],
+    "aksaray": ["Ihlara Vadisi ve kaya kiliseleri", "Ihlara Valley and its rock churches"],
+    "amasya": ["Kral kaya mezarları ve Yeşilırmak evleri", "Royal rock tombs above the Yeşilırmak"],
+    "ankara": ["Anıtkabir ve Anadolu Medeniyetleri Müzesi", "Anıtkabir and the Museum of Anatolian Civilizations"],
+    "antalya": ["Antik kentler ve turkuaz koylar", "Ancient cities and turquoise coves"],
+    "ardahan": ["Çıldır Gölü ve yayla yolları", "Lake Çıldır and highland roads"],
+    "artvin": ["Borçka Karagöl ve eski manastırlar", "Lake Karagöl and old monasteries"],
+    "aydin": ["Afrodisias, Milet ve Didyma", "Aphrodisias, Miletus and Didyma"],
+    "balikesir": ["Kazdağı ve Cunda Adası", "Mount Ida and Cunda Island"],
+    "bartin": ["Amasra'nın kalesi ve koyları", "Amasra's castle and bays"],
+    "batman": ["Hasankeyf ve Dicle kıyısı", "Hasankeyf on the Tigris"],
+    "bayburt": ["Baksı Müzesi ve Bayburt Kalesi", "Baksı Museum and Bayburt Castle"],
+    "bilecik": ["Söğüt, Osmanlı'nın doğduğu yer", "Söğüt, where the Ottomans began"],
+    "bingol": ["Yüzen adalar ve dağ gölleri", "Floating islands and mountain lakes"],
+    "bitlis": ["Ahlat mezar taşları ve Nemrut Krater Gölü", "Ahlat tombstones and Nemrut Crater Lake"],
+    "bolu": ["Abant Gölü ve Yedigöller", "Lake Abant and the Seven Lakes"],
+    "burdur": ["Salda Gölü'nün beyaz kıyıları", "The white shores of Lake Salda"],
+    "bursa": ["Uludağ ve ilk Osmanlı başkenti", "Uludağ and the first Ottoman capital"],
+    "canakkale": ["Gelibolu ve Troya", "Gallipoli and Troy"],
+    "cankiri": ["Ilgaz Dağı ve tuz mağarası", "Ilgaz Mountain and the salt cave"],
+    "corum": ["Hattuşa, Hititlerin başkenti", "Hattusa, capital of the Hittites"],
+    "denizli": ["Pamukkale travertenleri", "The white terraces of Pamukkale"],
+    "diyarbakir": ["Surlar, Hevsel Bahçeleri ve Dicle", "City walls, Hevsel Gardens and the Tigris"],
+    "duzce": ["Akçakoca sahili ve şelaleler", "Akçakoca coast and waterfalls"],
+    "edirne": ["Selimiye ve Kırkpınar", "Selimiye Mosque and Kırkpınar wrestling"],
+    "elazig": ["Harput ve Hazar Gölü", "Harput and Lake Hazar"],
+    "erzincan": ["Gürlevik Şelalesi ve Kemaliye", "Gürlevik Waterfall and Kemaliye"],
+    "erzurum": ["Çifte Minareli Medrese ve Palandöken", "Twin Minaret Madrasa and Palandöken"],
+    "eskisehir": ["Odunpazarı evleri ve Porsuk kıyısı", "Odunpazarı houses and the Porsuk river"],
+    "gaziantep": ["Zeugma mozaikleri ve baklava", "Zeugma mosaics and baklava"],
+    "giresun": ["Giresun Adası ve fındık bahçeleri", "Giresun Island and hazelnut groves"],
+    "gumushane": ["Karaca Mağarası ve Santa harabeleri", "Karaca Cave and the ruins of Santa"],
+    "hakkari": ["Cilo Dağları ve Sat Gölleri", "The Cilo Mountains and Sat Lakes"],
+    "hatay": ["Aziz Petrus Kilisesi ve Antakya sofrası", "St Peter's Church and Antakya cuisine"],
+    "igdir": ["Ağrı Dağı ve Aras Kuş Cenneti", "Mount Ararat and the Aras bird sanctuary"],
+    "isparta": ["Eğirdir Gölü ve lavanta tarlaları", "Lake Eğirdir and lavender fields"],
+    "istanbul": ["İki kıta, bir vapur yolculuğu", "Two continents, one ferry ride"],
+    "izmir": ["Efes sütunları, Kordon'da gün batımı", "Ephesus columns, sunset on the Kordon"],
+    "kahramanmaras": ["Kalesi, Ulu Camii ve dövme dondurma", "Its castle, Great Mosque and stretchy ice cream"],
+    "karabuk": ["Safranbolu'nun Osmanlı evleri", "The Ottoman houses of Safranbolu"],
+    "karaman": ["Binbir Kilise ve Karadağ", "A thousand and one churches on Karadağ"],
+    "kars": ["Ani'nin yıkık kiliseleri", "The ruined churches of Ani"],
+    "kastamonu": ["Valla Kanyonu ve Küre Dağları", "Valla Canyon and the Küre Mountains"],
+    "kayseri": ["Erciyes ve Kapadokya'nın kapısı", "Mount Erciyes, gateway to Cappadocia"],
+    "kirikkale": ["Kızılırmak kıyısı ve Hasandede", "The Kızılırmak riverside and Hasandede"],
+    "kirklareli": ["Dupnisa Mağarası ve İğneada ormanları", "Dupnisa Cave and the İğneada forests"],
+    "kirsehir": ["Cacabey Medresesi ve Ahi Evran", "Cacabey Madrasa and Ahi Evran"],
+    "kilis": ["Ravanda Kalesi ve zeytinlikler", "Ravanda Castle and olive groves"],
+    "kocaeli": ["İzmit Körfezi ve Kefken sahili", "The Gulf of İzmit and the Kefken coast"],
+    "konya": ["Mevlana Müzesi ve Çatalhöyük", "The Mevlana Museum and Çatalhöyük"],
+    "kutahya": ["Aizanoi ve çini atölyeleri", "Aizanoi and tile workshops"],
+    "malatya": ["Arslantepe ve kayısı bahçeleri", "Arslantepe and apricot orchards"],
+    "manisa": ["Sardes antik kenti ve Spil Dağı", "Ancient Sardis and Mount Spil"],
+    "mardin": ["Taş evler ve Mezopotamya manzarası", "Stone houses above the Mesopotamian plain"],
+    "mersin": ["Kız Kalesi ve Cennet Cehennem", "Maiden's Castle and the Heaven and Hell sinkholes"],
+    "mugla": ["Bodrum, Fethiye ve Ölüdeniz", "Bodrum, Fethiye and Ölüdeniz"],
+    "mus": ["Malazgirt, Anadolu'nun kapısı", "Malazgirt, where Anatolia's story turned"],
+    "nevsehir": ["Kapadokya, peribacaları ve balonlar", "Cappadocia, fairy chimneys and balloons"],
+    "nigde": ["Aladağlar ve Gümüşler Manastırı", "The Aladağlar range and Gümüşler Monastery"],
+    "ordu": ["Boztepe manzarası ve Yason Burnu", "The Boztepe view and Cape Jason"],
+    "osmaniye": ["Karatepe-Aslantaş ve taş kabartmalar", "Karatepe-Aslantaş and its stone reliefs"],
+    "rize": ["Ayder Yaylası ve çay bahçeleri", "Ayder plateau and tea gardens"],
+    "sakarya": ["Sapanca Gölü ve Acarlar Longozu", "Lake Sapanca and the Acarlar floodplain forest"],
+    "samsun": ["Bandırma Vapuru ve 19 Mayıs", "The Bandırma steamer and 19 May 1919"],
+    "siirt": ["Botan Vadisi ve Veysel Karani", "Botan Valley and the shrine of Veysel Karani"],
+    "sinop": ["Hamsilos Koyu ve Sinop Kalesi", "Hamsilos bay and Sinop fortress"],
+    "sivas": ["Divriği Ulu Camii ve Gökmedrese", "Divriği Great Mosque and the Gökmedrese"],
+    "sanliurfa": ["Göbeklitepe ve Balıklıgöl", "Göbeklitepe and the sacred fish pools"],
+    "sirnak": ["Cudi Dağı ve Cizre Kalesi", "Mount Cudi and Cizre Castle"],
+    "tekirdag": ["Uçmakdere ve Rakoçi Müzesi", "Uçmakdere and the Rákóczi Museum"],
+    "tokat": ["Ballıca Mağarası ve Taşhan", "Ballıca Cave and the Taşhan inn"],
+    "trabzon": ["Sümela ve yayla sisleri", "Sümela and misty highlands"],
+    "tunceli": ["Munzur Vadisi ve gözeler", "Munzur Valley and its springs"],
+    "usak": ["Ulubey Kanyonu", "The Ulubey Canyon"],
+    "van": ["Van Gölü ve Akdamar Adası", "Lake Van and Akdamar Island"],
+    "yalova": ["Termal kaplıcalar ve Sudüşen Şelalesi", "Thermal springs and Sudüşen Waterfall"],
+    "yozgat": ["Yozgat Çamlığı ve Kerkenes", "Yozgat pine forest and Kerkenes"],
+    "zonguldak": ["Gökgöl Mağarası ve maden tarihi", "Gökgöl Cave and the coal-mining story"]
+  };
   // ---------- rozetler ----------
   const BOLGE = {
     "Marmara": "istanbul edirne kirklareli tekirdag canakkale kocaeli yalova sakarya bilecik bursa balikesir",
@@ -2254,6 +2351,9 @@
     // Bu sürümde yeni: her sürümde güncellenir (yeni, iyileşen, çıkarılan)
     const yeni = [
       ["car-front", TL("Arabamı, otelimi kaydet", "Save my car or hotel"), TL("Ana sayfadaki “Arabamı / otelimi kaydet” düğmesine bas, durduğun yer kaydedilsin. Dönerken “Arabama dön”e bas, Google Haritalar seni doğrudan oraya götürsün.", "Tap “Save my car / hotel” on the home screen to save where you are. On the way back, tap “Back to car” and Google Maps takes you straight there."), ""],
+      ["shield-plus", TL("Acil yardım", "Emergency help"), TL("Tek dokunuşla 112, internetsiz konumun, en yakın hastane, karakol ve nöbetçi eczane. Yakınımda sekmesinde ve Ayarlar'da.", "Call 112 in one tap, see your location offline, find the nearest hospital, police and pharmacy on duty. In Nearby and Settings."), "#/acil"],
+      ["sparkles", TL("Kültür koçu", "Culture coach"), TL("Cami sayfalarında girmeden önce bilmen gereken 4 kısa kural; çay, bahşiş, pazarlık ve Ramazan için küçük bilgiler.", "Four quick rules on every mosque page, plus tips on tea, tipping, bargaining and Ramadan."), "#/kultur"],
+      ["map", TL("İller tek bakışta", "Provinces at a glance"), TL("Her ilin kartında en bilinen yerleri yazıyor; tüm illeri bölgeye göre süz. Paylaşılan linkler artık doğrudan uygulamada açılıyor.", "Every province card names its best-known sights; filter all provinces by region. Shared links now open straight in the app."), ""],
       ["headphones", TL("Gezi Modu ve doğal ses", "Tour Mode and natural voice"), TL("Bütün yerler artık doğal bir sesle anlatılıyor, kadın ya da erkek sesi seç. Gezi Modu'nu aç, yürürken yaklaştığın yeri kulağına anlatsın; tatil planın varsa günün rotası ana sayfada seni beklesin.", "Every place is now narrated in a natural voice; choose a female or male narrator. Start Tour Mode and hear about each place as you walk up to it; if you have a holiday plan, today's route waits on the home screen."), ""],
       ["calendar-days", TL("Tatil planı", "Holiday planner"), TL("Kaç gün gideceğini seç, nerede kaç gün kalacağını yaz; günlere yer ekle, sırasını değiştir, her günün rotasını haritada aç ve planını paylaş.", "Choose how many days, set where you'll stay each day, add places to each day, reorder them, open each day's route on the map and share your plan."), "#/plan"],
       ["landmark", "MüzeKart", TL("MüzeKart'ın geçerli olduğu 358 müze ve ören yeri il il: açılış saatleri, kapalı günler, kendi listen ve gezdiklerin.", "The 358 museums and sites where the Museum Pass (MüzeKart) is valid, by province: opening hours, closed days, your own list and the ones you visited."), "#/muzekart"],
@@ -2852,7 +2952,7 @@
   $("dShare").after(fotoPayBtn);
   fotoPayBtn.addEventListener("click", () => { if (open) fotoKart(open, fotoPayBtn); });
 
-  let tumIl = false, ilSira = "az";
+  let tumIl = false, ilSira = "az", ilBol = "hepsi";
   // ---------- Sesli rehber: doğal sesle anlatım (Azure ile önceden kaydedildi, GitHub'da il il klasörlerde durur) ----------
   // Dosya: ses-kayitlari dalında <il>/<id>-<dil>-<k|e>.mp3 · id: il | ilce-<sıra> | yerin Wikidata kodu
   const SES_AYAR = "gezi-ses-ayar";
@@ -3112,18 +3212,25 @@
     gununKesfi(); sanaOzel(); ayKart(); renderPasOzet(); renderTarzlar(); planAlt();
     $("results").hidden = true; $("homeMain").hidden = false;
     let iller = IDX.iller.slice();
-    $("ilGrid").classList.toggle("yatay", !tumIl); $("ilSira").hidden = !tumIl;
+    $("ilGrid").classList.toggle("yatay", !tumIl); $("ilGrid").classList.toggle("satir", tumIl); $("ilSira").hidden = !tumIl; $("ilBolge").hidden = !tumIl;
     $("ilBaslik").textContent = tumIl ? T("Tüm iller") : T("Öne çıkan iller");
     $("tumIlBtn").textContent = tumIl ? T("Daha az göster") : T("Tüm iller (81)");
     if (tumIl) {
       if (ilSira === "plaka") iller.sort((a, b) => (+a.plaka || 0) - (+b.plaka || 0));
       else iller.sort((a, b) => a.ad.localeCompare(b.ad, "tr"));
+      if (ilBol !== "hepsi") iller = iller.filter((il) => IL_BOLGE.get(il.s) === ilBol);
+      $("ilBolge").innerHTML = ["hepsi", ...Object.keys(BOLGE)].map((b) => `<button class="chip${b === ilBol ? " on" : ""}" data-bolge="${esc(b)}" aria-pressed="${b === ilBol}">${b === "hepsi" ? T("Tümü") : esc(T(b))}</button>`).join("");
     } else {
       iller.sort((a, b) => me ? km(me, a) - km(me, b) : b.n - a.n);
       iller = iller.slice(0, 10);
     }
-    $("ilGrid").innerHTML = iller.map((il) =>
-      `<li><button class="ilcard" data-go="#/il/${il.s}">${thumb(il.f, "s", 500, "cover")}<span class="ilname"><b>${esc(il.ad)}</b><small>${me ? fmt(km(me, il)) + " · " : ""}${il.n} ${TL("yer", "places")} · ${il.ilceler.length} ${TL("ilçe", "districts")}</small></span></button></li>`).join("");
+    // Kısa tanıtım yoksa eski "yer · ilçe" yazısı kalır
+    const ilAlt = (il) => KANCA[il.s] ? (DIL === "en" ? KANCA[il.s][1] : KANCA[il.s][0]) : `${il.n} ${TL("yer", "places")} · ${il.ilceler.length} ${TL("ilçe", "districts")}`;
+    $("ilGrid").innerHTML = tumIl
+      ? iller.map((il) =>
+        `<li><button class="row" data-go="#/il/${il.s}">${thumb(il.f, "s")}<span class="rt"><b><span class="plaka">${esc(il.plaka || "")}</span>${esc(il.ad)}</b><small>${esc(ilAlt(il))}</small></span><span class="km">${me ? fmt(km(me, il)) : ik("chevron-right", 18)}</span></button></li>`).join("")
+      : iller.map((il) =>
+        `<li><button class="ilcard" data-go="#/il/${il.s}">${thumb(il.f, "s", 500, "cover")}<span class="ilname"><b>${esc(il.ad)}</b><small>${me ? fmt(km(me, il)) + " · " : ""}${esc(ilAlt(il))}</small></span></button></li>`).join("");
   }
   function renderSearch(q) {
     const s = sade(q);
@@ -3240,6 +3347,103 @@
     places = ds.flatMap((d) => d.yerler).sort((a, b) => km(me, a) - km(me, b)).slice(0, 150);
     renderAll();
   }
+
+  // ---------- kültür koçu: gezerken işe yarayan kısa görgü bilgileri (internetsiz) ----------
+  // [ikon, başlık, alt yazı, [[tamam mı (1) / kaçın (0), TR, EN], ...]]
+  const KOC = [
+    ["landmark", ["Cami ziyareti", "Visiting a mosque"], ["Ayakkabı, kıyafet, namaz vakitleri", "Shoes, clothing, prayer times"], [
+      [1, "Ayakkabını girişte çıkar, raflara ya da verilen poşete koy.", "Take your shoes off at the entrance and leave them on the racks or in the bag provided."],
+      [1, "Omuz ve dizler kapalı olsun. Kadınlar başını örter; büyük camilerin çoğunda girişte örtü bulunur.", "Cover shoulders and knees. Women cover their hair; most large mosques lend scarves at the door."],
+      [0, "Namaz vakitlerinde, özellikle Cuma öğle namazında ziyaret kısa süre durur. Ezan okununca biraz bekle.", "Visits pause briefly at prayer times, especially Friday noon prayer. When you hear the call to prayer, wait a little."],
+      [0, "Namaz kılanların önünden geçme, yüksek sesle konuşma, flaşla fotoğraf çekme.", "Don't walk in front of people praying, keep your voice down and don't use flash."]]],
+    ["coffee", ["Çay ve misafirlik", "Tea and hospitality"], ["İkram edilince ne yapılır", "When you're offered something"], [
+      [1, "Çay ikramını kabul etmek nezakettir; nazikçe reddetmek de ayıp sayılmaz.", "Accepting offered tea is polite; declining kindly is fine too."],
+      [1, "Yeter demek için çay kaşığını bardağın üstüne yatır.", "To say \"no more\", lay the teaspoon across the top of your glass."],
+      [1, "Eve davet edilirsen kapıda ayakkabını çıkar.", "If you're invited into a home, take your shoes off at the door."]]],
+    ["coins", ["Bahşiş", "Tipping"], ["Lokanta, taksi, otel", "Restaurants, taxis, hotels"], [
+      [1, "Lokantada hesabın yaklaşık %5-10'u kadar bahşiş yaygındır, zorunlu değildir. Hesaba servis ücreti eklendiyse gerekmez.", "In restaurants about 5-10% is common but not required. If a service charge is already on the bill, no need."],
+      [1, "Takside genelde ücret yukarı yuvarlanır.", "In taxis people usually round the fare up."]]],
+    ["handshake", ["Pazarlık", "Bargaining"], ["Nerede yapılır, nerede yapılmaz", "Where it's done and where it isn't"], [
+      [1, "Tarihi çarşılarda, halı ve hediyelik eşya dükkânlarında pazarlık olağandır. Güler yüzle yap.", "Bargaining is normal in historic bazaars, carpet and souvenir shops. Keep it friendly."],
+      [0, "Market, mağaza ve fiyatı yazılı yerlerde pazarlık yapılmaz.", "Supermarkets, chain stores and places with marked prices don't bargain."]]],
+    ["moon-star", ["Ramazan'da", "During Ramadan"], ["Oruç ayında gezerken", "Travelling in the fasting month"], [
+      [1, "Lokantaların çoğu gündüz de açıktır, yemek yemek serbesttir. Oruç tutanlara saygıyla, gösterişsiz ye.", "Most restaurants stay open by day and you're free to eat. Just be discreet out of respect for those fasting."],
+      [1, "İftar saatine yakın lokantalar çok dolar; erken git ya da yer ayırt.", "Restaurants fill up close to iftar (sunset meal), so go early or book."],
+      [1, "Gece sahur davulcusu sokakları dolaşabilir, bu bir gelenektir.", "At night a drummer may walk the streets to wake people for the pre-dawn meal. It's a tradition."]]]
+  ];
+  const kocMadde = ([ok, tr, en]) => `<li class="kmad ${ok ? "ok" : "no"}">${ik(ok ? "check" : "x", 18)}<span>${esc(DIL === "en" ? en : tr)}</span></li>`;
+  const camiMi = (p) => sade(p.ad) === "ayasofya" || /(^| )(cami|camii|camisi|mescit|mescidi)( |,|$)/.test(sade(p.ad)) && !/kopru|muze|meydan|carsi|sokak|mahalle/.test(sade(p.ad));
+  function kocKart(p) {
+    if (!camiMi(p)) return "";
+    return `<details class="koc"><summary>${ik("sparkles", 20)}<span><b>${TL("Camiye girmeden önce", "Before you enter the mosque")}</b><small>${TL("4 kısa kural · 20 saniyede oku", "4 quick rules · a 20-second read")}</small></span>${ik("chevron-down", 18)}</summary><ul>${KOC[0][3].map(kocMadde).join("")}</ul></details>`;
+  }
+  function showKultur() {
+    view = { mode: "kultur" }; show("kultur");
+    $("eyebrow").textContent = TL("Türkiye'de gezerken", "Travelling in Türkiye"); $("title").textContent = TL("Kültür koçu", "Culture coach");
+    $("kultur").innerHTML = `<p class="kocgiris">${TL("Gezerken işine yarayacak küçük bilgiler. İnternetsiz de açılır.", "Little things that help while you travel. Works offline too.")}</p>` +
+      KOC.map(([ikon, ad, alt, m]) => `<details class="kocb"><summary><span class="aci">${ik(ikon, 20)}</span><span class="rt"><b>${esc(DIL === "en" ? ad[1] : ad[0])}</b><small>${esc(DIL === "en" ? alt[1] : alt[0])}</small></span>${ik("chevron-down", 18)}</summary><ul>${m.map(kocMadde).join("")}</ul></details>`).join("") +
+      `<p class="kocnot">${TL("Genel geçer kurallardır; yerine göre küçük farklar olabilir.", "These are general customs; small local differences are normal.")}</p>`;
+  }
+
+  // ---------- acil yardım: 112, konumum (internetsiz), yakındaki hastane / karakol / nöbetçi eczane ----------
+  function showAcil() {
+    view = { mode: "acil" }; show("acil");
+    $("eyebrow").textContent = TL("Sakin ol, adım adım", "Stay calm, step by step"); $("title").textContent = TL("Acil yardım", "Emergency help");
+    renderAcil();
+    if (!me) startLocation(() => { if (view.mode === "acil") renderAcil(); });
+  }
+  let acilYer = "";
+  async function acilYerBul() {
+    if (!me || !IDX) return;
+    const il = IDX.iller.slice().sort((a, b) => km(me, a) - km(me, b))[0];
+    let yaz = il.ad;
+    try {
+      const d = await loadIl(il.s);
+      const ilce = d.ilceler.filter((x) => x.lat).sort((a, b) => km(me, a) - km(me, b))[0];
+      if (ilce) yaz = ilce.ad + ", " + il.ad;
+    } catch (e) {}
+    if (yaz !== acilYer) { acilYer = yaz; if (view.mode === "acil") renderAcil(); }
+  }
+  function renderAcil() {
+    if (!view || view.mode !== "acil") return;
+    const k = me ? `${me.lat.toFixed(5)}, ${me.lng.toFixed(5)}` : "";
+    const ara = (q) => me ? `https://www.google.com/maps/search/${encodeURIComponent(q)}/@${me.lat},${me.lng},14z` : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+    const satir = (ikon, ad, alt, href) => `<a class="acsatir" href="${href}" target="_blank" rel="noopener"><span class="aci">${ik(ikon, 20)}</span><span class="rt"><b>${ad}</b><small>${alt}</small></span><span class="acet">${TL("internet", "online")}</span></a>`;
+    $("acil").innerHTML = `
+      <a class="acara" href="tel:112">${ik("phone", 30)}<span>${TL("112'yi ara", "Call 112")}<small>${TL("Polis · Ambulans · İtfaiye", "Police · Ambulance · Fire")}</small></span></a>
+      <p class="acnot">${TL("Telefonun arama ekranı açılır, aramayı sen başlatırsın. 112 ücretsizdir.", "Your phone's dialer opens and you start the call. 112 is free. If you don't speak Turkish, say \"English, please\" and stay on the line.")}</p>
+      <section class="ackart">
+        <h3>${ik("locate-fixed", 18)} ${TL("Konumum", "My location")} <span class="acet ok">${TL("internetsiz", "offline")}</span></h3>
+        ${me ? `<div class="ackoor">${k}</div><p>${acilYer ? esc(acilYer) + TL(" yakınları", " area") + " · " : ""}${TL("112 \"neredesiniz\" diye sorarsa bunu oku.", "If 112 asks where you are, read this out.")}</p>
+        <div class="acdug"><button class="btn" data-acil="kopya">${ik("copy", 16)} ${TL("Kopyala", "Copy")}</button><button class="btn" data-acil="gonder">${ik("send", 16)} ${TL("Konumumu gönder", "Send my location")}</button></div>
+        <p>${TL("Tek seferlik gönderilir, canlı takip yok.", "Sent once, no live tracking.")}</p>`
+        : `<p>${watchId !== null ? T("Konum aranıyor…") : TL("Konumun kapalı. Açarsan koordinatın burada görünür, internet olmasa da.", "Location is off. Turn it on to see your coordinates here, even offline.")}</p>${watchId === null ? `<div class="acdug"><button class="btn primary" data-acil="konum">${ik("locate-fixed", 16)} ${T("Konumu aç")}</button></div>` : ""}`}
+      </section>
+      <section class="ackart">
+        <h3>${ik("map-pin", 18)} ${TL("Yakınımda bul", "Find near me")}</h3>
+        ${satir("hospital", TL("En yakın hastane", "Nearest hospital"), TL("Google Haritalar'da açılır", "Opens in Google Maps"), ara(TL("hastane", "hospital")))}
+        ${satir("shield", TL("En yakın karakol", "Nearest police station"), TL("Google Haritalar'da açılır", "Opens in Google Maps"), ara(TL("polis karakolu", "police station")))}
+        ${satir("pill", TL("Nöbetçi eczane", "Pharmacy on duty"), TL("e-Devlet'in resmi nöbetçi eczane sayfası", "Official e-Devlet page (in Turkish)"), "https://www.turkiye.gov.tr/saglik-titck-nobetci-eczane-sorgulama")}
+      </section>
+      ${DIL === "en" ? `<section class="ackart">
+        <h3>${ik("book-open", 18)} Lost your passport?</h3>
+        <ol><li>Go to the nearest police station and get a loss report.</li><li>Contact your country's embassy or consulate.</li><li>Travel home with the emergency travel document they issue.</li></ol>
+        <div class="acdug"><a class="btn" href="https://www.mfa.gov.tr/diplomatic-missions-in-turkey.en.mfa" target="_blank" rel="noopener">${ik("external-link", 16)} Embassies and consulates</a></div>
+        <p>The list is the official page of the Turkish Ministry of Foreign Affairs.</p>
+      </section>` : ""}`;
+    if (me && !acilYer) acilYerBul();
+  }
+  document.addEventListener("click", async (e) => {
+    const b = e.target.closest("[data-acil]"); if (!b) return;
+    const a = b.dataset.acil;
+    if (a === "konum") { startLocation(() => { if (view.mode === "acil") renderAcil(); }); renderAcil(); return; }
+    if (!me) return;
+    const k = `${me.lat.toFixed(5)}, ${me.lng.toFixed(5)}`, link = `https://maps.google.com/?q=${me.lat.toFixed(5)},${me.lng.toFixed(5)}`;
+    if (a === "kopya") {
+      try { await navigator.clipboard.writeText(k); toast(TL("Konum kopyalandı", "Location copied")); }
+      catch (x) { toast(k, 8000); }
+    } else if (a === "gonder") metinPaylas(TL("Konumum", "My location"), TL("Şu an buradayım:", "I'm here right now:"), link);
+  });
 
   // ---------- liste ----------
   let ilAra = "";
@@ -3450,6 +3654,7 @@
     dinleDurdur(); $("dDinle").hidden = !sesVar && !open.q;
     const ip = DIL === "en" ? p.ipe : p.ip;
     $("dTip").hidden = !ip; $("dTip").innerHTML = ip ? `<b>${TL("İpucu:", "Tip:")}</b> ` + esc(ip) : "";
+    const koc = kocKart(p); $("dKoc").hidden = !koc; $("dKoc").innerHTML = koc;
     const ilce = p.ilce && p.ilce !== p.il ? p.ilce : "";
     let txt;
     if (DIL === "en") txt = p.me || `${adi(p)} is one of the places worth seeing in ${ilce ? ilce + ", " : ""}${p.il} Province, Türkiye.`;
@@ -3932,6 +4137,7 @@
   $("nearBtn").addEventListener("click", () => git("#/yakin"));
   $("favSirala").addEventListener("click", () => { favSirali = !favSirali; try { localStorage.setItem("gezi-fav-sira", favSirali ? "1" : "0"); } catch (e) {} renderFav(); });
   $("tumIlBtn").addEventListener("click", () => { tumIl = !tumIl; renderHome(); if (!tumIl) $("ilBaslik").scrollIntoView({ block: "start" }); });
+  $("ilBolge").addEventListener("click", (e) => { const b = e.target.closest("[data-bolge]"); if (!b) return; ilBol = b.dataset.bolge; renderHome(); });
   $("ilSira").addEventListener("click", (e) => { const b = e.target.closest("[data-sira]"); if (!b) return; ilSira = b.dataset.sira; $("ilSira").querySelectorAll("[data-sira]").forEach((x) => x.classList.toggle("on", x === b)); renderHome(); });
   $("yolBtn").addEventListener("click", () => git("#/yol"));
   $("planBtn").addEventListener("click", () => git("#/plan"));
@@ -4188,6 +4394,17 @@
       if (Date.now() - cikisZamani < 2000) { CapApp.exitApp(); return; }
       cikisZamani = Date.now(); toast(T("Çıkmak için tekrar geri bas"));
     });
+  }
+  // ---------- paylaşılan Rota Cepte linki uygulamada açılınca aynı sayfaya git (Android App Links) ----------
+  if (CapApp && CapApp.addListener) {
+    const linkAc = (u) => {
+      try {
+        const x = new URL(u);
+        if (x.hostname === "me7rt.github.io" && x.pathname.indexOf("/Rota-Cepte") === 0 && PAYLASIM_YOLU.test(x.hash)) git(x.hash);
+      } catch (e) { /* tanınmayan link: ana sayfada kal */ }
+    };
+    CapApp.addListener("appUrlOpen", (e) => { if (e && e.url) linkAc(e.url); });
+    if (CapApp.getLaunchUrl) CapApp.getLaunchUrl().then((r) => { if (r && r.url) linkAc(r.url); }).catch(() => {});
   }
   // ---------- hafta sonu önerisi: her Cuma 18:00'de telefonda hazırlanan yerel bildirim (yalnızca uygulamada) ----------
   const LN = window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() !== "web" && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications;
