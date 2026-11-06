@@ -125,7 +125,7 @@ Durum sözcükleri:
 | Link ile ortak plan | Tamam (tarayıcıda denendi) | Canlı ortak düzenleme yok, sunucu gerektiriyor. |
 | Yeni Keşfet kutuları, il sayfasında türler, öğrenen Sana özel | Tamam (tarayıcıda denendi) | |
 | Doğal sesli Dinle, kadın ya da erkek ses seçimi | Denenmemiş | Ekran kapalıyken çalışması denenmedi. |
-| Gezi Modu (yaklaşınca anlatan rehber) | Yarım ve denenmemiş | Ekran kapalı modu yazılmadı. Play'e özel konum izni beyanı ve video gerekiyor. |
+| Gezi Modu (yaklaşınca anlatan rehber) | Yazıldı, denenmemiş | Ekran kapalıyken çalışan kısım da yazıldı (arka planda konum eklentisi ve "Gezi Modu açık" bildirimi), ama telefonda hiç denenmedi. Play'e özel konum izni beyanı ve video gerekiyor. |
 | "Bugünkü rotan" kartı, "Etrafımı anlat" | Denenmemiş | |
 | Özel gezi günlüğü (cihazda not ve fotoğraf) | Kontrol edilmeli | Notlarda 6.6 için seçildiği yazıyor. Kodlanıp kodlanmadığı bu rapor için doğrulanmadı. |
 
@@ -307,7 +307,7 @@ Dal yaklaşık 1.450 sese düşmüştü. Seslendirme işinin kendisi hiçbir dos
 | Veri dalgalanması | Her veri çalıştırmasında yaklaşık 5 yer gelip gidiyor. Yayından önce farkın kontrol edilmesi gerekiyor. |
 | 6.6 henüz birleşmedi | 6.6 dalı `main`'in 80 kayıt önünde. Önizleme için geçici önbellek adları kullanılıyor (6.6-o…). Yayında bunlar 6.6 yapılmalı. Gerçek veri çalıştırması da henüz yapılmadı. |
 | Geçici betikler | Seslendirme betikleri ve geçici iş akışları `claude/project-thread-2h3c9c` dalında. 6.6'ya girmeden önce ayrılmaları ya da nötr adlarla düzenlenmeleri gerekiyor. |
-| Gezi Modu | Telefonda denenmedi. Ekran kapalı modu yok. Play'de konum izni beyanı ve video gerekiyor. |
+| Gezi Modu | Telefonda denenmedi. Ekran kapalı modu yazıldı ama denenmedi. Play'de konum izni beyanı ve video gerekiyor. |
 | Ses barındırma | Sesler şimdilik GitHub üzerinden sunuluyor. Herkese açık yayından önce Cloudflare R2'ye taşınması planlandı. Ses adresi uygulamada sabit yazılmayacak. |
 | Ücretsiz planlar | MapTiler, Open-Meteo ve OSM ticari kullanım dışı. Gelir başlamadan ücretli plana geçilmeli. |
 | Gezi haritan çizimi | Lisans riski 6.5'te çözüldü: harita kamu malı Natural Earth verisinden çiziliyor. Lisanslar sayfası da Natural Earth'ü gösteriyor. Eski kaynaktan bir MIT lisans dosyası kalmış (`docs/tr-harita-LICENSE.txt`). Artık o kaynaktan bir şey kullanılmadığı için silinebilir, MERT'in onayı bekleniyor. |
@@ -333,7 +333,7 @@ Dal yaklaşık 1.450 sese düşmüştü. Seslendirme işinin kendisi hiçbir dos
    - İl sayfasında "Bu ilde N yer sesli rehberli" yazısı ve kartlarda rozet.
 4. **Gezi Modu (6.7):**
    - Telefonda deneme.
-   - Ekran kapalı modu.
+   - Ekran kapalı modunun telefonda denenmesi (kod var).
    - Play konum izni beyanı ve video.
 5. **Veri temizliği:**
    - Bölüm 7'deki koordinat ve ilçe hataları.
