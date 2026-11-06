@@ -54,7 +54,7 @@ const TELAFFUZ = [
   ["Çelebi", "tʃɛlɛˈbiː"],
   ["Evliya", "ɛvliːˈjɑː"],
   ["Kahta", "kɑːˈtɑː"],
-  ["Zelve", "zɛlˈveɪ"],
+  ["Zelve", "ˈzɛlveɪ"],
   ["Niğde", "ˈniːdeɪ"],
   ["Maçka", "mɑːtʃˈkɑː"],
   ["Hatay", "hɑːˈtaɪ"],

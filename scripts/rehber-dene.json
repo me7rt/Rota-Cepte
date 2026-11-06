@@ -1,78 +1,25 @@
 [
  {
-  "id": "007_tr_kart",
-  "dil": "tr",
-  "metin": "En güzel zaman gün doğumu; doğu terasına çık. Gün batımı için batı terasına geç.\nYazın bile zirve soğuktur, mont al. Heykellere dokunma ve üstlerine çıkma.\nGiriş biletlidir ve Müzekart geçerlidir. Kışın yol kar yüzünden kapanabilir.\nYerli ipucu: dönüşte Karakuş Tümülüsü'ne ve Cendere Köprüsü'ne de uğra. Yerliler bu rotaya Nemrut turu der.\nSonraki durak Arsameia; araçla yaklaşık on bir kilometre, yirmi beş dakika."
- },
- {
   "id": "007_en_kart",
   "dil": "en",
-  "metin": "The best time is sunrise, on the east terrace. For sunset, move to the west terrace.\nThe summit is cold even in summer, so bring a jacket. Please don't touch or climb on the statues.\nEntry is ticketed, and the Turkish museum pass is valid. In winter, snow can close the road.\nLocal tip: on the way back, stop at the Karakuş Tumulus and Cendere Bridge too. Locals call this route the mountain tour.\nYour next stop is Arsameia, about eleven kilometres by car, around twenty-five minutes."
- },
- {
-  "id": "160_tr_kart",
-  "dil": "tr",
-  "metin": "En güzel zaman sabah açılışta ya da kapanışa yakın. En az üç saat ayır, yanına su al.\nGiriş ücretlidir ve Müzekart geçerlidir. Yamaç Evler için ayrı bilet alınır.\nYerli ipucu: dönüşte Şirince köyüne çık. Akşam Selçuk'ta çöp şiş ye.\nSonraki durak Artemis Tapınağı; araçla yaklaşık dört kilometre, on dakika."
- },
- {
-  "id": "160_en_kart",
-  "dil": "en",
-  "metin": "The best time is opening time or just before closing. Allow at least three hours, and bring water.\nEntry is paid, and the Turkish museum pass is valid. The Terrace Houses need a separate ticket.\nLocal tip: on the way back, drive up to the hill village of Şirince. In the evening, eat small lamb skewers in Selçuk.\nYour next stop is the Temple of Artemis, about four kilometres by car, around ten minutes."
- },
- {
-  "id": "231_tr_kart",
-  "dil": "tr",
-  "metin": "En güzel zaman gün doğumu; balonlar havadayken bir tepeye çık.\nAçık Hava Müzesi'nin girişi ücretlidir ve Müzekart geçerlidir. Karanlık Kilise için ayrıca ücret istenebilir.\nKayaya oyulmuş kiliselerin içinde fotoğraf çekme ve fresklere dokunma.\nYerli ipucu: balona binmesen de gün doğumunu bir tepeden izle. Bu manzara için kimse para istemez.\nSonraki durak Zelve Ören Yeri; araçla yaklaşık üç kilometre, on dakika."
+  "metin": "The best time is sunrise, on the east terrace. For sunset, move to the west terrace.\nThe summit is cold even in summer, so bring a jacket. Please don't touch or climb on the statues.\nEntry is ticketed, and the Turkish museum pass is valid. In winter, snow can close the road.\nLocal tip: on the way back, stop at the Karakuş Tumulus and Cendere Bridge too. Locals call this route the Nemrut tour.\nYour next stop is Arsameia, about eleven kilometres by car, around twenty-five minutes.",
+  "varyant": [
+   {
+    "cins": "e",
+    "etiket": "erkek",
+    "ses": "en-US-AndrewNeural"
+   }
+  ]
  },
  {
   "id": "231_en_kart",
   "dil": "en",
-  "metin": "The best time is sunrise; climb a hill while the balloons are up.\nEntry to the Open Air Museum is paid, and the Turkish museum pass is valid. The Dark Church may cost extra.\nInside the rock churches, please do not take photos or touch the frescoes.\nLocal tip: even without a balloon ride, watch the sunrise from a hill. Nobody charges for that view.\nYour next stop is the Zelve open-air site, about three kilometres by car, around ten minutes."
- },
- {
-  "id": "276_tr_kart",
-  "dil": "tr",
-  "metin": "En güzel zaman sabah; sis kalkarken manastır vadiden çok güzel görünür. Rahat ayakkabı giy.\nBurası bir manastır. İçeride sessiz ol ve fresklere dokunma.\nGiriş ücretlidir ve Müzekart geçerlidir.\nYerli ipucu: dönüşte vadideki dere kenarında alabalık ya da Akçaabat köftesi ye.\nSonraki durak Atatürk Köşkü; araçla yaklaşık kırk dört kilometre, elli dakika."
- },
- {
-  "id": "276_en_kart",
-  "dil": "en",
-  "metin": "The best time is the morning, when the mist lifts off the valley. Wear comfortable shoes for the steep path.\nThis was a monastery, so keep your voice low inside and do not touch the frescoes.\nEntry is paid, and the Turkish museum pass is valid.\nLocal tip: on the way back, stop by the stream for grilled trout or Akçaabat meatballs.\nYour next stop is the Atatürk Mansion, about forty-four kilometres by car, around fifty minutes."
- },
- {
-  "id": "281_tr_kart",
-  "dil": "tr",
-  "metin": "En güzel zaman öğleden önce; bahçe serin ve sakin olur.\nGiriş ücretlidir. Köşk bir süre restorasyonda kaldı, açık olup olmadığını gitmeden öğren.\nYerli ipucu: dönüşte Boztepe'ye çık ve günü şehrin en geniş manzarasıyla bitir.\nSonraki durak Ayasofya Camii; araçla yaklaşık beş kilometre, on beş dakika."
- },
- {
-  "id": "281_en_kart",
-  "dil": "en",
-  "metin": "The best time is before noon, when the garden is cool and calm.\nEntry is paid. The mansion was closed for restoration for a while, so check before you go.\nLocal tip: on the way back, go up to Boztepe hill and end the day with the widest view of the city.\nYour next stop is Hagia Sophia Mosque, about five kilometres by car, around fifteen minutes."
- },
- {
-  "id": "telaffuz_testi",
-  "dil": "en",
-  "metin": "Arsameia.\nNemrut.\nLocals call this the Nemrut tour.\nCendere Bridge.\nZelve.\nGöreme.\nAkçaabat meatballs.\nKarakuş Tumulus.\nKahta.\nAltındere.\nBoztepe.\nŞirince.\nSelçuk.\nTrabzon.\nSoğuksu.",
+  "metin": "The best time is sunrise; climb a hill while the balloons are up.\nEntry to the Open Air Museum is paid, and the Turkish museum pass is valid. The Dark Church may cost extra.\nInside the rock churches, please do not take photos or touch the frescoes.\nLocal tip: even without a balloon ride, watch the sunrise from a hill. Nobody charges for that view.\nYour next stop is the Zelve open-air site, about three kilometres by car, around ten minutes.",
   "varyant": [
    {
-    "cins": "k",
-    "etiket": "kadin"
-   },
-   {
     "cins": "e",
-    "etiket": "erkek_A",
-    "ses": "en-US-AndrewMultilingualNeural"
-   },
-   {
-    "cins": "e",
-    "etiket": "erkek_B",
+    "etiket": "erkek",
     "ses": "en-US-AndrewNeural"
-   },
-   {
-    "cins": "e",
-    "etiket": "erkek_C",
-    "ses": "en-US-AndrewMultilingualNeural",
-    "yontem": "yazim"
    }
   ]
  }
