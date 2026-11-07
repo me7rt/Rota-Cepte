@@ -13,14 +13,14 @@ def temiz(s): return re.sub(r"<[^>]+>", "", s or "").strip()
 out = []; seen = set(); n = 0
 for grup, sorgular in Q.items():
     for q in sorgular:
-        u = "https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode({"action": "query", "format": "json", "generator": "search", "gsrnamespace": 6, "gsrlimit": 14, "gsrsearch": q + " filetype:bitmap", "prop": "imageinfo", "iiprop": "url|size|extmetadata", "iiurlwidth": 330})
+        u = "https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode({"action": "query", "format": "json", "generator": "search", "gsrnamespace": 6, "gsrlimit": 7, "gsrsearch": q + " filetype:bitmap", "prop": "imageinfo", "iiprop": "url|size|extmetadata", "iiurlwidth": 330})
         b = get(u)
         if not b: continue
         for p in (json.loads(b).get("query", {}).get("pages", {}) or {}).values():
             t = p["title"]
             if t in seen or "imageinfo" not in p: continue
             seen.add(t); ii = p["imageinfo"][0]; m = ii.get("extmetadata", {})
-            k = f"d{n:04d}"; n += 1
+            k = f"f{n:04d}"; n += 1
             img = get(ii.get("thumburl") or ii["url"])
             if not img: continue
             try:
