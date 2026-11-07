@@ -1,0 +1,16 @@
+name: Foto arama
+on:
+  push:
+    branches: [foto-rapor]
+    paths: [rapor/ara-liste.json]
+permissions:
+  contents: write
+jobs:
+  ara:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install -q pillow && python3 rapor/ara.py
+      - run: |
+          git config user.name "Mert Turanlıoğlu"; git config user.email "me7rtt@gmail.com"
+          git add rapor/a rapor/ara.json && git commit -q -m "Fotoğraf arama sonuçları" && git push
