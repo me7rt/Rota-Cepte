@@ -20,7 +20,7 @@ for grup, sorgular in Q.items():
             t = p["title"]
             if t in seen or "imageinfo" not in p: continue
             seen.add(t); ii = p["imageinfo"][0]; m = ii.get("extmetadata", {})
-            k = f"g{n:04d}"; n += 1
+            k = f"h{n:04d}"; n += 1
             img = get(ii.get("thumburl") or ii["url"])
             if not img: continue
             try:
