@@ -1,0 +1,235 @@
+{
+ "not": "Sabit günler AA-GG. Dini bayram, kandil, Anneler/Babalar Günü tarihleri her yıl değişir: Diyanet takviminden kontrol edip 'degisken' listesine ekle (bas/bit dahil); tek günlükler listede önce gelir. 'ad' alanı olan bayramlar için 60 gün kala ana sayfada geri sayım çıkar. 'sayac': 1 olan günlerde (ör. Ramazan) şeritte yaklaşan bayramın geri sayımı da görünür. 'yil' varsa metindeki {n} yerine kaçıncı yıl olduğu yazılır. 'git' şeride dokununca açılacak sayfa. 'saygi': 1 olan günde (10 Kasım) bir kez saygı kartı açılır. 'kart': kartlar.js'teki çizim (ör. cumhuriyet-a). 'soz' kartta görünen söz (yalnızca kaynağı doğrulanmış sözler), 'imza': 1 Atatürk'ün imzası, 'foto' kamu malı fotoğraf (yalnızca -c kartlarında), 'mahya' cami kartında minareler arasındaki ışıklı yazı.",
+ "sabit": {
+  "01-01": {
+   "e": "🎉",
+   "tr": "Mutlu yıllar! Yeni yılda yeni rotalar seni bekliyor.",
+   "en": "Happy New Year! New routes are waiting for you.",
+   "kart": "yilbasi-f2"
+  },
+  "02-06": {
+   "e": "🖤",
+   "tr": "6 Şubat depremlerinde hayatını kaybeden canlarımızı rahmetle anıyoruz. Unutmadık, unutmayacağız.",
+   "en": "Remembering the lives we lost in the 6 February earthquakes. We will never forget.",
+   "yas": 1
+  },
+  "03-12": {
+   "e": "🇹🇷",
+   "tr": "İstiklal Marşı'nın kabulünün {n}. yılında Mehmet Akif Ersoy'u rahmetle anıyoruz.",
+   "en": "{n} years since the Turkish National Anthem was adopted: remembering its poet Mehmet Akif Ersoy.",
+   "yil": 1921,
+   "kart": "istiklal-a",
+   "soz": {
+    "tr": "Korkma, sönmez bu şafaklarda yüzen al sancak; Sönmeden yurdumun üstünde tüten en son ocak.",
+    "kim": "Mehmet Âkif Ersoy · İstiklâl Marşı",
+    "kimEn": "Mehmet Âkif Ersoy · Turkish National Anthem"
+   }
+  },
+  "03-18": {
+   "e": "🇹🇷",
+   "tr": "18 Mart Çanakkale Zaferi'nin {n}. yılında şehitlerimizi rahmetle anıyoruz.",
+   "en": "{n} years since the Çanakkale Victory: remembering the fallen.",
+   "yil": 1915,
+   "git": "#/ataturk",
+   "kart": "canakkale-c",
+   "soz": {
+    "tr": "Bir hilâl uğruna, yâ Rab, ne güneşler batıyor!",
+    "en": "For a crescent, O Lord, how many suns are setting!",
+    "kim": "Mehmet Âkif Ersoy"
+   },
+   "foto": "kart/canakkale.jpg"
+  },
+  "04-23": {
+   "e": "🎈",
+   "tr": "23 Nisan Ulusal Egemenlik ve Çocuk Bayramı kutlu olsun! Meclisimiz {n} yaşında.",
+   "en": "Happy National Sovereignty and Children's Day! Our Grand National Assembly is {n} years old.",
+   "yil": 1920,
+   "git": "#/ataturk",
+   "kart": "cocuk-c",
+   "imza": 1,
+   "foto": "kart/cocuk.jpg"
+  },
+  "05-01": {
+   "e": "🤝",
+   "tr": "1 Mayıs Emek ve Dayanışma Günü kutlu olsun!",
+   "en": "Happy Labour and Solidarity Day!",
+   "kart": "emek-b"
+  },
+  "05-19": {
+   "e": "🇹🇷",
+   "tr": "19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı kutlu olsun! Millî Mücadele'nin {n}. yılı.",
+   "en": "Happy Commemoration of Atatürk, Youth and Sports Day! {n} years since the War of Independence began.",
+   "yil": 1919,
+   "git": "#/ataturk",
+   "kart": "genclik-c",
+   "imza": 1,
+   "soz": {
+    "tr": "Ey Türk gençliği! Birinci vazifen, Türk istiklâlini, Türk Cumhuriyetini, ilelebet muhafaza ve müdafaa etmektir.",
+    "en": "O Turkish youth! Your first duty is to preserve and defend Turkish independence and the Turkish Republic forever.",
+    "kim": "Gençliğe Hitabe",
+    "kimEn": "Address to the Youth"
+   },
+   "foto": "kart/genclik.jpg"
+  },
+  "07-15": {
+   "e": "🇹🇷",
+   "tr": "15 Temmuz Demokrasi ve Millî Birlik Günü. Şehitlerimizi rahmetle anıyoruz.",
+   "en": "July 15 Democracy and National Unity Day. We honour the memory of our martyrs.",
+   "kart": "demokrasi-f3"
+  },
+  "08-30": {
+   "e": "🇹🇷",
+   "tr": "30 Ağustos Zafer Bayramı'nın {n}. yılı kutlu olsun!",
+   "en": "Happy Victory Day! {n} years since the Great Victory.",
+   "yil": 1922,
+   "git": "#/ataturk",
+   "kart": "zafer-c",
+   "imza": 1,
+   "soz": {
+    "tr": "Ordular, ilk hedefiniz Akdeniz'dir. İleri!",
+    "en": "Armies, your first goal is the Mediterranean. Forward!",
+    "kim": "Başkomutan Mustafa Kemal · 1 Eylül 1922",
+    "kimEn": "Commander-in-Chief Mustafa Kemal · 1 September 1922"
+   },
+   "foto": "kart/zafer.jpg"
+  },
+  "10-29": {
+   "e": "🇹🇷",
+   "tr": "Cumhuriyetimizin {n}. yılı kutlu olsun! Nice yıllara Türkiye.",
+   "en": "Happy Republic Day! The Republic of Türkiye is {n} years old.",
+   "yil": 1923,
+   "git": "#/ataturk",
+   "kart": "cumhuriyet-c",
+   "imza": 1,
+   "soz": {
+    "tr": "Ne mutlu Türk'üm diyene!",
+    "en": "How happy is the one who says, I am a Turk!",
+    "kim": "Onuncu Yıl Nutku · 29 Ekim 1933",
+    "kimEn": "10th Anniversary Speech · 29 October 1933"
+   },
+   "foto": "kart/cumhuriyet.jpg"
+  },
+  "11-10": {
+   "e": "🖤",
+   "tr": "Ebediyete intikalinin {n}. yılında Cumhuriyetimizin kurucusu Gazi Mustafa Kemal Atatürk'ü saygı, sevgi ve özlemle anıyoruz.",
+   "en": "{n} years since his passing, we remember Mustafa Kemal Atatürk, founder of the Republic, with respect and longing.",
+   "yas": 1,
+   "yil": 1938,
+   "git": "#/ataturk",
+   "saygi": 1
+  },
+  "11-24": {
+   "e": "📚",
+   "tr": "24 Kasım Öğretmenler Günü kutlu olsun! Başöğretmen Atatürk başta olmak üzere bize yol gösteren tüm öğretmenlerimize teşekkürler.",
+   "en": "Happy Teachers' Day! Thank you to every teacher who showed us the way, starting with Atatürk, our Head Teacher.",
+   "kart": "ogretmen-c",
+   "imza": 1,
+   "foto": "kart/ogretmen.jpg"
+  }
+ },
+ "degisken": [
+  {
+   "bas": "2026-12-10",
+   "bit": "2026-12-10",
+   "e": "🌙",
+   "tr": "Üç Aylarınız ve Regaip Kandiliniz mübarek olsun!",
+   "en": "Blessed Regaip Kandil and the Three Holy Months!",
+   "kart": "kandil-f2",
+   "mahya": {
+    "tr": "REGAİP KANDİLİ"
+   }
+  },
+  {
+   "bas": "2027-01-04",
+   "bit": "2027-01-04",
+   "e": "🌙",
+   "tr": "Miraç Kandiliniz mübarek olsun!",
+   "en": "Blessed Miraç Kandil!",
+   "kart": "kandil-f2",
+   "mahya": {
+    "tr": "MİRAÇ KANDİLİ"
+   }
+  },
+  {
+   "bas": "2027-01-22",
+   "bit": "2027-01-22",
+   "e": "🌙",
+   "tr": "Berat Kandiliniz mübarek olsun!",
+   "en": "Blessed Berat Kandil!",
+   "kart": "kandil-f2",
+   "mahya": {
+    "tr": "BERAT KANDİLİ"
+   }
+  },
+  {
+   "bas": "2027-03-05",
+   "bit": "2027-03-05",
+   "e": "🌙",
+   "tr": "Kadir Geceniz mübarek olsun!",
+   "en": "Blessed Night of Power (Kadir Gecesi)!",
+   "sayac": 1,
+   "kart": "kadir-f4",
+   "mahya": {
+    "tr": "KADİR GECESİ"
+   }
+  },
+  {
+   "bas": "2027-05-09",
+   "bit": "2027-05-09",
+   "e": "💐",
+   "tr": "Anneler Günü kutlu olsun! Bugün annenle bir yere gitmeye ne dersin?",
+   "en": "Happy Mother's Day! Why not take your mum somewhere today?",
+   "kart": "anneler-f6",
+   "kartAlt": {
+    "tr": "İlk yol arkadaşımız annelerimize sevgiyle.",
+    "en": "To our mothers, our very first travel companions."
+   }
+  },
+  {
+   "bas": "2027-06-20",
+   "bit": "2027-06-20",
+   "e": "👔",
+   "tr": "Babalar Günü kutlu olsun! Bugün babanla bir yere gitmeye ne dersin?",
+   "en": "Happy Father's Day! Why not take your dad somewhere today?",
+   "kart": "babalar-f4",
+   "kartAlt": {
+    "tr": "Bize yolu ilk gösteren babalarımıza sevgiyle.",
+    "en": "To our fathers, who first showed us the way."
+   }
+  },
+  {
+   "bas": "2027-02-08",
+   "bit": "2027-03-08",
+   "e": "🌙",
+   "tr": "Hayırlı Ramazanlar!",
+   "en": "Ramadan Mubarak!",
+   "sayac": 1,
+   "kart": "ramazan-f1",
+   "mahya": {
+    "tr": "HOŞ GELDİN RAMAZAN"
+   }
+  },
+  {
+   "bas": "2027-03-09",
+   "bit": "2027-03-11",
+   "e": "🌙",
+   "tr": "Ramazan Bayramınız mübarek olsun!",
+   "en": "Happy Eid al-Fitr!",
+   "bayram": 1,
+   "ad": "Ramazan Bayramı",
+   "adEn": "Eid al-Fitr",
+   "kart": "rbayram-f3"
+  },
+  {
+   "bas": "2027-05-16",
+   "bit": "2027-05-19",
+   "e": "🐑",
+   "tr": "Kurban Bayramınız mübarek olsun!",
+   "en": "Happy Eid al-Adha!",
+   "bayram": 1,
+   "ad": "Kurban Bayramı",
+   "adEn": "Eid al-Adha",
+   "kart": "kurban-f4"
+  }
+ ]
+}

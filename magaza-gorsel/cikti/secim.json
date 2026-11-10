@@ -1,0 +1,176 @@
+{
+ "g1": [
+  {
+   "q": "Q12506",
+   "s": "istanbul",
+   "ad": "Ayasofya",
+   "il": "İstanbul",
+   "k": "t",
+   "f": {
+    "p": "2/22/Hagia_Sophia_Mars_2013.jpg",
+    "w": 5514,
+    "a": "Arild Vågen · CC BY-SA 3.0"
+   },
+   "lat": 41.00833,
+   "lng": 28.98
+  },
+  {
+   "q": "Q80541",
+   "s": "istanbul",
+   "ad": "Sultanahmet Camii",
+   "il": "İstanbul",
+   "k": "t",
+   "f": {
+    "p": "1/12/Exterior_of_Sultan_Ahmed_I_Mosque_in_Istanbul%2C_Turkey_002.jpg",
+    "w": 4238,
+    "a": "Moonik · CC BY-SA 3.0"
+   },
+   "lat": 41.00539,
+   "lng": 28.97682
+  },
+  {
+   "q": "Q170495",
+   "s": "istanbul",
+   "ad": "Topkapı Sarayı",
+   "il": "İstanbul",
+   "k": "t",
+   "f": {
+    "p": "a/ac/Topkapi_Palace_Seen_From_Harem.JPG",
+    "w": 3454,
+    "a": "Bjørn Christian Tørrissen · CC BY-SA 3.0"
+   },
+   "lat": 41.013,
+   "lng": 28.984
+  },
+  {
+   "q": "Q216511",
+   "s": "istanbul",
+   "ad": "Yerebatan Sarnıcı",
+   "il": "İstanbul",
+   "k": "t",
+   "f": {
+    "p": "a/ae/Cisterna_Bas%C3%ADlica%2C_Estambul%2C_Turqu%C3%ADa%2C_2024-09-28%2C_DD_58-60_HDR.jpg",
+    "w": 5495,
+    "a": "Diego Delso · CC BY-SA 4.0"
+   },
+   "lat": 41.0084,
+   "lng": 28.97792
+  }
+ ],
+ "g2": [
+  {
+   "q": "Q91274",
+   "s": "istanbul",
+   "ad": "Galata Kulesi",
+   "il": "İstanbul",
+   "k": "d",
+   "f": {
+    "p": "f/f7/Istanbul_asv2020-02_img48_Galata_Tower.jpg",
+    "w": 4321,
+    "a": "A.Savin · FAL"
+   },
+   "lat": 41.02563,
+   "lng": 28.97415
+  },
+  {
+   "q": "Q848397",
+   "s": "istanbul",
+   "ad": "Kız Kulesi",
+   "il": "İstanbul",
+   "k": "d",
+   "f": {
+    "p": "6/62/Istanbul_asv2020-02_img53_Maiden%27s_Tower.jpg",
+    "w": 5005,
+    "a": "A.Savin · FAL"
+   },
+   "lat": 41.02111,
+   "lng": 29.00417
+  },
+  {
+   "q": "Q274141",
+   "s": "istanbul",
+   "ad": "Dolmabahçe Sarayı",
+   "il": "İstanbul",
+   "k": "t",
+   "f": {
+    "p": "a/a7/Palacio_de_Dolmabah%C3%A7e%2C_Estambul%2C_Turqu%C3%ADa%2C_2024-09-29%2C_DD_24.jpg",
+    "w": 7129,
+    "a": "Diego Delso · CC BY-SA 4.0"
+   },
+   "lat": 41.03944,
+   "lng": 29.00167
+  },
+  {
+   "q": "Q176380",
+   "s": "istanbul",
+   "ad": "Ortaköy Camii",
+   "il": "İstanbul",
+   "k": "t",
+   "f": {
+    "p": "2/23/Istanbul_asv2020-02_img61_Ortak%C3%B6y_Mosque.jpg",
+    "w": 4878,
+    "a": "A.Savin · FAL"
+   },
+   "lat": 41.04733,
+   "lng": 29.02681
+  }
+ ],
+ "g3": [
+  {
+   "q": "Q620593",
+   "s": "nevsehir",
+   "ad": "Göreme Tarihî Millî Parkı",
+   "il": "Nevşehir",
+   "k": "d",
+   "f": {
+    "p": "8/81/00_3598_Felsformation_aus_vulkanischer_Ascheablagerung_-_Felswohnungen.jpg",
+    "w": 2666,
+    "a": "W. Bulach · CC BY-SA 4.0"
+   },
+   "lat": 38.65278,
+   "lng": 34.86306
+  },
+  {
+   "q": "Q112865630",
+   "s": "nevsehir",
+   "ad": "Uçhisar Kalesi",
+   "il": "Nevşehir",
+   "k": "t",
+   "f": {
+    "p": "3/39/Nev%C5%9Fehir_U%C3%A7_hisar_kalesi.jpg",
+    "w": 4608,
+    "a": "SerifeOzoglu · CC BY-SA 4.0"
+   },
+   "lat": 38.63033,
+   "lng": 34.80556
+  },
+  {
+   "q": "Q133612406",
+   "s": "nevsehir",
+   "ad": "Paşabağ",
+   "il": "Nevşehir",
+   "k": "d",
+   "f": {
+    "p": "f/f0/Pasaba_Valley.jpg",
+    "w": 4032,
+    "a": "Héctor Ochoa 'Robot8A' · CC BY-SA 4.0"
+   },
+   "lat": 38.67708,
+   "lng": 34.85581
+  },
+  {
+   "q": "Q1328958",
+   "s": "nevsehir",
+   "ad": "Derinkuyu Yeraltı Şehri",
+   "il": "Nevşehir",
+   "k": "t",
+   "f": {
+    "p": "6/6c/Derinkuyu_Underground_City_9831_Nevit_Enhancer.jpg",
+    "w": 4000,
+    "a": "Nevit Dilmen (talk) · CC BY-SA 3.0"
+   },
+   "lat": 38.3734,
+   "lng": 34.73503
+  }
+ ]
+}

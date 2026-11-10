@@ -27,3 +27,9 @@ Artık kullanılmayan dalların dosyaları. Her klasör bir eski dalın son hâl
 | `veri-aday` | veri-aday | 2026-11-03 | 267 | `999ff32` |
 | `veri-aday-sonuc` | veri-aday-sonuc | 2026-11-03 | 90 | `2ed6b26` |
 | `veri-aday-silinen-dosyalar` | veri-aday (geçmişte silinmiş geçici dosyalar) | 2026-11-03 | 5 | |
+| `foto-rapor` | foto-rapor | 2026-11-07 | 6243 | `ff6155e` |
+| `magaza-gorsel` | magaza-gorsel | 2026-11-07 | 53 | `a1f8900` |
+| `surum-6.6` | 6.6 sürüm dalı | 2026-11-10 | 267 | `b0cac0f` |
+| `surum-6.6-onceki` | 6.6 önceki sürüm dalı | 2026-11-06 | 272 | `cc65463` |
+| `foto-rapor-silinen-dosyalar` | foto-rapor (geçmişte silinmiş dosyalar) | 2026-11-07 | 110 | |
+| `magaza-gorsel-silinen-dosyalar` | magaza-gorsel (geçmişte silinmiş dosyalar) | 2026-11-07 | 29 | |

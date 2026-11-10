@@ -1,0 +1,72 @@
+name: Veri hazirla
+on:
+  workflow_dispatch:
+    inputs:
+      gorev:
+        description: "teshis, uret, dene (main yerine veri-deneme dalina yazar) veya zorla (veri kapisini atlar)"
+        default: "uret"
+  push:
+    branches: [main]
+    paths: ["scripts/**", "data/**", ".github/workflows/veri.yml"]
+permissions:
+  contents: write
+concurrency: { group: veri, cancel-in-progress: true }
+jobs:
+  veri:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with: { node-version: 20 }
+      - name: Teshis
+        if: ${{ github.event.inputs.gorev == 'teshis' }}
+        run: node scripts/teshis.mjs
+      - name: Veriyi uret
+        if: ${{ github.event.inputs.gorev != 'teshis' }}
+        run: node scripts/uret.mjs
+      - name: Veri kapisi (yer sayisi belirgin azaldiysa durdur)
+        if: ${{ github.event.inputs.gorev != 'teshis' && github.event.inputs.gorev != 'dene' && github.event.inputs.gorev != 'zorla' }}
+        run: node scripts/veri-kapi.mjs
+      - name: Deneme verisini veri-deneme dalina yukle
+        if: ${{ github.event.inputs.gorev == 'dene' }}
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p /tmp/d && cp -r docs/data /tmp/d/data && cp kontrol/rapor.txt kontrol/liste.json /tmp/d/
+          cd /tmp/d
+          git init -q -b veri-deneme
+          git config user.name "Mert Turanlıoğlu"
+          git config user.email "me7rtt@gmail.com"
+          git add -A
+          git commit -q -m "Deneme verisi"
+          git push -f "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git" veri-deneme
+      - name: Veriyi main'e yukle
+        if: ${{ github.ref == 'refs/heads/main' && github.event.inputs.gorev != 'teshis' && github.event.inputs.gorev != 'dene' }}
+        run: |
+          git config user.name "Mert Turanlıoğlu"
+          git config user.email "me7rtt@gmail.com"
+          cp kontrol/rapor.txt data/son-rapor.txt
+          git add docs/data data/son-rapor.txt
+          if git diff --cached --quiet; then echo "degisiklik yok"; exit 0; fi
+          git commit -m "Veri guncellendi (otomatik)"
+          ok=0; for i in 1 2 3; do if git pull --rebase origin main && git push origin HEAD:main; then ok=1; break; fi; sleep 5; done; [ "$ok" = 1 ] || { echo "Veri main dalina gonderilemedi"; exit 1; }
+      - name: Fotograf kontrol sayfalari
+        continue-on-error: true
+        timeout-minutes: 30
+        if: ${{ github.event.inputs.gorev != 'teshis' }}
+        run: |
+          pip install --quiet pillow
+          python3 scripts/kontrol.py
+      - name: Kontrol sayfalarini kontrol dalina yukle
+        if: ${{ always() && github.event.inputs.gorev != 'teshis' }}
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd kontrol
+          git init -q -b kontrol
+          git config user.name "Mert Turanlıoğlu"
+          git config user.email "me7rtt@gmail.com"
+          git add -A
+          git commit -q -m "Fotograf kontrol sayfalari"
+          git push -f "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git" kontrol

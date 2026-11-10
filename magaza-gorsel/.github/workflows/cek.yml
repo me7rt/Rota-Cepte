@@ -1,0 +1,27 @@
+name: Magaza gorselleri
+on:
+  push:
+    branches: [magaza-gorsel]
+    paths: [cek.mjs, .github/workflows/cek.yml]
+permissions:
+  contents: write
+jobs:
+  cek:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with: { ref: claude/project-thread-2h3c9c, path: uyg, persist-credentials: false }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: |
+          npm install --no-save --no-audit --no-fund playwright@1.48.2
+          npx playwright install --with-deps chromium
+      - run: |
+          (cd uyg/docs && python3 -m http.server 8000 >/dev/null 2>&1 &)
+          sleep 2
+          node cek.mjs
+      - run: |
+          git config user.name "Mert Turanlıoğlu"; git config user.email "me7rtt@gmail.com"
+          git add cikti && git commit -q -m "Ekran görüntüleri" && git push
