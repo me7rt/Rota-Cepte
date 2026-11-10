@@ -217,6 +217,7 @@
       if (!$("listem").hidden) renderFav();
       if (!$("home").hidden && $("search").value.trim().length >= 2) renderHome();
       if (DIL === "en" && !$("home").hidden) gmKart();
+      if ($("rotaKart").children.length) rotaKartlar();
     }).catch(() => { araSoz = null; });
     return araSoz;
   }
@@ -317,7 +318,8 @@
     $("city").hidden = v !== "city";
     $("indirSec").hidden = true;
     $("plan").hidden = true;
-    $("back").hidden = v === "home" || v === "listem" || v === "rozet" || v === "ayarlar" || (view && view.mode === "near");
+    // Sekme sayfalarında geri oku yalnızca geçmiş varsa görünür; bir önceki ekrana döner
+    $("back").hidden = v === "home" || ((v === "listem" || v === "rozet" || v === "ayarlar" || (view && view.mode === "near")) && !adim);
     $("dilHizli").hidden = v !== "home";
     $("acilPill").hidden = !(view && view.mode === "near");
     if (degisti || v === "city") window.scrollTo(0, 0);
@@ -401,6 +403,15 @@
       else { GERI = false; KAYDIR.set(kayAnah(), scrollY); }
     };
     requestAnimationFrame(dene);
+  }
+  // iPhone'da ana ekrana eklenmiş web uygulamasında Safari'nin kaydırarak geri hareketi yok: soldan sağa kaydırınca bir önceki ekrana dön
+  if (navigator.standalone) {
+    let sx = -1, sy = 0;
+    addEventListener("touchstart", (e) => { const t = e.touches[0]; sx = e.touches.length === 1 && t.clientX < 24 ? t.clientX : -1; sy = t.clientY; }, { passive: true });
+    addEventListener("touchend", (e) => {
+      if (sx < 0) return; const t = e.changedTouches[0], dx = t.clientX - sx, dy = Math.abs(t.clientY - sy); sx = -1;
+      if (dx > 80 && dy < 50) { if (!$("sheet").hidden) closeDetail(); else if (adim > 0) history.back(); }
+    }, { passive: true });
   }
   async function sayfaDegisti() {
     const geri = !ileri; ileri = false;
@@ -1845,14 +1856,22 @@
   let ROTA = null;
   const rt = (r, k) => (DIL === "en" && r[k + "_en"]) || r[k];
   function loadRota() {
-    if (!ROTA) ROTA = getJSON(`rotalar.json?v=${SURUM}`).catch(() => { ROTA = null; return []; });
+    if (!ROTA) ROTA = getJSON(`rotalar.json?v=${SURUM}-2`).catch(() => { ROTA = null; return []; });
     return ROTA;
   }
   async function rotaKartlar() {
     const r = await loadRota();
     $("rotaSec").hidden = !r.length;
-    $("rotaKart").innerHTML = r.map((x) =>
-      `<button class="rkart" data-go="#/rota/${x.k}"><i>${ik("route", 22)}</i><b>${esc(rt(x, "ad"))}</b><small>${esc(rt(x, "sure"))} · ${x.d.length} ${TL("durak", "stops")}</small></button>`).join("");
+    // Kapak: rotanın en bilinen durağının fotoğrafı (rotalar.json "kapak"; yoksa ilk durak)
+    const kapak = (x) => {
+      if (!ARA) return "";
+      const d = x.d.find((y) => y[1] === x.kapak) || x.d[0];
+      const y = ARA.find((z) => z[2] === d[0] && z[1] === d[1]);
+      return y && y[8] ? foto({ p: y[8], w: 1e5 }, 500) : "";
+    };
+    $("rotaKart").innerHTML = r.map((x, i) => { const src = kapak(x);
+      return `<button class="rkart${src ? " fotolu" : ""}" data-go="#/rota/${x.k}">${src ? `<img src="${esc(src)}" alt="" loading="lazy" decoding="async" onerror="fotoHata(this)">` : ""}<i>${ik("route", 22)}</i><b>${esc(rt(x, "ad"))}</b><small>${esc(rt(x, "sure"))} · ${x.d.length} ${TL("durak", "stops")}</small></button>`; }).join("");
+    if (!ARA && IDX) loadAra();
   }
   async function showRota(k, no) {
     const r = (await loadRota()).find((x) => x.k === k);
@@ -2438,10 +2457,11 @@
     const yeni = [
       ["settings", TL("Yeni Ayarlar sekmesi", "New Settings tab"), TL("Alt menünün sağında Ayarlar: acil yardım, sesli rehber, dil ve tema, bildirimler, paylaşma ve bize yazma tek yerde.", "Settings now has its own tab: emergency help, audio guide, language and theme, notifications, sharing and feedback in one place."), "#/ayarlar"],
       ["compass", TL("Keşfet ortada, daha sade", "Explore in the middle, tidier"), TL(`Keşfet alt menünün ortasında. Planlama araçları altı eşit kutuda, Festivaller de aralarında; Yol üstü keşif artık Tatilini planla'nın içinde. Gezi türleri dört büyük kutuda, ayın önerileri “${ayBas}” başlığında.`, `Explore sits in the middle of the menu. Planning tools are six equal tiles, now with Festivals; Along the way lives inside Plan your holiday. Trip types are in four big boxes, and this month's picks are under “${ayBas}”.`), ""],
+      ["camera", TL("Fotoğraflı hazır rotalar", "Ready routes with photos"), TL("Hazır rota kartlarında rotanın en bilinen durağının fotoğrafı var: Kapadokya'da peri bacaları, Ankara'da Anıtkabir.", "Ready route cards now show their best-known stop: fairy chimneys for Cappadocia, Anıtkabir for Ankara."), ""],
       ["phone", TL("112 için onay", "112 confirmation"), TL("Yanlışlıkla aramayı önlemek için 112'ye basınca önce “112'yi aramak istiyor musun?” diye soruyoruz.", "To avoid calling by mistake, we now ask “Call 112?” before dialling."), ""],
       ["bell", TL("Anma ve bayram bildirimleri", "Holiday and commemoration alerts"), TL("Özel gün kartındaki zile dokun: millî bayramlarda, anmalarda, dini bayramlarda ve kandillerde haber verelim. Ayarlar'da “Tüm bildirimler” anahtarıyla hepsini tek dokunuşla aç ya da kapat. İzin artık yalnızca sen istediğinde sorulur.", "Tap the bell on a special-day card and we'll let you know on national and religious holidays and commemorations. Turn everything on or off with “All notifications” in Settings. We only ask for permission when you choose to."), ""],
       ["send", TL("Öneri gönder", "Send feedback"), TL("Fikrini ya da bulduğun bir hatayı Ayarlar'dan tek dokunuşla bize yaz.", "Send us an idea or a bug from Settings in one tap."), ""],
-      ["map", TL("Haritada yer adı", "Place names on the map"), TL("“Haritada aç”ta iğne tam yerinde, üstünde yerin adı yazıyor. Bir yere bakıp geri dönünce her sayfada kaldığın yerden devam edersin.", "“Open in map” puts the pin on the exact spot with the place's name. Go back from any place and you'll be where you left off."), ""],
+      ["map", TL("Haritada yer adı", "Place names on the map"), TL("“Haritada aç”ta iğne tam yerinde, üstünde yerin adı yazıyor. Geri her zaman bir önceki ekrana döner, sekmeler arasında da; dönünce kaldığın yerden devam edersin.", "“Open in map” puts the pin on the exact spot with the place's name. Back always takes you to the previous screen, across tabs too, right where you left off."), ""],
       ["map-pin", TL("Bilgi düzeltmeleri", "Corrections"), TL("Galata Kulesi artık tarihî yerler arasında, Ayasofya'nın yapım yılı 537, Muğla'nın yüzölçümü 12.654 km² (Harita Genel Müdürlüğü). İngilizcede “Bugünkü rotan” kartında yer adları İngilizce.", "Galata Tower is now listed as a historic site, Hagia Sophia was built in 537, and Muğla covers 12,654 km² (General Directorate of Mapping). Place names on the “Today's route” card are now in English."), ""],
       ["circle-minus", TL("Çıkanlar", "Removed"), TL("Ana sayfadaki büyük MüzeKart kutusu ve pasaport özeti kalktı: MüzeKart artık planlama araçlarında, pasaportun Gezilerim'de.", "The big Museum Pass box and passport summary left the home screen: Museum Pass is now a planning tile and your passport is in My trips."), ""]
     ];
@@ -4833,7 +4853,7 @@
   function anahtarYaz(id, on) { const b = $(id); if (!b) return; b.setAttribute("aria-checked", on ? "true" : "false"); b.classList.toggle("on", on); }
   function bildirimYazi() {
     if (!$("bildGrup")) return;
-    $("bildGrup").hidden = $("bildBas").hidden = !LN;
+    $("bildGrup").hidden = !LN; $("bildBas").hidden = false; $("bildWeb").hidden = !!LN;
     if (!LN) return;
     const h = izinVar && bildirimAcik(), a = izinVar && anmaAcik();
     anahtarYaz("bildirimBtn", h); anahtarYaz("anmaBtn", a); anahtarYaz("tumBildBtn", h || a);
