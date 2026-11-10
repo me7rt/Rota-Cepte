@@ -1,8 +1,8 @@
 /* Rota Cepte · © 2026 Mert Turanlıoğlu · Çevrimdışı açılış (önce internet, yavaşsa ya da yoksa kayıtlı kopya) */
-const C = "gezi-6.6";
+const C = "gezi-6.6.1";
 const IND = "gezi-indir"; // "İnternetsiz kullan" ile indirilen il verisi ve fotoğraflar (sürüm değişse de silinmez)
 // Uygulamanın iskeleti: ilk kurulumda kaydedilir, böylece ilk ziyaretten sonra internetsiz de açılır
-const ISKELET = ["./", "index.html", "style.css?v=6.6", "app.js?v=6.6", "i18n.js?v=6.6", "vendor/lucide.js?v=6.6", "kartlar.js?v=6.6", "vendor/leaflet.js", "vendor/leaflet.css",
+const ISKELET = ["./", "index.html", "style.css?v=6.6.1", "app.js?v=6.6.1", "i18n.js?v=6.6.1", "vendor/lucide.js?v=6.6.1", "kartlar.js?v=6.6.1", "vendor/leaflet.js", "vendor/leaflet.css",
   "vendor/font/manrope-latin-wght-normal.woff2", "vendor/font/manrope-latin-ext-wght-normal.woff2", "icon-192.png", "manifest.webmanifest",
   "gizlilik.html", "lisanslar.html", "kosullar.html", "belge.css?v=6.3"];
 self.addEventListener("install", (e) => e.waitUntil(

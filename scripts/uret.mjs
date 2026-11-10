@@ -39,6 +39,8 @@ const IPUCU = okuJSON("data/ipuclari.json", {});
 //   elle: Wikidata no -> {tr, en} kaynak metin yanlış yere aitse elle yazılmış kısa metin (Vikipedi bağlantısı kaldırılır)
 const ICERIK = okuJSON("data/icerik-duzelt.json", {});
 const INGILIZCE_ACK = /^(?!.*[çğıöşüÇĞİÖŞÜ]).*\b(in|of|the|and|ancient|city|located|building|mosque|church|museum|lake|mountain|island|national|village|neighbou?rhood|quarter|street|bridge|castle|cave|valley|canyon|monastery|temple|statue|tree|point|bay|gulf|cape|beach|resort|square|district|range|zoo|garden|lagoon|tower|tomb|ruins|church|Turkey)\b(?!['’])/i;
+// Elle veri düzeltmeleri: "kategori" (Wikidata no -> k), "yil" (Wikidata no -> yapım yılı), "il_alan" (il slug -> km², HGM)
+const KAT_DUZ = ICERIK.kategori || {}, YIL_DUZ = ICERIK.yil || {}, IL_ALAN = ICERIK.il_alan || {};
 const AD_DUZ = ICERIK.ad || {}, TR_CEVIRI = ICERIK.tr || {}, EN_CEVIRI = ICERIK.en || {}, IPUCU_EN = ICERIK.ip_en || {}, IL_DUZ = ICERIK.il || {}, ILCE_DUZ = ICERIK.ilce || {}, ELLE_METIN = ICERIK.elle || {};
 
 // ---------- Sınıflar ----------
@@ -1028,6 +1030,8 @@ for (const il of ilSirali) {
     y.w = o.trA ? "tr:" + o.trA : o.enA ? "en:" + o.enA : "";
     if (ceviri) { y.cv = 1; if (o.enA) y.w = "en:" + o.enA; }
     if (ELLE_METIN[o.q]) { y.m = ELLE_METIN[o.q].tr; y.w = ""; delete y.en; delete y.cv; }
+    if (KAT_DUZ[o.q]) o.k = y.k = KAT_DUZ[o.q];
+    if (YIL_DUZ[o.q]) o.yil = YIL_DUZ[o.q];
     if (o.yil) y.yil = o.yil; if (o.rakim && o.k === "d") y.rak = o.rakim; if (o.unesco) y.un = 1;
     y.sl = o.sl || 0;
     return y;
@@ -1044,7 +1048,7 @@ for (const il of ilSirali) {
     yerler.unshift(y);
   });
   const ilceCikti = ilceSira.map((d) => ({ ad: d.ad, q: d.q, lat: d.koor[0], lng: d.koor[1], f: fotoCikti(d.foto), m: trM.get(d.trA) || "", w: d.trA ? "tr:" + d.trA : "", nuf: d.nufus || 0, nufY: d.nufusYil || "", alan: d.alan ? Math.round(d.alan) : 0, n: yerler.filter((y) => y.i === ilceNo.get(d.q)).length }));
-  const dosya = { ad: il.ad, s: il.s, q: il.q, lat: il.koor ? il.koor[0] : 0, lng: il.koor ? il.koor[1] : 0, plaka: PLAKA[il.s] || il.plaka, f: fotoCikti(il.foto), m: trM.get(il.trA) || "", w: il.trA ? "tr:" + il.trA : "", nuf: il.nufus || 0, nufY: il.nufusYil || "", alan: il.alan ? Math.round(il.alan) : 0, ilceler: ilceCikti, yerler };
+  const dosya = { ad: il.ad, s: il.s, q: il.q, lat: il.koor ? il.koor[0] : 0, lng: il.koor ? il.koor[1] : 0, plaka: PLAKA[il.s] || il.plaka, f: fotoCikti(il.foto), m: trM.get(il.trA) || "", w: il.trA ? "tr:" + il.trA : "", nuf: il.nufus || 0, nufY: il.nufusYil || "", alan: IL_ALAN[il.s] || (il.alan ? Math.round(il.alan) : 0), ilceler: ilceCikti, yerler };
   // Kapak: şehir genel görünümü yerine ilin en bilinen yerinin büyük fotoğrafı
   const kapakYer = yerler.find((y) => y.f && y.ad === KAPAK[il.s]) || yerler.find((y) => y.one && y.f && y.f.w >= 1200) || yerler.find((y) => y.one && y.f);
   if (il.kapakFoto && !KAPAK[il.s]) { dosya.f = fotoCikti(il.kapakFoto); dosya.kapak = temizAd(il.kapakO.ad); }

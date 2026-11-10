@@ -53,9 +53,11 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          # Her derlemede sürüm numarası artar (Play bunu ister)
-          sed -i "s/versionCode [0-9]*/versionCode ${{ github.run_number }}/; s/versionName \"[^\"]*\"/versionName \"$(node -p "require('../package.json').version")\"/" app/build.gradle
-          grep -q "versionCode ${{ github.run_number }}" app/build.gradle || { echo "Surum numarasi ayarlanamadi"; exit 1; }
+          # Sürüm kodu: package.json'daki "surumKodu" (varsa), yoksa derleme numarası. Play her yüklemede daha büyük kod ister.
+          KOD=$(node -p "require('../package.json').surumKodu || ${{ github.run_number }}")
+          sed -i "s/versionCode [0-9]*/versionCode $KOD/; s/versionName \"[^\"]*\"/versionName \"$(node -p "require('../package.json').version")\"/" app/build.gradle
+          grep -q "versionCode $KOD" app/build.gradle || { echo "Surum numarasi ayarlanamadi"; exit 1; }
+          echo "Sürüm kodu: $KOD"
           if [ "$IMZALI" = "true" ]; then
             # İmza anahtarı derleme sırasında diskte durmaz; imzalama ayrı adımda yapılır
             ./gradlew assembleRelease bundleRelease --no-daemon

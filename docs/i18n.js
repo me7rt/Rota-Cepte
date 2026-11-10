@@ -6,6 +6,12 @@
   try { dil = localStorage.getItem("gezi-dil") || ""; } catch (e) {}
   if (dil !== "tr" && dil !== "en") dil = /^tr/i.test(navigator.language || "tr") ? "tr" : "en";
   const EN = {
+    // v6.6.1
+    "MüzeKart": "Museum Pass", "Festivaller": "Festivals", "Ayarlar": "Settings", "Güvenlik": "Safety", "Dinleme": "Listening", "Ses seçimi, Etrafımı anlat": "Voice, Tell me what's around",
+    "Görünüm ve dil": "Look and language", "Bildirimler": "Notifications", "Tüm bildirimler": "All notifications", "Tek dokunuşla hepsini aç ya da kapat": "Turn them all on or off in one tap",
+    "Hafta sonu önerisi": "Weekend ideas", "Anma ve bayram bildirimleri": "Holiday and commemoration alerts", "Önerileri sıfırla": "Reset suggestions",
+    "Paylaş ve destek": "Share and support", "Arkadaşına öner": "Recommend to a friend", "Rota Cepte'yi paylaş": "Share Rota Cepte",
+    "Öneri gönder": "Send feedback", "Fikrin ya da bulduğun bir hata için e-posta": "Email us an idea or a bug", "Hakkında": "About",
     // v6.6
     "Tatilini planla": "Plan your holiday", "Gün gün kendi rotanı yap, gideceğin yerleri sen seç": "Build your own day-by-day route and pick the places yourself",
     "Nasıl bir gezi istiyorsun?": "What kind of trip?", "Gezi türü": "Trip type",

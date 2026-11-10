@@ -1481,3 +1481,74 @@ html.gm-acik,html.gm-acik body{overflow:hidden}
 /* Sana özel: neden bunlar, sürpriz kartı */
 .ozel .ozneden{margin:2px 14px -6px 6px;font-size:13px}
 .ozsur{background:linear-gradient(150deg,var(--altin-a),var(--altin-b));color:var(--altin-ink);-webkit-backdrop-filter:none;backdrop-filter:none}
+
+/* ---------- 6.6.1 düzen: 5 sekmeli alt menü, sade üst çubuk, Ayarlar sayfası, birleşik gezi türleri ---------- */
+.gizli-yazi{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* Üst çubukta konum yalnızca simge (yazı ekran okuyucu için kalır) */
+#locBtn{width:42px;height:42px;min-height:42px;padding:0;justify-content:center;gap:0}
+.tabbar{grid-template-columns:repeat(5,1fr)}
+.tabbar a{font-size:11px;min-width:0}
+.tabbar a span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tabbar a i{width:52px}
+.tabbar a.orta i{width:58px;height:38px;margin-top:-12px;border-radius:16px;background:var(--pri);color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.18)}
+.tabbar a.orta.on i{background:var(--pri);color:#fff}
+/* Planlama araçları: 6 eşit kutu, yalnızca başlık */
+.arac6{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:10px}
+.arac6 .mini{min-height:100px;gap:0;padding:12px 10px 12px 12px;justify-content:flex-start}
+.arac6 .mini b{font-size:14px;line-height:1.25;hyphens:auto}
+@media (max-width:359px){.arac6 .mini b{font-size:13px}.arac6 .mini{padding:10px}}
+/* Nasıl bir gezi istiyorsun?: büyük 4 kutunun altında küçük tür düğmeleri, alt satıra sarar */
+.tarzsec .tchips{display:flex;flex-wrap:wrap;gap:8px;overflow:visible;margin:10px 0 0;padding:0}
+.tarzsec .tchip{min-height:40px;max-width:100%;gap:8px;padding:4px 12px 4px 4px;font-size:13.5px;line-height:1.25;border-radius:999px}
+.tarzsec .tchip i{width:30px;height:30px;border-radius:50%}
+.tarzsec .tchip span{min-width:0}
+/* Ayarlar */
+.ayarv{padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
+.ayarv .ayb{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:10px 4px -6px}
+.ayarv .ayb:first-child{margin-top:4px}
+.ayarv .grup{margin-top:0}
+.ayarv .grow > span{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.ayarv .grow small{font-weight:500;color:var(--muted);font-size:13px;line-height:1.35}
+.ayarv .credit{margin-top:6px}
+.acilsatir > i{background:#fde8e6!important;color:#c0281b!important}
+.anahtar .sw{flex:none;position:relative;width:46px;height:28px;border-radius:999px;background:var(--line);transition:background-color .2s}
+.anahtar .sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+.anahtar.on .sw{background:var(--pri)}
+.anahtar.on .sw::after{transform:translateX(18px)}
+.anahtar.alt{padding-left:30px}
+/* Özel gün kartı: Kartı paylaş + zil */
+.ogdug{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.ozelgun .ogdug .ogpay{margin-top:0}
+.ozelgun .ogzil.on{background:rgba(255,255,255,.3)}
+/* 112 onayı */
+.temo.acilik{background:#fde8e6;color:#c0281b}
+.tbtn.ikiesit{display:grid;grid-template-columns:1fr 1fr}
+.tbtn.ikiesit .btn{padding:12px 10px;justify-content:center}
+.btn.ara112{background:#c0281b;border-color:#c0281b;color:#fff}
+.ayarv #dilYazi,.ayarv #temaYazi{display:block}
+.ozelgun .ogzil{white-space:normal;text-align:left;line-height:1.25;padding-block:6px}
+/* Üst çubukta sesli rehber (kulaklık) */
+.sesust{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--pri-ink);box-shadow:var(--sh-1);transition:transform .15s}
+.sesust:active{transform:scale(.92)}
+/* "Tüm türler" ile açılan diğer türler */
+.tchips.kapali .tfazla{display:none}
+.tumtur{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border:1px dashed var(--line);border-radius:999px;background:transparent;color:var(--pri-ink);font:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
+.tumtur svg{transition:transform .2s}
+.tumtur[aria-expanded="true"] svg{transform:rotate(180deg)}
+.ozelgun .ogzil{white-space:nowrap}
+/* Nasıl bir gezi: dört gruba girmeyen türler için ince kutular */
+.tarzince{grid-column:span 1;display:flex;align-items:center;gap:10px;min-height:52px;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-l);background:var(--surface);color:var(--fg);font:inherit;text-align:left;cursor:pointer;transition:transform .15s}
+.tarzince:active{transform:scale(.97)}
+.tarzince .tarzik{width:32px;height:32px;border-radius:10px;background:var(--pri-soft);color:var(--pri-ink);grid-row:auto}
+.tarzince b{flex:1;min-width:0;font-size:14px;line-height:1.25}
+.tarzince > svg{flex:none;color:var(--muted)}
+.plyol{margin-top:4px}
+
+/* 6.6.1: eşit boy tür kutuları, kaydırmalı alt tür satırı */
+.tarzlar{grid-template-rows:1fr 1fr;grid-auto-rows:auto}
+.tarz{grid-template-columns:1fr;grid-template-rows:auto auto 1fr;align-items:start;row-gap:2px}
+.tarz .tarzik{grid-row:auto;width:38px;height:38px;margin-bottom:8px}
+.tarz b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tarz small{min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.chips button{white-space:nowrap}
+.tarzchips{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
