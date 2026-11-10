@@ -39,7 +39,7 @@ const IPUCU = okuJSON("data/ipuclari.json", {});
 //   elle: Wikidata no -> {tr, en} kaynak metin yanlış yere aitse elle yazılmış kısa metin (Vikipedi bağlantısı kaldırılır)
 const ICERIK = okuJSON("data/icerik-duzelt.json", {});
 const INGILIZCE_ACK = /^(?!.*[çğıöşüÇĞİÖŞÜ]).*\b(in|of|the|and|ancient|city|located|building|mosque|church|museum|lake|mountain|island|national|village|neighbou?rhood|quarter|street|bridge|castle|cave|valley|canyon|monastery|temple|statue|tree|point|bay|gulf|cape|beach|resort|square|district|range|zoo|garden|lagoon|tower|tomb|ruins|church|Turkey)\b(?!['’])/i;
-const AD_DUZ = ICERIK.ad || {}, TR_CEVIRI = ICERIK.tr || {}, EN_CEVIRI = ICERIK.en || {}, IPUCU_EN = ICERIK.ip_en || {}, IL_DUZ = ICERIK.il || {}, ELLE_METIN = ICERIK.elle || {};
+const AD_DUZ = ICERIK.ad || {}, TR_CEVIRI = ICERIK.tr || {}, EN_CEVIRI = ICERIK.en || {}, IPUCU_EN = ICERIK.ip_en || {}, IL_DUZ = ICERIK.il || {}, ILCE_DUZ = ICERIK.ilce || {}, ELLE_METIN = ICERIK.elle || {};
 
 // ---------- Sınıflar ----------
 // c: çarşı, t: tarihi, m: müze, d: doğa, s: şehir. Puan yüksek olan kategori kazanır.
@@ -353,6 +353,10 @@ if (etiketAra.length) {
   }
   rapor("ilçe maddesi tahminle bulunan:", bulunan, "| Vikipedi'den eklenen ilçe:", yeniBulunan);
 }
+// Elle ilçe merkezi (icerik-duzelt.json "ilce_koor": "İl/İlçe" -> [enlem, boylam]); Wikidata noktası ilçe sınırı dışında kalanlar için
+{ const IK = ICERIK.ilce_koor || {}; let n = 0;
+  for (const o of ilceler.values()) { const k = IK[iller.get(o.il).ad + "/" + o.ad]; if (k) { o.koor = k; n++; } }
+  rapor("elle düzeltilen ilçe merkezi:", n, "/", Object.keys(IK).length); }
 for (const o of [...ilceler.values()]) if (!o.koor) { rapor(`  UYARI koordinatsız ilçe atıldı: ${iller.get(o.il).ad} / ${o.ad}`); ilceler.delete(o.q); }
 for (const o of ilceler.values()) iller.get(o.il).ilceler.push(o);
 rapor("ilçe sayısı", ilceler.size, "| Vikipedi maddeli:", [...ilceler.values()].filter((o) => o.trA).length,
@@ -680,6 +684,8 @@ for (const il of iller.values()) {
       else if (!o.trA && (o.sl < 2 || (!o.imgs.length && !o.cat))) continue;
     }
     let ic = [...o.ilceler].find((q) => ilceler.has(q) && ilceler.get(q).il === il.q);
+    // Elle ilçe düzeltmesi (icerik-duzelt.json "ilce": Wikidata no -> resmî ilçe adı), resmî sınırlarla doğrulanmış olmalı
+    if (ILCE_DUZ[o.q]) { const z = il.ilceler.find((d) => d.ad === ILCE_DUZ[o.q]); if (z) ic = z.q; else rapor("  UYARI ilçe düzeltmesi eşleşmedi:", o.ad, ILCE_DUZ[o.q]); }
     if (!ic) {
       let enY = null, enD = 1e9;
       for (const d of il.ilceler) if (d.koor) { const m = mesafe(o.koor[0], o.koor[1], d.koor[0], d.koor[1]); if (m < enD) { enD = m; enY = d; } }
@@ -856,10 +862,11 @@ for (const il of iller.values()) {
     const ek = il.adaylar.filter((o) => !o.foto && o.trA && !o.wd && (o.k !== "t" || YAPI_ADI.test(o.ad))).sort((a, b) => b.sl - a.sl).slice(0, 15 - il.yerler.length);
     if (ek.length) { il.yerler.push(...ek); azIlEk += ek.length; }
   }
-  // Son sınır: ilçe başına 35, ilçesiz 40, il başına 400
+  // Son sınır: ilçe başına 50, ilçesiz 40, il başına 400. İlçeler resmî sınırlarla düzeltilince tarihî merkezler
+  // (Bursa Osmangazi, İstanbul Fatih) tek ilçede toplandı; 35'lik sınır Orhan Gazi Külliyesi gibi yerleri düşürüyordu.
   const say = new Map(); const son = [];
   for (const o of il.yerler) {
-    if (!o.one) { const key = o.ilce || "-"; const n = say.get(key) || 0; if (n >= (o.ilce ? 35 : 40)) continue; say.set(key, n + 1); }
+    if (!o.one) { const key = o.ilce || "-"; const n = say.get(key) || 0; if (n >= (o.ilce ? 50 : 40)) continue; say.set(key, n + 1); }
     son.push(o);
   }
   il.yerler = son.slice(0, 400);
@@ -951,6 +958,8 @@ for (const x of dorduncu) {
 for (const il of iller.values()) {
   const liste = ELLE[il.s] || [];
   for (const e of liste) {
+    const eq = "e-" + ascii(e.ad).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    if (ILCE_DUZ[eq] && il.ilceler.some((d) => d.ad === ILCE_DUZ[eq])) e.ilce = ILCE_DUZ[eq];
     if (!e.ilce || !il.ilceler.some((d) => d.ad === e.ilce)) e.ilce = yakinIlceAdi(il, e.lat, e.lng);
     // Elle seçilmiş fotoğraf (Commons dosya adı) varsa önce o kullanılır
     let a = null;

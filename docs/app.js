@@ -3,10 +3,19 @@
    Veri docs/data altında; GitHub Actions'ta Wikidata, Vikipedi ve Commons'tan hazırlanır (scripts/uret.mjs). */
 (function () {
   "use strict";
-  const SURUM = "6.5.1";
+  const SURUM = "6.6";
   // "6.5.1'de", "6.5'te", "6.6'da": sürüm numarasına Türkçe bulunma eki
   const surumEk = (v) => ({ 0: "da", 1: "de", 2: "de", 3: "te", 4: "te", 5: "te", 6: "da", 7: "de", 8: "de", 9: "da" })[String(v).slice(-1)] || "de";
   if (window.ikDoldur) ikDoldur();
+  // Paylaşılan link Android tarayıcıda açıldıysa uygulama yüklü değildir (yüklüyse Android linki doğrudan uygulamaya verir): Google Play'e yönlendir
+  const PAYLASIM_YOLU = /^#\/(il\/[^/]+\/yer\/|liste\/|yol\/|plan-al\/)/;
+  try {
+    const yerli = window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() !== "web";
+    if (!yerli && location.hostname === "me7rt.github.io" && /Android/i.test(navigator.userAgent) && PAYLASIM_YOLU.test(location.hash) && !/[?&]web\b/.test(location.search)) {
+      location.replace("https://play.google.com/store/apps/details?id=io.github.me7rt.rotacepte");
+      return;
+    }
+  } catch (e) { /* yönlendirme yapılamazsa web sürümü açılır */ }
   // MapTiler harita anahtarı (boşsa OpenStreetMap kullanılır)
   const HARITA_ANAHTAR = "pI5pMuHAI4gLw3aqy35G";
 
@@ -69,6 +78,9 @@
     if (m[3] === "'ler") return n + "s" + mo;
     return n + mo;
   }
+  // Çok duraklı Google Haritalar rotası: bulunduğun yerden başlar, durakları sırayla gezer.
+  // ?api=1 bağlantısında telefon uygulaması ara durakları atlayabildiği için duraklar yol olarak yazılır (en fazla 10).
+  const yolLink = (noktalar) => "https://www.google.com/maps/dir//" + noktalar.slice(0, 10).join("/") + "/data=!4m2!4m1!3e0";
   function km(a, b) {
     const R = 6371, r = (x) => (x * Math.PI) / 180;
     const dLa = r(b.lat - a.lat), dLo = r(b.lng - a.lng);
@@ -217,12 +229,13 @@
 
   // ---------- konum ----------
   document.querySelector("#locBtn .locik").innerHTML = ik("locate-fixed", 16);
+  $("kocEn").hidden = DIL !== "en"; // turist için kültür koçu ana sayfada da görünür
   function stopLocation() {
     if (watchId !== null) navigator.geolocation.clearWatch(watchId);
     watchId = null; me = null; homeMe = null; konumBekleyen = [];
     try { localStorage.setItem("gezi-konum-kapali", "1"); } catch (e) {}
     $("locBtn").classList.remove("on");
-    $("locText").textContent = T("Konum kapalı");
+    $("locText").textContent = T("Konumu aç");
     $("nearSub").textContent = T("Konumunu aç, sana en yakın gezilecek yerleri sıralayalım");
     if (meMarker && layer) { layer.removeLayer(meMarker); meMarker = null; }
     if (open) renderFacts(open);
@@ -254,7 +267,7 @@
         if (watchId !== null) navigator.geolocation.clearWatch(watchId);
         watchId = null; me = null; homeMe = null; konumBekleyen = [];
         $("locBtn").classList.remove("on");
-        $("locText").textContent = T("Konum kapalı");
+        $("locText").textContent = T("Konumu aç");
         toast(T("Konum izni verilmedi. Ayarlardan izin verebilirsin."));
       },
       { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
@@ -295,7 +308,7 @@
     $("tema").hidden = v !== "tema";
     $("rota").hidden = v !== "rota";
     $("yol").hidden = v !== "yol";
-    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark"]) $(x).hidden = v !== x;
+    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark", "planlar", "muzekart", "acil", "kultur", "festival"]) $(x).hidden = v !== x;
     $("ataturk").hidden = v !== "ataturk";
     $("rozet").hidden = v !== "rozet";
     $("listem").hidden = v !== "listem";
@@ -304,6 +317,7 @@
     $("plan").hidden = true;
     $("back").hidden = v === "home" || v === "listem" || v === "rozet" || (view && view.mode === "near");
     $("dilHizli").hidden = v !== "home";
+    $("acilPill").hidden = !(view && view.mode === "near");
     if (degisti || v === "city") window.scrollTo(0, 0);
     navAktif();
   }
@@ -338,14 +352,21 @@
       }
       if (h[0] === "yakin") return await showNear(no);
       if (h[0] === "tema" && TEMA[h[1]]) return showTema(h[1]);
+      if (h[0] === "tarz" && TARZ[h[1]]) return showTarz(h[1]);
+      if (h[0] === "plan-al") return await showPlanAl(h[1]);
+      if (h[0] === "plan") return await showPlan(h[1]);
       if (h[0] === "ataturk") return await showAtaturk();
       if (h[0] === "rota") return await showRota(h[1], no);
       if (h[0] === "yol") return showYol(h[1], h[2]);
       if (h[0] === "liste") return await showListe(h[1], no);
       if (h[0] === "kacamak") return showKacamak(h[1]);
+      if (h[0] === "muzekart") return await showMuzeKart(h[1]);
       if (h[0] === "kartlar") return await showKartlar();
       if (h[0] === "oyun") return await showOyun();
       if (h[0] === "cark") return showCark();
+      if (h[0] === "acil") return showAcil();
+      if (h[0] === "kultur") return showKultur();
+      if (h[0] === "festival") return showFestival(h[1]);
       if (h[0] === "ozet") { history.replaceState(null, "", "#/rozetler"); route(); setTimeout(() => yilOzeti(+h[1] || 0), 600); return; }
       if (h[0] === "rozetler") { view = { mode: "rozet" }; show("rozet"); $("eyebrow").textContent = T("Gezi haritan ve rozetler"); $("title").textContent = T("Gezilerim"); renderGez(); return; }
       if (h[0] === "listem") { view = { mode: "listem" }; show("listem"); $("eyebrow").textContent = "Rota Cepte"; $("title").textContent = T("Gideceğim yerler"); renderFav(); return; }
@@ -384,6 +405,7 @@
     b.classList.toggle("on", on); b.setAttribute("aria-pressed", on);
     b.setAttribute("aria-label", on ? T("Listemden çıkar") : T("Gideceğim yerlere ekle"));
   }
+  let favSirali = (() => { try { return localStorage.getItem("gezi-fav-sira") === "1"; } catch (e) { return false; } })();
   function renderFav() {
     const a = favs();
     $("favSec").hidden = !a.length; $("favBos").hidden = !!a.length;
@@ -394,13 +416,11 @@
     };
     if (a.some((x) => x.lat == null) && !ARA && IDX) loadAra();
     const nok = a.map(kon).filter(Boolean);
-    $("favList").innerHTML = a.map((x) => {
-      const n = kon(x);
-      return `<li><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${thumb(x.f, x.k)}<span class="rt"><b>${esc(kayitAd(x))}</b><small>${esc(x.il)}</small></span><span class="km">${me && n ? fmt(km(me, n)) : OKIK}</span></button></li>`;
-    }).join("");
     // Kendi rotan: en yakından başlayıp hep bir sonraki en yakın yere giden sıra (en fazla 10 durak)
-    const b = $("favRota");
-    if (nok.length < 2) { b.hidden = true; return; }
+    const b = $("favRota"), sb = $("favSirala");
+    const satir = (x, no, ara) => { const n = kon(x); return `<li><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${no ? `<span class="favno">${no}</span>` : ""}${thumb(x.f, x.k)}<span class="rt"><b>${esc(kayitAd(x))}</b><small>${esc(x.il)}${ara ? " · " + ara : ""}</small></span><span class="km">${me && n ? fmt(km(me, n)) : OKIK}</span></button></li>`; };
+    const duz = () => { $("favList").innerHTML = a.map((x) => satir(x)).join(""); };
+    if (nok.length < 2) { b.hidden = sb.hidden = true; duz(); return; }
     let kalan = nok.slice(), sira = [], cur = me || null, top = 0;
     while (kalan.length && sira.length < 10) {
       let bi = 0;
@@ -419,8 +439,14 @@
       }
     }
     top = yolUz(sira);
-    const nk = (x) => x.lat + "," + x.lng, son = sira[sira.length - 1], ara = sira.slice(0, -1).map(nk).join("|");
-    b.href = `https://www.google.com/maps/dir/?api=1&destination=${nk(son)}${ara ? "&waypoints=" + encodeURIComponent(ara) : ""}&travelmode=driving`;
+    sb.hidden = false; sb.classList.toggle("on", favSirali);
+    sb.innerHTML = favSirali ? `${ik("list-ordered", 16)} ${TL("En mantıklı sırada · eklenme sırasına dön", "In best order · back to added order")}` : `${ik("sparkles", 16)} ${TL("En mantıklı sıraya koy", "Put in best order")}`;
+    if (favSirali) {
+      const kalanlar = a.filter((x) => !sira.some((y) => y.q === x.q && y.s === x.s));
+      $("favList").innerHTML = sira.map((x, i) => satir(x, i + 1, i ? fmt(km(sira[i - 1], x) * 1.3) + TL(" yol", " away") : "")).join("") + kalanlar.map((x) => satir(x)).join("");
+    } else duz();
+    const nk = (x) => x.lat + "," + x.lng;
+    b.href = yolLink(sira.map(nk));
     b.innerHTML = TL(`<span>${ik("route", 18)} Listemden rota yap</span><small>${sira.length} durak · ~${fmt(top * 1.3)} · en kısa sırayla</small>`, `<span>${ik("route", 18)} Make a route from my list</span><small>${sira.length} stops · ~${fmt(top * 1.3)} · shortest order</small>`);
     b.hidden = false;
   }
@@ -454,7 +480,7 @@
   function renderGez() {
     renderSevdik();
     const a = gittiklerim();
-    $("gezSec").hidden = false; renderHarita(); renderRozet(); renderHedef(); renderPasaport();
+    $("gezSec").hidden = false; renderHarita(); renderRozet(); renderHedef(); renderPasaport(); isaretSorGoster();
     $("gezBtn").hidden = $("karneBtn").hidden = !a.length; ozetBtn();
     if (!a.length) { $("gezList").hidden = true; return; }
     const iller = new Set(a.map((x) => x.s)).size;
@@ -464,6 +490,90 @@
     $("gezList").innerHTML = a.map((x) =>
       `<li><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${thumb(x.f, x.k)}<span class="rt"><b>${esc(kayitAd(x))}</b><small>${esc(x.il)}${x.t ? " · " + new Date(x.t).toLocaleDateString(DIL === "en" ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" }) : ""}</small></span><span class="km ok">${ik("circle-check", 20)}</span></button></li>`).join("");
   }
+  // İl kartlarındaki kısa tanıtım (her ilin en bilinen yerleri, verideki adlarla kontrol edildi)
+  const KANCA = {
+    "adana": ["Taşköprü ve Seyhan kıyısı", "Taşköprü bridge and the Seyhan riverside"],
+    "adiyaman": ["Nemrut'ta gün doğumu", "Sunrise on Mount Nemrut"],
+    "afyonkarahisar": ["Kayalık kale ve Frig Vadisi", "A clifftop castle and the Phrygian Valley"],
+    "agri": ["İshak Paşa Sarayı ve Ağrı Dağı", "Ishak Pasha Palace and Mount Ararat"],
+    "aksaray": ["Ihlara Vadisi ve kaya kiliseleri", "Ihlara Valley and its rock churches"],
+    "amasya": ["Kral kaya mezarları ve Yeşilırmak evleri", "Royal rock tombs above the Yeşilırmak"],
+    "ankara": ["Anıtkabir ve Anadolu Medeniyetleri Müzesi", "Anıtkabir and the Museum of Anatolian Civilizations"],
+    "antalya": ["Antik kentler ve turkuaz koylar", "Ancient cities and turquoise coves"],
+    "ardahan": ["Çıldır Gölü ve yayla yolları", "Lake Çıldır and highland roads"],
+    "artvin": ["Borçka Karagöl ve eski manastırlar", "Lake Karagöl and old monasteries"],
+    "aydin": ["Afrodisias, Milet ve Didyma", "Aphrodisias, Miletus and Didyma"],
+    "balikesir": ["Kazdağı ve Cunda Adası", "Mount Ida and Cunda Island"],
+    "bartin": ["Amasra'nın kalesi ve koyları", "Amasra's castle and bays"],
+    "batman": ["Hasankeyf ve Dicle kıyısı", "Hasankeyf on the Tigris"],
+    "bayburt": ["Baksı Müzesi ve Bayburt Kalesi", "Baksı Museum and Bayburt Castle"],
+    "bilecik": ["Söğüt, Osmanlı'nın doğduğu yer", "Söğüt, where the Ottomans began"],
+    "bingol": ["Yüzen adalar ve dağ gölleri", "Floating islands and mountain lakes"],
+    "bitlis": ["Ahlat mezar taşları ve Nemrut Krater Gölü", "Ahlat tombstones and Nemrut Crater Lake"],
+    "bolu": ["Abant Gölü ve Yedigöller", "Lake Abant and the Seven Lakes"],
+    "burdur": ["Salda Gölü'nün beyaz kıyıları", "The white shores of Lake Salda"],
+    "bursa": ["Uludağ ve ilk Osmanlı başkenti", "Uludağ and the first Ottoman capital"],
+    "canakkale": ["Gelibolu ve Troya", "Gallipoli and Troy"],
+    "cankiri": ["Ilgaz Dağı ve tuz mağarası", "Ilgaz Mountain and the salt cave"],
+    "corum": ["Hattuşa, Hititlerin başkenti", "Hattusa, capital of the Hittites"],
+    "denizli": ["Pamukkale travertenleri", "The white terraces of Pamukkale"],
+    "diyarbakir": ["Surlar, Hevsel Bahçeleri ve Dicle", "City walls, Hevsel Gardens and the Tigris"],
+    "duzce": ["Akçakoca sahili ve şelaleler", "Akçakoca coast and waterfalls"],
+    "edirne": ["Selimiye ve Kırkpınar", "Selimiye Mosque and Kırkpınar wrestling"],
+    "elazig": ["Harput ve Hazar Gölü", "Harput and Lake Hazar"],
+    "erzincan": ["Gürlevik Şelalesi ve Kemaliye", "Gürlevik Waterfall and Kemaliye"],
+    "erzurum": ["Çifte Minareli Medrese ve Palandöken", "Twin Minaret Madrasa and Palandöken"],
+    "eskisehir": ["Odunpazarı evleri ve Porsuk kıyısı", "Odunpazarı houses and the Porsuk river"],
+    "gaziantep": ["Zeugma mozaikleri ve baklava", "Zeugma mosaics and baklava"],
+    "giresun": ["Giresun Adası ve fındık bahçeleri", "Giresun Island and hazelnut groves"],
+    "gumushane": ["Karaca Mağarası ve Santa harabeleri", "Karaca Cave and the ruins of Santa"],
+    "hakkari": ["Cilo Dağları ve Sat Gölleri", "The Cilo Mountains and Sat Lakes"],
+    "hatay": ["Aziz Petrus Kilisesi ve Antakya sofrası", "St Peter's Church and Antakya cuisine"],
+    "igdir": ["Ağrı Dağı ve Aras Kuş Cenneti", "Mount Ararat and the Aras bird sanctuary"],
+    "isparta": ["Eğirdir Gölü ve lavanta tarlaları", "Lake Eğirdir and lavender fields"],
+    "istanbul": ["İki kıta, bir vapur yolculuğu", "Two continents, one ferry ride"],
+    "izmir": ["Efes sütunları, Kordon'da gün batımı", "Ephesus columns, sunset on the Kordon"],
+    "kahramanmaras": ["Kalesi, Ulu Camii ve dövme dondurma", "Its castle, Great Mosque and stretchy ice cream"],
+    "karabuk": ["Safranbolu'nun Osmanlı evleri", "The Ottoman houses of Safranbolu"],
+    "karaman": ["Binbir Kilise ve Karadağ", "A thousand and one churches on Karadağ"],
+    "kars": ["Ani'nin yıkık kiliseleri", "The ruined churches of Ani"],
+    "kastamonu": ["Valla Kanyonu ve Küre Dağları", "Valla Canyon and the Küre Mountains"],
+    "kayseri": ["Erciyes ve Kapadokya'nın kapısı", "Mount Erciyes, gateway to Cappadocia"],
+    "kirikkale": ["Kızılırmak kıyısı ve Hasandede", "The Kızılırmak riverside and Hasandede"],
+    "kirklareli": ["Dupnisa Mağarası ve İğneada ormanları", "Dupnisa Cave and the İğneada forests"],
+    "kirsehir": ["Cacabey Medresesi ve Ahi Evran", "Cacabey Madrasa and Ahi Evran"],
+    "kilis": ["Ravanda Kalesi ve zeytinlikler", "Ravanda Castle and olive groves"],
+    "kocaeli": ["İzmit Körfezi ve Kefken sahili", "The Gulf of İzmit and the Kefken coast"],
+    "konya": ["Mevlana Müzesi ve Çatalhöyük", "The Mevlana Museum and Çatalhöyük"],
+    "kutahya": ["Aizanoi ve çini atölyeleri", "Aizanoi and tile workshops"],
+    "malatya": ["Arslantepe ve kayısı bahçeleri", "Arslantepe and apricot orchards"],
+    "manisa": ["Sardes antik kenti ve Spil Dağı", "Ancient Sardis and Mount Spil"],
+    "mardin": ["Taş evler ve Mezopotamya manzarası", "Stone houses above the Mesopotamian plain"],
+    "mersin": ["Kız Kalesi ve Cennet Cehennem", "Maiden's Castle and the Heaven and Hell sinkholes"],
+    "mugla": ["Bodrum, Fethiye ve Ölüdeniz", "Bodrum, Fethiye and Ölüdeniz"],
+    "mus": ["Malazgirt, Anadolu'nun kapısı", "Malazgirt, where Anatolia's story turned"],
+    "nevsehir": ["Kapadokya, peribacaları ve balonlar", "Cappadocia, fairy chimneys and balloons"],
+    "nigde": ["Aladağlar ve Gümüşler Manastırı", "The Aladağlar range and Gümüşler Monastery"],
+    "ordu": ["Boztepe manzarası ve Yason Burnu", "The Boztepe view and Cape Jason"],
+    "osmaniye": ["Karatepe-Aslantaş ve taş kabartmalar", "Karatepe-Aslantaş and its stone reliefs"],
+    "rize": ["Ayder Yaylası ve çay bahçeleri", "Ayder plateau and tea gardens"],
+    "sakarya": ["Sapanca Gölü ve Acarlar Longozu", "Lake Sapanca and the Acarlar floodplain forest"],
+    "samsun": ["Bandırma Vapuru ve 19 Mayıs", "The Bandırma steamer and 19 May 1919"],
+    "siirt": ["Botan Vadisi ve Veysel Karani", "Botan Valley and the shrine of Veysel Karani"],
+    "sinop": ["Hamsilos Koyu ve Sinop Kalesi", "Hamsilos bay and Sinop fortress"],
+    "sivas": ["Divriği Ulu Camii ve Gökmedrese", "Divriği Great Mosque and the Gökmedrese"],
+    "sanliurfa": ["Göbeklitepe ve Balıklıgöl", "Göbeklitepe and the sacred fish pools"],
+    "sirnak": ["Cudi Dağı ve Cizre Kalesi", "Mount Cudi and Cizre Castle"],
+    "tekirdag": ["Uçmakdere ve Rakoçi Müzesi", "Uçmakdere and the Rákóczi Museum"],
+    "tokat": ["Ballıca Mağarası ve Taşhan", "Ballıca Cave and the Taşhan inn"],
+    "trabzon": ["Sümela ve yayla sisleri", "Sümela and misty highlands"],
+    "tunceli": ["Munzur Vadisi ve gözeler", "Munzur Valley and its springs"],
+    "usak": ["Ulubey Kanyonu", "The Ulubey Canyon"],
+    "van": ["Van Gölü ve Akdamar Adası", "Lake Van and Akdamar Island"],
+    "yalova": ["Termal kaplıcalar ve Sudüşen Şelalesi", "Thermal springs and Sudüşen Waterfall"],
+    "yozgat": ["Yozgat Çamlığı ve Kerkenes", "Yozgat pine forest and Kerkenes"],
+    "zonguldak": ["Gökgöl Mağarası ve maden tarihi", "Gökgöl Cave and the coal-mining story"]
+  };
   // ---------- rozetler ----------
   const BOLGE = {
     "Marmara": "istanbul edirne kirklareli tekirdag canakkale kocaeli yalova sakarya bilecik bursa balikesir",
@@ -1001,7 +1111,7 @@
   const IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   const HIZ = 0.95; // biraz sakin, anlatıcı gibi
   let dinleNo = 0, konusuyor = false; // dinleNo: durdurulan okumanın geç gelen "bitti" haberini yok saymak için
-  function dinleDurdur() { dinleNo++; if (NTTS) NTTS.stop().catch(() => {}); else if (webSes) speechSynthesis.cancel(); dinleYaz(false); }
+  function dinleDurdur() { dinleNo++; if (typeof sesDur === "function" && !(GM && GM.simdi)) sesDur(); if (NTTS) NTTS.stop().catch(() => {}); else if (webSes) speechSynthesis.cancel(); dinleYaz(false); }
   function dinleYaz(on) { konusuyor = on; const b = $("dDinle"); b.classList.toggle("on", on); b.innerHTML = ik(on ? "square" : "volume-2", 22) + `<span>${on ? T("Durdur") : T("Dinle")}</span>`; }
   // Telefondaki en doğal sesi seç: Premium / geliştirilmiş / doğal sesler öne, robotik ve şaka sesleri (iPhone'daki Albert, Zarvox...) sona
   const ROBOT = /compact|espeak|robot|\b(albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|jester|organ|superstar|trinoids|whisper|wobble|zarvox|junior|ralph|fred|kathy|princess|eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley)\b/;
@@ -1064,12 +1174,20 @@
     }
     if (no === dinleNo) dinleYaz(false);
   }
-  function dinle() {
-    if (!sesVar || !open) return;
+  async function dinle() {
+    if (!open) return;
     if (konusuyor) return dinleDurdur();
+    if (open.q && open.ilS) {
+      const no = ++dinleNo, p = open;
+      dinleYaz(true);
+      const ok = await sesCal(sesUrl(p.ilS, p.q), { bitti: () => { if (no === dinleNo) dinleYaz(false); } });
+      if (ok || no !== dinleNo) return;
+      if (!sesVar) { toast(TL("Ses yüklenemedi. İnternetini kontrol et.", "Couldn't load the voice. Check your connection.")); return dinleYaz(false); }
+    }
+    if (!sesVar) return;
     const metin = DIL === "en" ? $("dText").textContent.replace(/\s*\([^)]*\)/g, "") : okunur($("dText").textContent);
     const cumleler = (adi(open) + ". " + metin).split(/(?<=[.!?])\s+(?=[A-ZÇĞİÖŞÜ])/).map((c) => c.trim()).filter(Boolean);
-    const no = ++dinleNo;
+    const no = dinleNo;
     dinleYaz(true);
     if (NTTS) yerelOku(cumleler, no); else webOku(cumleler, no);
   }
@@ -1164,22 +1282,32 @@
     <blockquote class="atsoz">${esc(TL("“Beni görmek demek mutlaka yüzümü görmek değildir. Benim fikirlerimi, benim duygularımı anlıyorsanız ve hissediyorsanız bu kâfidir.”", "“To see me does not necessarily mean to see my face. To understand my ideas and my feelings is enough.”"))}<cite>Mustafa Kemal Atatürk</cite></blockquote>`;
   }
   // ---------- keşfet: tema listeleri (Türkiye geneli) ----------
+  // Antik kentler adında "antik kent" geçmeyebilir (Efes, Perge): bu yüzden ad listesiyle eşleşir
+  const ANTIK = new Set("atarneus | myrina | ceramus | kadyanda | loryma | abarnis | abonuteikhos | adada | adramytteion | afrodisias | aigai | ainos | aizanoi | akhilleion | alabanda | alacahoyuk | alexandreion | alexandria troas | alinda | amisos | amorium | amos | anemurium antik kenti | ani | antandros | antiocheia ad cragum | antiokheia | antiphellos | apameia kibotos | aperlae | apollonia | araxa | argyria | ariassos | arsada | arsameia | arslantepe | arykanda | aspendos | aspendos antik tiyatrosu | assos | athena tapinagi | aulae | ayasuluk | ayazini | bargylia | bergama akropolu | beycesultan | blaundos | bouleuterion/odeion | briula | catalhoyuk | cavustepe | cedrae | dara | delikkemer | didyma | dokimeion | duluk | efes | elaiussa sebaste | emirzeli | epiphaneia | erithrai | eski smyrna | eumania | euromos | faselis | gobeklitepe | gordion | gryneion | hadrianapolis | halikarnassos | hamaksya | hamaxitos | harran | hattusa | herakleia | hierapolis | hierapolis plutoniumu | iassos | idebessos | imbriogon | issos | izmir agorasi | juliopolis nekropolu | kabacam oren yeri | kandyba | kanis | kanlidivane | karahantepe | kastabala | kaunos | kelenderis | kerkenes | khrysa | kilistra | klaros | klazomenai | knidos | kolossai | korykos | kremna | ksantos | kultepe | kyaneai | kybeleia | kyme | kyzikos | labranda | lagina | lamos | laodikeia | larissa | latmos | lebedos | letoon | limyra | lydae | lyrbe | magarsa | magnesia | mastaura | metropolis | milet | misis | mokissos | myndos | myra | myriandos | nais | nakoleia | neandreia | nemrut dagi milli parki | neonteikhos | nerik | nicomedia | nikaia | notion | nysa | oinoanda | okuzlu oren yeri | olba | olimpos | orthosia | panionion | parion | patara | pergamon | perge | perinthos | perre | pessinus | phellos | philadelphia | phokaia | pinara | pisilis | pitane | pompeiopolis | priene | pydnai | rhodiapolis | sagalassos | sapinuva | sardis | satala | sayburc oren yeri | sedir adasi | seleucia pieria | seleukia | selge | selinus | sidyma | sillyon | simena | skepsis | smintheion | sobesos antik kenti | sogmatar harabeleri | stratonikeia | sura | syedra | tapureli | tavium | teimiussa | tekkadin | telmessos | teos | termessos | tisna | tlos | tralleis | troya | troya tarihi milli parki | tyberissos | uzuncaburc | yanikhan | yazilikaya | yesemek tas ocagi ve heykel atolyesi | zelve oren yeri | zerzevan kalesi | zeugma".split(" | "));
+  // gizli: eski bağlantılar (#/tema/kanyon) açılsın diye duruyor, şeritte birleşik kutunun içinde
   const TEMA = {
     aile: { ad: T("Çocuklarla gezi"), e: "heart-handshake", k: ["hayvanat", "akvaryum", "oyuncak", "bilim", "botanik", "teleferik", "rahmi m", "havacilik", "deniz muzesi", "millet bahcesi", "kent ormani", "tabiat park", "kus cenneti", "kelebek", "magara", "selale", "planetaryum", "lunapark", "plaj", "demiryolu", "miniaturk"] },
-    selale: { ad: T("Şelaleler"), e: "droplets", k: ["selale"] },
-    magara: { ad: T("Mağaralar"), e: "mountain-snow", k: ["magara"] },
-    kanyon: { ad: T("Kanyon ve vadiler"), e: "mountain", k: ["kanyon", "vadi"] },
+    cami: { ad: TL("Cami ve dini yapılar", "Mosques and places of worship"), e: "moon-star", k: ["cami", "mescit", "mescid", "kilise", "sinagog", "manastir", "turbe", "kulliye", "ayasofya"], nd: 1 },
+    antik: { ad: TL("Antik kentler", "Ancient cities"), e: "amphora", k: ["antik kent", "oren yeri", "harabe", "antik tiyatro", "roma tiyatrosu", "roma hamami", "roma yolu", "tapinagi", "mozolesi", "celsus"], tam: ANTIK },
+    kale: { ad: TL("Kale, saray ve konaklar", "Castles, palaces and mansions"), e: "castle", k: ["kale", " saray", "konag", "kosk", "hisari"], nd: 1, sil: /canakkale/g },
+    han: { ad: TL("Köprü, han ve çarşılar", "Bridges, inns and bazaars"), e: "store", k: ["kervansaray", " hani", "bedesten", "kopru", "carsi"], sil: / hanim/g },
+    semt: { ad: TL("Semtler ve kasabalar", "Quarters and towns"), e: "houses", k: [], tam: new Set(["hamamonu", "ulus", "kaleici", "damal", "amasra", "osmaneli", "mudurnu", "cumalikizik", "akcakoca", "konuralp", "kemaliye", "balat", "moda", "beyoglu", "galata", "eminonu", "fener", "karakoy", "kalamis", "yeldegirmeni", "alacati", "sirince", "kordon", "yenifoca", "safranbolu", "taskale", "talas", "sille", "akyaka", "halfeti", "amasya yaliboyu evleri", "istiklal caddesi", "cunda", "adasi", "bozcaada", "buyukada", "heybeliada", "kinaliada", "hasankeyf", "golturkbuku"]) },
+    selale: { ad: TL("Şelale ve kanyonlar", "Waterfalls and canyons"), e: "droplets", k: ["selale", "kanyon", "vadi"] },
     gol: { ad: T("Göller"), e: "waves-horizontal", k: ["golu", "gol "], d: 1 },
-    ada: { ad: T("Adalar ve koylar"), e: "tree-palm", k: ["adasi", "koyu", "plaj"] },
-    park: { ad: T("Milli parklar"), e: "trees", k: ["milli park", "tabiat park"] },
+    magara: { ad: T("Mağaralar"), e: "mountain-snow", k: ["magara"] },
     dag: { ad: T("Dağlar ve yaylalar"), e: "mountain-snow", k: ["dagi", "yayla"], d: 1 },
-    kale: { ad: T("Kaleler"), e: "castle", k: ["kale"] },
-    kopru: { ad: T("Tarihi köprüler"), e: "bridge", k: ["kopru"] },
-    saray: { ad: T("Saraylar ve konaklar"), e: "crown", k: ["saray", "konag", "kosk"] },
-    han: { ad: T("Han ve kervansaraylar"), e: "store", k: ["kervansaray", " hani", "bedesten"] },
-    muze: { ad: T("Müzeler"), e: "landmark", k: ["muze"] }
+    ada: { ad: T("Adalar ve koylar"), e: "tree-palm", k: ["adasi", "koyu", "plaj"], sil: /koyu cami/g },
+    park: { ad: TL("Milli parklar ve ormanlar", "National parks and forests"), e: "trees", k: ["milli park", "tabiat park", "orman"] },
+    muze: { ad: T("Müzeler"), e: "landmark", k: ["muze"] },
+    kanyon: { ad: T("Kanyon ve vadiler"), e: "mountain", k: ["kanyon", "vadi"], gizli: 1 },
+    kopru: { ad: T("Tarihi köprüler"), e: "bridge", k: ["kopru"], gizli: 1 },
+    saray: { ad: T("Saraylar ve konaklar"), e: "crown", k: [" saray", "konag", "kosk"], gizli: 1 }
   };
-  const temaUyar = (t, x) => t.k.some((w) => (" " + x[0] + " ").includes(w)) && (!t.d || x[6] === "d");
+  // Mevsim kutusunda eski tema adı birleşik kutuya döner (kanyon -> şelale ve kanyonlar)
+  const TEMA_ES = { kanyon: "selale", kopru: "han", saray: "kale" };
+  const temaUyarAd = (t, sadeAd, k) => { const m = TEMA[t], a = " " + (m.sil ? sadeAd.replace(m.sil, "") : sadeAd) + " "; return ((m.tam && m.tam.has(sadeAd)) || m.k.some((w) => a.includes(w))) && (!m.d || k === "d") && (!m.nd || k !== "d"); };
+  for (const k in TEMA) TEMA[k].id = k;
+  const temaUyar = (t, x) => temaUyarAd(t.id, x[0], x[6]);
   // Aylık öneri: "Kasım'da nereye?" başlığı, kısa not, 3-4 tema ve fotoğraflı yer şeridi
   const AYLAR = [
     { e: "snowflake", ad: TL("Ocak'ta nereye?", "Where to go in January?"), not: TL("Kısa, soğuk günler içeride gezmelik: müzeler, saraylar, kervansaraylar. Mağaraların içi yaz kış hemen hemen aynı ısıda.", "Short, cold days suit indoor sights: museums, palaces and caravanserais. Caves stay about the same temperature all year."), t: ["muze", "saray", "han", "magara"] },
@@ -1195,17 +1323,20 @@
     { e: "leaf", ad: TL("Kasım'da nereye?", "Where to go in November?"), not: TL("Ormanlar sonbahar renginde, yağmurlarla şelaleler coşuyor; serin günlerde müzeler de güzel. 10 Kasım'da Atatürk'ü saygıyla anıyoruz.", "Forests wear their autumn colours and the rains bring waterfalls to life; on cool days, museums are lovely too. On 10 November we remember Atatürk."), t: ["park", "selale", "muze"], ata: 1 },
     { e: "snowflake", ad: TL("Aralık'ta nereye?", "Where to go in December?"), not: TL("Yılın en kısa günleri: müzeler ve saraylar sıcacık bir mola. Yükseklerde karlı manzaralar başlıyor.", "The shortest days of the year: museums and palaces make a cosy break. Snowy views begin up in the mountains."), t: ["muze", "saray", "magara", "dag"] }
   ];
+  // Ayın kutuları, eski adlar birleşik kutuya çevrilip tekrarsız
+  function ayTema(ay) { const m = AYLAR[ay]; return Object.assign({}, m, { t: [...new Set(m.t.map((k) => TEMA_ES[k] || k))] }); }
   // Günün tohumu: aynı gün aynı sıra, ertesi gün yeni sıra (FNV-1a)
   function tohum(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
   let ayAnahtar = "", ayBekle = false;
   function ayKart() {
-    const n = new Date(), ay = n.getMonth(), m = AYLAR[ay], el = $("mevsim");
+    const n = new Date(), ay = n.getMonth(), m = ayTema(ay), el = $("mevsim");
     if (el.dataset.ay !== String(ay)) {
       el.dataset.ay = ay; ayAnahtar = "";
       const chip = (go, e, ad, cls) => `<button class="tchip${cls || ""}" data-go="${go}"><i>${ik(e, 20)}</i><span>${esc(ad)}</span></button>`;
       // Çok dar ekranda uzun kelimeli tema adı ("kervansaraylar") varsa çipler tek sütun olur
       const uzun = m.t.some((k) => TEMA[k].ad.split(" ").some((w) => w.length > 11));
       el.innerHTML = `<div class="mvust"><span class="mvik">${ik(m.e, 22)}</span><span><b>${esc(m.ad)}</b><small>${esc(m.not)}</small></span></div>` +
+        festSatir() +
         `<ul class="mvserit" id="aySerit" aria-label="${TL("Bu ay için öneriler", "Picks for this month")}">${'<li><span class="mvf yuk"></span></li>'.repeat(8)}</ul>` +
         `<div class="mvchips${uzun ? " uzun" : ""}">${(m.ata ? chip("#/ataturk", "footprints", TL("Atatürk'ün izinde", "In Atatürk's footsteps"), " ata") : "") + m.t.map((k) => chip(`#/tema/${k}`, TEMA[k].e, TEMA[k].ad)).join("")}</div>`;
     }
@@ -1248,7 +1379,9 @@
     ayKart();
     // Kasım kartında zaten Atatürk çipi varsa aşağıda tekrar gösterme
     const ataAy = (AYLAR[new Date().getMonth()] || {}).ata;
-    $("temaChips").innerHTML = (ataAy ? "" : `<button class="tchip tata" data-go="#/ataturk"><i>${ik("footprints", 20)}</i><span>${TL("Atatürk'ün izinde", "In Atatürk's footsteps")}</span></button>`) + Object.entries(TEMA).map(([k, t]) =>
+    // Bu ayın kutusunda olan tür aşağıda tekrar çıkmasın
+    const ayT = new Set(ayTema(new Date().getMonth()).t);
+    $("temaChips").innerHTML = (ataAy ? "" : `<button class="tchip tata" data-go="#/ataturk"><i>${ik("footprints", 20)}</i><span>${TL("Atatürk'ün izinde", "In Atatürk's footsteps")}</span></button>`) + Object.entries(TEMA).filter(([k, t]) => !t.gizli && !ayT.has(k)).map(([k, t]) =>
       `<button class="tchip" data-go="#/tema/${k}"><i>${ik(t.e, 20)}</i><span>${esc(t.ad)}</span></button>`).join("");
   }
   function showTema(k) {
@@ -1258,17 +1391,52 @@
   }
   function renderTema() {
     if (!view || view.mode !== "tema") return;
-    const t = TEMA[view.k];
+    const t = view.tarz ? TARZ[view.k] : TEMA[view.k];
     $("temaLoc").hidden = !!me;
+    $("tarzChips").hidden = !view.tarz;
+    if (view.tarz) $("tarzChips").innerHTML = Object.entries(TARZ).map(([k, z]) => `<button class="chip${k === view.k ? " on" : ""}" data-tarz="${k}" aria-pressed="${k === view.k}">${ik(z.e, 16)} ${esc(z.ad)}</button>`).join("");
+    $("temaMore").hidden = true;
     if (!ARA) { $("temaList").innerHTML = `<li class="empty">${T("Yükleniyor…")}</li>`; loadAra(); return; }
-    let r = ARA.filter((x) => temaUyar(t, x));
+    let r = ARA.filter((x) => (view.tarz ? t.f(x) : temaUyar(t, x)));
     if (me) r = r.map((x) => [km(me, { lat: x[4], lng: x[5] }), x]).sort((a, b) => a[0] - b[0]).map((x) => x[1]);
+    else if (view.tarz) r.sort((a, b) => b[11] - a[11] || b[7] - a[7] || a[1].localeCompare(b[1], "tr"));
     else r.sort((a, b) => b[7] - a[7] || a[1].localeCompare(b[1], "tr"));
-    $("temaSay").textContent = TL(`${r.length} yer` + (me ? " · sana en yakından uzağa" : " · konumunu açarsan yakından uzağa sıralarız"), `${r.length} places` + (me ? " · nearest first" : " · turn on location to sort by distance"));
+    const hepsi = r.length;
+    if (view.tarz && r.length > (view.n || 60)) { r = r.slice(0, view.n || 60); $("temaMore").hidden = false; }
+    $("temaSay").textContent = TL(`${hepsi} yer` + (me ? " · sana en yakından uzağa" : " · konumunu açarsan yakından uzağa sıralarız"), `${hepsi} places` + (me ? " · nearest first" : " · turn on location to sort by distance"));
     $("temaList").innerHTML = r.length ? r.map((x) => {
       const c = CATS[x[6]] || CATS.t, il = (IDX.ilBy.get(x[2]) || {}).ad || "";
       return `<li><button class="row res" data-yer="${x[2]}|${x[3]}">${x[8] ? thumb({ p: x[8], w: 1e5 }, x[6] || "t") : `<span class="thumb" style="--c:${c.renk}">${icon(x[6] || "t", 20)}</span>`}<span class="rt"><b>${esc(araAd(x))}</b><small>${esc(il)}</small></span><span class="km">${me ? fmt(km(me, { lat: x[4], lng: x[5] })) : OKIK}</span></button></li>`;
     }).join("") : `<li class="empty">${T("Bu türde yer bulunamadı.")}</li>`;
+  }
+  // ---------- v6.6 gezi türü: deniz, tarih, doğa, müze ----------
+  // Deniz & sahil: yalnızca denize kıyısı olan illerde, adında plaj/koy/ada/burun/körfez geçen yerler
+  const KIYI = new Set("adana antalya artvin aydin balikesir bartin bursa canakkale duzce edirne giresun hatay istanbul izmir kastamonu kirklareli kocaeli mersin mugla ordu rize sakarya samsun sinop tekirdag trabzon yalova zonguldak".split(" "));
+  const DENIZ_K = ["plaj", "koyu", "koy ", "sahil", "adası", "adaları", "burnu", "körfez", "lagün", "kumsal", "deniz", "yarımada", "feneri"];
+  const DENIZ_DEGIL = /kulesi|müzesi|köşkü|sarayı|cami/;
+  const kucuk = (t) => " " + t.toLocaleLowerCase("tr") + " ";
+  const denizMi = (x) => KIYI.has(x[2]) && x[6] !== "m" && !DENIZ_DEGIL.test(kucuk(x[1])) && DENIZ_K.some((w) => kucuk(x[1]).includes(w));
+  const TARZ = {
+    deniz: { ad: TL("Deniz & sahil", "Sea & beaches"), alt: TL("Plaj, koy, ada", "Beaches, coves, islands"), e: "tree-palm", renk: "#0b84a5", f: denizMi },
+    tarih: { ad: TL("Tarih", "History"), alt: TL("Kale, antik kent, cami", "Castles, ruins, mosques"), e: "castle", renk: "var(--k-t)", f: (x) => x[6] === "t" },
+    doga: { ad: TL("Doğa & manzara", "Nature & views"), alt: TL("Şelale, göl, kanyon", "Waterfalls, lakes, canyons"), e: "mountain", renk: "var(--k-d)", f: (x) => x[6] === "d" && !denizMi(x) },
+    muze: { ad: TL("Müze", "Museums"), alt: TL("Arkeoloji, kent, sanat", "Archaeology, city, art"), e: "landmark", renk: "var(--k-m)", f: (x) => x[6] === "m" }
+  };
+  // Aramada tür kelimeleri (Türkçe + İngilizce, sade yazımla): "plaj", "beach", "museum"…
+  const ARA_TUR = [
+    ["deniz", ["plaj", "sahil", "deniz", "koy", "ada", "beach", "sea", "coast", "bay", "island"]],
+    ["tarih", ["tarih", "antik", "kale", "oren", "harabe", "cami", "kilise", "history", "historic", "ancient", "ruin", "castle", "mosque", "church"]],
+    ["doga", ["doga", "selale", "gol", "kanyon", "magara", "yayla", "manzara", "nature", "waterfall", "lake", "canyon", "cave", "view"]],
+    ["muze", ["muze", "museum", "sanat", "art", "galeri", "gallery"]]
+  ];
+  function renderTarzlar() {
+    $("tarzlar").innerHTML = Object.entries(TARZ).map(([k, z]) =>
+      `<button class="tarz" data-go="#/tarz/${k}" style="--c:${z.renk}"><span class="tarzik">${ik(z.e, 22)}</span><b>${esc(z.ad)}</b><small>${esc(z.alt)}</small></button>`).join("");
+  }
+  function showTarz(k) {
+    view = { mode: "tema", k, tarz: 1, n: 60 }; show("tema");
+    $("eyebrow").textContent = T("Türkiye geneli"); $("title").textContent = TARZ[k].ad;
+    renderTema();
   }
   // ---------- v6.5 gezi notu ve puan, en sevdiğin yerler, sana özel ----------
   // Puan (p: 1-5) ve not (n) yalnızca bu cihazda, "gezi-gittim" kaydının içinde durur; hiçbir yere gönderilmez.
@@ -1353,29 +1521,64 @@
     }).join("");
   }
   // Sana özel: listendeki ve gittiğin yerlerden zevkini çıkar, her gün 6 yer öner (hesap cihazda yapılır)
-  const OZ_TEMA = { aile: ["çocuklarla gezmeyi", "family days out"], selale: ["şelaleleri", "waterfalls"], magara: ["mağaraları", "caves"], kanyon: ["kanyonları", "canyons"], gol: ["gölleri", "lakes"], ada: ["adaları", "islands"], park: ["milli parkları", "national parks"], dag: ["dağları", "mountains"], kale: ["kaleleri", "castles"], kopru: ["tarihi köprüleri", "historic bridges"], saray: ["sarayları", "palaces"], han: ["kervansarayları", "caravanserais"], muze: ["müzeleri", "museums"] };
+  const OZ_TEMA = { aile: ["çocuklarla gezmeyi", "family days out"], cami: ["camileri", "mosques"], antik: ["antik kentleri", "ancient cities"], semt: ["semt ve kasabaları", "quarters and towns"], selale: ["şelale ve kanyonları", "waterfalls and canyons"], magara: ["mağaraları", "caves"], kanyon: ["kanyonları", "canyons"], gol: ["gölleri", "lakes"], ada: ["adaları", "islands"], park: ["milli parkları ve ormanları", "national parks and forests"], dag: ["dağları", "mountains"], kale: ["kale ve sarayları", "castles and palaces"], kopru: ["tarihi köprüleri", "historic bridges"], saray: ["sarayları", "palaces"], han: ["han ve çarşıları", "inns and bazaars"], muze: ["müzeleri", "museums"] };
   const OZ_KAT = { t: ["tarihi yerleri", "historic sites"], d: ["doğayı", "nature"], m: ["müzeleri", "museums"], c: ["çarşıları", "bazaars"], s: ["şehir semtlerini", "city quarters"] };
   // Temanın zaten söylediği kategori ("şelaleleri ve doğayı" olmasın)
-  const OZ_TK = { selale: "d", magara: "d", kanyon: "d", gol: "d", ada: "d", park: "d", dag: "d", kale: "t", kopru: "t", saray: "t", han: "t", muze: "m" };
-  const temaUyarAd = (t, sadeAd, k) => TEMA[t].k.some((w) => (" " + sadeAd + " ").includes(w)) && (!TEMA[t].d || k === "d");
+  const OZ_TK = { cami: "t", antik: "t", semt: "s", selale: "d", magara: "d", kanyon: "d", gol: "d", ada: "d", park: "d", dag: "d", kale: "t", kopru: "t", saray: "t", han: "t", muze: "m" };
   // Bir yerin temaları (renderTema ile aynı anahtar kelimeler); "Çocuklarla gezi" yalnızca başka temaya girmeyen yerde sayılır
   function yerTema(sadeAd, k) {
-    const l = Object.keys(TEMA).filter((t) => temaUyarAd(t, sadeAd, k)), o = l.filter((t) => t !== "aile");
+    const l = Object.keys(TEMA).filter((t) => !TEMA[t].gizli && temaUyarAd(t, sadeAd, k)), o = l.filter((t) => t !== "aile");
     return o.length ? o : l;
   }
+  // Sana özel öğrenme: yer sayfasında ne kadar ilgilendiğin bu telefonda tutulur, hiçbir yere gönderilmez.
+  // Puanlar: 30 sn bakma 1, sonuna kadar okuma 2, Dinle 2, yol tarifi 3, paylaşma 3, başka gün tekrar açma 3; 30 günde yarıya iner.
+  const ILGI = "gezi-ilgi", YARI = 30 * 864e5;
+  const bugun = () => { const d = new Date(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
+  function ilgiOku() { try { const o = JSON.parse(localStorage.getItem(ILGI)); return o && typeof o === "object" && o.y ? o : { y: {}, g: [] }; } catch (e) { return { y: {}, g: [] }; } }
+  const ilgiPuan = (r, now) => r.s * Math.pow(0.5, (now - r.t) / YARI);
+  function ilgiEkle(p, tur, puan) {
+    if (!p || !p.q || !p.ilS) return;
+    try {
+      const o = ilgiOku(), now = Date.now(), gun = bugun(), a = p.ilS + "|" + p.q;
+      let r = o.y[a];
+      if (!r) r = o.y[a] = { ad: p.ad, k: p.k, s: 0, t: now, d: "", x: [] };
+      if (r.d !== gun) { if (r.d && r.s > 0 && tur === "ac") { tur = "tekrar"; puan = 3; } r.d = gun; r.x = []; }
+      // Aynı sinyal aynı gün bir kez sayılır
+      if (r.x.includes(tur)) return;
+      r.x.push(tur);
+      if (puan) { r.s = ilgiPuan(r, now) + puan; r.t = now; }
+      if (!o.g.includes(gun)) o.g = [...o.g, gun].slice(-10);
+      // En fazla 400 yer: en az ilgi görenler düşer
+      const k = Object.keys(o.y);
+      if (k.length > 400) k.sort((m, n) => ilgiPuan(o.y[m], now) - ilgiPuan(o.y[n], now)).slice(0, k.length - 400).forEach((m) => delete o.y[m]);
+      localStorage.setItem(ILGI, JSON.stringify(o));
+    } catch (e) {}
+  }
+  let ilgiSaat = 0;
+  function ilgiBasla(p) {
+    clearTimeout(ilgiSaat);
+    ilgiEkle(p, "ac", 0);
+    ilgiSaat = setTimeout(() => { if (open === p && document.visibilityState === "visible") ilgiEkle(p, "bak", 1); }, 30000);
+  }
   function zevk() {
-    const f = favs(), g = gittiklerim(), w = new Map();
-    for (const x of f) w.set(x.s + "|" + x.q, [x, 1]);
-    // Gittiğin yerde 4-5 yıldız iki kat, 1-2 yıldız eksi sayılır
-    for (const x of g) w.set(x.s + "|" + x.q, [x, x.p >= 4 ? 2 : x.p > 0 && x.p <= 2 ? -1 : 1]);
-    const tema = {}, kat = {}; let say = 0;
-    for (const [x, a] of w.values()) {
-      if (a > 0) say++;
+    const f = favs(), g = gittiklerim(), now = Date.now(), w = new Map();
+    const il = ilgiOku();
+    for (const [a, r] of Object.entries(il.y)) { const v = ilgiPuan(r, now); if (v > 0.2) w.set(a, [{ ad: r.ad, k: r.k, s: a.split("|")[0] }, v, 0]); }
+    const ekle = (x, v) => { const a = x.s + "|" + x.q, o = w.get(a); w.set(a, [x, (o ? o[1] : 0) + v, 1]); };
+    for (const x of f) ekle(x, 3);
+    for (const p of planlar()) for (const gun of p.g || []) for (const x of gun) if (x && x.q) ekle(x, 4);
+    // Gittiğin yerde 4-5 yıldız daha çok, 1-2 yıldız eksi sayılır
+    for (const x of g) ekle(x, x.p >= 4 ? 8 : x.p > 0 && x.p <= 2 ? -3 : 5);
+    const tema = {}, kat = {}, bol = {}; let say = 0, toplam = 0;
+    for (const [x, a, kayit] of w.values()) {
+      if (a > 0) { toplam += a; if (kayit) say++; }
       for (const t of yerTema(sade(x.ad || ""), x.k)) tema[t] = (tema[t] || 0) + a;
       if (CATS[x.k]) kat[x.k] = (kat[x.k] || 0) + a;
+      const b = IL_BOLGE.get(x.s); if (b && a > 0) bol[b] = (bol[b] || 0) + a;
     }
-    return { say, tema, kat, haric: new Set([...f, ...g].map((x) => x.s + "|" + x.ad)) };
+    return { say, toplam, gunler: il.g.length, tema, kat, bol, haric: new Set([...f, ...g].map((x) => x.s + "|" + x.ad).concat(Object.entries(il.y).map(([k, r]) => k.split("|")[0] + "|" + r.ad))) };
   }
+
   // Güne bağlı sabit sayı (0-1): aynı gün aynı öneriler
   function gunSayi(s) {
     let h = 2166136261;
@@ -1387,9 +1590,11 @@
   function ozelGizle() { $("ozelSec").hidden = true; $("ozelKart").innerHTML = ozelHtml = ""; }
   async function sanaOzel() {
     try {
-      if (zevk().say < 3) return ozelGizle();
+      // Listende/gezdiklerinde/planında 3 yer ya da yer sayfalarında 20 puanlık ilgi
+      const yeter = (z) => z.say >= 3 || z.toplam >= 20;
+      if (!yeter(zevk())) return ozelGizle();
       await loadAra(); if (!ARA || !IDX) return;
-      const z = zevk(); if (z.say < 3) return ozelGizle();
+      const z = zevk(); if (!yeter(z)) return ozelGizle();
       const sira = (o) => Object.entries(o).filter((e) => e[1] > 0).sort((a, b) => b[1] - a[1]);
       const neden = sira(z.tema).slice(0, 2).map(([t]) => ({ t }));
       for (const [k] of sira(z.kat)) if (neden.length < 2 && !neden.some((n) => OZ_TK[n.t] === k || n.k === k)) neden.push({ k });
@@ -1397,8 +1602,10 @@
       // Öne çıkan yer işareti veride yoksa: fotoğraflı ve ilinin ilk 10 yerinden biri
       const oneVar = ARA.some((x) => x[11]), one = (x) => (oneVar ? x[11] : x[7] === 1 && x[8] && x[3] < 10);
       const g = new Date(), tohum = `${g.getFullYear()}-${g.getMonth() + 1}-${g.getDate()}|`;
+      // En çok baktığın bölge, toplam ilginin üçte birini geçiyorsa o bölgenin yerleri biraz öne gelir
+      const bs = sira(z.bol), bt = bs.reduce((a, b) => a + b[1], 0), bolge = bs.length && bs[0][1] >= bt / 3 && bs[0][1] >= 6 ? bs[0][0] : "";
       const listeler = neden.map((n) => ARA.filter((x) => !z.haric.has(x[2] + "|" + x[1]) && (n.t ? temaUyarAd(n.t, x[0], x[6]) : x[6] === n.k)).map((x) => {
-        const r = gunSayi(tohum + x[2] + "|" + x[3]), s = one(x) ? 0 : x[8] ? 1 : 2, uz = me ? km(me, { lat: x[4], lng: x[5] }) : null;
+        const r = gunSayi(tohum + x[2] + "|" + x[3]) - (bolge && IL_BOLGE.get(x[2]) === bolge ? 0.5 : 0), s = one(x) ? 0 : x[8] ? 1 : 2, uz = me ? km(me, { lat: x[4], lng: x[5] }) : null;
         // Konum açıksa yakındakiler öne (gün içinde sabit küçük sapmayla), değilse öne çıkanlar güne göre karışık
         return { x, uz, v: me ? uz * (0.75 + r * 0.5) + [0, 60, 250][s] : s + r };
       }).sort((a, b) => a.v - b.v));
@@ -1415,9 +1622,19 @@
         });
       }
       if (sec.length < 3) return ozelGizle();
+      // Seni iyi tanıyınca (60 puan, 3 farklı gün) son kart sürpriz: hiç bakmadığın türden öne çıkan bir yer
+      if (z.toplam >= 60 && z.gunler >= 3) {
+        const bilinen = new Set(Object.keys(z.tema).filter((t) => z.tema[t] > 0));
+        const yeni = Object.keys(TEMA).filter((t) => !TEMA[t].gizli && t !== "aile" && !bilinen.has(t));
+        const aday = ARA.filter((x) => x[8] && one(x) && !z.haric.has(x[2] + "|" + x[1]) && !il.has(x[2]) && yeni.some((t) => temaUyarAd(t, x[0], x[6])))
+          .sort((a, b) => gunSayi(tohum + "s|" + a[2] + a[3]) - gunSayi(tohum + "s|" + b[2] + b[3]))[0];
+        if (aday) { if (sec.length >= 6) sec.pop(); sec.push({ x: aday, uz: me ? km(me, { lat: aday[4], lng: aday[5] }) : null, sur: 1 }); }
+      }
       const ad = (n) => (n.t ? OZ_TEMA[n.t] : OZ_KAT[n.k]), tr = neden.map((n) => ad(n)[0]).join(" ve ");
-      $("ozelNeden").textContent = TL(tr.charAt(0).toLocaleUpperCase("tr") + tr.slice(1) + " seviyorsun", "You love " + neden.map((n) => ad(n)[1]).join(" and "));
-      const html = sec.map(({ x, uz }) => `<button class="ozk" data-yer="${x[2]}|${x[3]}">${thumb(x[8] ? { p: x[8], w: 1e5 } : null, x[6] || "t", 400, "cover")}${uz != null ? `<em class="ozkm">${ik("navigation", 11)}${fmt(uz)}</em>` : ""}<span class="ozkt"><b>${esc(araAd(x))}</b><small>${esc((IDX.ilBy.get(x[2]) || {}).ad || "")}</small></span></button>`).join("");
+      const BY = { "Marmara": ["Marmara'ya", "the Marmara region"], "Ege": ["Ege'ye", "the Aegean"], "Akdeniz": ["Akdeniz'e", "the Mediterranean region"], "İç Anadolu": ["İç Anadolu'ya", "Central Anatolia"], "Karadeniz": ["Karadeniz'e", "the Black Sea region"], "Doğu Anadolu": ["Doğu Anadolu'ya", "Eastern Anatolia"], "Güneydoğu": ["Güneydoğu'ya", "southeastern Türkiye"] }[bolge];
+      const bAd = BY ? TL(`, en çok ${BY[0]} bakıyorsun`, `, especially in ${BY[1]}`) : "";
+      $("ozelNeden").textContent = TL(tr.charAt(0).toLocaleUpperCase("tr") + tr.slice(1) + " seviyorsun", "You love " + neden.map((n) => ad(n)[1]).join(" and ")) + bAd;
+      const html = sec.map(({ x, uz, sur }) => `<button class="ozk" data-yer="${x[2]}|${x[3]}">${thumb(x[8] ? { p: x[8], w: 1e5 } : null, x[6] || "t", 400, "cover")}${sur ? `<em class="ozkm ozsur">${ik("sparkles", 11)}${TL("Sürpriz", "Surprise")}</em>` : uz != null ? `<em class="ozkm">${ik("navigation", 11)}${fmt(uz)}</em>` : ""}<span class="ozkt"><b>${esc(araAd(x))}</b><small>${esc((IDX.ilBy.get(x[2]) || {}).ad || "")}</small></span></button>`).join("");
       if (html !== ozelHtml) { ozelHtml = html; $("ozelKart").innerHTML = html; }
       $("ozelSec").hidden = false;
     } catch (e) { console.warn("Sana özel:", e); }
@@ -1437,7 +1654,17 @@
     b.classList.toggle("hazir", !!ind);
     b.innerHTML = ind
       ? `<b>${ik("circle-check", 18)} ${TL("İnternetsiz hazır", "Ready offline")}</b><small>${TL(`${ind.n} fotoğraf · ${new Date(ind.t).toLocaleDateString("tr-TR")} · güncellemek için dokun`, `${ind.n} photos · ${new Date(ind.t).toLocaleDateString("en-GB")} · tap to update`)}</small>`
-      : `<b>${ik("download", 18)} ${TL("İnternetsiz kullan", "Use offline")}</b><small>${TL("Bu ilin yerlerini ve fotoğraflarını telefona indir, çekmeyen yerde de aç", "Save this province's places and photos to your phone")}</small>`;
+      : `<b>${ik("download", 18)} ${TL("İnternetsiz kullan", "Use offline")} · ${TL("yaklaşık", "about")} ${indirBoyut(view.d)} MB</b><small>${TL("Bu ilin yerlerini ve fotoğraflarını telefona indir, çekmeyen yerde de aç. Wi-Fi'da indirmen önerilir.", "Save this province's places and photos to your phone. Wi-Fi recommended.")}</small>`;
+  }
+  // Tahmini indirme boyutu: küçük fotoğraf ~18 KB, büyük ~150 KB, il verisi ~0,3 MB
+  function indirBoyut(d) {
+    let b = 0, k = 0;
+    const say = (f, buyuk) => { if (f) { k++; if (buyuk) b++; } };
+    say(d.f, 1); if (d.kapak) say(d.kapak, 1);
+    d.yerler.forEach((y) => { say(y.f, 1); (y.g || []).forEach((f) => say(f, 1)); });
+    d.ilceler.forEach((z) => say(z.f, 0));
+    const mb = 0.3 + (k * 18 + b * 150) / 1024;
+    return mb < 10 ? mb.toFixed(1).replace(".", DIL === "en" ? "." : ",") : Math.round(mb);
   }
   // İlk açılışta servis çalışanı sayfayı devralınca "İnternetsiz kullan" düğmesi hemen görünsün
   if (navigator.serviceWorker) navigator.serviceWorker.addEventListener("controllerchange", () => { try { indirBtn(); } catch (e) {} });
@@ -1529,12 +1756,14 @@
     if (!view || view.mode !== "il" || view.d.s !== d.s) return;
     const yemek = YEMEK && YEMEK[d.s] && YEMEK[d.s][0];
     let top = 0; for (let i = 1; i < s.length; i++) top += km(s[i - 1], s[i]);
-    const saat = ["09:00", "11:00", "14:00", "16:00", "18:00"];
-    const nk = (x) => x.lat + "," + x.lng, son = s[s.length - 1], ara = s.slice(0, -1).map(nk).join("|");
+    // Katı saat yok: gün bölümleri (sabah / öğle / öğleden sonra / akşamüstü)
+    const bant = (e, t) => `<li class="plbant">${ik(e, 15)} ${t}</li>`;
+    const bolum = { 0: bant("sunrise", TL("Sabah", "Morning")), 4: bant("sunset", TL("Akşamüstü", "Early evening")) };
+    const nk = (x) => x.lat + "," + x.lng;
     kutu.innerHTML = `<div class="plust"><h3>${ik("calendar-days", 20)} ${TL(esc(d.ad) + ekDe(d.ad) + " 1 günlük plan", "A day in " + esc(d.ad))}</h3><button class="linkbtn" id="planYeni">${ik("shuffle", 16)} ${TL("Başka plan", "Another plan")}</button></div>
       <small class="plalt">${TL(`${s.length} durak · aralarda toplam ~${fmt(top * 1.3)} yol`, `${s.length} stops · ~${fmt(top * 1.3)} of driving in between`)}</small>
-      <ol class="plist">${s.map((p, i) => `${i === 2 ? `<li class="plyemek"><time>13:00</time><span>${ik("utensils", 16)} ${TL("Öğle arası", "Lunch break")}${yemek ? `: <b>${esc(yemekAd(yemek))}</b>${TL(" dene", "")}` : ""}</span></li>` : ""}<li><button class="row" data-s="${p.ilS}" data-j="${p.j}"><time>${saat[i]}</time>${thumb(p.f, p.k)}<span class="rt"><b>${esc(adi(p))}</b><small>${i ? fmt(km(s[i - 1], p) * 1.3) + TL(" yol", " drive") : esc(p.ilce || d.ad)}</small></span></button></li>`).join("")}</ol>
-      <a class="btn primary rotaac" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${nk(son)}&waypoints=${encodeURIComponent(ara)}&travelmode=driving">${ik("navigation", 18)} ${TL("Planı Google Maps'te aç", "Open plan in Google Maps")}</a>`;
+      <ol class="plist">${s.map((p, i) => `${bolum[i] || ""}${i === 2 ? `<li class="plyemek"><time>${ik("utensils", 15)}</time><span>${TL("Öğle molası", "Lunch break")}${yemek ? `: <b>${esc(yemekAd(yemek))}</b>${TL(" dene", "")}` : ""}</span></li>${bant("sun", TL("Öğleden sonra", "Afternoon"))}` : ""}<li><button class="row" data-s="${p.ilS}" data-j="${p.j}"><time>${i + 1}</time>${thumb(p.f, p.k)}<span class="rt"><b>${esc(adi(p))}</b><small>${i ? fmt(km(s[i - 1], p) * 1.3) + TL(" yol", " drive") : esc(p.ilce || d.ad)}</small></span></button></li>`).join("")}</ol>
+      <a class="btn primary rotaac" target="_blank" rel="noopener" href="${yolLink(s.map(nk))}">${ik("navigation", 18)} ${TL("Planı Google Maps'te aç", "Open plan in Google Maps")}</a>`;
     kutu.hidden = false;
   }
   // ---------- uygulamayı paylaş + beğeni sorusu ----------
@@ -1622,8 +1851,7 @@
       return `<li>${ara}<button class="row res" data-yer="${x[2]}|${x[3]}"><span class="rno${ok ? " on" : ""}">${ok ? ik("check", 18) : i + 1}</span><span class="rt"><b>${esc(araAd(x))}</b><small>${esc(il)}</small></span><span class="km">${me ? fmt(km(me, { lat: x[4], lng: x[5] })) : OKIK}</span></button></li>`;
     }).join("");
     const nk = (x) => x[4] + "," + x[5];
-    const son = ds[ds.length - 1], ara = ds.slice(0, -1).map(nk).join("|");
-    $("rotaAc").href = `https://www.google.com/maps/dir/?api=1&destination=${nk(son)}${ara ? "&waypoints=" + encodeURIComponent(ara) : ""}&travelmode=driving`;
+    $("rotaAc").href = yolLink(ds.map(nk));
     $("rotaAc").hidden = !ds.length;
   }
   // ---------- yol üstü keşif: iki il arasındaki yolda mola verilecek yerler ----------
@@ -1797,6 +2025,87 @@
   }
   // ---------- hafta sonu kaçamağı: arabayla 1,5-4 saatlik iller; bayram için 3-4 günlük, daha uzak ----------
   let kacGun = 1;
+  // ---------- v6.6 MüzeKart: geçerli müze ve ören yerleri (muze.gov.tr, il il), kendi listen ve gezdiklerin ----------
+  // Simge kendi çizimimiz (Lidya sikkesi); resmî logo kullanılmaz. Liste ve gezdim bilgisi yalnızca bu cihazda durur.
+  const MK_L = "gezi-mk-liste", MK_G = "gezi-mk-gez";
+  let MK = null, mkSoz = null;
+  function mkSikke(boy) {
+    let n = ""; for (let i = 0; i < 24; i++) { const a = i * Math.PI / 12; n += `<circle cx="${(32 + 20.5 * Math.cos(a)).toFixed(1)}" cy="${(32 + 20.5 * Math.sin(a)).toFixed(1)}" r="1"/>`; }
+    const g = "mk" + Math.random().toString(36).slice(2, 7), d = "M32 7c8 0 14 3 18 8s6 11 5 18-3 13-8 17-11 6-17 5-12-2-16-7-6-11-5-17 3-12 8-16 9-8 15-8z";
+    return `<svg width="${boy}" height="${boy}" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe3a3"/><stop offset=".45" stop-color="#e2a336"/><stop offset="1" stop-color="#a8701f"/></linearGradient></defs><path d="${d}" fill="url(#${g})"/><path d="${d}" fill="none" stroke="#8a5a14" stroke-width="1.2" opacity=".6"/><g fill="#8a5a14" opacity=".8">${n}</g><g transform="translate(12.2 12.4) scale(0.62)" fill="#8a5a14"><polygon points="15.5,50 18.5,14 21,14 18,50"/><polygon points="18,14 24.5,14 35.5,48 30.5,48"/><polygon points="30.5,48 45,14 47.2,14 33,48"/><polygon points="44,14 50.5,14 52.5,50 46,50"/><rect x="11.5" y="49.5" width="11" height="2.6" rx="1"/><rect x="42.5" y="49.5" width="14" height="2.6" rx="1"/><rect x="14" y="12.6" width="11" height="2.4" rx="1"/><rect x="42.5" y="12.6" width="10" height="2.4" rx="1"/></g><path d="M20 15a20 20 0 0 1 14-5" stroke="#fff6" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
+  }
+  const mkOku = (k) => { try { return new Set(JSON.parse(localStorage.getItem(k)) || []); } catch (e) { return new Set(); } };
+  const mkYaz = (k, set) => { try { localStorage.setItem(k, JSON.stringify([...set])); } catch (e) {} };
+  function mkYukle() {
+    if (MK) return Promise.resolve(MK);
+    return mkSoz ||= fetch("data/muzekart.json").then((r) => r.ok ? r.json() : null).then((j) => {
+      if (!j) return null;
+      j.hepsi = []; for (const [s, a] of Object.entries(j.il)) a.forEach((m) => { m.s = s; j.hepsi.push(m); });
+      return (MK = j);
+    }).catch(() => (mkSoz = null));
+  }
+  // Gezdim: MüzeKart ekranında işaretlenen ya da aynı yeri uygulamada "Gittim" yaptıysan
+  function mkGezdi(m, G, gq) { return G.has(m.i) || (m.q && gq.has(m.s + "|" + m.q)); }
+  const mkGitQ = () => new Set(gittiklerim().map((x) => x.s + "|" + x.q));
+  async function mkKutu() {
+    const j = await mkYukle(), b = $("mkBtn"); if (!b) return;
+    if (!j) { b.hidden = true; return; }
+    if (!$("mkCoin").firstChild) $("mkCoin").innerHTML = mkSikke(52);
+    const G = mkOku(MK_G), gq = mkGitQ(), g = j.hepsi.filter((m) => mkGezdi(m, G, gq)).length;
+    $("mkSub").textContent = TL(`${j.hepsi.length} yerde geçerli${g ? ` · ${g}'i gezildi` : ""}`, `Museum Pass · ${j.hepsi.length} sites${g ? ` · ${g} visited` : ""}`);
+    $("mkBar").style.width = Math.max(g ? 3 : 0, Math.round(g / j.hepsi.length * 100)) + "%";
+    b.hidden = false;
+  }
+  async function showMuzeKart(s) {
+    view = { mode: "muzekart", s: s || "", f: (view && view.mode === "muzekart" && view.f) || "hepsi" }; show("muzekart");
+    const j = await mkYukle();
+    if (!j) { $("muzekart").innerHTML = `<p class="empty">${T("Veriler yüklenemedi. İnternet bağlantını kontrol edip tekrar dene.")}</p>`; return; }
+    if (s && !j.il[s]) { view.s = ""; s = ""; }
+    $("eyebrow").textContent = s ? TL("MüzeKart", "Museum Pass (MüzeKart)") : TL("Kültür ve Turizm Bakanlığı müzeleri", "Ministry of Culture and Tourism sites");
+    $("title").textContent = s ? IDX.ilBy.get(s).ad : "MüzeKart";
+    mkCiz();
+  }
+  function mkSatir(m, L, G, gq) {
+    const ls = L.has(m.i), gz = mkGezdi(m, G, gq);
+    const kapali = m.d && m.d !== "Her gün açık" ? TL(m.d, m.de || m.d) : TL("Her gün açık", "Open every day");
+    const bilgi = [m.h && m.h !== "00.00–00.00" ? `${ik("clock", 14)} ${esc(m.h)} · ${esc(kapali)}` : "", m.x ? `<b class="mkkapali">${esc(TL(m.x, "Note: fully or partly closed, check the official page"))}</b>` : "", `${ik("ticket", 14)} <b class="mkok">${TL("MüzeKart ile ücretsiz", "Free with Museum Pass (MüzeKart)")}</b>`].filter(Boolean).join("<br>");
+    return `<li class="mkmz${gz ? " gez" : ""}"><div class="mkb"><b>${esc(DIL === "en" && m.e ? m.e : m.a)}</b>${MK && !view.s && view.f !== "hepsi" ? `<small class="mkil">${esc(IDX.ilBy.get(m.s).ad)}</small>` : ""}<div class="mki">${bilgi}</div>
+      <div class="mkact"><button class="mkc${ls ? " on" : ""}" data-mk="liste" data-i="${esc(m.i)}">${ik(ls ? "check" : "plus", 14)} ${ls ? TL("Listemde", "In my list") : TL("Listeme ekle", "Add to list")}</button><button class="mkc${gz ? " ok" : ""}" data-mk="gez" data-i="${esc(m.i)}"${m.q && gq.has(m.s + "|" + m.q) && !G.has(m.i) ? " disabled" : ""}>${ik(gz ? "circle-check" : "circle", 14)} ${gz ? TL("Gezdim", "Visited") : TL("Gezdim mi?", "Visited?")}</button>${m.q ? `<a class="mkc" href="#/il/${esc(m.s)}/yer/${encodeURIComponent(m.q)}">${TL("Detay", "Details")}</a>` : ""}<a class="mkc" href="${esc("https://muze.gov.tr/muze-detay?" + m.l)}" target="_blank" rel="noopener">${TL("Resmî sayfa", "Official page")}</a></div></div></li>`;
+  }
+  function mkCiz() {
+    if (!view || view.mode !== "muzekart" || !MK) return;
+    const s = view.s, L = mkOku(MK_L), G = mkOku(MK_G), gq = mkGitQ(), j = MK;
+    const not = `<p class="mknot">${ik("info", 14)} ${TL(`Saat ve ücretler Kültür ve Turizm Bakanlığı'nın sitesinden alındı (${j.t}). Gitmeden önce <a href="https://muze.gov.tr/muzeler" target="_blank" rel="noopener">resmî sayfadan</a> kontrol et.`, `Hours and fees are from the Ministry of Culture and Tourism website (${j.t}). Check the <a href="https://muze.gov.tr/muzeler" target="_blank" rel="noopener">official page</a> before you go.`)}</p>`;
+    let h = "";
+    if (!s) {
+      const g = j.hepsi.filter((m) => mkGezdi(m, G, gq)).length;
+      h += `<div class="mkust">${mkSikke(44)}<div><b>${TL(`${j.hepsi.length} müze ve ören yeri`, `${j.hepsi.length} museums and sites`)}</b><small>${TL(`${g} gezildi · ${L.size} listende`, `${g} visited · ${L.size} in your list`)}</small><i class="mkbar"><i style="width:${Math.round(g / j.hepsi.length * 100)}%"></i></i></div></div>`;
+      h += `<div class="mkchips">${[["hepsi", TL("Tüm iller", "All provinces")], ["liste", TL(`Listem (${L.size})`, `My list (${L.size})`)], ["gez", TL("Gezdiklerim", "Visited")]].map(([k, t]) => `<button class="tchip${view.f === k ? " on" : ""}" data-mkf="${k}">${esc(t)}</button>`).join("")}</div>`;
+      if (view.f === "hepsi") {
+        const iller = Object.entries(j.il).map(([k, a]) => ({ il: IDX.ilBy.get(k), n: a.length, g: a.filter((m) => mkGezdi(m, G, gq)).length })).filter((x) => x.il).sort((a, b) => b.n - a.n || a.il.ad.localeCompare(b.il.ad, "tr"));
+        h += `<ul class="mkiller">${iller.map((x) => `<li><a href="#/muzekart/${x.il.s}"><span class="mkpl">${esc(x.il.plaka)}</span><span class="mkt"><b>${esc(x.il.ad)}</b><small>${x.g ? TL(`${x.g} gezildi`, `${x.g} visited`) : "—"}</small></span><span class="mkpill">${TL(`${x.n} yer`, `${x.n} sites`)}</span>${ik("chevron-right", 18)}</a></li>`).join("")}</ul>`;
+      } else {
+        const a = j.hepsi.filter((m) => view.f === "liste" ? L.has(m.i) : mkGezdi(m, G, gq));
+        h += a.length ? `<ul class="mkliste">${a.map((m) => mkSatir(m, L, G, gq)).join("")}</ul>` : `<p class="empty">${view.f === "liste" ? TL("Listen boş. Bir ile girip “Listeme ekle”ye dokun.", "Your list is empty. Open a province and tap “Add to list”.") : TL("Henüz gezdiğin bir yer işaretlemedin.", "You haven't marked any visited sites yet.")}</p>`;
+      }
+    } else {
+      const a = j.il[s], f = view.f === "hepsi" || view.f === "liste" || view.f === "gezme" ? view.f : "hepsi";
+      h += `<div class="mkchips">${[["hepsi", TL(`Hepsi (${a.length})`, `All (${a.length})`)], ["liste", TL("Listemde", "In my list")], ["gezme", TL("Gezmediklerim", "Not visited")]].map(([k, t]) => `<button class="tchip${f === k ? " on" : ""}" data-mkf="${k}">${esc(t)}</button>`).join("")}</div>`;
+      const b = a.filter((m) => f === "liste" ? L.has(m.i) : f === "gezme" ? !mkGezdi(m, G, gq) : true);
+      h += b.length ? `<ul class="mkliste">${b.map((m) => mkSatir(m, L, G, gq)).join("")}</ul>` : `<p class="empty">${TL("Bu filtrede yer yok.", "Nothing here for this filter.")}</p>`;
+    }
+    $("muzekart").innerHTML = h + not;
+  }
+  $("muzekart").addEventListener("click", (e) => {
+    const f = e.target.closest("[data-mkf]");
+    if (f) { view.f = f.dataset.mkf; mkCiz(); return; }
+    const b = e.target.closest("[data-mk]"); if (!b) return;
+    const k = b.dataset.mk === "liste" ? MK_L : MK_G, set = mkOku(k), i = b.dataset.i;
+    if (set.has(i)) set.delete(i); else set.add(i);
+    mkYaz(k, set); mkCiz(); mkKutu();
+  });
+  $("mkBtn").addEventListener("click", () => git("#/muzekart"));
+
   function showKacamak(g) {
     kacGun = g === "3" ? 3 : 1;
     view = { mode: "kacamak" }; show("kacamak");
@@ -2107,11 +2416,23 @@
     let son = "istanbul"; try { son = localStorage.getItem("gezi-son-il") || son; } catch (e) {}
     // Bu sürümde yeni: her sürümde güncellenir (yeni, iyileşen, çıkarılan)
     const yeni = [
-      ["car-front", TL("Yol üstü keşifte mola ekle", "Add stops along the way"), TL("Yol üstündeki yerleri türüne göre süz, beğendiklerini + ile mola ekle; Google Haritalar'da yol tarifi o duraklardan geçsin. Yol tarifi düğmesi artık en üstte.", "Filter places along the way by type and tap + to add stops; the Google Maps directions will pass through them. The directions button is now at the top."), "#/yol"],
-      ["languages", TL("Dil düğmesi en üstte", "Language button at the top"), TL("Dili değiştirmek için ana ekranın sağ üstündeki küreye dokun, istediğin dili seç.", "To change the language, tap the globe at the top right of the home screen and pick one.")],
-      ["camera", TL("Daha temiz bilgiler", "Cleaner information"), TL("Gezilecek bir yanı olmayan yerler çıkarıldı, iki kez görünen yerler teke indi; birçok yere yeni fotoğraf ve daha uzun açıklama geldi.", "Places with nothing to see were removed and duplicates merged; many places got new photos and longer descriptions.")],
-      ["shield-check", TL("Daha güvenli", "Safer"), TL("Uygulamanın güvenliği baştan sona gözden geçirildi ve sıkılaştırıldı.", "The app's security was reviewed end to end and tightened.")],
-      ["list-checks", TL("Küçük düzeltmeler", "Small fixes"), TL("Geri dönünce açık kalan pencereler artık kapanıyor; bazı yer açıklamalarında kalan kod parçaları temizlendi.", "Pop-ups now close when you go back, and leftover code bits were cleaned from some place descriptions.")],
+      ["car-front", TL("Arabamı, otelimi kaydet", "Save my car or hotel"), TL("Ana sayfadaki “Arabamı / otelimi kaydet” düğmesine bas, durduğun yer kaydedilsin. Dönerken “Arabama dön”e bas, Google Haritalar seni doğrudan oraya götürsün.", "Tap “Save my car / hotel” on the home screen to save where you are. On the way back, tap “Back to car” and Google Maps takes you straight there."), ""],
+      ["shield-plus", TL("Acil yardım", "Emergency help"), TL("Tek dokunuşla 112, internetsiz konumun, en yakın hastane, karakol ve nöbetçi eczane. Yakınımda sekmesinde ve Ayarlar'da.", "Call 112 in one tap, see your location offline, find the nearest hospital, police and pharmacy on duty. In Nearby and Settings."), "#/acil"],
+      ["users", TL("Ortak plan", "Shared plan"), TL("Tatil planını linkle gönder; arkadaşın açıp düzenlesin, geri göndersin. Ne eklendi, ne çıkarıldı tek tek görürsün, istersen planını güncellersin.", "Send your holiday plan as a link; your friend edits it and sends it back. See what was added or removed, then update your plan if you like."), "#/plan"],
+      ["party-popper", TL("Festivaller ve anmalar", "Festivals and commemorations"), TL("Ana sayfadaki ay kutusunda o ayın festivalleri; ay ay bütün Türkiye ve her ilin sayfasında kendi festivalleri. 10 Kasım, 18 Mart, 19 Mayıs ve Kocatepe anmaları da burada.", "This month's festivals in the season box, every month across Türkiye, and each province's own festivals on its page."), "#/festival"],
+      ["sparkles", TL("Kültür koçu", "Culture coach"), TL("Cami sayfalarında girmeden önce bilmen gereken 4 kısa kural; çay, bahşiş, pazarlık ve Ramazan için küçük bilgiler.", "Four quick rules on every mosque page, plus tips on tea, tipping, bargaining and Ramadan."), "#/kultur"],
+      ["sparkles", TL("Sana özel artık seni tanıyor", "Picks that learn from you"), TL("Ana sayfadaki öneriler ilgiyle baktığın, okuduğun ve yol tarifi aldığın yerlerden de öğreniyor; arada bir sürpriz yer çıkıyor. Hepsi sadece telefonunda kalır.", "Home picks now learn from places you read, listen to and get directions for, with the odd surprise. It all stays on your phone."), ""],
+      ["amphora", TL("Yeni gezi türleri", "New kinds of places"), TL("Keşfet'e cami, antik kent ve semt kutuları geldi; il sayfasında yerler artık türüne göre: cami, antik kent, kale, göl, şelale…", "Explore now has mosques, ancient cities and towns; province pages sort places by kind: mosques, ancient cities, castles, lakes, waterfalls…"), "#/tema/antik"],
+      ["map", TL("İller tek bakışta", "Provinces at a glance"), TL("Her ilin kartında en bilinen yerleri yazıyor; tüm illeri bölgeye göre süz. Paylaşılan linkler artık doğrudan uygulamada açılıyor.", "Every province card names its best-known sights; filter all provinces by region. Shared links now open straight in the app."), ""],
+      ["headphones", TL("Gezi Modu ve doğal ses", "Tour Mode and natural voice"), TL("Bütün yerler artık doğal bir sesle anlatılıyor, kadın ya da erkek sesi seç. Gezi Modu'nu aç, yürürken yaklaştığın yeri kulağına anlatsın; tatil planın varsa günün rotası ana sayfada seni beklesin.", "Every place is now narrated in a natural voice; choose a female or male narrator. Start Tour Mode and hear about each place as you walk up to it; if you have a holiday plan, today's route waits on the home screen."), ""],
+      ["calendar-days", TL("Tatil planı", "Holiday planner"), TL("Kaç gün gideceğini seç, nerede kaç gün kalacağını yaz; günlere yer ekle, sırasını değiştir, her günün rotasını haritada aç ve planını paylaş.", "Choose how many days, set where you'll stay each day, add places to each day, reorder them, open each day's route on the map and share your plan."), "#/plan"],
+      ["landmark", "MüzeKart", TL("MüzeKart'ın geçerli olduğu 358 müze ve ören yeri il il: açılış saatleri, kapalı günler, kendi listen ve gezdiklerin.", "The 358 museums and sites where the Museum Pass (MüzeKart) is valid, by province: opening hours, closed days, your own list and the ones you visited."), "#/muzekart"],
+      ["compass", TL("Nasıl bir gezi istiyorsun?", "What kind of trip?"), TL("Deniz, tarih, doğa ya da müze: gezi türünü seç, Türkiye'nin dört bir yanından yerleri gör.", "Sea, history, nature or museums: pick a trip type and see places from all over Turkey."), "#/tarz/deniz"],
+      ["search", TL("Daha akıllı arama", "Smarter search"), TL("\"Plaj\", \"şelale\", \"müze\" yaz, o türdeki yerler gelsin; yerlerin İngilizce adlarıyla da bulabilirsin.", "Type \"beach\", \"waterfall\" or \"museum\" to see places of that type; English names work too."), ""],
+      ["list-ordered", TL("En mantıklı sıra", "Smartest order"), TL("Listem'de \"En mantıklı sıraya koy\"a dokun, yerler en kısa yola göre dizilsin. Günlük rotalar artık saat yerine sabah, öğle ve akşamüstü diye bölünüyor.", "In My list, tap \"Put in best order\" to sort places by the shortest path. Day routes are now split into morning, midday and late afternoon instead of clock times."), "#/listem"],
+      ["stamp", TL("Gezdiğin yerleri işaretle", "Mark where you've been"), TL("Gezilerim'de haritadan daha önce gittiğin illere dokun, damgaların ve rozetlerin hemen gelsin. Gezi Karnen artık Instagram hikâyesine tam oturuyor.", "In My trips, tap the provinces you've already visited on the map to get your stamps and badges. Your Travel Card now fits Instagram stories."), "#/rozetler"],
+      ["house", TL("Toparlanan ana sayfa", "Tidier home screen"), TL("Araçlar dört kutuda, öne çıkan iller yan yana; tüm 81 il A–Z ya da plakaya göre. Ayarlar tek menüde. İnternetsiz kullan düğmesi artık indirme boyutunu gösteriyor.", "Tools in four tiles, featured provinces side by side, all 81 by A–Z or plate number. Settings in one menu. The offline button now shows the download size."), ""],
+      ["map-pin", TL("Daha doğru bilgiler", "More accurate info"), TL("Yüzlerce yerin ilçesi düzeltildi, bazı önemli yerler geri geldi.", "Hundreds of places now show the right district, and some important places are back."), ""],
     ];
     // Önceki sürümü (6.5) görmemiş olanlara onun yenilikleri de gösterilir.
     // Her madde bir öğretici: dokununca o özellik açılır. Rotası olmayan madde yalnızca bilgi.
@@ -2132,7 +2453,7 @@
       ["share-2", TL("Listeni linkle paylaş", "Share your list"), TL("Listem sekmesinde \"Listeyi linkle paylaş\": arkadaşın tek dokunuşla kendi listesine ekler.", "In My list, tap \"Share list as a link\": friends add it to theirs in one tap."), "#/listem"],
       ["mountain", TL("Daha güzel fotoğraflar", "Better photos"), TL("İl kapakları yenilendi; yanlış fotoğraflar ve gezilecek bir şeyi olmayan yerler çıkarıldı.", "New province covers; wrong photos and places with nothing to see were removed."), ""],
     ];
-    const s = gordu === "6.5" && !zorla ? yeni : [...yeni, ["", TL("Sürüm 6.5 ile gelenler", "Added in version 6.5")], ...s65];
+    const s = gordu.startsWith("6.5") && !zorla ? yeni : [...yeni, ["", TL("Sürüm 6.5 ile gelenler", "Added in version 6.5")], ...s65];
     const d = document.createElement("div"); d.className = "tanit";
     d.innerHTML = `<div class="tkart yenilik"><div class="temo altin">${ik("sparkles", 36)}</div><h2>${TL(`Sürüm ${SURUM}'${surumEk(SURUM)} yeni`, `New in version ${SURUM}`)}</h2>${s.some((x) => x[3]) ? `<p class="yalt">${TL("Denemek için birine dokun.", "Tap one to try it.")}</p>` : ""}<ul class="ylist">${s.map((x) => !x[0] ? `<li class="yara">${x[1]}</li>` : x[3] ? `<li><button class="ybtn" data-r="${x[3]}"><i>${ik(x[0], 22)}</i><span><b>${x[1]}</b><small>${x[2]}</small></span>${ik("chevron-right", 18)}</button></li>` : `<li><i>${ik(x[0], 22)}</i><span><b>${x[1]}</b><small>${x[2]}</small></span></li>`).join("")}</ul><div class="tbtn">${s.some((x) => x[3]) ? `<button class="linkbtn" data-k="kapat">${T("Kapat")}</button><button class="btn primary" data-k="dene">${ik("car-front", 18)} ${TL("Yol üstü keşfi dene", "Try Along the way")}</button>` : `<button class="btn primary" data-k="kapat" style="margin-inline:auto">${TL("Tamam", "OK")}</button>`}</div></div>`;
     const kapat = () => { try { localStorage.setItem("gezi-yenilik", SURUM); } catch (e) {} d.classList.add("out"); setTimeout(() => d.remove(), 300); };
@@ -2207,17 +2528,17 @@
     const isik = g.createRadialGradient(W * 0.85, 120, 0, W * 0.85, 120, 700); isik.addColorStop(0, "rgba(245,181,68,.35)"); isik.addColorStop(1, "rgba(245,181,68,0)");
     g.fillStyle = isik; g.fillRect(0, 0, W, H);
     g.textAlign = "center"; g.fillStyle = "#fff";
-    try { const ik = new Image(); ik.src = "icon-192.png"; await ik.decode(); g.save(); g.beginPath(); g.roundRect(W / 2 - 150, 92, 64, 64, 16); g.clip(); g.drawImage(ik, W / 2 - 150, 92, 64, 64); g.restore(); } catch (e) {}
-    g.font = F(800, 46); g.textAlign = "left"; g.fillText("Rota Cepte", W / 2 - 70, 140); g.textAlign = "center";
-    g.font = F(800, 96); g.fillText(TL("Gezi Karnem", "My Travel Card"), W / 2, 300);
+    try { const ik = new Image(); ik.src = "icon-192.png"; await ik.decode(); g.save(); g.beginPath(); g.roundRect(W / 2 - 150, 232, 64, 64, 16); g.clip(); g.drawImage(ik, W / 2 - 150, 232, 64, 64); g.restore(); } catch (e) {}
+    g.font = F(800, 46); g.textAlign = "left"; g.fillText("Rota Cepte", W / 2 - 70, 280); g.textAlign = "center";
+    g.font = F(800, 90); g.fillText(TL("Gezi Karnem", "My Travel Card"), W / 2, 400);
     const iller = new Set(a.map((x) => x.s)).size;
-    g.textAlign = "left"; g.font = F(800, 230); const wN = g.measureText(String(iller)).width;
+    g.textAlign = "left"; g.font = F(800, 200); const wN = g.measureText(String(iller)).width;
     g.font = F(700, 90); const w2 = g.measureText("/ 81").width, x0 = (W - wN - 24 - w2) / 2;
-    g.font = F(800, 230); g.fillStyle = "#f5b544"; g.fillText(String(iller), x0, 540);
-    g.font = F(700, 90); g.fillStyle = "rgba(255,255,255,.75)"; g.fillText("/ 81", x0 + wN + 24, 540); g.textAlign = "center";
-    g.font = F(600, 44); g.fillStyle = "#fff"; g.fillText(TL("ili gezdim", "provinces visited"), W / 2, 620);
+    g.font = F(800, 200); g.fillStyle = "#f5b544"; g.fillText(String(iller), x0, 600);
+    g.font = F(700, 90); g.fillStyle = "rgba(255,255,255,.75)"; g.fillText("/ 81", x0 + wN + 24, 600); g.textAlign = "center";
+    g.font = F(600, 44); g.fillStyle = "#fff"; g.fillText(TL("ili gezdim", "provinces visited"), W / 2, 670);
     // harita
-    const [bx, by, bw, bh] = HARITA_KUTU, olc = 980 / bw, ox = (W - bw * olc) / 2, oy = 700;
+    const [bx, by, bw, bh] = HARITA_KUTU, olc = 980 / bw, ox = (W - bw * olc) / 2, oy = 720;
     g.save(); g.translate(ox, oy); g.scale(olc, olc); g.translate(-bx, -by);
     for (const [s, d] of Object.entries(HARITA || {})) {
       const o = HARITA_ORAN.get(s) || 0, p = new Path2D(d);
@@ -2228,14 +2549,14 @@
     // sayılar
     const R = rozetler(), rk = R.filter((x) => x.tamam);
     const kutu = (x, sayi, yazi) => {
-      g.fillStyle = "rgba(255,255,255,.1)"; g.beginPath(); g.roundRect(x - 230, 1300, 460, 220, 36); g.fill();
-      g.fillStyle = "#fff"; g.font = F(800, 96); g.fillText(sayi, x, 1420); g.font = F(600, 38); g.fillStyle = "rgba(255,255,255,.8)"; g.fillText(yazi, x, 1478);
+      g.fillStyle = "rgba(255,255,255,.1)"; g.beginPath(); g.roundRect(x - 230, 1200, 460, 200, 36); g.fill();
+      g.fillStyle = "#fff"; g.font = F(800, 96); g.fillText(sayi, x, 1310); g.font = F(600, 38); g.fillStyle = "rgba(255,255,255,.8)"; g.fillText(yazi, x, 1368);
     };
     kutu(W / 2 - 255, String(a.length), TL("yer gördüm", "places seen"));
     kutu(W / 2 + 255, `${rk.length}/${R.length}`, TL("rozet", "badges"));
-    if (rk.length) { g.font = F(400, 64); g.fillStyle = "#fff"; g.fillText(rk.slice(0, 8).map((x) => x.e).join(" "), W / 2, 1640); }
-    g.fillStyle = "#f5b544"; sigdir(g, T("Yol senin, rotan cepte!"), W / 2, 1770, W - 100, (px) => F(800, px), 50);
-    g.fillStyle = "rgba(255,255,255,.75)"; g.font = F(600, 36); g.fillText(TL("Sen de gez: me7rt.github.io/Rota-Cepte", "Explore too: me7rt.github.io/Rota-Cepte"), W / 2, 1835);
+    if (rk.length) { g.font = F(400, 64); g.fillStyle = "#fff"; g.fillText(rk.slice(0, 8).map((x) => x.e).join(" "), W / 2, 1490); }
+    g.fillStyle = "#f5b544"; sigdir(g, T("Yol senin, rotan cepte!"), W / 2, 1580, W - 100, (px) => F(800, px), 50);
+    g.fillStyle = "rgba(255,255,255,.75)"; g.font = F(600, 36); g.fillText(TL("Sen de gez: me7rt.github.io/Rota-Cepte", "Explore too: me7rt.github.io/Rota-Cepte"), W / 2, 1640);
     const url = c.toDataURL("image/png");
     // önizleme + paylaş
     const d = document.createElement("div"); d.className = "tanit";
@@ -2701,16 +3022,285 @@
   $("dShare").after(fotoPayBtn);
   fotoPayBtn.addEventListener("click", () => { if (open) fotoKart(open, fotoPayBtn); });
 
+  let tumIl = false, ilSira = "az", ilBol = "hepsi";
+  // ---------- Sesli rehber: doğal sesle anlatım (Azure ile önceden kaydedildi, GitHub'da il il klasörlerde durur) ----------
+  // Dosya: ses-kayitlari dalında <il>/<id>-<dil>-<k|e>.mp3 · id: il | ilce-<sıra> | yerin Wikidata kodu
+  const SES_AYAR = "gezi-ses-ayar";
+  const SES_ADI = { k: { tr: "Ava", en: "Sonia" }, e: { tr: "Andrew", en: "Andrew" } };
+  function sesAyar() { let a = {}; try { a = JSON.parse(localStorage.getItem(SES_AYAR)) || {}; } catch (e) {} return { c: a.c === "e" ? "e" : "k", h: [0.9, 1, 1.15].includes(a.h) ? a.h : 1, m: a.m === 15 ? 15 : 30 }; }
+  function sesAyarYaz(a) { try { localStorage.setItem(SES_AYAR, JSON.stringify(a)); } catch (e) {} }
+  const sesUrl = (s, id, c) => `https://raw.githubusercontent.com/me7rt/Rota-Cepte/ses-kayitlari/${s}/${encodeURIComponent(id)}-${DIL === "en" ? "en" : "tr"}-${c || sesAyar().c}.mp3`;
+  const sesSesci = () => SES_ADI[sesAyar().c][DIL === "en" ? "en" : "tr"];
+  const SESC = new Audio(); SESC.preload = "none";
+  let sesNo = 0;
+  // Doğal sesi çal; olmazsa (internet yok, kayıt yok) false döner, çağıran telefonun sesine geçer
+  function sesCal(url, olay) {
+    const no = ++sesNo;
+    return new Promise((coz) => {
+      let basladi = false;
+      SESC.onplaying = () => { if (no !== sesNo) return; basladi = true; coz(true); if (olay && olay.bas) olay.bas(); };
+      SESC.onended = () => { if (no === sesNo && olay && olay.bitti) olay.bitti(); };
+      SESC.onerror = () => { if (no !== sesNo) return; if (!basladi) coz(false); else if (olay && olay.bitti) olay.bitti(); };
+      SESC.ontimeupdate = () => { if (no === sesNo && olay && olay.ilerle) olay.ilerle(SESC.currentTime, SESC.duration); };
+      SESC.src = url; SESC.playbackRate = sesAyar().h;
+      SESC.play().catch(() => { if (no === sesNo && !basladi) coz(false); });
+      setTimeout(() => { if (no === sesNo && !basladi) { SESC.pause(); coz(false); } }, navigator.onLine === false ? 10 : 12000);
+    });
+  }
+  function sesDur() { sesNo++; SESC.pause(); SESC.removeAttribute("src"); try { SESC.load(); } catch (e) {} }
+
+  // Ayarlar › Sesli rehber
+  function sesAyarAc() {
+    const d = document.createElement("div"); d.className = "tanit ust";
+    const ciz = () => {
+      const a = sesAyar(), sec = (ad, v, yazi) => `<button data-a="${ad}" data-v="${v}" aria-pressed="${a[ad] === v}">${yazi}</button>`;
+      d.innerHTML = `<div class="tkart gmayar"><span class="temo">${ik("headphones", 34)}</span><h2>${TL("Sesli rehber", "Audio guide")}</h2>
+        <p>${TL("Yerleri doğal bir sesle anlatır. Bir yerin sayfasında “Dinle”ye bas ya da Gezi Modu'nu aç.", "Places are narrated in a natural voice. Tap “Listen” on a place, or start Tour Mode.")}</p>
+        <b class="gmb">${TL("Anlatıcı", "Narrator")}</b><div class="seg">${sec("c", "k", TL("Kadın · ", "Female · ") + SES_ADI.k[DIL === "en" ? "en" : "tr"])}${sec("c", "e", TL("Erkek · ", "Male · ") + SES_ADI.e[DIL === "en" ? "en" : "tr"])}</div>
+        <button class="linkbtn gmdene">${ik("play", 16)} ${TL("Sesi dene", "Try the voice")}</button>
+        <b class="gmb">${TL("Hız", "Speed")}</b><div class="seg">${sec("h", 0.9, TL("Yavaş", "Slow"))}${sec("h", 1, TL("Normal", "Normal"))}${sec("h", 1.15, TL("Hızlı", "Fast"))}</div>
+        <b class="gmb">${TL("Gezi Modu'nda ne zaman anlatsın?", "When should Tour Mode narrate?")}</b><div class="seg">${sec("m", 30, TL("Yaklaşınca (30 m)", "Nearby (30 m)"))}${sec("m", 15, TL("Varınca (15 m)", "On arrival (15 m)"))}</div>
+        <div class="tbtn" style="justify-content:center"><button class="btn primary" data-k="kapat">${TL("Tamam", "Done")}</button></div></div>`;
+    };
+    ciz();
+    d.addEventListener("click", (e) => {
+      const b = e.target.closest("button"); if (!b && e.target !== d) return;
+      if (e.target === d || b.dataset.k === "kapat") { sesDur(); d.classList.add("out"); setTimeout(() => d.remove(), 300); return; }
+      if (b.classList.contains("gmdene")) { const s = (IDX && IDX.iller.find((x) => x.s === "istanbul")) ? "istanbul" : IDX.iller[0].s; sesCal(sesUrl(s, "il")).then((ok) => { if (!ok) toast(TL("Ses yüklenemedi. İnternetini kontrol et.", "Couldn't load the voice. Check your connection.")); }); return; }
+      if (b.dataset.a) { const a = sesAyar(); a[b.dataset.a] = b.dataset.a === "c" ? b.dataset.v : +b.dataset.v; sesAyarYaz(a); if (b.dataset.a === "h") SESC.playbackRate = a.h; ciz(); }
+    });
+    document.body.appendChild(d);
+  }
+
+  // ---------- Ana sayfa: Bugünkü rotan kartı ya da "Etrafımı anlat" ----------
+  // Etkin plan: son 30 günde açılmış, gezilmemiş durağı kalan en son plan. Gün: gezilmemiş durağı olan ilk gün.
+  function etkinPlan() {
+    const git = new Set(gittiklerim().map((x) => x.q));
+    const p = planlar().filter((x) => planSay(x) && Date.now() - (x.u || 0) < 30 * 864e5).sort((a, b) => (b.u || 0) - (a.u || 0))[0];
+    if (!p) return null;
+    const gi = p.g.findIndex((g) => g.some((x) => !git.has(x.q)));
+    if (gi < 0) return null;
+    const g = p.g[gi], sira = g.findIndex((x) => !git.has(x.q));
+    return { p, gi, g, sira, gez: g.filter((x) => git.has(x.q)).length };
+  }
+  function gmKart() {
+    parkCiz();
+    const el = $("gmKart"); if (!el) return;
+    const e = etkinPlan();
+    if (!e) {
+      el.innerHTML = `<button class="ea" data-gm="etraf"><span class="halka"></span><span class="eq">${[14, 26, 36, 22, 30, 16].map((h) => `<i style="height:${h}px"></i>`).join("")}</span><span class="eat"><b>${TL("Etrafımı anlat", "Tell me what's around")}</b><small>${TL("Yürü, yaklaştığın yerleri sesli anlatsın", "Walk, and hear about places as you get near")}</small></span><span class="eabas">${TL("Başlat", "Start")}</span></button>`;
+      return;
+    }
+    const x = e.g[e.sira], kon = (e.p.kon || [])[e.gi], src = foto(x.f, 960), mes = me ? km(me, x) : null;
+    const yuru = mes != null && mes < 5 ? ` · ${Math.max(1, Math.round((mes * 1000) / 80))} ${TL("dk yürüme", "min walk")}` : "";
+    const nok = e.g.map((y, i) => (i ? `<s class="${i <= e.gez ? "ok" : ""}"></s>` : "") + `<i class="${i < e.sira || gittiklerim().some((z) => z.q === y.q) ? "ok" : i === e.sira ? "su" : ""}"></i>`).join("");
+    el.innerHTML = `<div class="gmk"><button class="gmkfoto" data-gm="detay" style="${src ? `background-image:url('${src}')` : `--c:${CATS[x.k] ? CATS[x.k].renk : "var(--pri)"}`}">
+      <span class="gmkchip">${esc(TL("BUGÜNKÜ ROTAN", "TODAY'S ROUTE"))} · ${esc((kon ? kon.ad : e.p.ad) || "")} · ${esc(gunAd(e.gi).toLocaleUpperCase(DIL === "en" ? "en" : "tr"))}</span>
+      <span class="gmkhalka" style="--y:${Math.round((e.gez / e.g.length) * 100)}%"><span>${e.gez}/${e.g.length}</span></span>
+      <span class="gmkalt"><small>${TL("SIRADAKİ DURAK", "NEXT STOP")}</small><b>${esc(kayitAd(x))}</b><em>${ik("map-pin", 14)} ${mes != null ? fmt(mes) + yuru : esc(x.il || "")}</em></span></button>
+      <div class="gmkad"><div class="gmkadim">${nok}</div><div class="gmkbt"><button class="gmkgo" data-gm="plan">${ik("headphones", 19)} ${TL("Gezmeye başla", "Start the tour")}</button><a class="gmkyol" href="https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lng}&travelmode=walking" target="_blank" rel="noopener" aria-label="${TL("Yol tarifi", "Directions")}">${ik("navigation", 20)}</a></div></div></div>`;
+  }
+  document.addEventListener("click", (ev) => {
+    const b = ev.target.closest("[data-gm]"); if (!b || !$("gmKart") || !$("gmKart").contains(b)) return;
+    const e = etkinPlan();
+    if (b.dataset.gm === "etraf") gmAc({ tur: "etraf" });
+    else if (b.dataset.gm === "plan" && e) gmAc({ tur: "plan", liste: e.g.slice(), ad: gunAd(e.gi) });
+    else if (b.dataset.gm === "detay" && e) { const x = e.g[e.sira]; yerAc(x.s, x.q); }
+  });
+  async function yerAc(s, q) { try { const d = await loadIl(s); const p = d.yerler.find((y) => y.q === q); if (p) openDetail(p); } catch (e) {} }
+
+  // ---------- Gezi Modu: yürürken yaklaşılan yeri anlatır ----------
+  const BG = window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() !== "web" && window.Capacitor.Plugins && window.Capacitor.Plugins.BackgroundGeolocation;
+  let GM = null; // { tur, liste, anlatilan:Set, simdi, gecmis:[], konum, izci, kilit }
+  const gmYaricap = (x) => sesAyar().m + (x.k === "d" ? 60 : x.k === "s" ? 20 : 0);
+  // Yakındaki adaylar: plan modunda planın durakları, etraf modunda tüm yerler (arama listesinden)
+  function gmAdaylar() {
+    if (!GM || !GM.konum) return [];
+    let a;
+    if (GM.tur === "plan") a = GM.liste.map((x) => ({ s: x.s, q: x.q, ad: kayitAd(x), k: x.k, f: x.f, lat: x.lat, lng: x.lng }));
+    else {
+      if (!ARA) { loadAra(); return []; }
+      a = [];
+      // Arama listesindeki konum kaba (yaklaşık 100 m): yakındakilerin ilini yükleyip gerçek konumu kullan
+      for (const x of ARA) {
+        if (Math.abs(x[4] - GM.konum.lat) > 0.012 || Math.abs(x[5] - GM.konum.lng) > 0.016) continue;
+        const d = IL.get(x[2]), y = d && d.yerler[x[3]];
+        if (!d) { if (!GM.yukle.has(x[2])) { GM.yukle.add(x[2]); loadIl(x[2]).then(() => gmKontrol()).catch(() => {}); } continue; }
+        if (y) a.push({ s: x[2], j: x[3], q: y.q, ad: araAd(x), k: y.k, f: y.f, lat: y.lat, lng: y.lng });
+      }
+    }
+    a.forEach((x) => (x.m = km(GM.konum, x) * 1000));
+    return a.sort((x, y) => x.m - y.m);
+  }
+  async function gmYerBul(x) {
+    try { const d = await loadIl(x.s); return x.q ? d.yerler.find((y) => y.q === x.q) : d.yerler[x.j]; } catch (e) { return null; }
+  }
+  async function gmAnlat(x, vardi) {
+    const p = await gmYerBul(x); if (!p || !GM) return;
+    GM.anlatilan.add(p.q); GM.simdi = { x, p }; GM.gecmis.push(x);
+    // Plan durağına varıldıysa sessizce "gittim" olarak işaretle (kutlama penceresi yürürken rahatsız etmesin)
+    if (vardi && GM.tur === "plan" && !gittimMi(p)) { const a = gittiklerim(); a.unshift({ q: p.q, s: p.ilS, ad: p.ad, il: [...new Set([p.ilce, p.il].filter(Boolean))].join(", "), k: p.k, f: p.f, t: Date.now() }); try { localStorage.setItem(GIT, JSON.stringify(a)); } catch (e) {} }
+    gmCiz();
+    if ("mediaSession" in navigator) { try { navigator.mediaSession.metadata = new MediaMetadata({ title: adi(p), artist: "Rota Cepte · " + TL("Gezi Modu", "Tour Mode"), artwork: foto(p.f, 512) ? [{ src: foto(p.f, 512), sizes: "512x512" }] : [] }); } catch (e) {} }
+    const ok = await sesCal(sesUrl(p.ilS, p.q), { bas: () => gmCiz(), bitti: () => { if (GM && GM.simdi && GM.simdi.p === p) { GM.simdi = null; gmCiz(); gmKontrol(); } }, ilerle: (t, s) => gmIlerle(t, s) });
+    if (!ok && GM && GM.simdi && GM.simdi.p === p) {
+      // İnternet yoksa telefonun kendi sesiyle oku
+      const metin = DIL === "en" ? p.me || "" : okunur(p.m || "");
+      const cumleler = (adi(p) + ". " + metin).split(/(?<=[.!?])\s+(?=[A-ZÇĞİÖŞÜ])/).filter(Boolean).slice(0, 8);
+      const no = ++dinleNo;
+      if (NTTS) await yerelOku(cumleler, no); else if (webSes) webOku(cumleler, no);
+      if (GM && GM.simdi && GM.simdi.p === p) { GM.simdi = null; gmCiz(); }
+    }
+  }
+  function gmKontrol() {
+    if (!GM || GM.simdi || GM.durdu) return;
+    const x = gmAdaylar().find((y) => !GM.anlatilan.has(y.q || y.s + "|" + y.j) && y.m <= gmYaricap(y));
+    if (x) { GM.anlatilan.add(x.q || x.s + "|" + x.j); gmAnlat(x, true); }
+    else gmCiz();
+  }
+  function gmKonum(lat, lng, acc) {
+    if (!GM) return;
+    GM.konum = { lat, lng, acc };
+    me = { lat, lng, acc };
+    gmKontrol();
+  }
+  async function gmAc(o) {
+    if (GM) gmKapat();
+    dinleDurdur();
+    GM = { tur: o.tur, liste: o.liste || [], ad: o.ad || "", anlatilan: new Set(), gecmis: [], simdi: null, konum: me ? { ...me } : null, yukle: new Set() };
+    if (o.tur === "etraf") loadAra();
+    let el = $("gezi");
+    if (!el) { el = document.createElement("div"); el.id = "gezi"; el.className = "gmy"; document.body.appendChild(el); }
+    el.hidden = false; document.documentElement.classList.add("gm-acik");
+    gmCiz();
+    try {
+      if (BG) {
+        // Android 13+: ekran kapalıyken görünen "Gezi Modu açık" bildirimi için izin
+        if (LN) { try { const iz = await LN.checkPermissions(); if (iz.display === "prompt") await LN.requestPermissions(); } catch (e) {} }
+        GM.izci = await BG.addWatcher({ backgroundTitle: TL("Gezi Modu açık", "Tour Mode is on"), backgroundMessage: TL("Yaklaştığın yerleri anlatıyorum. Bitirmek için uygulamayı aç.", "Narrating places as you get near. Open the app to stop."), requestPermissions: true, stale: false, distanceFilter: 5 },
+          (konum, hata) => {
+            if (hata) { if (hata.code === "NOT_AUTHORIZED") { toast(T("Konum izni verilmedi. Ayarlardan izin verebilirsin.")); gmKapat(); } return; }
+            if (konum) gmKonum(konum.latitude, konum.longitude, konum.accuracy);
+          });
+      } else if (navigator.geolocation) {
+        GM.izci = navigator.geolocation.watchPosition((p) => gmKonum(p.coords.latitude, p.coords.longitude, p.coords.accuracy), (e) => { if (e.code === 1) { toast(T("Konum izni verilmedi. Ayarlardan izin verebilirsin.")); gmKapat(); } }, { enableHighAccuracy: true, maximumAge: 3000, timeout: 20000 });
+        // Tarayıcıda ekran kapanınca konum durur: açık tut
+        if (navigator.wakeLock) navigator.wakeLock.request("screen").then((k) => { if (GM) GM.kilit = k; else k.release(); }).catch(() => {});
+      }
+    } catch (e) { toast(T("Konum bulunamadı, tekrar dene.")); }
+    if ("mediaSession" in navigator) {
+      try {
+        navigator.mediaSession.setActionHandler("pause", () => gmDuraklat());
+        navigator.mediaSession.setActionHandler("play", () => gmDuraklat());
+        navigator.mediaSession.setActionHandler("nexttrack", () => gmSonraki());
+        navigator.mediaSession.setActionHandler("previoustrack", () => gmOnceki());
+      } catch (e) {}
+    }
+    if (GM.konum) gmKontrol();
+  }
+  function gmKapat() {
+    if (!GM) return;
+    const g = GM; GM = null;
+    sesDur(); dinleDurdur();
+    try { if (BG && g.izci) BG.removeWatcher({ id: g.izci }); else if (g.izci != null) navigator.geolocation.clearWatch(g.izci); } catch (e) {}
+    try { if (g.kilit) g.kilit.release(); } catch (e) {}
+    const el = $("gezi"); if (el) { el.hidden = true; el.innerHTML = ""; }
+    document.documentElement.classList.remove("gm-acik");
+    if (!$("home").hidden) gmKart();
+    const n = g.gecmis.length;
+    if (n) toast(TL(`Gezi Modu bitti · ${n} yer dinledin`, `Tour Mode ended · you heard about ${n} places`));
+  }
+  function gmDuraklat() {
+    if (!GM) return;
+    if (GM.simdi && !SESC.paused) { SESC.pause(); GM.durdu = true; }
+    else if (GM.simdi && SESC.src) { SESC.play().catch(() => {}); GM.durdu = false; }
+    else { GM.durdu = !GM.durdu; if (!GM.durdu) gmKontrol(); }
+    gmCiz();
+  }
+  function gmSonraki() {
+    if (!GM) return;
+    const simdi = GM.simdi; sesDur(); dinleDurdur(); GM.simdi = null; GM.durdu = false;
+    // Planda sıradaki durağı, etrafta en yakın anlatılmamış yeri hemen anlat
+    const kal = GM.tur === "plan" ? GM.liste.filter((x) => !GM.anlatilan.has(x.q)).map((x) => ({ ...x, ad: kayitAd(x) })) : gmAdaylar().filter((y) => !GM.anlatilan.has(y.q || y.s + "|" + y.j));
+    const x = kal.find((y) => !simdi || (y.q || y.s + "|" + y.j) !== (simdi.x.q || simdi.x.s + "|" + simdi.x.j));
+    if (x) { GM.anlatilan.add(x.q || x.s + "|" + x.j); gmAnlat(x); } else { toast(TL("Anlatılacak başka yer kalmadı.", "No more places to narrate.")); gmCiz(); }
+  }
+  function gmOnceki() {
+    if (!GM) return;
+    if (GM.simdi && SESC.currentTime > 4) { SESC.currentTime = 0; return; }
+    const i = GM.gecmis.length - (GM.simdi ? 2 : 1), x = GM.gecmis[i];
+    if (x) { sesDur(); dinleDurdur(); GM.simdi = null; GM.gecmis.splice(i); gmAnlat(x); }
+  }
+  function gmIlerle(t, s) {
+    const el = $("gezi"); if (!el || !s || !isFinite(s)) return;
+    const bar = el.querySelectorAll(".gmdalga i"), n = Math.round((t / s) * bar.length);
+    bar.forEach((b, i) => b.classList.toggle("on", i < n));
+    const z = (v) => Math.floor(v / 60) + ":" + String(Math.floor(v % 60)).padStart(2, "0");
+    const a = el.querySelector(".gmzm"); if (a) a.innerHTML = `<span>${z(t)}</span><span>${z(s)}</span>`;
+  }
+  const DALGA = Array.from({ length: 44 }, (_, i) => 8 + Math.round(Math.abs(Math.sin(i * 1.7) + Math.sin(i * 0.6)) * 14));
+  function gmCiz() {
+    const el = $("gezi"); if (!el || !GM) return;
+    const ad = GM.tur === "plan" ? TL(`${GM.ad} rotası`, `${GM.ad} route`) : TL("Etrafımı anlat", "Tell me what's around");
+    const yak = gmAdaylar().filter((y) => !GM.anlatilan.has(y.q || y.s + "|" + y.j)).slice(0, 6);
+    const sp = GM.simdi && GM.simdi.p, hedef = sp || yak[0];
+    const src = hedef ? foto(hedef.f, 960) : "";
+    let orta;
+    if (sp) {
+      orta = `<small class="gms">${TL("ŞİMDİ ANLATIYOR", "NOW PLAYING")} · ${esc(sesSesci().toLocaleUpperCase(DIL === "en" ? "en" : "tr"))}</small><h1>${esc(adi(sp))}</h1>
+        <div class="gmyer">${esc([...new Set([sp.ilce, sp.il].filter(Boolean))].join(", "))}${GM.konum ? " · " + fmt(km(GM.konum, sp)) : ""}</div>
+        <div class="gmdalga">${DALGA.map((h) => `<i style="height:${h}px"></i>`).join("")}</div><div class="gmzm"><span>0:00</span><span></span></div>`;
+    } else if (!GM.konum) {
+      orta = `<small class="gms">${TL("KONUM ARANIYOR", "FINDING YOU")}</small><h1>${TL("Bir saniye…", "One moment…")}</h1><div class="gmyer">${TL("Konumun bulununca yakındaki yerleri anlatmaya başlayacağım.", "I'll start narrating nearby places once your location is found.")}</div>`;
+    } else if (yak[0]) {
+      orta = `<small class="gms">${GM.durdu ? TL("DURAKLATILDI", "PAUSED") : TL("YÜRÜMEYE DEVAM ET", "KEEP WALKING")}</small><h1>${esc(yak[0].ad)}</h1><div class="gmyer">${TL(`${fmt(yak[0].m / 1000)} uzakta · yaklaşınca anlatacağım`, `${fmt(yak[0].m / 1000)} away · I'll narrate when you get close`)}</div>`;
+    } else {
+      orta = `<small class="gms">${TL("YÜRÜMEYE DEVAM ET", "KEEP WALKING")}</small><h1>${TL("Yakında yer yok", "Nothing nearby")}</h1><div class="gmyer">${GM.tur === "plan" ? TL("Planındaki duraklar bitti ya da uzakta.", "Your planned stops are done or far away.") : TL("1 km içinde rehberimizde yer bulunmuyor. Yürümeye devam et.", "There are no places from our guide within 1 km. Keep walking.")}</div>`;
+    }
+    const oynuyor = sp && !SESC.paused;
+    el.innerHTML = `<div class="gmkap" style="${src ? `background-image:url('${src}')` : ""}"><div class="gmust"><span class="gmgl c"><i></i>${esc(ad)}</span><button class="gmgl" data-g="bitir">${TL("Bitir", "End")}</button></div></div>
+      <div class="gmalt">${orta}
+        <div class="gmkont"><button data-g="onceki" aria-label="${TL("Önceki", "Previous")}">${ik("skip-back", 24)}</button><button class="ana" data-g="dur" aria-label="${oynuyor ? TL("Durdur", "Pause") : TL("Devam", "Play")}">${ik(oynuyor || (!sp && !GM.durdu) ? "pause" : "play", 28)}</button><button data-g="sonraki" aria-label="${TL("Sonraki", "Next")}">${ik("skip-forward", 24)}</button></div>
+        ${yak.length ? `<div class="gmyak">${yak.slice(sp ? 0 : 1, sp ? 4 : 5).map((y) => `<button data-g="yak" data-id="${esc(y.q || y.s + "|" + y.j)}">${esc(y.ad)}<em>${fmt(y.m / 1000)}</em></button>`).join("")}</div>` : ""}
+        <div class="gmnot">${BG ? TL("Ekranı kapatabilirsin · kulaklıktan anlatmaya devam eder", "You can lock your screen · narration continues in your headphones") : TL("Ekran açık kalsın · kulaklık önerilir", "Keep the screen on · headphones recommended")}</div></div>`;
+    if (sp && SESC.duration) gmIlerle(SESC.currentTime, SESC.duration);
+  }
+  document.addEventListener("click", (ev) => {
+    const b = ev.target.closest("#gezi [data-g]"); if (!b || !GM) return;
+    const g = b.dataset.g;
+    if (g === "bitir") gmKapat();
+    else if (g === "dur") gmDuraklat();
+    else if (g === "sonraki") gmSonraki();
+    else if (g === "onceki") gmOnceki();
+    else if (g === "yak") { const x = gmAdaylar().find((y) => (y.q || y.s + "|" + y.j) === b.dataset.id); if (x) { sesDur(); dinleDurdur(); GM.simdi = null; GM.anlatilan.add(b.dataset.id); gmAnlat(x); } }
+  });
   function renderHome() {
     if (!IDX) return;
+    mkKutu(); gmKart();
     const q = $("search").value.trim();
     if (q.length >= 2) return renderSearch(q);
-    gununKesfi(); sanaOzel(); ayKart(); renderPasOzet();
+    gununKesfi(); sanaOzel(); ayKart(); renderPasOzet(); renderTarzlar(); planAlt();
     $("results").hidden = true; $("homeMain").hidden = false;
-    const iller = IDX.iller.slice();
-    if (me) iller.sort((a, b) => km(me, a) - km(me, b));
-    $("ilGrid").innerHTML = iller.map((il) =>
-      `<li><button class="ilcard" data-go="#/il/${il.s}">${thumb(il.f, "s", 500, "cover")}<span class="ilname"><b>${esc(il.ad)}</b><small>${me ? fmt(km(me, il)) + " · " : ""}${il.n} ${TL("yer", "places")} · ${il.ilceler.length} ${TL("ilçe", "districts")}</small></span></button></li>`).join("");
+    let iller = IDX.iller.slice();
+    $("ilGrid").classList.toggle("yatay", !tumIl); $("ilGrid").classList.toggle("satir", tumIl); $("ilSira").hidden = !tumIl; $("ilBolge").hidden = !tumIl;
+    $("ilBaslik").textContent = tumIl ? T("Tüm iller") : T("Öne çıkan iller");
+    $("tumIlBtn").textContent = tumIl ? T("Daha az göster") : T("Tüm iller (81)");
+    if (tumIl) {
+      if (ilSira === "plaka") iller.sort((a, b) => (+a.plaka || 0) - (+b.plaka || 0));
+      else iller.sort((a, b) => a.ad.localeCompare(b.ad, "tr"));
+      if (ilBol !== "hepsi") iller = iller.filter((il) => IL_BOLGE.get(il.s) === ilBol);
+      $("ilBolge").innerHTML = ["hepsi", ...Object.keys(BOLGE)].map((b) => `<button class="chip${b === ilBol ? " on" : ""}" data-bolge="${esc(b)}" aria-pressed="${b === ilBol}">${b === "hepsi" ? T("Tümü") : esc(T(b))}</button>`).join("");
+    } else {
+      iller.sort((a, b) => me ? km(me, a) - km(me, b) : b.n - a.n);
+      iller = iller.slice(0, 10);
+    }
+    // Kısa tanıtım yoksa eski "yer · ilçe" yazısı kalır
+    const ilAlt = (il) => KANCA[il.s] ? (DIL === "en" ? KANCA[il.s][1] : KANCA[il.s][0]) : `${il.n} ${TL("yer", "places")} · ${il.ilceler.length} ${TL("ilçe", "districts")}`;
+    $("ilGrid").innerHTML = tumIl
+      ? iller.map((il) =>
+        `<li><button class="row" data-go="#/il/${il.s}">${thumb(il.f, "s")}<span class="rt"><b><span class="plaka">${esc(il.plaka || "")}</span>${esc(il.ad)}</b><small>${esc(ilAlt(il))}</small></span><span class="km">${me ? fmt(km(me, il)) : ik("chevron-right", 18)}</span></button></li>`).join("")
+      : iller.map((il) =>
+        `<li><button class="ilcard" data-go="#/il/${il.s}">${thumb(il.f, "s", 500, "cover")}<span class="ilname"><b>${esc(il.ad)}</b><small>${me ? fmt(km(me, il)) + " · " : ""}${esc(ilAlt(il))}</small></span></button></li>`).join("");
   }
   function renderSearch(q) {
     const s = sade(q);
@@ -2724,8 +3314,12 @@
       });
     }
     if (ARA) {
-      for (const [b, ad, ils, j, , , k, , fp, en, be] of ARA) if (b.includes(s) || (DIL === "en" && be.includes(s))) res.push({ p: b.startsWith(s) || (DIL === "en" && be.startsWith(s)) ? 2 : 5, yer: `${ils}|${j}`, k: CATS[k] ? k : "t", fp, ad: DIL === "en" ? en : ad, alt: [(IDX.ilBy.get(ils) || {}).ad, CATS[k] && CATS[k].ad].filter(Boolean).join(" · ") });
+      for (const [b, ad, ils, j, , , k, , fp, en, be] of ARA) if (b.includes(s) || (be && be.includes(s))) res.push({ p: b.startsWith(s) || (be && be.startsWith(s)) ? 2 : 5, yer: `${ils}|${j}`, k: CATS[k] ? k : "t", fp, ad: DIL === "en" ? en : ad, alt: [(IDX.ilBy.get(ils) || {}).ad, CATS[k] && CATS[k].ad].filter(Boolean).join(" · ") });
     } else loadAra();
+    if (s.length >= 3) for (const [key, kelime] of ARA_TUR) if (kelime.some((w) => w.startsWith(s) || [w, w + "lar", w + "ler", w + "s", w + "es"].includes(s))) {
+      const z = TARZ[key]; res.push({ p: -1, go: `#/tarz/${key}`, k: key === "muze" ? "m" : key === "tarih" ? "t" : "d", ad: z.ad, alt: TL(`Gezi türü · ${ARA ? ARA.filter(z.f).length + " yer" : z.alt}`, `Trip type · ${ARA ? ARA.filter(z.f).length + " places" : z.alt}`) });
+    }
+    if ((s.length >= 4 && "muzekart".startsWith(s.replace(/\s+/g, ""))) || (s.length >= 6 && "museum pass".startsWith(s))) res.push({ p: -2, go: "#/muzekart", k: "m", ad: "MüzeKart", alt: TL("Geçerli müze ve ören yerleri, il il", "Museum Pass sites, by province") });
     res.sort((a, b) => a.p - b.p || a.ad.localeCompare(b.ad, "tr"));
     $("homeMain").hidden = true; $("results").hidden = false;
     $("results").innerHTML = res.length
@@ -2736,7 +3330,7 @@
 
   // ---------- il / ilçe / yakın ekranları ----------
   function renderHero(h) {
-    $("hero").hidden = false; $("hava").hidden = $("yemek").hidden = true;
+    $("hero").hidden = false; $("hava").hidden = $("yemek").hidden = $("ilFest").hidden = true;
     const src = foto(h.f, 960);
     $("heroImg").style.setProperty("--c", BOLGE_RENK);
     $("heroImg").innerHTML = icon("y", 40) + (src ? `<img src="${src}" alt="" onerror="fotoHata(this)">` : "");
@@ -2765,10 +3359,10 @@
     $("tabs").hidden = false;
     $("tabBtnIlce").textContent = `${T("İlçeler")} (${d.ilceler.length})`;
     $("tabBtnYer").textContent = `${T("Gezilecek yerler")} (${d.yerler.length})`;
-    havaGoster(IDX.ilBy.get(d.s) || d); yemekGoster(d); ilDamga(d);
+    havaGoster(IDX.ilBy.get(d.s) || d); yemekGoster(d); festIl(d); ilDamga(d);
     planBas = 0; planGoster(d);
     indirBtn();
-    places = d.yerler; cat = "hepsi"; shown = 60; fitted = false;
+    places = d.yerler; cat = "hepsi"; turAcik = false; shown = 60; fitted = false;
     ilAraSifirla();
     sortMode = me ? "yakin" : "oner";
     setTab(tab);
@@ -2793,7 +3387,7 @@
       : z.m || `${z.ad}, ${d.ad} iline bağlı bir ilçedir.${z.nuf ? ` Nüfusu ${nf(z.nuf)}${z.nufY ? " (" + z.nufY + ")" : ""}.` : ""}${z.alan ? ` Yüzölçümü ${nf(z.alan)} km².` : ""}`;
     renderHero({ f: z.f, m: ilceMetin, w: DIL === "en" ? "" : z.w, facts: [nufusBilgi(z), alanBilgi(z), [T("Gezilecek yer"), z.n]] });
     $("tabs").hidden = true;
-    places = d.yerler.filter((y) => y.i === i); cat = "hepsi"; shown = 60; fitted = false;
+    places = d.yerler.filter((y) => y.i === i); cat = "hepsi"; turAcik = false; shown = 60; fitted = false;
     // İlçede kayıtlı yer yoksa ilçe merkezine en yakın yerleri göster (35 km içinde)
     view.yakin = !places.length;
     if (view.yakin) places = d.yerler.map((y) => [y, km(z, y)]).filter((x) => x[1] < 35).sort((a, b) => a[1] - b[1]).slice(0, 15).map((x) => x[0]);
@@ -2807,7 +3401,7 @@
     show("city");
     $("eyebrow").textContent = T("Konumuna göre"); $("title").textContent = T("Yakınımdakiler");
     $("hero").hidden = true; $("tabs").hidden = true; $("tabYer").hidden = false; $("tabIlce").hidden = true;
-    places = []; cat = "hepsi"; shown = 60; fitted = false; sortMode = "yakin";
+    places = []; cat = "hepsi"; turAcik = false; shown = 60; fitted = false; sortMode = "yakin";
     ilAraSifirla();
     ensureMap();
     if (!me) {
@@ -2824,6 +3418,185 @@
     renderAll();
   }
 
+  // ---------- festivaller ve anmalar: ay ay, il il (tarihler her yıl biraz değişir, kesin tarih için arama linki) ----------
+  // [il, aylar, ad, ad (en), ne zaman, ne zaman (en), kısa bilgi, kısa bilgi (en), tür: f festival / a anma]
+  const FEST = [
+    ["izmir", [1], "Selçuk Efes Deve Güreşi Festivali", "Selçuk Camel Wrestling Festival", "Ocak", "January", "Süslenmiş develer ve davul zurnayla Ege'nin en renkli kış şenliği.", "Decorated camels, drums and pipes: the Aegean's most colourful winter fair.", "f"],
+    ["kars", [1], "Sarıkamış Şehitlerini Anma", "Sarıkamış Commemoration", "Ocak başı", "Early January", "Allahuekber Dağları'nda donarak şehit olan askerlerimiz için karda anma yürüyüşü.", "A walk through the snow honouring the soldiers who froze in the Allahuekber Mountains in 1915.", "a"],
+    ["mugla", [2], "Datça Badem Çiçeği Festivali", "Datça Almond Blossom Festival", "Şubat", "February", "Datça yarımadası beyaz badem çiçekleriyle dolar.", "The Datça peninsula fills with white almond blossom.", "f"],
+    ["canakkale", [3], "18 Mart Çanakkale Zaferi Anması", "Çanakkale Victory Day", "18 Mart", "18 March", "Gelibolu'daki şehitliklerde 1915 deniz zaferi anılır.", "The 1915 naval victory is remembered at the Gallipoli memorials.", "a"],
+    ["manisa", [3], "Mesir Macunu Festivali", "Mesir Paste Festival", "21 Mart civarı", "Around 21 March", "Sultan Camii'nin kubbesinden şifa macunu saçılır; 480 yılı aşkın bir gelenek.", "Healing paste is thrown from the dome of the Sultan Mosque, a tradition of almost 500 years.", "f"],
+    ["istanbul", [4], "İstanbul Lale Festivali", "Istanbul Tulip Festival", "Nisan", "April", "Emirgan Korusu başta olmak üzere parklar milyonlarca laleyle renklenir.", "Parks, above all Emirgan Grove, bloom with millions of tulips.", "f"],
+    ["istanbul", [4], "İstanbul Film Festivali", "Istanbul Film Festival", "Nisan", "April", "Şehrin sinemalarında Türk ve dünya filmleri.", "Turkish and world cinema across the city's theatres.", "f"],
+    ["izmir", [4], "Alaçatı Ot Festivali", "Alaçatı Herb Festival", "Nisan", "April", "Ege otlarıyla yemekler, pazar ve sokak şenliği.", "Aegean wild herbs in dishes, markets and street fun.", "f"],
+    ["adana", [4], "Portakal Çiçeği Karnavalı", "Orange Blossom Carnival", "Nisan", "April", "Portakal çiçeği kokan sokaklarda kortej ve konserler.", "Parades and concerts in streets scented with orange blossom.", "f"],
+    ["edirne", [5], "Kakava ve Hıdırellez Şenlikleri", "Kakava and Hıdırellez", "5-6 Mayıs", "5-6 May", "Baharın gelişi ateş üstünden atlanıp dilek tutularak kutlanır, Sarayiçi'nde büyük şenlik.", "Spring is welcomed by jumping over fires and making wishes, with a big party at Sarayiçi.", "f"],
+    ["samsun", [5], "19 Mayıs Kutlamaları", "19 May Celebrations", "19 Mayıs", "19 May", "Atatürk'ün Samsun'a çıktığı gün; Bandırma Vapuru'nun yanında coşkulu kutlama.", "The day Atatürk landed in Samsun, celebrated beside the Bandırma ferry replica.", "a"],
+    ["giresun", [5], "Aksu Festivali", "Aksu Festival", "20 Mayıs civarı", "Around 20 May", "Karadeniz'in en eski bahar şenliklerinden; Giresun Adası'na tekne yolculuğu.", "One of the Black Sea's oldest spring festivals, with boat trips to Giresun Island.", "f"],
+    ["mersin", [5], "Silifke Müzik ve Folklor Festivali", "Silifke Music and Folk Festival", "Mayıs sonu", "Late May", "Türkiye'nin en eski folklor festivallerinden biri.", "One of Türkiye's oldest folk dance festivals.", "f"],
+    ["isparta", [5, 6], "Gül Hasadı", "Rose Harvest", "Mayıs sonu – Haziran", "Late May – June", "Sabahın erken saatlerinde gül bahçelerinde toplama; gül yağı ve reçeli.", "Rose picking in the fields at dawn; rose oil and rose jam.", "f"],
+    ["istanbul", [6], "İstanbul Müzik Festivali", "Istanbul Music Festival", "Haziran", "June", "Klasik müzik konserleri, tarihi mekânlarda.", "Classical concerts, often in historic venues.", "f"],
+    ["izmir", [6], "Bergama Kermesi", "Bergama Fair", "Haziran", "June", "Atatürk'ün önerisiyle başlayan, Bergama'nın kültür ve sanat şenliği.", "Bergama's arts and culture fair, started on Atatürk's suggestion.", "f"],
+    ["amasya", [6], "Atatürk Kültür ve Sanat Haftası", "Atatürk Culture and Arts Week", "Haziran ortası", "Mid-June", "Amasya Genelgesi'nin yıldönümü etkinlikleri.", "Events marking the anniversary of the Amasya Circular.", "a"],
+    ["tekirdag", [6], "Tekirdağ Kiraz Festivali", "Tekirdağ Cherry Festival", "Haziran", "June", "Kiraz zamanı konserler ve sahilde şenlik.", "Concerts and seaside fun in cherry season.", "f"],
+    ["bursa", [6, 7], "Bursa Festivali", "Bursa Festival", "Haziran – Temmuz", "June – July", "Konserler ve halk dansları gösterileri.", "Concerts and folk dance shows.", "f"],
+    ["izmir", [6, 7], "Uluslararası İzmir Festivali", "International İzmir Festival", "Haziran – Temmuz", "June – July", "Efes Antik Tiyatrosu gibi mekânlarda konserler.", "Concerts in venues such as the ancient theatre of Ephesus.", "f"],
+    ["edirne", [6, 7], "Kırkpınar Yağlı Güreşleri", "Kırkpınar Oil Wrestling", "Haziran sonu – Temmuz başı", "Late June – early July", "600 yılı aşkın gelenek; pehlivanlar zeytinyağına bulanıp Sarayiçi'nde güreşir.", "A 600-year-old tradition: wrestlers covered in olive oil compete at Sarayiçi.", "f"],
+    ["artvin", [6, 7], "Kafkasör Kültür Sanat Festivali", "Kafkasör Festival", "Haziran sonu – Temmuz başı", "Late June – early July", "Kafkasör Yaylası'nda boğa güreşleri ve yayla şenliği.", "Bull wrestling and highland fun on the Kafkasör plateau.", "f"],
+    ["istanbul", [7], "İstanbul Caz Festivali", "Istanbul Jazz Festival", "Temmuz", "July", "Açık hava sahnelerinde caz konserleri.", "Jazz concerts on open-air stages.", "f"],
+    ["konya", [7], "Akşehir Nasreddin Hoca Şenliği", "Nasreddin Hodja Festival", "Temmuz başı", "Early July", "Nasreddin Hoca'nın memleketinde fıkralar, mizah ve gösteriler.", "Jokes, humour and shows in Nasreddin Hodja's hometown.", "f"],
+    ["erzurum", [7], "Erzurum Kongresi Yıldönümü", "Erzurum Congress Anniversary", "23 Temmuz", "23 July", "Millî Mücadele'nin ilk kongresi anılır.", "Marks the first congress of the War of Independence.", "a"],
+    ["bayburt", [7], "Dede Korkut Kültür ve Sanat Şöleni", "Dede Korkut Festival", "Temmuz", "July", "Dede Korkut destanlarına adanmış şölen.", "A festival dedicated to the Dede Korkut epics.", "f"],
+    ["malatya", [7], "Malatya Kayısı Festivali", "Malatya Apricot Festival", "Temmuz", "July", "Kayısı hasadı zamanı şenlik ve pazar.", "Markets and fun at apricot harvest time.", "f"],
+    ["trabzon", [7], "Kadırga Yayla Şenliği", "Kadırga Highland Festival", "Temmuz", "July", "Karadeniz yaylalarında horon ve kemençe.", "Horon dancing and kemençe music on the Black Sea highlands.", "f"],
+    ["canakkale", [8], "Troya Kültür ve Turizm Festivali", "Troy Culture Festival", "Ağustos", "August", "Konserler, kortej ve Troya temalı etkinlikler.", "Concerts, parades and Troy-themed events.", "f"],
+    ["nevsehir", [8], "Hacı Bektaş-ı Veli Anma Törenleri", "Hacı Bektaş Veli Commemoration", "16-18 Ağustos", "16-18 August", "Hacıbektaş'ta anma, semah ve konserler.", "Commemoration, semah dances and concerts in Hacıbektaş.", "a"],
+    ["bolu", [8], "Mengen Aşçılık Festivali", "Mengen Cooks Festival", "Ağustos", "August", "Ünlü Mengen aşçılarının memleketinde yemek şenliği.", "A food festival in the hometown of Türkiye's famous Mengen cooks.", "f"],
+    ["afyonkarahisar", [8], "Kocatepe Şafak Töreni", "Kocatepe Dawn Ceremony", "26 Ağustos, şafakta", "26 August, at dawn", "Büyük Taarruz'un başladığı Kocatepe'de, Atatürk'ün izlediği tepede tören.", "A ceremony on the hill where Atatürk watched the Great Offensive begin.", "a"],
+    ["mus", [8], "Malazgirt Zaferi Kutlamaları", "Battle of Manzikert Anniversary", "26 Ağustos", "26 August", "1071 Malazgirt Zaferi, savaşın yapıldığı ovada anılır.", "The 1071 victory is marked on the plain where the battle was fought.", "a"],
+    ["izmir", [9], "İzmir Enternasyonal Fuarı", "İzmir International Fair", "Eylül başı", "Early September", "Kültürpark'ta Türkiye'nin en eski fuarı ve konserler.", "Türkiye's oldest fair, with concerts, at Kültürpark.", "f"],
+    ["sivas", [9], "Sivas Kongresi Yıldönümü", "Sivas Congress Anniversary", "4 Eylül", "4 September", "Kongre binasında Millî Mücadele'nin büyük kongresi anılır.", "The great congress of the War of Independence is marked at its building.", "a"],
+    ["nevsehir", [9], "Ürgüp Bağ Bozumu Festivali", "Ürgüp Grape Harvest Festival", "Eylül", "September", "Kapadokya bağlarında üzüm hasadı şenliği.", "Grape harvest celebrations in Cappadocia's vineyards.", "f"],
+    ["diyarbakir", [9], "Diyarbakır Karpuz Festivali", "Diyarbakır Watermelon Festival", "Eylül", "September", "Dicle kıyısında yetişen dev karpuzlar yarışır.", "Giant watermelons grown on the Tigris compete for the title.", "f"],
+    ["antalya", [10], "Antalya Altın Portakal Film Festivali", "Antalya Golden Orange Film Festival", "Ekim", "October", "Türkiye'nin en köklü film festivali.", "Türkiye's longest-running film festival.", "f"],
+    ["ankara", [11], "10 Kasım Atatürk'ü Anma", "Atatürk Remembrance Day", "10 Kasım, 09.05", "10 November, 9:05 am", "Saat 09.05'te tüm Türkiye saygı duruşunda; Anıtkabir'de anma.", "At 9:05 am all of Türkiye stands in silence; ceremonies at Anıtkabir.", "a"],
+    ["istanbul", [11], "İstanbul Kitap Fuarı", "Istanbul Book Fair", "Kasım", "November", "Türkiye'nin en büyük kitap fuarı, yazarlarla imza günleri.", "Türkiye's biggest book fair, with author signings.", "f"],
+    ["antalya", [11], "Antalya Piyano Festivali", "Antalya Piano Festival", "Kasım", "November", "Dünyaca ünlü piyanistlerin konserleri.", "Concerts by world-famous pianists.", "f"],
+    ["konya", [12], "Şeb-i Arus Mevlânâ Anma Törenleri", "Şeb-i Arus Rumi Commemoration", "7-17 Aralık", "7-17 December", "Mevlânâ'nın vefat yıldönümü; semazenlerin sema gösterileri.", "The anniversary of Rumi's death, with whirling dervish ceremonies.", "a"]
+  ];
+  const AY_ADI = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+  const AY_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const AY_EK = ["'ta", "'ta", "'ta", "'da", "'ta", "'da", "'da", "'ta", "'de", "'de", "'da", "'ta"];
+  const ayAd = (a) => (DIL === "en" ? AY_EN[a - 1] : AY_ADI[a - 1]);
+  const ayDe = (a) => (DIL === "en" ? "in " + AY_EN[a - 1] : AY_ADI[a - 1] + AY_EK[a - 1]);
+  const fF = (x) => ({ s: x[0], ay: x[1], ad: DIL === "en" ? x[3] : x[2], ne: DIL === "en" ? x[5] : x[4], acik: DIL === "en" ? x[7] : x[6], anma: x[8] === "a" });
+  const festAy = (a) => FEST.filter((x) => x[1].includes(a)).map(fF);
+  const festAra = (f) => `https://www.google.com/search?q=${encodeURIComponent(f.ad + " " + new Date().getFullYear())}`;
+  // Mevsim kutusunda bu ayın satırı (festival yoksa görünmez)
+  function festSatir() {
+    const a = new Date().getMonth() + 1, l = festAy(a);
+    if (!l.length) return "";
+    const fs = l.filter((f) => !f.anma), an = l.length - fs.length;
+    const say = [fs.length ? TL(`${fs.length} festival`, `${fs.length} festival${fs.length > 1 ? "s" : ""}`) : "", an ? TL(`${an} anma`, `${an} commemoration${an > 1 ? "s" : ""}`) : ""].filter(Boolean).join(TL(" ve ", " and "));
+    return `<button class="fsatir" data-go="#/festival/${a}"><span class="fsik">${ik("party-popper", 20)}</span><span class="rt"><b>${esc(TL(`${ayDe(a)} ${say} var`, `${say} ${ayDe(a)}`))}</b><small>${esc(l[0].ad)}${l.length > 1 ? esc(TL(` ve ${l.length - 1} tane daha`, ` and ${l.length - 1} more`)) : ""}</small></span>${ik("chevron-right", 18)}</button>`;
+  }
+  function showFestival(a) {
+    a = Math.min(12, Math.max(1, +a || new Date().getMonth() + 1));
+    view = { mode: "festival", a }; show("festival");
+    $("eyebrow").textContent = TL("Ay ay Türkiye", "Türkiye month by month"); $("title").textContent = TL("Festivaller ve anmalar", "Festivals and commemorations");
+    const l = festAy(a);
+    $("festival").innerHTML = `<div class="ilsira ilbolge fay" role="group" aria-label="${TL("Ay", "Month")}">${AY_ADI.map((_, i) => `<button class="chip${i + 1 === a ? " on" : ""}" data-go="#/festival/${i + 1}" aria-pressed="${i + 1 === a}">${esc(ayAd(i + 1))}</button>`).join("")}</div>` +
+      (l.length ? `<ul class="list flist">${l.map((f) => { const il = IDX && IDX.ilBy.get(f.s);
+        return `<li><button class="row" data-go="#/il/${f.s}"><span class="ftarih${f.anma ? " anma" : ""}">${ik(f.anma ? "flag" : "party-popper", 20)}</span><span class="rt"><b>${esc(f.ad)}</b><small>${esc((il ? il.ad : f.s) + " · " + f.ne)}</small><small class="facik">${esc(f.acik)}</small></span><span class="km">${ik("chevron-right", 18)}</span></button></li>`; }).join("")}</ul>`
+        : `<p class="kocgiris">${TL(`${ayDe(a)} listemizde festival yok. Başka bir aya bak.`, `No festivals on our list ${ayDe(a)}. Try another month.`)}</p>`) +
+      `<p class="kocnot">${ik("info", 14)} ${TL("Kesin tarih her yıl biraz değişir. Gitmeden ilin sayfasındaki arama linkinden kontrol et.", "Exact dates shift a little every year. Check with the search link on the province page before you go.")}</p>`;
+    const on = $("festival").querySelector(".fay .on"); if (on) on.scrollIntoView({ inline: "center", block: "nearest" });
+  }
+  // İl sayfasında o ilin festivalleri
+  function festIl(d) {
+    const kutu = $("ilFest"), l = FEST.filter((x) => x[0] === d.s).map(fF);
+    kutu.hidden = !l.length; if (!l.length) { kutu.innerHTML = ""; return; }
+    kutu.innerHTML = `<h3>${ik("party-popper", 18)} ${esc(TL(d.ad + ekDe(d.ad) + " festivaller ve anmalar", "Festivals in " + d.ad))}</h3>` + l.map((f) =>
+      `<div class="fil"><b>${esc(f.ad)}</b><p>${esc(f.acik)}</p><small>${ik("calendar-days", 14)} ${esc(TL("Her yıl ", "Every year: ") + f.ne)} · <a href="${festAra(f)}" target="_blank" rel="noopener">${TL("Bu yılın tarihine bak", "Check this year's dates")}</a></small></div>`).join("");
+  }
+
+  // ---------- kültür koçu: gezerken işe yarayan kısa görgü bilgileri (internetsiz) ----------
+  // [ikon, başlık, alt yazı, [[tamam mı (1) / kaçın (0), TR, EN], ...]]
+  const KOC = [
+    ["landmark", ["Cami ziyareti", "Visiting a mosque"], ["Ayakkabı, kıyafet, namaz vakitleri", "Shoes, clothing, prayer times"], [
+      [1, "Ayakkabını girişte çıkar, raflara ya da verilen poşete koy.", "Take your shoes off at the entrance and leave them on the racks or in the bag provided."],
+      [1, "Omuz ve dizler kapalı olsun. Kadınlar başını örter; büyük camilerin çoğunda girişte örtü bulunur.", "Cover shoulders and knees. Women cover their hair; most large mosques lend scarves at the door."],
+      [0, "Namaz vakitlerinde, özellikle Cuma öğle namazında ziyaret kısa süre durur. Ezan okununca biraz bekle.", "Visits pause briefly at prayer times, especially Friday noon prayer. When you hear the call to prayer, wait a little."],
+      [0, "Namaz kılanların önünden geçme, yüksek sesle konuşma, flaşla fotoğraf çekme.", "Don't walk in front of people praying, keep your voice down and don't use flash."]]],
+    ["coffee", ["Çay ve misafirlik", "Tea and hospitality"], ["İkram edilince ne yapılır", "When you're offered something"], [
+      [1, "Çay ikramını kabul etmek nezakettir; nazikçe reddetmek de ayıp sayılmaz.", "Accepting offered tea is polite; declining kindly is fine too."],
+      [1, "Yeter demek için çay kaşığını bardağın üstüne yatır.", "To say \"no more\", lay the teaspoon across the top of your glass."],
+      [1, "Eve davet edilirsen kapıda ayakkabını çıkar.", "If you're invited into a home, take your shoes off at the door."]]],
+    ["coins", ["Bahşiş", "Tipping"], ["Lokanta, taksi, otel", "Restaurants, taxis, hotels"], [
+      [1, "Lokantada hesabın yaklaşık %5-10'u kadar bahşiş yaygındır, zorunlu değildir. Hesaba servis ücreti eklendiyse gerekmez.", "In restaurants about 5-10% is common but not required. If a service charge is already on the bill, no need."],
+      [1, "Takside genelde ücret yukarı yuvarlanır.", "In taxis people usually round the fare up."]]],
+    ["handshake", ["Pazarlık", "Bargaining"], ["Nerede yapılır, nerede yapılmaz", "Where it's done and where it isn't"], [
+      [1, "Tarihi çarşılarda, halı ve hediyelik eşya dükkânlarında pazarlık olağandır. Güler yüzle yap.", "Bargaining is normal in historic bazaars, carpet and souvenir shops. Keep it friendly."],
+      [0, "Market, mağaza ve fiyatı yazılı yerlerde pazarlık yapılmaz.", "Supermarkets, chain stores and places with marked prices don't bargain."]]],
+    ["moon-star", ["Ramazan'da", "During Ramadan"], ["Oruç ayında gezerken", "Travelling in the fasting month"], [
+      [1, "Lokantaların çoğu gündüz de açıktır, yemek yemek serbesttir. Oruç tutanlara saygıyla, gösterişsiz ye.", "Most restaurants stay open by day and you're free to eat. Just be discreet out of respect for those fasting."],
+      [1, "İftar saatine yakın lokantalar çok dolar; erken git ya da yer ayırt.", "Restaurants fill up close to iftar (sunset meal), so go early or book."],
+      [1, "Gece sahur davulcusu sokakları dolaşabilir, bu bir gelenektir.", "At night a drummer may walk the streets to wake people for the pre-dawn meal. It's a tradition."]]]
+  ];
+  const kocMadde = ([ok, tr, en]) => `<li class="kmad ${ok ? "ok" : "no"}">${ik(ok ? "check" : "x", 18)}<span>${esc(DIL === "en" ? en : tr)}</span></li>`;
+  const camiMi = (p) => sade(p.ad) === "ayasofya" || /(^| )(cami|camii|camisi|mescit|mescidi)( |,|$)/.test(sade(p.ad)) && !/kopru|muze|meydan|carsi|sokak|mahalle/.test(sade(p.ad));
+  function kocKart(p) {
+    if (!camiMi(p)) return "";
+    return `<details class="koc"><summary>${ik("sparkles", 20)}<span><b>${TL("Camiye girmeden önce", "Before you enter the mosque")}</b><small>${TL("4 kısa kural · 20 saniyede oku", "4 quick rules · a 20-second read")}</small></span>${ik("chevron-down", 18)}</summary><ul>${KOC[0][3].map(kocMadde).join("")}</ul></details>`;
+  }
+  function showKultur() {
+    view = { mode: "kultur" }; show("kultur");
+    $("eyebrow").textContent = TL("Türkiye'de gezerken", "Travelling in Türkiye"); $("title").textContent = TL("Kültür koçu", "Culture coach");
+    $("kultur").innerHTML = `<p class="kocgiris">${TL("Gezerken işine yarayacak küçük bilgiler. İnternetsiz de açılır.", "Little things that help while you travel. Works offline too.")}</p>` +
+      KOC.map(([ikon, ad, alt, m]) => `<details class="kocb"><summary><span class="aci">${ik(ikon, 20)}</span><span class="rt"><b>${esc(DIL === "en" ? ad[1] : ad[0])}</b><small>${esc(DIL === "en" ? alt[1] : alt[0])}</small></span>${ik("chevron-down", 18)}</summary><ul>${m.map(kocMadde).join("")}</ul></details>`).join("") +
+      `<p class="kocnot">${TL("Genel geçer kurallardır; yerine göre küçük farklar olabilir.", "These are general customs; small local differences are normal.")}</p>`;
+  }
+
+  // ---------- acil yardım: 112, konumum (internetsiz), yakındaki hastane / karakol / nöbetçi eczane ----------
+  function showAcil() {
+    view = { mode: "acil" }; show("acil");
+    $("eyebrow").textContent = TL("Sakin ol, adım adım", "Stay calm, step by step"); $("title").textContent = TL("Acil yardım", "Emergency help");
+    renderAcil();
+    if (!me) startLocation(() => { if (view.mode === "acil") renderAcil(); });
+  }
+  let acilYer = "";
+  async function acilYerBul() {
+    if (!me || !IDX) return;
+    const il = IDX.iller.slice().sort((a, b) => km(me, a) - km(me, b))[0];
+    let yaz = il.ad;
+    try {
+      const d = await loadIl(il.s);
+      const ilce = d.ilceler.filter((x) => x.lat).sort((a, b) => km(me, a) - km(me, b))[0];
+      if (ilce) yaz = ilce.ad + ", " + il.ad;
+    } catch (e) {}
+    if (yaz !== acilYer) { acilYer = yaz; if (view.mode === "acil") renderAcil(); }
+  }
+  function renderAcil() {
+    if (!view || view.mode !== "acil") return;
+    const k = me ? `${me.lat.toFixed(5)}, ${me.lng.toFixed(5)}` : "";
+    const ara = (q) => me ? `https://www.google.com/maps/search/${encodeURIComponent(q)}/@${me.lat},${me.lng},14z` : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+    const satir = (ikon, ad, alt, href) => `<a class="acsatir" href="${href}" target="_blank" rel="noopener"><span class="aci">${ik(ikon, 20)}</span><span class="rt"><b>${ad}</b><small>${alt}</small></span><span class="acet">${TL("internet", "online")}</span></a>`;
+    $("acil").innerHTML = `
+      <a class="acara" href="tel:112">${ik("phone", 30)}<span>${TL("112'yi ara", "Call 112")}<small>${TL("Polis · Ambulans · İtfaiye", "Police · Ambulance · Fire")}</small></span></a>
+      <p class="acnot">${TL("Telefonun arama ekranı açılır, aramayı sen başlatırsın. 112 ücretsizdir.", "Your phone's dialer opens and you start the call. 112 is free. If you don't speak Turkish, say \"English, please\" and stay on the line.")}</p>
+      <section class="ackart">
+        <h3>${ik("locate-fixed", 18)} ${TL("Konumum", "My location")} <span class="acet ok">${TL("internetsiz", "offline")}</span></h3>
+        ${me ? `<div class="ackoor">${k}</div><p>${acilYer ? esc(acilYer) + TL(" yakınları", " area") + " · " : ""}${TL("112 \"neredesiniz\" diye sorarsa bunu oku.", "If 112 asks where you are, read this out.")}</p>
+        <div class="acdug"><button class="btn" data-acil="kopya">${ik("copy", 16)} ${TL("Kopyala", "Copy")}</button><button class="btn" data-acil="gonder">${ik("send", 16)} ${TL("Konumumu gönder", "Send my location")}</button></div>
+        <p>${TL("Tek seferlik gönderilir, canlı takip yok.", "Sent once, no live tracking.")}</p>`
+        : `<p>${watchId !== null ? T("Konum aranıyor…") : TL("Konumun kapalı. Açarsan koordinatın burada görünür, internet olmasa da.", "Location is off. Turn it on to see your coordinates here, even offline.")}</p>${watchId === null ? `<div class="acdug"><button class="btn primary" data-acil="konum">${ik("locate-fixed", 16)} ${T("Konumu aç")}</button></div>` : ""}`}
+      </section>
+      <section class="ackart">
+        <h3>${ik("map-pin", 18)} ${TL("Yakınımda bul", "Find near me")}</h3>
+        ${satir("hospital", TL("En yakın hastane", "Nearest hospital"), TL("Google Haritalar'da açılır", "Opens in Google Maps"), ara(TL("hastane", "hospital")))}
+        ${satir("shield", TL("En yakın karakol", "Nearest police station"), TL("Google Haritalar'da açılır", "Opens in Google Maps"), ara(TL("polis karakolu", "police station")))}
+        ${satir("pill", TL("Nöbetçi eczane", "Pharmacy on duty"), TL("e-Devlet'in resmi nöbetçi eczane sayfası", "Official e-Devlet page (in Turkish)"), "https://www.turkiye.gov.tr/saglik-titck-nobetci-eczane-sorgulama")}
+      </section>
+      ${DIL === "en" ? `<section class="ackart">
+        <h3>${ik("book-open", 18)} Lost your passport?</h3>
+        <ol><li>Go to the nearest police station and get a loss report.</li><li>Contact your country's embassy or consulate.</li><li>Travel home with the emergency travel document they issue.</li></ol>
+        <div class="acdug"><a class="btn" href="https://www.mfa.gov.tr/diplomatic-missions-in-turkey.en.mfa" target="_blank" rel="noopener">${ik("external-link", 16)} Embassies and consulates</a></div>
+        <p>The list is the official page of the Turkish Ministry of Foreign Affairs.</p>
+      </section>` : ""}`;
+    if (me && !acilYer) acilYerBul();
+  }
+  document.addEventListener("click", async (e) => {
+    const b = e.target.closest("[data-acil]"); if (!b) return;
+    const a = b.dataset.acil;
+    if (a === "konum") { startLocation(() => { if (view.mode === "acil") renderAcil(); }); renderAcil(); return; }
+    if (!me) return;
+    const k = `${me.lat.toFixed(5)}, ${me.lng.toFixed(5)}`, link = `https://maps.google.com/?q=${me.lat.toFixed(5)},${me.lng.toFixed(5)}`;
+    if (a === "kopya") {
+      try { await navigator.clipboard.writeText(k); toast(TL("Konum kopyalandı", "Location copied")); }
+      catch (x) { toast(k, 8000); }
+    } else if (a === "gonder") metinPaylas(TL("Konumum", "My location"), TL("Şu an buradayım:", "I'm here right now:"), link);
+  });
+
   // ---------- liste ----------
   let ilAra = "";
   function visible() {
@@ -2831,6 +3604,7 @@
     if (ilAra) v = v.filter((p) => sade(p.ad + " " + (p.ilce || "")).includes(ilAra));
     if (cat === "one") v = v.filter((p) => p.one);
     else if (cat === "aile") v = v.filter(aileMi);
+    else if (cat.startsWith("tur:")) v = v.filter((p) => turu(p) === cat.slice(4));
     else if (cat !== "hepsi") v = v.filter((p) => p.k === cat);
     if (sortMode === "yakin" && me) v = v.slice().sort((a, b) => km(me, a) - km(me, b));
     else v = v.slice().sort((a, b) => (b.one || 0) - (a.one || 0) || b.sl - a.sl);
@@ -2839,16 +3613,56 @@
   function ilAraSifirla() { ilAra = ""; $("ilAra").value = ""; $("ilAraSil").hidden = true; }
   function renderAll() { renderChips(); renderSort(); renderList(); drawPins(); }
   const aileMi = (p) => TEMA.aile.k.some((w) => (" " + sade(p.ad) + " ").includes(w));
+  // İl sayfası türleri: her yer adına bakılarak tek bir türe girer (sıra önemli: ilk tutan tür)
+  const TUR = [
+    ["ataturk", TL("Atatürk ve Kurtuluş yolu", "Atatürk and the War of Independence"), "x"],
+    ["muze", TL("Müzeler", "Museums"), "t"],
+    ["cami", TL("Cami ve dini yapılar", "Mosques and places of worship"), "t"],
+    ["antik", TL("Antik kentler", "Ancient cities"), "t"],
+    ["kale", TL("Kale, saray ve konaklar", "Castles, palaces and mansions"), "t"],
+    ["han", TL("Köprü, han ve çarşılar", "Bridges, inns and bazaars"), "t"],
+    ["deniz", TL("Deniz ve koylar", "Sea and coves"), "x"],
+    ["selale", TL("Şelale ve kanyonlar", "Waterfalls and canyons"), "d"],
+    ["magara", TL("Mağaralar", "Caves"), "d"],
+    ["gol", TL("Göller", "Lakes"), "d"],
+    ["dag", TL("Dağ ve yaylalar", "Mountains and highlands"), "d"],
+    ["park", TL("Milli parklar ve ormanlar", "National parks and forests"), "d"],
+    ["semt", TL("Şehir ve semtler", "Town and quarters"), "x"]
+  ];
+  const TUR_RENK = { t: "var(--k-t)", d: "var(--k-d)", x: "var(--k-s)" };
+  const turHafiza = new WeakMap();
+  function turu(p) {
+    if (turHafiza.has(p)) return turHafiza.get(p);
+    const a = sade(p.ad || ""), b = " " + a + " ";
+    let t = "diger";
+    if (b.includes("ataturk") && !/park|bulvar|cadde|baraj|stadyum|kosu|ormani/.test(a) || /kurtulus savasi|milli mucadele|anitkabir|zubeyde hanim/.test(a)) t = "ataturk";
+    else if (p.k === "m" || b.includes("muze")) t = "muze";
+    else if (denizMi([0, p.ad || "", p.ilS, 0, 0, 0, p.k])) t = "deniz";
+    else for (const k of ["cami", "antik", "kale", "han", "selale", "magara", "gol", "dag", "park"]) if (temaUyarAd(k, a, p.k)) { t = k; break; }
+    if (t === "diger" && p.k === "s") t = "semt";
+    // Deniz kontrolü cami ve kaleden sonra gelsin: "Kız Kalesi" kale sayılır
+    if (t === "deniz") for (const k of ["cami", "antik", "kale"]) if (temaUyarAd(k, a, p.k)) { t = k; break; }
+    turHafiza.set(p, t); return t;
+  }
+  let turAcik = false;
   function renderChips() {
-    const say = (k) => places.filter((p) => (k === "one" ? p.one : p.k === k)).length;
     const items = [["hepsi", T("Hepsi"), places.length]];
-    const one = say("one");
+    const one = places.filter((p) => p.one).length;
     if (one && one < places.length) items.push(["one", ik("star", 14) + " " + T("Öne çıkanlar"), one]);
-    for (const k of Object.keys(CATS)) { const c = say(k); if (c) items.push([k, CATS[k].ad, c]); }
+    const say = {};
+    for (const p of places) { const t = turu(p); say[t] = (say[t] || 0) + 1; }
+    // En kalabalık 6 tür görünür, kalanı "Daha fazla" ile açılır; seçili tür her zaman görünür
+    const turler = TUR.filter(([k]) => say[k]).sort((a, b) => say[b[0]] - say[a[0]]);
+    const gor = [], gizli = [];
+    turler.forEach((t, i) => (i < 6 || turAcik || cat === "tur:" + t[0] ? gor : gizli).push(t));
+    for (const [k, ad, g] of gor) items.push(["tur:" + k, ad, say[k], TUR_RENK[g]]);
+    if (say.diger && (turAcik || !gizli.length || cat === "tur:diger")) items.push(["tur:diger", TL("Diğer", "Other"), say.diger, "var(--muted)"]);
+    else if (say.diger) gizli.push(1);
     const aile = places.filter(aileMi).length;
     if (aile >= 2) items.push(["aile", ik("heart-handshake", 14) + " " + T("Çocuklarla"), aile]);
-    $("chips").innerHTML = places.length ? items.map(([k, ad, c]) =>
-      `<button data-k="${k}" aria-pressed="${cat === k}">${CATS[k] ? `<span class="dot" style="background:${CATS[k].renk}"></span>` : ""}${ad} <small>${c}</small></button>`).join("") : "";
+    $("chips").innerHTML = places.length ? items.map(([k, ad, c, r]) =>
+      `<button data-k="${k}" aria-pressed="${cat === k}">${r ? `<span class="dot" style="background:${r}"></span>` : ""}${ad} <small>${c}</small></button>`).join("") +
+      (gizli.length ? `<button data-k="daha" aria-expanded="false">${TL("Daha fazla", "More")} <small>${gizli.length}</small></button>` : "") : "";
   }
   function renderSort() {
     $("sortSeg").innerHTML = me && view.mode !== "near"
@@ -2882,24 +3696,87 @@
       `<li><button class="row" data-go="#/il/${d.s}/ilce/${i}">${thumb(z.f, "y")}<span class="rt"><b>${esc(z.ad)}</b><small>${z.n ? z.n + TL(" gezilecek yer", " places") : T("İlçe bilgisi")}${z.nuf ? " · " + nf(z.nuf) + TL(" kişi", " people") : ""}</small></span><span class="km" data-lat="${z.lat}" data-lng="${z.lng}">${me ? fmt(km(me, z)) : OKIK}</span></button></li>`).join("");
   }
 
+  // ---------- Park yeri ve otel: tek tıkla kaydet, tek tıkla yol tarifi ----------
+  const PARK = "gezi-park", PARK_TUR = { a: { ik: "car-front", tr: "Arabam", en: "My car" }, o: { ik: "bed", tr: "Otelim", en: "My hotel" } };
+  function parkOku() { try { return JSON.parse(localStorage.getItem(PARK)) || {}; } catch (e) { return {}; } }
+  function parkYaz(v) { try { localStorage.setItem(PARK, JSON.stringify(v)); } catch (e) {} }
+  function parkGit(t) {
+    const x = parkOku()[t]; if (!x) return;
+    // Arabaya dönüş yürüyerek; otel için yolu harita uygulaması seçer
+    disAc(`https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lng}${t === "a" ? "&travelmode=walking" : ""}&dir_action=navigate`);
+  }
+  function parkKaydet(t) {
+    const kaydet = () => {
+      if (!me) return;
+      const v = parkOku(); v[t] = { lat: +me.lat.toFixed(6), lng: +me.lng.toFixed(6), u: Date.now() }; parkYaz(v);
+      parkCiz(); drawPark();
+      toast(t === "a" ? TL("Araban kaydedildi. Dönmek için ana sayfadaki “Arabama dön”e bas.", "Car saved. Tap “Back to car” on the home screen to get back.") : TL("Otelin kaydedildi. Dönmek için ana sayfadaki “Otelime dön”e bas.", "Hotel saved. Tap “Back to hotel” on the home screen to get back."));
+    };
+    if (me) kaydet(); else { toast(TL("Konumun bulunuyor…", "Finding your location…")); startLocation(kaydet); }
+  }
+  function parkSec() {
+    const v = parkOku(), d = document.createElement("div"); d.className = "tanit ust";
+    const satir = (t) => `<button class="parksec" data-p="${t}">${ik(PARK_TUR[t].ik, 22)}<span><b>${t === "a" ? TL("Arabamı kaydet", "Save my car") : TL("Otelimi kaydet", "Save my hotel")}</b><small>${v[t] ? TL("Eski kaydın yerine şu anki konumun yazılır", "Replaces the saved spot with where you are now") : TL("Şu an durduğun yer kaydedilir", "Saves where you are standing now")}</small></span></button>`;
+    const sil = Object.keys(PARK_TUR).filter((t) => v[t]).map((t) => `<button class="linkbtn" data-sil="${t}">${ik("trash", 15)} ${t === "a" ? TL("Araba kaydını sil", "Delete car spot") : TL("Otel kaydını sil", "Delete hotel spot")}</button>`).join("");
+    d.innerHTML = `<div class="tkart parkkart"><h2>${TL("Konumu kaydet", "Save this spot")}</h2>${satir("a")}${satir("o")}${sil ? `<div class="parksil">${sil}</div>` : ""}</div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    d.addEventListener("click", (e) => {
+      const b = e.target.closest("button");
+      if (e.target === d) return kapat();
+      if (!b) return;
+      if (b.dataset.p) { kapat(); parkKaydet(b.dataset.p); }
+      else if (b.dataset.sil) { const x = parkOku(); delete x[b.dataset.sil]; parkYaz(x); parkCiz(); drawPark(); kapat(); toast(TL("Kayıt silindi", "Spot deleted")); }
+    });
+    document.body.appendChild(d);
+  }
+  function parkCiz() {
+    const v = parkOku(), var_ = Object.keys(PARK_TUR).filter((t) => v[t]);
+    const git = (t, sinif, yazi) => `<button class="${sinif}" data-pg="${t}" aria-label="${t === "a" ? TL("Arabama yol tarifi", "Directions to my car") : TL("Otelime yol tarifi", "Directions to my hotel")}">${ik(PARK_TUR[t].ik, 18)}<span>${yazi(t)}</span></button>`;
+    const kay = (sinif) => `<button class="${sinif}" data-pk="1" aria-label="${TL("Arabamı ya da otelimi kaydet", "Save my car or hotel")}">${ik("map-pin", 19)}</button>`;
+    const el = $("parkBar");
+    if (el) el.innerHTML = var_.map((t) => git(t, "parkgit", () => TL("Yol tarifi", "Directions"))).join("") + kay("parkkay");
+    const ev = $("parkHome");
+    if (ev) ev.innerHTML = var_.length
+      ? var_.map((t) => git(t, "pev git", (t) => t === "a" ? TL("Arabama dön", "Back to car") : TL("Otelime dön", "Back to hotel"))).join("") + kay("pev kay")
+      : `<button class="pev" data-pk="1">${ik("car-front", 18)}<span>${TL("Arabamı / otelimi kaydet", "Save my car / hotel")}</span>${ik("bed", 18)}</button>`;
+  }
+  let parkKatman = null;
+  function drawPark() {
+    if (!map) return;
+    if (!parkKatman) parkKatman = L.layerGroup().addTo(map);
+    parkKatman.clearLayers();
+    const v = parkOku();
+    for (const t of Object.keys(PARK_TUR)) if (v[t]) L.marker([v[t].lat, v[t].lng], { icon: L.divIcon({ className: "", html: `<div class="parkpin">${ik(PARK_TUR[t].ik, 15)}</div>`, iconSize: [30, 30], iconAnchor: [15, 15] }), title: PARK_TUR[t][DIL === "en" ? "en" : "tr"], zIndexOffset: 900 }).on("click", () => parkGit(t)).addTo(parkKatman);
+  }
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("#parkBar button, #parkHome button"); if (!b) return;
+    e.stopPropagation();
+    if (b.dataset.pg) parkGit(b.dataset.pg); else parkSec();
+  });
+
   // ---------- harita ----------
   function ensureMap() {
-    if (map) { setTimeout(() => map.invalidateSize(), 60); return; }
+    if (map) { parkCiz(); setTimeout(() => map.invalidateSize(), 60); return; }
     map = L.map("map", { zoomControl: false, attributionControl: true }).setView([39, 35], 6);
     L.control.zoom({ zoomInTitle: TL("Yakınlaştır", "Zoom in"), zoomOutTitle: TL("Uzaklaştır", "Zoom out") }).addTo(map);
-    // Atıflar zorunlu: OSM (ODbL) ve MapTiler kullanım şartları; bağlantılar dış tarayıcıda açılır
+    altlik(map);
+    layer = L.layerGroup().addTo(map);
+    drawPark(); parkCiz();
+  }
+  // Harita altlığı ve zorunlu atıflar (OSM ODbL, MapTiler şartları); bağlantılar dış tarayıcıda açılır
+  function altlik(m) {
     const OSM_ATIF = `<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap ${TL("katkıcıları", "contributors")}</a>`;
-    map.attributionControl.setPrefix(`<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>`);
+    m.attributionControl.setPrefix(`<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>`);
     const osm = () => L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: OSM_ATIF });
-    if (HARITA_ANAHTAR) {
+    // Anahtar yalnızca bu adreslerde geçerli; başka yerde (ör. önizleme) "Invalid key" yerine OpenStreetMap
+    if (HARITA_ANAHTAR && /^(me7rt\.github\.io|localhost)$/.test(location.hostname)) {
       // MapTiler çalışmazsa (kota, anahtar hatası) OpenStreetMap'e geç
       let hata = 0;
       const mt = L.tileLayer(`https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=${HARITA_ANAHTAR}`, { maxZoom: 19, attribution: `<a href="https://www.maptiler.com/copyright/" target="_blank" rel="noopener">© MapTiler</a> ${OSM_ATIF}` });
       mt.on("tileload", () => { hata = 0; });
-      mt.on("tileerror", () => { if (++hata === 6 && map.hasLayer(mt)) { map.removeLayer(mt); osm().addTo(map); } });
-      mt.addTo(map);
-    } else osm().addTo(map);
-    layer = L.layerGroup().addTo(map);
+      mt.on("tileerror", () => { if (++hata === 6 && m.hasLayer(mt)) { m.removeLayer(mt); osm().addTo(m); } });
+      mt.addTo(m);
+    } else osm().addTo(m);
   }
   function drawPins() {
     if (!map) return;
@@ -2967,9 +3844,10 @@
     renderFacts(p);
     favBtn(p); gitBtn(p); $("dFav").hidden = $("dShare").hidden = $("dGit").hidden = !p.q;
     $("dFotoPay").hidden = !p.q || !foto(p.f, 1280);
-    dinleDurdur(); $("dDinle").hidden = !sesVar;
+    dinleDurdur(); $("dDinle").hidden = !sesVar && !open.q;
     const ip = DIL === "en" ? p.ipe : p.ip;
     $("dTip").hidden = !ip; $("dTip").innerHTML = ip ? `<b>${TL("İpucu:", "Tip:")}</b> ` + esc(ip) : "";
+    const koc = kocKart(p); $("dKoc").hidden = !koc; $("dKoc").innerHTML = koc;
     const ilce = p.ilce && p.ilce !== p.il ? p.ilce : "";
     let txt;
     if (DIL === "en") txt = p.me || `${adi(p)} is one of the places worth seeing in ${ilce ? ilce + ", " : ""}${p.il} Province, Türkiye.`;
@@ -2999,6 +3877,7 @@
     $("dWiki").textContent = wk && wk.startsWith("en:") ? T("Vikipedi'de (İngilizce) oku") : DIL === "en" && wk ? "Read more on Wikipedia (Turkish)" : T("Vikipedi'de devamını oku");
     metinLisans($("dLis"), !!(DIL === "en" ? p.me && p.we : p.m && p.w), DIL === "en" ? p.cve : p.cv);
     $("sheet").querySelector(".card").scrollTop = 0;
+    ilgiBasla(p);
     if ($("sheet").hidden) { history.pushState({ sheet: 1 }, "", location.href); sheetPushed = true; acan = document.activeElement; }
     $("sheet").hidden = false; arkaPlan(true);
     $("dClose").focus({ preventScroll: true });
@@ -3019,6 +3898,519 @@
     if (geri) history.back();
   }
 
+  // ---------- v6.6 tatil planı: gün gün kendi rotan (yalnızca bu cihazda saklanır) ----------
+  const PLAN = "gezi-plan", PLAN_GUN_UST = 14, PLAN_DURAK_UST = 12;
+  function planlar() { try { const a = JSON.parse(localStorage.getItem(PLAN)); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+  function planYaz(a) { try { localStorage.setItem(PLAN, JSON.stringify(a)); } catch (e) {} }
+  function planDegis(id, fn) { const a = planlar(), p = a.find((x) => x.id === id); if (!p) return null; fn(p); p.u = Date.now(); planYaz(a); return p; }
+  const yerKayit = (p) => ({ q: p.q, s: p.ilS, ad: p.ad, il: [...new Set([p.ilce, p.il].filter(Boolean))].join(", "), k: p.k, f: p.f, lat: p.lat, lng: p.lng });
+  const planSay = (p) => p.g.reduce((t, g) => t + g.length, 0);
+  const gunKm = (g) => g.reduce((t, x, i) => t + (i ? km(g[i - 1], x) : 0), 0);
+  const gunHarita = (g) => yolLink(g.map((x) => x.lat + "," + x.lng));
+  const gunAd = (i) => TL(`${i + 1}. Gün`, `Day ${i + 1}`);
+  // Günün nerede geçeceği: il, ilçe ya da tek bir yer olabilir. {ad, alt, s (il), lat, lng}
+  const konAnah = (k) => (k ? k.s + "|" + k.ad : "");
+  // Planın durakları sırayla: [[konum, gün sayısı], ...] (art arda aynı yer tek parça)
+  const planSehir = (p) => { const r = []; p.g.forEach((g, i) => { const k = (p.kon || [])[i] || null; if (r.length && konAnah(r[r.length - 1][0]) === konAnah(k)) r[r.length - 1][1]++; else r.push([k, 1]); }); return r; };
+  const konDugme = (k, attr) => `<button class="plkon${k ? "" : " bos"}" ${attr}>${ik("map-pin", 16)}<span>${k ? `<b>${esc(k.ad)}</b>${k.alt ? `<small>${esc(k.alt)}</small>` : ""}` : `<b>${TL("Nereye?", "Where?")}</b><small>${TL("İl, ilçe ya da yer seç", "Pick a province, district or place")}</small>`}</span>${ik("chevron-down", 16)}</button>`;
+  const POPULER = ["istanbul", "antalya", "mugla", "izmir", "nevsehir", "trabzon", "aydin", "canakkale", "rize", "mardin", "konya", "bursa"];
+  // Konum seçme penceresi: il, ilçe ve yerlerde arar; seçilince geri(konum) çağrılır
+  async function konumSecAc(geri) {
+    loadAra();
+    const d = document.createElement("div"); d.className = "tanit ust";
+    d.innerHTML = `<div class="tkart plsec"><h2>${TL("Nereye gideceksin?", "Where are you going?")}</h2><p>${TL("İl, ilçe ya da gitmek istediğin yerin adını yaz.", "Type a province, district or the place you want to visit.")}</p>
+      <div class="arakutu plara2"><i class="araik">${ik("search", 20)}</i><input id="knAra" type="search" placeholder="${TL("ör. Fethiye, Kapadokya, Rize", "e.g. Fethiye, Cappadocia, Rize")}" autocomplete="off" enterkeyhint="search"></div>
+      <p class="tsay" id="knBas"></p><ul class="list plsonuc" id="knList"></ul>
+      <div class="tbtn" style="justify-content:center"><button class="btn" data-k="kapat">${TL("Vazgeç", "Cancel")}</button></div></div>`;
+    let son = [];
+    const ilK = (il) => ({ ad: il.ad, alt: "", s: il.s, lat: il.lat, lng: il.lng, t: "il" });
+    const yaz = () => {
+      const q = sade(d.querySelector("#knAra").value.trim());
+      let r = [];
+      if (q.length < 2) { r = POPULER.map((s) => IDX.ilBy.get(s)).filter(Boolean).map(ilK); d.querySelector("#knBas").textContent = TL("Çok gidilen iller", "Popular provinces"); }
+      else {
+        d.querySelector("#knBas").textContent = "";
+        for (const il of IDX.iller) {
+          const a = sade(il.ad); if (a.includes(q)) r.push({ ...ilK(il), p: a.startsWith(q) ? 0 : 3 });
+          il.ilceler.forEach((z) => { const b = sade(z[0]); if (b.includes(q) && z[0] !== il.ad) r.push({ ad: z[0], alt: il.ad, s: il.s, lat: z[1], lng: z[2], t: "ilce", p: b.startsWith(q) ? 1 : 4 }); });
+        }
+        if (ARA) ARA.filter((x) => x[0].includes(q) || x[10].includes(q)).sort((a, b) => b[11] - a[11] || b[7] - a[7]).slice(0, 15).forEach((x) => r.push({ ad: araAd(x), alt: ilAdi(x[2]), s: x[2], lat: x[4], lng: x[5], t: "yer", f: x[8], k: x[6], p: x[0].startsWith(q) || x[10].startsWith(q) ? 2 : 5 }));
+        r.sort((a, b) => a.p - b.p); r = r.slice(0, 30);
+        if (!r.length) d.querySelector("#knBas").textContent = TL("Bu isimde bir yer bulunamadı.", "Nothing found with that name.");
+      }
+      son = r;
+      d.querySelector("#knList").innerHTML = r.map((k, i) => `<li><button class="row plsatir" data-i="${i}">${k.t === "yer" && k.f ? thumb({ p: k.f, w: 1e5 }, k.k || "t") : `<span class="thumb" style="--c:${BOLGE_RENK}">${ik(k.t === "yer" ? "map-pin" : k.t === "ilce" ? "map-pinned" : "map", 22)}</span>`}<span class="rt"><b>${esc(k.ad)}</b><small>${k.t === "il" ? TL("İl", "Province") : k.t === "ilce" ? TL(`${esc(k.alt)} ilçesi`, `District of ${esc(k.alt)}`) : esc(k.alt)}</small></span>${OKIK}</button></li>`).join("");
+    };
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    let zaman = null;
+    d.querySelector("#knAra").addEventListener("input", () => { clearTimeout(zaman); zaman = setTimeout(yaz, 120); });
+    // İl seçilince ikinci adım: hangi ilçe? (ya da tüm il)
+    const ilceSor = (k) => {
+      const il = IDX.ilBy.get(k.s); if (!il) { kapat(); return geri(k); }
+      const sira = il.ilceler.map((z) => z).filter((z) => z[3] > 0).sort((a, b) => b[3] - a[3]);
+      son = [k, ...sira.map((z) => ({ ad: z[0], alt: il.ad, s: il.s, lat: z[1], lng: z[2], t: "ilce" }))];
+      d.querySelector("h2").textContent = TL(`${ekDa(il.ad)} hangi ilçe?`, `Which district of ${il.ad}?`);
+      d.querySelector("h2 + p").textContent = TL("Bir ilçe seç ya da tüm ili gez. İlçeyi gün gün de değiştirebilirsin.", "Pick a district or the whole province. You can change it day by day too.");
+      d.querySelector(".plara2").hidden = true; d.querySelector("#knBas").textContent = "";
+      d.querySelector("#knList").innerHTML = son.map((x, i) => `<li><button class="row plsatir" data-i="${i}"><span class="thumb" style="--c:${i ? BOLGE_RENK : "var(--pri)"}">${ik(i ? "map-pinned" : "map", 22)}</span><span class="rt"><b>${i ? esc(x.ad) : TL(`Tüm ${esc(il.ad)}`, `All of ${esc(il.ad)}`)}</b><small>${i ? TL(`${sira[i - 1][3]} gezilecek yer`, `${sira[i - 1][3]} places`) : TL("İlçeyi her gün ayrıca seçerim", "I'll pick a district each day")}</small></span>${OKIK}</button></li>`).join("");
+      d.querySelector(".tkart").scrollTop = 0;
+      ilceAdim = true;
+    };
+    let ilceAdim = false;
+    d.addEventListener("click", (e) => {
+      if (e.target === d || e.target.closest("[data-k=kapat]")) return kapat();
+      const b = e.target.closest("[data-i]"); if (!b || !son[+b.dataset.i]) return;
+      const { p: _p, f: _f, k: _k, ...k } = son[+b.dataset.i];
+      if (k.t === "il" && !ilceAdim) return ilceSor(k);
+      kapat(); geri(k);
+    });
+    document.body.appendChild(d);
+    yaz(); if (araSoz) araSoz.then(() => { if (d.isConnected && d.querySelector("#knAra").value.trim().length >= 2) yaz(); });
+    setTimeout(() => d.querySelector("#knAra").focus(), 80);
+  }
+  function planAlt() {
+    const a = planlar(); if (!a.length) { $("planSub").textContent = T("Gün gün kendi rotanı yap, gideceğin yerleri sen seç"); return; }
+    const p = a[0]; $("planSub").textContent = TL(`${p.ad} · ${p.g.length} gün · ${planSay(p)} yer`, `${p.ad} · ${p.g.length} day${p.g.length === 1 ? "" : "s"} · ${planSay(p)} place${planSay(p) === 1 ? "" : "s"}`);
+  }
+  async function showPlan(id) {
+    const p = id && planlar().find((x) => x.id === id);
+    view = { mode: "plan", id: p ? p.id : null }; show("planlar");
+    $("eyebrow").textContent = p ? T("Tatil planı") : "Rota Cepte"; $("title").textContent = p ? p.ad : T("Tatil planlarım");
+    renderPlan();
+  }
+  function renderPlan() {
+    if (!view || view.mode !== "plan") return;
+    const kutu = $("planlar"), a = planlar();
+    if (!view.id) {
+      kutu.innerHTML = (a.length ? `<ul class="list plist2">${a.map((p) => {
+        const ilk = p.g.flat().find((x) => x.f) || p.g.flat()[0];
+        return `<li><button class="row" data-go="#/plan/${esc(p.id)}">${ilk ? thumb(ilk.f, ilk.k) : `<span class="thumb" style="--c:var(--pri)">${ik("calendar-days", 22)}</span>`}<span class="rt"><b>${esc(p.ad)}</b><small>${TL(`${p.g.length} gün`, `${p.g.length} day${p.g.length === 1 ? "" : "s"}`)}${planSehir(p).filter((x) => x[0]).length ? " · " + esc(planSehir(p).filter((x) => x[0]).map((x) => x[0].ad).join(", ")) : ""} · ${TL(`${planSay(p)} yer`, `${planSay(p)} place${planSay(p) === 1 ? "" : "s"}`)}</small></span>${OKIK}</button></li>`;
+      }).join("")}</ul>` : `<div class="plbos"><span class="plbosik">${ik("calendar-plus", 34)}</span><b>${TL("Tatilini gün gün planla", "Plan your holiday day by day")}</b><p>${TL("Bir plan oluştur, her güne gitmek istediğin yerleri ekle. Sırayı sen belirle, her günün rotasını tek dokunuşla haritada aç.", "Create a plan and add the places you want to see each day. You choose the order and open each day's route on the map with one tap.")}</p></div>`) +
+        `<button class="btn primary plyeni" data-p="yeni">${ik("plus", 18)} ${TL("Yeni plan oluştur", "Create a new plan")}</button><p class="tsay">${TL("Planların yalnızca bu telefonda saklanır.", "Your plans are stored only on this phone.")}</p>`;
+      return;
+    }
+    const p = a.find((x) => x.id === view.id); if (!p) { git("#/plan"); return; }
+    $("title").textContent = p.ad;
+    const gunler = p.g.map((g, gi) => {
+      const durak = g.map((x, i) => `${i ? `<li class="plara">${ik("arrow-down", 14)} ~${fmt(km(g[i - 1], x) * 1.3)}</li>` : ""}<li class="pldurak"><span class="plno">${i + 1}</span><button class="row" data-go="#/il/${x.s}/yer/${x.q}">${thumb(x.f, x.k)}<span class="rt"><b>${esc(kayitAd(x))}</b><small>${esc(x.il)}</small></span></button><span class="plsira"><button data-p="yukari" data-g="${gi}" data-i="${i}" aria-label="${TL("Yukarı taşı", "Move up")}" ${i ? "" : "disabled"}>${ik("arrow-up", 16)}</button><button data-p="asagi" data-g="${gi}" data-i="${i}" aria-label="${TL("Aşağı taşı", "Move down")}" ${i < g.length - 1 ? "" : "disabled"}>${ik("arrow-down", 16)}</button><button data-p="cikar" data-g="${gi}" data-i="${i}" aria-label="${TL("Plandan çıkar", "Remove from plan")}">${ik("x", 16)}</button></span></li>`).join("");
+      const uzun = g.length > 1 && gunKm(g) > 150;
+      const ozet = g.length ? TL(`${g.length} durak` + (g.length > 1 ? ` · ~${fmt(gunKm(g) * 1.3)} yol` : ""), `${g.length} stop${g.length === 1 ? "" : "s"}` + (g.length > 1 ? ` · ~${fmt(gunKm(g) * 1.3)} drive` : "")) : TL("Henüz yer eklemedin", "No places yet");
+      const kon = (p.kon || [])[gi] || null, onceki = gi ? (p.kon || [])[gi - 1] || null : undefined;
+      let bant = "";
+      if (kon && (onceki === undefined || konAnah(kon) !== konAnah(onceki))) {
+        let bas = 0; const n = planSehir(p).find((x) => { const ok = bas === gi; bas += x[1]; return ok; });
+        bant = `<div class="plsehir">${ik("map-pin", 18)}<span><b>${esc(kon.ad)}</b>${kon.alt ? `<small>${esc(kon.alt)}</small>` : ""}</span><em>${n && n[1] > 1 ? TL(`${gi + 1}-${gi + n[1]}. gün`, `Days ${gi + 1}-${gi + n[1]}`) : gunAd(gi)}</em></div>`;
+      }
+      return `${bant}<section class="plgun"><div class="plbas"><b>${gunAd(gi)}</b><small>${ozet}</small>${p.g.length > 1 ? `<button class="plsil" data-p="gunsil" data-g="${gi}" aria-label="${TL(`${gi + 1}. günü sil`, `Delete day ${gi + 1}`)}">${ik("trash", 16)}</button>` : ""}</div>
+        ${konDugme(kon, `data-p="kon" data-g="${gi}" aria-label="${TL(`${gi + 1}. gün nerede?`, `Where on day ${gi + 1}?`)}"`)}
+        ${uzun ? `<p class="pluyari">${ik("info", 15)} ${TL("Bu günün durakları birbirine uzak. Bir yeri başka güne taşımayı düşünebilirsin.", "This day's stops are far apart. You might move one to another day.")}</p>` : ""}
+        ${g.length ? `<ol class="pllist">${durak}</ol>` : ""}
+        ${g.length ? `<button class="linkbtn plhgos" data-p="hgun" data-g="${gi}">${ik("map", 16)} ${TL("Bu günü haritada gör", "See this day on the map")}</button>` : ""}
+        <div class="plalt"><button class="btn plekle" data-p="ekle" data-g="${gi}" ${g.length >= PLAN_DURAK_UST ? "disabled" : ""}>${ik("plus", 18)} ${TL("Yer ekle", "Add a place")}</button>${g.length ? `<a class="btn primary" href="${gunHarita(g)}" target="_blank" rel="noopener">${ik("navigation", 18)} ${TL("Rotayı aç", "Open route")}</a>` : ""}</div></section>`;
+    }).join("");
+    kutu.innerHTML = `<div class="plust"><button class="chipbtn" data-p="ad">${ik("pencil", 16)} ${TL("Adını değiştir", "Rename")}</button><button class="chipbtn" data-p="paylas">${ik("share-2", 16)} ${TL("Paylaş", "Share")}</button>${p.op ? `<button class="chipbtn opgeri" data-p="geri">${ik("send", 16)} ${esc(TL(`${p.op.k}${ekE(p.op.k)} geri gönder`, `Send back to ${p.op.k}`))}</button>` : ""}<button class="chipbtn" data-p="sil">${ik("trash", 16)} ${TL("Planı sil", "Delete plan")}</button></div>
+      ${gunler}
+      ${p.g.length < PLAN_GUN_UST ? `<button class="btn plgunekle" data-p="gunekle">${ik("calendar-plus", 18)} ${TL("Gün ekle", "Add a day")}</button>` : ""}
+      ${planHaritaHtml(p)}
+      <button class="btn primary plkaydet" data-p="kaydet">${ik("circle-check", 18)} ${TL("Planı kaydet", "Save plan")}</button>
+      <p class="tsay">${TL("Planın her değişiklikte bu telefona kendiliğinden de kaydedilir. Rotayı aç, bulunduğun yerden başlayıp o günün duraklarını sırasıyla Google Haritalar'da açar. Mesafeler yaklaşık yol mesafesidir.", "Your plan is also saved on this phone after every change. Open route starts from where you are and opens that day's stops in order in Google Maps. Distances are rough driving estimates.")}</p>`;
+    planHaritaCiz(p);
+  }
+  // ---------- v6.6 planın haritası: numaralı duraklar ve gün gün güzergah ----------
+  const GUN_RENK = ["#d4381a", "#2f6fde", "#2a9d5c", "#9b4dca", "#e08a00", "#0f9fb3", "#c2185b"];
+  let planMap = null;
+  // Seçili gün (-1 = tüm plan) için duraklar: {x, gi, no}; tüm planda numara baştan sona sürer
+  function planDuraklar(p, hg) {
+    const r = []; let no = 0;
+    p.g.forEach((g, gi) => g.forEach((x, i) => { no++; if (hg < 0 || hg === gi) r.push({ x, gi, no: hg < 0 ? no : i + 1 }); }));
+    return r.filter((d) => d.x.lat != null);
+  }
+  function planHaritaHtml(p) {
+    if (!planSay(p)) return "";
+    const hg = view.hgun != null && view.hgun < p.g.length ? view.hgun : -1, d = planDuraklar(p, hg);
+    let top = 0; for (let i = 1; i < d.length; i++) top += km(d[i - 1].x, d[i].x);
+    const gunVar = p.g.map((g, gi) => g.length ? gi : -1).filter((gi) => gi >= 0);
+    const satir = d.map((a, i) => {
+      const yeniGun = hg < 0 && (!i || d[i - 1].gi !== a.gi);
+      return `${yeniGun ? `<li class="plhgunbas" style="--c:${GUN_RENK[a.gi % GUN_RENK.length]}">${gunAd(a.gi)}${(p.kon || [])[a.gi] ? " · " + esc(p.kon[a.gi].ad) : ""}</li>` : i ? `<li class="plhara">${ik("arrow-down", 13)} ~${fmt(km(d[i - 1].x, a.x) * 1.3)}</li>` : ""}<li><button class="plhdurak" data-p="hodak" data-i="${i}"><span class="plhno" style="--c:${GUN_RENK[a.gi % GUN_RENK.length]}">${a.no}</span><b>${esc(kayitAd(a.x))}</b><small>${esc(a.x.il)}</small></button></li>`;
+    }).join("");
+    return `<section class="plharita"><div class="plhbas"><b>${ik("route", 18)} ${TL("Tüm rota", "Whole route")}</b><small>${TL(`${d.length} durak` + (d.length > 1 ? ` · ~${fmt(top * 1.3)} yol` : ""), `${d.length} stop${d.length === 1 ? "" : "s"}` + (d.length > 1 ? ` · ~${fmt(top * 1.3)} drive` : ""))}</small></div>
+      ${gunVar.length > 1 ? `<div class="chips plhgun"><button data-p="hgun" data-g="-1" aria-pressed="${hg < 0}">${TL("Tüm plan", "Whole plan")}</button>${gunVar.map((gi) => `<button data-p="hgun" data-g="${gi}" aria-pressed="${hg === gi}" style="--c:${GUN_RENK[gi % GUN_RENK.length]}"><i></i>${gunAd(gi)}</button>`).join("")}</div>` : ""}
+      <div id="plMap" class="plmap"></div>
+      <details class="plhliste" open><summary>${hg < 0 ? TL("Tüm güzergah, durak durak", "The whole route, stop by stop") : TL(`${gunAd(hg)} güzergahı, durak durak`, `${gunAd(hg)} route, stop by stop`)}</summary><ol>${satir}</ol></details></section>`;
+  }
+  function planHaritaCiz(p) {
+    if (planMap) { planMap.remove(); planMap = null; }
+    const el = $("plMap"); if (!el || typeof L === "undefined") return;
+    const hg = view.hgun != null && view.hgun < p.g.length ? view.hgun : -1, d = planDuraklar(p, hg);
+    if (!d.length) return;
+    planMap = L.map(el, { zoomControl: true, attributionControl: true, scrollWheelZoom: false });
+    altlik(planMap);
+    // Gün içi yol: günün rengiyle düz çizgi; günler arası geçiş: gri kesik çizgi
+    for (let i = 1; i < d.length; i++) {
+      const a = d[i - 1], b = d[i], ayni = a.gi === b.gi;
+      L.polyline([[a.x.lat, a.x.lng], [b.x.lat, b.x.lng]], ayni ? { color: GUN_RENK[a.gi % GUN_RENK.length], weight: 4, opacity: 0.85 } : { color: "#8a8f9c", weight: 3, opacity: 0.8, dashArray: "6 8" }).addTo(planMap);
+    }
+    view.plPin = d.map((a) => L.marker([a.x.lat, a.x.lng], {
+      icon: L.divIcon({ className: "", html: `<div class="plpin" style="--c:${GUN_RENK[a.gi % GUN_RENK.length]}">${a.no}</div>`, iconSize: [28, 28], iconAnchor: [14, 14] }),
+      zIndexOffset: a.no
+    }).bindPopup(`<b>${a.no}. ${esc(kayitAd(a.x))}</b><br><small>${gunAd(a.gi)} · ${esc(a.x.il)}</small><br><button class="linkbtn" data-go="#/il/${a.x.s}/yer/${a.x.q}">${TL("Yeri aç", "Open place")} ${ik("chevron-right", 14)}</button>`).addTo(planMap));
+    const sinir = L.latLngBounds(d.map((a) => [a.x.lat, a.x.lng]));
+    if (d.length === 1) planMap.setView(sinir.getCenter(), 13); else planMap.fitBounds(sinir, { padding: [30, 30], maxZoom: 14 });
+  }
+  function planTik(e) {
+    const b = e.target.closest("[data-p]"); if (!b) return;
+    const k = b.dataset.p, gi = +b.dataset.g, i = +b.dataset.i, id = view && view.id;
+    if (k === "yeni") return planYeniAc();
+    if (!id) return;
+    if (k === "ekle") return gunKurAc(id, gi);
+    if (k === "yukari" || k === "asagi") { planDegis(id, (p) => { const g = p.g[gi], j = k === "yukari" ? i - 1 : i + 1; if (g[j]) [g[i], g[j]] = [g[j], g[i]]; }); return renderPlan(); }
+    if (k === "cikar") { planDegis(id, (p) => p.g[gi].splice(i, 1)); return renderPlan(); }
+    if (k === "kur") return gunKurAc(id, gi);
+    if (k === "hgun") { view.hgun = gi; renderPlan(); const h = document.querySelector(".plharita"); if (h) h.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+    if (k === "hodak") { const m = (view.plPin || [])[i]; if (m && planMap) { planMap.setView(m.getLatLng(), Math.max(planMap.getZoom(), 13)); m.openPopup(); $("plMap").scrollIntoView({ behavior: "smooth", block: "center" }); } return; }
+    if (k === "kaydet") { planDegis(id, () => {}); toast(TL("Plan kaydedildi. Tatil planlarım'da seni bekliyor.", "Plan saved. It's waiting in My holiday plans."), 4000); git("#/plan"); return; }
+    if (k === "kon") return konumSecAc((kon) => { planDegis(id, (p) => { p.kon = p.kon || []; p.kon[gi] = kon; }); renderPlan(); });
+    if (k === "gunekle") { planDegis(id, (p) => { p.kon = p.kon || []; p.kon[p.g.length] = p.kon[p.g.length - 1] || null; p.g.push([]); }); renderPlan(); setTimeout(() => { const s = document.querySelectorAll(".plgun"); s[s.length - 1].scrollIntoView({ behavior: "smooth", block: "center" }); }, 50); return; }
+    if (k === "gunsil") {
+      const p = planlar().find((x) => x.id === id);
+      if (p && p.g[gi].length && !confirm(TL(`${gi + 1}. gündeki ${p.g[gi].length} yer de silinsin mi?`, `Also remove the ${p.g[gi].length} place(s) on day ${gi + 1}?`))) return;
+      planDegis(id, (p) => { p.g.splice(gi, 1); if (p.kon) p.kon.splice(gi, 1); }); return renderPlan();
+    }
+    if (k === "ad") return planYeniAc(null, id);
+    if (k === "sil") {
+      const p = planlar().find((x) => x.id === id);
+      if (!p || !confirm(TL(`"${p.ad}" planı silinsin mi?`, `Delete the plan "${p.ad}"?`))) return;
+      planYaz(planlar().filter((x) => x.id !== id)); toast(TL("Plan silindi.", "Plan deleted.")); git("#/plan"); return;
+    }
+    if (k === "paylas" || k === "geri") {
+      const p = planlar().find((x) => x.id === id); if (!p) return;
+      planGonder(p, k === "geri" && p.op);
+    }
+  }
+  // ---------- ortak plan: plan linkin içinde gider gelir (sunucu yok). Arkadaş açar, düzenler, geri gönderir ----------
+  const ADIM = "gezi-adim";
+  // Yönelme eki: Mert'e, Ayşe'ye, Ahmet'e, Ali'ye, Burak'a
+  const ekE = (ad) => { const k = ad.toLocaleLowerCase("tr"), sesli = k.match(/[aeıioöuü]/g), son = sesli ? sesli[sesli.length - 1] : "e"; return "'" + (/[aeıioöuü]$/.test(k) ? "y" : "") + ("aıou".includes(son) ? "a" : "e"); };
+  const adimOku = () => { try { return localStorage.getItem(ADIM) || ""; } catch (e) { return ""; } };
+  const b64 = (o) => btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const b64Oku = (k) => { try { return JSON.parse(decodeURIComponent(escape(atob(String(k).replace(/-/g, "+").replace(/_/g, "/"))))); } catch (e) { return null; } };
+  const yerAnah = (x) => x.s + "~" + String(x.q || "").replace(/^Q/, "");
+  // Linke yalnızca yerlerin kimliği, sırası, günlerin nerede geçtiği ve gönderenin adı girer
+  function planKod(p, kime) {
+    const kon = (p.kon || []).map((k) => k ? [k.ad, k.alt || "", k.s, +(+k.lat).toFixed(4), +(+k.lng).toFixed(4), k.t || ""] : 0);
+    return b64({ v: 1, a: p.ad, k: adimOku(), i: kime ? kime.id : p.id, r: kime ? 1 : 0, g: p.g.map((g) => g.filter((x) => /^Q\d+$/.test(x.q || "")).map(yerAnah)), o: kon });
+  }
+  function adSor(baslik, geri) {
+    const d = document.createElement("div"); d.className = "tanit";
+    d.innerHTML = `<div class="tkart plform"><div class="temo">${ik("users", 34)}</div><h2>${esc(baslik)}</h2><p>${TL("Arkadaşın planı kimin gönderdiğini görsün. Adını bir kere yazman yeter.", "So your friend knows who sent it. You only type it once.")}</p>
+      <label class="plinput"><small>${TL("Adın", "Your name")}</small><input id="opAd" maxlength="24" autocomplete="given-name" value="${esc(adimOku())}"></label>
+      <div class="tbtn"><button class="linkbtn" data-k="kapat">${T("Vazgeç")}</button><button class="btn primary" data-k="tamam">${ik("send", 18)} ${TL("Gönder", "Send")}</button></div></div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    d.addEventListener("click", (e) => {
+      if (e.target === d || e.target.closest("[data-k=kapat]")) return kapat();
+      if (e.target.closest("[data-k=tamam]")) { const ad = d.querySelector("#opAd").value.trim(); if (!ad) { d.querySelector("#opAd").focus(); return; } try { localStorage.setItem(ADIM, ad); } catch (x) {} kapat(); geri(); }
+    });
+    document.body.appendChild(d); setTimeout(() => d.querySelector("#opAd").focus(), 80);
+  }
+  function planGonder(p, geriMi) {
+    const git2 = () => {
+      const link = "https://me7rt.github.io/Rota-Cepte/#/plan-al/" + planKod(p, geriMi ? { id: p.op.i } : null);
+      const metin = geriMi ? TL(`"${p.ad}" planını düzenledim, bakar mısın?`, `I've edited the plan "${p.ad}", take a look:`)
+        : TL(`"${p.ad}" tatil planımı seninle paylaşıyorum (${p.g.length} gün, ${planSay(p)} yer). Açıp düzenleyebilirsin:`, `Here's my holiday plan "${p.ad}" (${p.g.length} days, ${planSay(p)} places). You can open and edit it:`);
+      metinPaylas(p.ad, metin, link);
+    };
+    if (adimOku()) git2(); else adSor(geriMi ? TL("Planı geri gönder", "Send the plan back") : TL("Planı paylaş", "Share the plan"), git2);
+  }
+  // Linkteki planı yerlerin gerçek kayıtlarına çevir
+  async function planCoz(o) {
+    const g = [];
+    for (const gun of (o.g || []).slice(0, PLAN_GUN_UST)) {
+      const l = [];
+      for (const a of gun.slice(0, PLAN_DURAK_UST)) {
+        const [sl, n] = String(a).split("~");
+        if (!IDX.ilBy.has(sl) || !/^\d+$/.test(n)) continue;
+        try { const d = await loadIl(sl); const y = d.yerler.find((x) => x.q === "Q" + n); if (y) l.push(yerKayit(y)); } catch (e) {}
+      }
+      g.push(l);
+    }
+    const kon = g.map((_, i) => { const k = (o.o || [])[i]; return Array.isArray(k) && IDX.ilBy.has(k[2]) ? { ad: String(k[0]).slice(0, 60), alt: String(k[1]).slice(0, 60), s: k[2], lat: +k[3], lng: +k[4], t: k[5] } : null; });
+    return { ad: String(o.a || TL("Ortak plan", "Shared plan")).slice(0, 40), g, kon };
+  }
+  // Fark: eklenen, çıkarılan, günü ya da sırası değişen yerler
+  function planFark(eski, yeni) {
+    const yer = (p) => { const m = new Map(); p.g.forEach((g, gi) => g.forEach((x, i) => m.set(yerAnah(x), { x, gi, i }))); return m; };
+    const A = yer(eski), B = yer(yeni), ekl = [], cik = [], deg = [];
+    for (const [k, v] of B) { const e = A.get(k); if (!e) ekl.push(v); else if (e.gi !== v.gi || e.i !== v.i) deg.push(v); }
+    for (const [k, v] of A) if (!B.has(k)) cik.push(v);
+    return { ekl, cik, deg, gunDeg: eski.g.length !== yeni.g.length };
+  }
+  async function showPlanAl(kod) {
+    const o = b64Oku(kod);
+    git("#/plan");
+    if (!o || o.v !== 1 || !Array.isArray(o.g)) { toast(TL("Bu plan linki açılamadı.", "This plan link couldn't be opened.")); return; }
+    const yeni = await planCoz(o), kim = String(o.k || "").slice(0, 24) || TL("Arkadaşın", "Your friend");
+    const benim = o.r && planlar().find((x) => x.id === o.i);
+    const d = document.createElement("div"); d.className = "tanit";
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    const yeniPlan = (op) => { const p = { id: "p" + Date.now().toString(36), ad: yeni.ad, g: yeni.g.length ? yeni.g : [[]], kon: yeni.kon, u: Date.now() }; if (op) p.op = op; const a = planlar(); a.unshift(p); planYaz(a); return p; };
+    if (benim) {
+      const f = planFark(benim, yeni);
+      const sat = (ikon, l, yazi) => l.length ? `<li>${ik(ikon, 18)}<span><b>${yazi}</b> ${esc(l.slice(0, 6).map((v) => kayitAd(v.x)).join(", "))}${l.length > 6 ? "…" : ""}</span></li>` : "";
+      const hic = !f.ekl.length && !f.cik.length && !f.deg.length && !f.gunDeg;
+      d.innerHTML = `<div class="tkart plform"><div class="temo">${ik("refresh-cw", 34)}</div><h2>${esc(TL(`${kim} planını düzenledi`, `${kim} edited your plan`))}</h2><p>${esc(benim.ad)}</p>
+        ${hic ? `<p>${TL("Hiçbir şey değişmemiş.", "Nothing has changed.")}</p>` : `<ul class="opfark">${sat("plus", f.ekl, TL(`${f.ekl.length} yer eklendi:`, `${f.ekl.length} added:`))}${sat("minus", f.cik, TL(`${f.cik.length} yer çıkarıldı:`, `${f.cik.length} removed:`))}${sat("arrow-up-down", f.deg, TL(`${f.deg.length} yerin günü ya da sırası değişti:`, `${f.deg.length} moved:`))}${f.gunDeg ? `<li>${ik("calendar-days", 18)}<span>${TL(`Gün sayısı ${benim.g.length} → ${yeni.g.length}`, `Days ${benim.g.length} → ${yeni.g.length}`)}</span></li>` : ""}</ul>`}
+        <div class="tbtn opbtn"><button class="linkbtn" data-k="kapat">${T("Vazgeç")}</button><button class="btn" data-k="ayri">${TL("Ayrı plan olarak kaydet", "Save as a new plan")}</button>${hic ? "" : `<button class="btn primary" data-k="guncelle">${ik("check", 18)} ${TL("Planımı güncelle", "Update my plan")}</button>`}</div></div>`;
+      d.addEventListener("click", (e) => {
+        if (e.target === d || e.target.closest("[data-k=kapat]")) return kapat();
+        if (e.target.closest("[data-k=guncelle]")) {
+          try { localStorage.setItem("gezi-plan-yedek", JSON.stringify(benim)); } catch (x) {}
+          planDegis(benim.id, (p) => { p.g = yeni.g.length ? yeni.g : [[]]; p.kon = yeni.kon; });
+          kapat(); toast(TL("Planın güncellendi.", "Your plan was updated.")); git("#/plan/" + benim.id);
+        } else if (e.target.closest("[data-k=ayri]")) { const p = yeniPlan(); kapat(); toast(TL("Ayrı plan olarak kaydedildi.", "Saved as a new plan.")); git("#/plan/" + p.id); }
+      });
+    } else {
+      const n = yeni.g.reduce((t, g) => t + g.length, 0);
+      const yerler = [...new Set(yeni.kon.filter(Boolean).map((k) => k.ad))].join(", ");
+      d.innerHTML = `<div class="tkart plform"><div class="temo">${ik("calendar-days", 34)}</div><h2>${esc(TL(`${kim} sana bir plan gönderdi`, `${kim} sent you a plan`))}</h2>
+        <p><b>${esc(yeni.ad)}</b><br>${TL(`${yeni.g.length} gün · ${n} yer`, `${yeni.g.length} day${yeni.g.length === 1 ? "" : "s"} · ${n} place${n === 1 ? "" : "s"}`)}${yerler ? " · " + esc(yerler) : ""}</p>
+        <p>${TL(`Açıp düzenleyebilirsin. Düzenleyince "${esc(kim + ekE(kim))} geri gönder" düğmesi çıkar.`, `You can open and edit it. Then a "Send back to ${esc(kim)}" button appears.`)}</p>
+        <div class="tbtn opbtn"><button class="linkbtn" data-k="kapat">${T("Vazgeç")}</button><button class="btn" data-k="kaydet">${TL("Sadece kaydet", "Just save")}</button><button class="btn primary" data-k="ac">${ik("pencil", 18)} ${TL("Aç ve düzenle", "Open and edit")}</button></div></div>`;
+      d.addEventListener("click", (e) => {
+        if (e.target === d || e.target.closest("[data-k=kapat]")) return kapat();
+        const ac = e.target.closest("[data-k=ac]"), kay = e.target.closest("[data-k=kaydet]");
+        if (!ac && !kay) return;
+        const p = yeniPlan(o.r ? null : { i: String(o.i || "").slice(0, 40), k: kim });
+        kapat(); toast(TL("Plan kaydedildi.", "Plan saved.")); git("#/plan/" + p.id);
+      });
+    }
+    document.body.appendChild(d);
+  }
+
+  // Yeni plan penceresi: ad, sonra hangi şehirde kaç gün (ör. 2 gün İzmir + 2 gün Muğla + 3 gün Antalya).
+  // adId verilirse yalnızca ad değişir; yer verilirse 1. güne eklenir.
+  function planYeniAc(yer, adId) {
+    const eski = adId && planlar().find((x) => x.id === adId);
+    const parca = [[yer ? { ad: yer.ilce || yer.il, alt: yer.ilce ? yer.il : "", s: yer.ilS, lat: yer.lat, lng: yer.lng } : null, yer ? 2 : 3]];
+    const d = document.createElement("div"); d.className = "tanit";
+    const toplam = () => parca.reduce((t, x) => t + x[1], 0);
+    const parcaYaz = () => {
+      d.querySelector("#plParca").innerHTML = parca.map(([s, n], i) => `<div class="plparca"><span class="plsira2">${i + 1}</span>${konDugme(s, `data-k="kon" data-i="${i}" aria-label="${TL(`${i + 1}. durak`, `Stop ${i + 1}`)}"`)}<span class="plstep"><button data-k="az" data-i="${i}" aria-label="${TL("Bir gün az", "One day fewer")}">−</button><b>${n}</b><small>${TL("gün", n === 1 ? "day" : "days")}</small><button data-k="cok" data-i="${i}" aria-label="${TL("Bir gün fazla", "One day more")}">+</button></span>${parca.length > 1 ? `<button class="plparsil" data-k="parsil" data-i="${i}" aria-label="${TL("Bu şehri çıkar", "Remove this city")}">${ik("x", 16)}</button>` : ""}</div>`).join("");
+      d.querySelector("#plToplam").textContent = TL(`Toplam ${toplam()} gün`, `${toplam()} day${toplam() === 1 ? "" : "s"} in total`);
+      d.querySelector("[data-k=sehirekle]").hidden = toplam() >= PLAN_GUN_UST || parca.length >= 7;
+    };
+    d.innerHTML = `<div class="tkart plform"><div class="temo">${ik(eski ? "pencil" : "calendar-plus", 34)}</div><h2>${eski ? TL("Planın adı", "Plan name") : TL("Yeni tatil planı", "New holiday plan")}</h2>
+      <label class="plinput"><small>${TL("Planın adı", "Plan name")}</small><input id="plAd" maxlength="40" autocomplete="off" placeholder="${TL("ör. Ege tatili", "e.g. Aegean holiday")}" value="${esc(eski ? eski.ad : "")}"></label>
+      ${eski ? "" : `<div class="plgunsec"><small>${TL("Nerede kaç gün kalacaksın?", "Where and for how many days?")}</small><div id="plParca"></div>
+        <div class="plparalt"><button class="linkbtn" data-k="sehirekle">${ik("plus", 16)} ${TL("Başka şehir ekle", "Add another city")}</button><b id="plToplam"></b></div>
+        <p class="plnot">${TL("Şehri sonra da seçebilir ya da değiştirebilirsin.", "You can pick or change cities later too.")}</p></div>`}
+      ${yer && !eski ? `<p class="plnot">${TL(`${esc(adi(yer))} 1. güne eklenecek.`, `${esc(adi(yer))} will be added to day 1.`)}</p>` : ""}
+      <div class="tbtn"><button class="linkbtn" data-k="kapat">${TL("Vazgeç", "Cancel")}</button><button class="btn primary" data-k="tamam">${eski ? TL("Kaydet", "Save") : TL("Oluştur", "Create")}</button></div></div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    d.addEventListener("click", (e) => {
+      if (e.target === d || e.target.closest("[data-k=kapat]")) return kapat();
+      const b = e.target.closest("[data-k]"); if (!b) return;
+      const k = b.dataset.k, i = +b.dataset.i;
+      if (k === "az") { parca[i][1] = Math.max(1, parca[i][1] - 1); return parcaYaz(); }
+      if (k === "cok") { if (toplam() < PLAN_GUN_UST) parca[i][1]++; else toast(TL(`Bir plan en fazla ${PLAN_GUN_UST} gün olabilir.`, `A plan can be up to ${PLAN_GUN_UST} days.`)); return parcaYaz(); }
+      if (k === "parsil") { parca.splice(i, 1); return parcaYaz(); }
+      if (k === "kon") return konumSecAc((kon) => { if (parca[i]) { parca[i][0] = kon; parcaYaz(); } });
+      if (k === "sehirekle") { parca.push([null, Math.min(2, PLAN_GUN_UST - toplam())]); parcaYaz(); const n = parca.length - 1; konumSecAc((kon) => { if (parca[n]) { parca[n][0] = kon; parcaYaz(); } }); return; }
+      if (k !== "tamam") return;
+      const sehirler = parca.filter((x) => x[0]).map((x) => x[0].ad);
+      const ad = d.querySelector("#plAd").value.trim().slice(0, 40) || (sehirler.length ? sehirler.join(" – ").slice(0, 40) : TL("Tatil planım", "My holiday plan"));
+      if (eski) { planDegis(adId, (p) => { p.ad = ad; }); kapat(); renderPlan(); return; }
+      const kon = parca.flatMap(([s, n]) => Array(n).fill(s));
+      const p = { id: Date.now().toString(36), ad, g: kon.map(() => []), kon, u: Date.now() };
+      if (yer) p.g[0].push(yerKayit(yer));
+      planYaz([p, ...planlar()]); kapat();
+      if (yer) { toast(TL(`${adi(yer)}, "${ad}" planının 1. gününe eklendi.`, `${adi(yer)} added to day 1 of "${ad}".`)); return; }
+      git("#/plan/" + p.id);
+      setTimeout(() => { if (view && view.mode === "plan" && view.id === p.id) gunKurAc(p.id, 0); }, 700);
+    });
+    d.querySelector("#plAd").addEventListener("keydown", (e) => { if (e.key === "Enter") d.querySelector("[data-k=tamam]").click(); });
+    document.body.appendChild(d);
+    if (!eski) parcaYaz();
+    setTimeout(() => d.querySelector("#plAd").focus(), 80);
+  }
+  // ---------- v6.6 günü adım adım kur: ilçe seç, yer seç, sonra o yerin yakınından devam et ----------
+  // "İzmir'de", "Konya'da", "Kars'ta"; çok kelimeli ve iyelik ekiyle biten adlarda araya n girer: "Kaputaş Plajı'nda"
+  const ekDa = (ad) => { const k = ad.toLocaleLowerCase("tr"), v = (k.match(/[aıoueiöü]/g) || ["a"]).pop(), n = /\s/.test(k.trim()) && /[ıiuü]$/.test(k) ? "n" : ""; return ad + "'" + n + (!n && /[çfhkpsşt]$/.test(k) ? "t" : "d") + ("aıou".includes(v) ? "a" : "e"); };
+  const ekDan = (ad) => { const k = ad.toLocaleLowerCase("tr"), v = (k.match(/[aıoueiöü]/g) || ["a"]).pop(), n = /\s/.test(k.trim()) && /[ıiuü]$/.test(k) ? "n" : ""; return ad + "'" + n + (!n && /[çfhkpsşt]$/.test(k) ? "t" : "d") + ("aıou".includes(v) ? "an" : "en"); };
+  const yerPuan = (y) => (y.one ? 1000 : 0) + (y.sl || 0) + (y.f ? 5 : 0);
+  async function gunKurAc(id, gi0) {
+    let gi = gi0, il = null, ilce = -1, mod = "ilce", goster = 20, adim = "ilce", sira = null;
+    // Sıralama: kullanıcı seçmediyse ilk durakta popülerlik, sonrasında yakınlık
+    const siraNe = (son) => sira || (son ? "yakin" : "populer");
+    const plan = () => planlar().find((x) => x.id === id);
+    const d = document.createElement("div"); d.className = "tanit tam";
+    d.innerHTML = `<div class="tkart plsec gkur"><div id="gkUst"></div><div id="gkGovde"></div><div class="tbtn gkalt" id="gkAlt"></div></div>`;
+    document.body.appendChild(d);
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); renderPlan(); };
+    async function gunHazirla() {
+      const p = plan(); if (!p) return kapat();
+      const kon = (p.kon || [])[gi];
+      if (!kon) { il = null; adim = "il"; return ciz(); }
+      try { il = await loadIl(kon.s); } catch (e) { toast(TL("Veriler yüklenemedi. İnternet bağlantını kontrol et.", "Couldn't load data. Check your connection.")); return kapat(); }
+      const g = p.g[gi] || [];
+      // Konum bir ilçeyse o ilçeden başla; günde durak varsa sonuncunun yakınından devam et
+      ilce = il.ilceler.findIndex((z) => z.ad === kon.ad);
+      if (g.length) { mod = "yakin"; adim = "yer"; } else if (ilce >= 0) { mod = "ilce"; adim = "yer"; } else { mod = "ilce"; adim = "ilce"; }
+      goster = 20; ciz();
+    }
+    function aday() {
+      const p = plan(), g = p.g[gi] || [], son = g[g.length - 1];
+      const genel = new Set([il.ad, "Kapadokya", ...il.ilceler.map((z) => z.ad)]);
+      const baska = new Map(); p.g.forEach((x, j) => { if (j !== gi) x.forEach((y) => baska.set(y.s + "|" + y.q, j)); });
+      const bugun = new Set(g.map((y) => y.s + "|" + y.q));
+      let r = il.yerler.filter((y) => y.lat != null && y.k !== "s" && !genel.has(y.ad) && !bugun.has(y.ilS + "|" + y.q));
+      if (mod === "ilce" && ilce >= 0) r = r.filter((y) => y.i === ilce);
+      if (mod === "yakin" && son) r = r.filter((y) => km(son, y) <= 60);
+      const merkez = son || (ilce >= 0 ? il.ilceler[ilce] : il);
+      r = r.map((y) => ({ y, uz: km(merkez, y), j: baska.get(y.ilS + "|" + y.q) }));
+      const gun = (a, b) => (a.j != null) - (b.j != null);
+      if (siraNe(son) === "yakin") r.sort((a, b) => gun(a, b) || a.uz - b.uz);
+      else r.sort((a, b) => gun(a, b) || yerPuan(b.y) - yerPuan(a.y) || a.uz - b.uz);
+      return { r, son };
+    }
+    function ciz() {
+      const p = plan(); if (!p) return kapat();
+      const g = p.g[gi] || [], son = g[g.length - 1], sonGun = gi === p.g.length - 1;
+      // Üst: gün başlığı ve bugünün durakları
+      d.querySelector("#gkUst").innerHTML = `<div class="gkbas"><b>${gunAd(gi)}${il ? " · " + esc(il.ad) : ""}</b><small>${TL(`${p.g.length} günlük planın ${gi + 1}. günü`, `Day ${gi + 1} of ${p.g.length}`)}</small></div>
+        ${g.length ? `<ol class="gkzincir">${g.map((x, i) => `<li><span>${i + 1}</span>${esc(kayitAd(x))}</li>`).join("")}</ol><button class="linkbtn gkgeri" data-k="geri">${ik("undo-2", 15)} ${TL("Son durağı geri al", "Undo last stop")}</button>` : ""}`;
+      const govde = d.querySelector("#gkGovde"), alt = d.querySelector("#gkAlt");
+      alt.innerHTML = `<button class="linkbtn" data-k="kapat">${TL("Kaydet ve çık", "Save and exit")}</button>${g.length ? `<button class="btn primary" data-k="bitir">${sonGun ? TL("Planı bitir", "Finish plan") : TL(`Günü bitir, ${gi + 2}. güne geç`, `Finish day, go to day ${gi + 2}`)}</button>` : ""}`;
+      if (adim === "il") {
+        govde.innerHTML = `<h2>${TL("Bu gün hangi şehirdesin?", "Which city is this day in?")}</h2><div class="gkiller">${IDX.iller.slice().sort((a, b) => a.ad.localeCompare(b.ad, "tr")).map((x) => `<button data-il="${x.s}">${esc(x.ad)}</button>`).join("")}</div>`;
+        return;
+      }
+      if (adim === "ilce") {
+        const sira = il.ilceler.map((z, i) => ({ z, i })).filter((x) => x.z.n > 0).sort((a, b) => (son ? km(son, a.z) - km(son, b.z) : b.z.n - a.z.n));
+        govde.innerHTML = `<h2>${son ? TL(`${esc(ekDan(kayitAd(son)))} sonra hangi ilçeye?`, `Which district after ${esc(kayitAd(son))}?`) : TL(`${esc(ekDa(il.ad))} hangi ilçeden başlayalım?`, `Which district of ${esc(il.ad)} first?`)}</h2>
+          <p>${son ? TL("Yakından uzağa sıralı. Yanında yer sayısı ve uzaklık yazıyor.", "Nearest first, with the number of places and distance.") : TL("Yanında o ilçedeki gezilecek yer sayısı yazıyor.", "The number shows how many places each district has.")}</p>
+          <div class="gkilce"><button data-ilce="-1"><b>${TL(`Tüm ${esc(il.ad)}`, `All of ${esc(il.ad)}`)}</b><small>${il.yerler.length}</small></button>${sira.map(({ z, i }) => `<button data-ilce="${i}"${i === ilce ? ' aria-pressed="true"' : ""}><b>${esc(z.ad)}</b><small>${z.n}${son ? " · " + fmt(km(son, z)) : ""}</small></button>`).join("")}</div>
+          ${son ? `<button class="morebtn gkyakinbtn" data-k="yakin">${ik("navigation", 16)} ${TL(`${esc(ekDa(kayitAd(son)))} yakınındakileri göster`, `Show places near ${esc(kayitAd(son))}`)}</button>` : ""}`;
+        return;
+      }
+      const { r } = aday();
+      const ilceAd = ilce >= 0 ? il.ilceler[ilce].ad : il.ad;
+      const baslik = son ? TL(`${esc(ekDan(kayitAd(son)))} sonra nereye?`, `Where after ${esc(kayitAd(son))}?`) : TL(`${esc(ekDa(ilceAd))} ilk durağın neresi olsun?`, `First stop in ${esc(ilceAd)}?`);
+      const sr = siraNe(son), nereden = son ? esc(ekDan(kayitAd(son))) : ilce >= 0 ? TL(`${esc(ilceAd)} merkezinden`, "") : TL(`${esc(il.ad)} merkezinden`, "");
+      const alt2 = sr === "yakin" ? TL(`${nereden} yakından uzağa sıralı.`, son ? `Nearest to ${esc(kayitAd(son))} first.` : "Nearest first.") : TL("En popüler yerler en üstte.", "Most popular places first.");
+      govde.innerHTML = `<h2>${baslik}</h2>
+        <div class="gksira" role="group" aria-label="${TL("Sıralama", "Sort")}"><span>${TL("Sırala:", "Sort:")}</span><button data-sira="yakin" aria-pressed="${sr === "yakin"}">${ik("navigation", 14)} ${TL("Yakınlık", "Distance")}</button><button data-sira="populer" aria-pressed="${sr === "populer"}">${ik("star", 14)} ${TL("Popülerlik", "Popularity")}</button></div>
+        <p>${alt2}</p>
+        <div class="chips gksec">${son ? `<button data-mod="yakin" aria-pressed="${mod === "yakin"}">${ik("navigation", 14)} ${TL("Yakınındakiler", "Nearby")}</button>` : ""}<button data-mod="ilce" aria-pressed="${mod === "ilce"}">${ik("map-pin", 14)} ${esc(ilceAd)}</button><button data-k="ilcesec">${ik("map", 14)} ${TL("Başka ilçe", "Other district")}</button></div>
+        <ul class="list plsonuc gkliste">${r.slice(0, goster).map(({ y, uz, j }, i) => `<li><button class="row plsatir gkyer" data-j="${y.j}">${thumb(y.f, y.k)}<span class="rt"><b>${y.one ? `<i class="prone">${ik("star", 12)}</i>` : ""}${esc(adi(y))}</b><small>${esc(y.ilce || il.ad)} · ${son ? TL(`${fmt(uz)} uzakta`, `${fmt(uz)} away`) : fmt(uz)}${j != null ? " · " + TL(`${j + 1}. günde var`, `in day ${j + 1}`) : ""}</small></span><span class="plek">${ik("plus", 18)}</span></button></li>`).join("") || `<li class="empty">${TL("Burada başka yer kalmadı. Başka bir ilçe seçebilirsin.", "No more places here. Try another district.")}</li>`}</ul>
+        ${r.length > goster ? `<button class="morebtn" data-k="daha">${T("Daha fazla göster")}</button>` : ""}`;
+    }
+    d.addEventListener("click", async (e) => {
+      if (e.target === d) return kapat();
+      const b = e.target.closest("button"); if (!b) return;
+      const k = b.dataset.k;
+      if (k === "kapat") { kapat(); if (plan() && planSay(plan())) toast(TL("Plan kaydedildi.", "Plan saved.")); return; }
+      if (b.dataset.il) { const x = IDX.ilBy.get(b.dataset.il); planDegis(id, (p) => { p.kon = p.kon || []; p.kon[gi] = { ad: x.ad, alt: "", s: x.s, lat: x.lat, lng: x.lng, t: "il" }; }); return gunHazirla(); }
+      if (b.dataset.ilce != null) { ilce = +b.dataset.ilce; mod = "ilce"; adim = "yer"; goster = 20; ciz(); d.querySelector(".tkart").scrollTop = 0; return; }
+      if (b.dataset.mod) { mod = b.dataset.mod; goster = 20; return ciz(); }
+      if (b.dataset.sira) { sira = b.dataset.sira; goster = 20; return ciz(); }
+      if (k === "ilcesec") { adim = "ilce"; ciz(); d.querySelector(".tkart").scrollTop = 0; return; }
+      if (k === "yakin") { mod = "yakin"; adim = "yer"; goster = 20; return ciz(); }
+      if (k === "daha") { goster += 20; return ciz(); }
+      if (k === "geri") { planDegis(id, (p) => p.g[gi].pop()); const g = plan().g[gi]; if (!g.length) mod = "ilce"; return ciz(); }
+      if (b.classList.contains("gkyer")) {
+        const y = il.yerler[+b.dataset.j]; if (!y) return;
+        let dolu = false;
+        planDegis(id, (p) => { if (p.g[gi].length >= PLAN_DURAK_UST) dolu = true; else p.g[gi].push(yerKayit(y)); });
+        if (dolu) { toast(TL(`Bir güne en fazla ${PLAN_DURAK_UST} yer eklenebilir.`, `A day can hold up to ${PLAN_DURAK_UST} places.`)); return; }
+        // Seçilen yerin ilçesi yeni varsayılan; liste artık o yerin yakınından
+        ilce = y.i; mod = "yakin"; adim = "yer"; goster = 20; ciz(); d.querySelector(".tkart").scrollTop = 0; return;
+      }
+      if (k === "bitir") {
+        const p = plan();
+        if (gi >= p.g.length - 1) { kapat(); toast(TL("Planın hazır! Her günün rotasını \"Rotayı aç\" ile haritada başlatabilirsin.", "Your plan is ready! Start each day's route with \"Open route\"."), 5000); return; }
+        gi++; await gunHazirla(); d.querySelector(".tkart").scrollTop = 0;
+      }
+    });
+    gunHazirla();
+  }
+  // Yer kartındaki "Plana ekle": plan yoksa yeni plan, varsa plan ve gün seçimi
+  function planaEkleAc(yer) {
+    const a = planlar();
+    if (!a.length) return planYeniAc(yer);
+    const d = document.createElement("div"); d.className = "tanit";
+    d.innerHTML = `<div class="tkart plsec"><div class="temo">${ik("calendar-plus", 34)}</div><h2>${TL("Hangi plana, hangi güne?", "Which plan and day?")}</h2><p>${esc(adi(yer))}</p>
+      ${a.slice(0, 5).map((p) => `<div class="plsecplan"><b>${esc(p.ad)}</b><div class="chips">${p.g.map((g, gi) => { const var_ = g.some((x) => x.s === yer.ilS && x.q === yer.q); return `<button data-id="${esc(p.id)}" data-g="${gi}" aria-pressed="${var_}">${var_ ? ik("check", 14) + " " : ""}${gunAd(gi)} <small>${g.length}</small></button>`; }).join("")}</div></div>`).join("")}
+      <div class="tbtn"><button class="linkbtn" data-k="yeni">${ik("plus", 16)} ${TL("Yeni plan", "New plan")}</button><button class="btn" data-k="kapat">${TL("Kapat", "Close")}</button></div></div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    d.addEventListener("click", (e) => {
+      if (e.target === d || e.target.closest("[data-k=kapat]")) return kapat();
+      if (e.target.closest("[data-k=yeni]")) { kapat(); return planYeniAc(yer); }
+      const b = e.target.closest("[data-id]"); if (!b) return;
+      const gi = +b.dataset.g; let sonuc = "";
+      const p = planDegis(b.dataset.id, (p) => { const g = p.g[gi], i = g.findIndex((x) => x.s === yer.ilS && x.q === yer.q); if (i >= 0) { g.splice(i, 1); sonuc = "cikti"; } else if (g.length >= PLAN_DURAK_UST) sonuc = "dolu"; else { g.push(yerKayit(yer)); sonuc = "eklendi"; } });
+      if (!p) return;
+      if (sonuc === "dolu") { toast(TL(`Bir güne en fazla ${PLAN_DURAK_UST} yer eklenebilir.`, `A day can hold up to ${PLAN_DURAK_UST} places.`)); return; }
+      kapat();
+      toast(sonuc === "eklendi" ? TL(`"${p.ad}" planının ${gi + 1}. gününe eklendi.`, `Added to day ${gi + 1} of "${p.ad}".`) : TL(`"${p.ad}" planının ${gi + 1}. gününden çıkarıldı.`, `Removed from day ${gi + 1} of "${p.ad}".`));
+    });
+    document.body.appendChild(d);
+  }
+  // ---------- v6.6 gezi haritasında önceden gittiğin yerleri işaretleme ----------
+  const ISARET_SORU = "gezi-isaret-soru";
+  let isaretAcik = false;
+  function isaretSorGoster() {
+    let sor = false; try { sor = !localStorage.getItem(ISARET_SORU); } catch (e) {}
+    $("isaretSor").innerHTML = sor && !isaretAcik ? `<div class="isor"><span class="isorik">${ik("map-pin-plus", 24)}</span><div><b>${TL("Daha önce gezdiğin yerler var mı?", "Been anywhere already?")}</b><p>${TL("Önceden gittiğin yerleri haritada işaretlemek ister misin? İle dokun, gittiğin yerleri seç; haritan ve pasaportun ona göre dolsun.", "Would you like to mark places you've already visited? Tap a province and pick the places, and your map and passport fill in.")}</p><div class="isorbtn"><button class="linkbtn" data-k="hayir">${TL("Şimdi değil", "Not now")}</button><button class="btn primary" data-k="evet">${TL("Evet, işaretleyeyim", "Yes, let's mark them")}</button></div></div></div>` : "";
+    isaretModu(isaretAcik, true);
+  }
+  function isaretModu(ac, sessiz) {
+    isaretAcik = !!ac;
+    $("gezHarita").classList.toggle("isaret", isaretAcik);
+    $("isaretBtn").classList.toggle("on", isaretAcik);
+    $("isaretBtn").querySelector("span").textContent = isaretAcik ? TL("İşaretlemeyi bitir", "Done marking") : T("Daha önce gittiğin yerleri işaretle");
+    let ipucu = $("isaretIpucu");
+    if (isaretAcik && !ipucu) { ipucu = document.createElement("p"); ipucu.id = "isaretIpucu"; ipucu.className = "iipucu"; $("gezHarita").before(ipucu); }
+    if (ipucu) { ipucu.hidden = !isaretAcik; ipucu.innerHTML = `${ik("hand-heart", 16)} ${TL("Gittiğin ile dokun, o ilde gördüğün yerleri seç.", "Tap a province you've visited and pick the places you saw.")}`; }
+    if (isaretAcik && !sessiz) { $("isaretSor").innerHTML = ""; ipucu.scrollIntoView({ behavior: "smooth", block: "start" }); }
+  }
+  async function ilIsaretAc(s) {
+    if (!IDX || !IDX.ilBy.has(s)) return;
+    let il; try { il = await loadIl(s); } catch (e) { toast(TL("Veriler yüklenemedi. İnternet bağlantını kontrol et.", "Couldn't load data. Check your connection.")); return; }
+    const genel = new Set([il.ad, ...il.ilceler.map((z) => z.ad)]);
+    const liste = il.yerler.filter((y) => !genel.has(y.ad)).slice().sort((a, b) => (b.one ? 1 : 0) - (a.one ? 1 : 0) || (b.f ? 1 : 0) - (a.f ? 1 : 0) || a.j - b.j);
+    let n = 0, goster = 30;
+    const d = document.createElement("div"); d.className = "tanit";
+    d.innerHTML = `<div class="tkart plsec"><h2>${TL(`${esc(ekDa(il.ad))} nerelere gittin?`, `Where did you go in ${esc(il.ad)}?`)}</h2><p>${TL("Gittiğin yerlere dokun. İstediğin zaman geri alabilirsin.", "Tap the places you've been. You can undo it any time.")}</p>
+      <div class="arakutu plara2"><i class="araik">${ik("search", 20)}</i><input id="isAra" type="search" placeholder="${TL(`${esc(il.ad)} içinde ara`, `Search in ${esc(il.ad)}`)}" autocomplete="off"></div>
+      <ul class="list plsonuc" id="isList"></ul><button class="morebtn" id="isMore" hidden>${T("Daha fazla göster")}</button>
+      <div class="tbtn" style="justify-content:center"><button class="btn primary" data-k="kapat">${TL("Tamam", "Done")}</button></div></div>`;
+    const yaz = () => {
+      const q = sade(d.querySelector("#isAra").value.trim());
+      const r = q.length >= 2 ? liste.filter((y) => sade(y.ad).includes(q) || sade(adi(y)).includes(q)) : liste;
+      d.querySelector("#isList").innerHTML = r.slice(0, goster).map((y) => `<li><button class="row plsatir" data-j="${y.j}" aria-pressed="${gittimMi(y)}">${thumb(y.f, y.k)}<span class="rt"><b>${esc(adi(y))}</b><small>${esc(y.ilce || il.ad)}</small></span><span class="plek gitek">${ik("circle-check", 22)}</span></button></li>`).join("") || `<li class="empty">${T("Bu isimde yer bulunamadı.")}</li>`;
+      d.querySelector("#isMore").hidden = r.length <= goster;
+    };
+    const kapat = () => {
+      d.classList.add("out"); setTimeout(() => d.remove(), 300); renderGez();
+      if (n) toast(TL(`${il.ad}: ${n} yer işaretlendi. Gezdiğin il: ${new Set(gittiklerim().map((x) => x.s)).size}/81`, `${il.ad}: ${n} place${n === 1 ? "" : "s"} marked. Provinces visited: ${new Set(gittiklerim().map((x) => x.s)).size}/81`));
+    };
+    d.querySelector("#isAra").addEventListener("input", () => { goster = 30; yaz(); });
+    d.addEventListener("click", (e) => {
+      if (e.target === d || e.target.closest("[data-k=kapat]")) return kapat();
+      if (e.target.closest("#isMore")) { goster += 30; yaz(); return; }
+      const b = e.target.closest(".plsatir"); if (!b) return;
+      const y = il.yerler[+b.dataset.j]; if (!y) return;
+      // Eski gezi: tarih yok (t: 0), böylece yılın özeti ve yıllık hedef bu yılın gezisi sanmaz
+      let a = gittiklerim(); const vardi = a.some((x) => ayni(x, y));
+      if (vardi) { a = a.filter((x) => !ayni(x, y)); n = Math.max(0, n - 1); }
+      else { a.unshift({ q: y.q, s: y.ilS, ad: y.ad, il: [...new Set([y.ilce, y.il].filter(Boolean))].join(", "), k: y.k, f: y.f, t: 0, e: 1 }); n++; }
+      try { localStorage.setItem(GIT, JSON.stringify(a)); } catch (x) {}
+      b.setAttribute("aria-pressed", !vardi);
+    });
+    document.body.appendChild(d);
+    yaz();
+  }
   // ---------- olaylar ----------
   let araZaman = null;
   function araTemizle() { $("search").value = ""; $("araSil").hidden = true; renderHome(); }
@@ -3035,7 +4427,20 @@
   $("ilAra").addEventListener("input", () => { ilAra = sade($("ilAra").value.trim()); $("ilAraSil").hidden = !ilAra; shown = 60; renderList(); drawPins(); });
   $("ilAraSil").addEventListener("click", () => { ilAraSifirla(); renderList(); drawPins(); $("ilAra").focus(); });
   $("nearBtn").addEventListener("click", () => git("#/yakin"));
+  $("favSirala").addEventListener("click", () => { favSirali = !favSirali; try { localStorage.setItem("gezi-fav-sira", favSirali ? "1" : "0"); } catch (e) {} renderFav(); });
+  $("tumIlBtn").addEventListener("click", () => { tumIl = !tumIl; renderHome(); if (!tumIl) $("ilBaslik").scrollIntoView({ block: "start" }); });
+  $("ilBolge").addEventListener("click", (e) => { const b = e.target.closest("[data-bolge]"); if (!b) return; ilBol = b.dataset.bolge; renderHome(); });
+  $("ilSira").addEventListener("click", (e) => { const b = e.target.closest("[data-sira]"); if (!b) return; ilSira = b.dataset.sira; $("ilSira").querySelectorAll("[data-sira]").forEach((x) => x.classList.toggle("on", x === b)); renderHome(); });
   $("yolBtn").addEventListener("click", () => git("#/yol"));
+  $("planBtn").addEventListener("click", () => git("#/plan"));
+  $("tarzChips").addEventListener("click", (e) => { const b = e.target.closest("[data-tarz]"); if (b && view && view.tarz) { history.replaceState(null, "", "#/tarz/" + b.dataset.tarz); showTarz(b.dataset.tarz); } });
+  $("temaMore").addEventListener("click", () => { if (view && view.tarz) { view.n = (view.n || 60) + 60; renderTema(); } });
+  $("planlar").addEventListener("click", planTik);
+  $("isaretBtn").addEventListener("click", () => isaretModu(!isaretAcik));
+  $("isaretSor").addEventListener("click", (e) => { const b = e.target.closest("[data-k]"); if (!b) return; try { localStorage.setItem(ISARET_SORU, "1"); } catch (x) {} $("isaretSor").innerHTML = ""; if (b.dataset.k === "evet") isaretModu(true); });
+  // İşaretleme açıkken haritada ile dokunmak o ilin sayfasına gitmez, gittiğin yerleri seçme penceresini açar
+  $("gezHarita").addEventListener("click", (e) => { if (!isaretAcik) return; const y = e.target.closest("path[data-go]"); if (!y) return; e.stopPropagation(); ilIsaretAc(y.dataset.go.split("/")[2]); });
+  $("dPlan").addEventListener("click", () => { if (open) planaEkleAc(open); });
   $("kacBtn").addEventListener("click", () => git("#/kacamak"));
   $("kartBtn").addEventListener("click", () => git("#/kartlar"));
   $("yeniBtn").addEventListener("click", () => yenilikler(0, true));
@@ -3166,7 +4571,7 @@
     history.replaceState(null, "", `#/il/${view.d.s}${b.dataset.tab === "ilce" ? "/ilceler" : ""}`);
     setTab(b.dataset.tab);
   });
-  $("chips").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; cat = b.dataset.k; shown = 60; fitted = false; renderChips(); renderList(); drawPins(); });
+  $("chips").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; if (b.dataset.k === "daha") { turAcik = true; renderChips(); return; } cat = b.dataset.k; shown = 60; fitted = false; renderChips(); renderList(); drawPins(); });
   $("sortSeg").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; sortMode = b.dataset.s; renderSort(); renderList(); });
   $("moreBtn").addEventListener("click", () => { shown += 60; renderList(); });
   $("list").addEventListener("click", (e) => {
@@ -3218,6 +4623,24 @@
   });
   document.querySelectorAll(".onerbtn").forEach((b) => b.addEventListener("click", yerOner));
   $("dDinle").addEventListener("click", dinle);
+  function ilgiSifirla() { try { localStorage.removeItem(ILGI); } catch (e) {} sanaOzel(); toast(TL("Sana özel öneriler sıfırlandı.", "Your picks have been reset.")); }
+  $("ilgiSil").addEventListener("click", ilgiSifirla);
+  $("ozelNedenBtn").addEventListener("click", () => {
+    const d = document.createElement("div"); d.className = "tanit";
+    d.innerHTML = `<div class="tkart"><div class="temo">${ik("sparkles", 34)}</div><h2>${TL("Bu öneriler nereden geliyor?", "Where do these picks come from?")}</h2>
+      <p>${TL("Gezdiğin, plana koyduğun, listene eklediğin ve ilgiyle baktığın yerlere bakıyoruz: sayfada durman, sonuna kadar okuman, Dinle'ye ya da yol tarifine basman. Eski ilgiler zamanla azalır, öneriler hep taze kalır.", "We look at places you've visited, planned, saved and spent time on: reading to the end, tapping Listen or directions. Old interests fade over time, so picks stay fresh.")}</p>
+      <p>${TL("Bu bilgi sadece senin telefonunda durur, hiçbir yere gönderilmez.", "This stays on your phone only and is never sent anywhere.")}</p>
+      <div class="tbtn"><button class="linkbtn" data-k="sil">${ik("refresh-cw", 16)} ${TL("Sıfırla", "Reset")}</button><button class="btn" data-k="kapat">${TL("Tamam", "OK")}</button></div></div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    d.addEventListener("click", (e) => { if (e.target === d || e.target.closest("[data-k=kapat]")) kapat(); else if (e.target.closest("[data-k=sil]")) { kapat(); ilgiSifirla(); } });
+    document.body.appendChild(d);
+  });
+  $("dDinle").addEventListener("click", () => ilgiEkle(open, "dinle", 2));
+  $("dDir").addEventListener("click", () => ilgiEkle(open, "yol", 3));
+  $("dShare").addEventListener("click", () => ilgiEkle(open, "paylas", 3));
+  // Yer sayfasını sonuna kadar kaydırdıysa: okudu
+  $("sheet").querySelector(".card").addEventListener("scroll", (e) => { const c = e.currentTarget; if (open && c.scrollTop > 200 && c.scrollTop + c.clientHeight >= c.scrollHeight - 60) ilgiEkle(open, "son", 2); }, { passive: true });
+  $("sesBtn").addEventListener("click", sesAyarAc);
   $("gezBtn").addEventListener("click", () => { $("gezList").hidden = !$("gezList").hidden; });
   $("karneBtn").addEventListener("click", karne);
   $("ozetBtn").addEventListener("click", () => yilOzeti());
@@ -3270,6 +4693,7 @@
   if (CapApp && CapApp.addListener) {
     let cikisZamani = 0;
     CapApp.addListener("backButton", (e) => {
+      if (GM) { gmKapat(); return; }
       const modal = document.querySelector(".tanit");
       if (modal) { const k = modal.querySelector('[data-t="gec"],[data-k="kapat"],[data-k="sonra"],[data-k="iptal"]'); if (k) k.click(); else modal.remove(); return; }
       if (!$("sheet").hidden) { closeDetail(); return; }
@@ -3279,6 +4703,17 @@
       if (Date.now() - cikisZamani < 2000) { CapApp.exitApp(); return; }
       cikisZamani = Date.now(); toast(T("Çıkmak için tekrar geri bas"));
     });
+  }
+  // ---------- paylaşılan Rota Cepte linki uygulamada açılınca aynı sayfaya git (Android App Links) ----------
+  if (CapApp && CapApp.addListener) {
+    const linkAc = (u) => {
+      try {
+        const x = new URL(u);
+        if (x.hostname === "me7rt.github.io" && x.pathname.indexOf("/Rota-Cepte") === 0 && PAYLASIM_YOLU.test(x.hash)) git(x.hash);
+      } catch (e) { /* tanınmayan link: ana sayfada kal */ }
+    };
+    CapApp.addListener("appUrlOpen", (e) => { if (e && e.url) linkAc(e.url); });
+    if (CapApp.getLaunchUrl) CapApp.getLaunchUrl().then((r) => { if (r && r.url) linkAc(r.url); }).catch(() => {});
   }
   // ---------- hafta sonu önerisi: her Cuma 18:00'de telefonda hazırlanan yerel bildirim (yalnızca uygulamada) ----------
   const LN = window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() !== "web" && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications;
@@ -3336,7 +4771,8 @@
     bildirimYazi(); await haftaSonuKur();
     toast(ac ? TL("Tamam! Her Cuma 18:00'de hafta sonu için 3 öneri gelecek.", "Done! Every Friday at 6 pm you'll get 3 weekend ideas.") : TL("Hafta sonu önerisi kapatıldı.", "Weekend ideas turned off."));
   }
-  // Listeye ilk yer eklendiğinde bir kez sorulur; "Şimdi değil" denirse bir daha sorulmaz (ayarlardan açılabilir)
+  // Listeye ilk yer eklendiğinde ya da uygulamanın 3. açılışında bir kez sorulur; "Şimdi değil" denirse bir daha sorulmaz (ayarlardan açılabilir)
+  let soruGosterildi = false;
   function bildirimTeklif() {
     if (!LN || document.querySelector(".tanit")) return;
     try { if (localStorage.getItem(BILDIRIM) != null) return; } catch (e) { return; }
@@ -3350,6 +4786,11 @@
     });
     document.body.appendChild(d);
   }
+  // Listeye hiç yer eklemeyenler de haftalık öneriyi duysun: 3. açılıştan itibaren, ana sayfadayken ve o açılışta başka bir soru sorulmadıysa
+  setTimeout(() => {
+    let n = 0; try { n = (JSON.parse(localStorage.getItem("gezi-puan")) || {}).n || 0; } catch (e) { return; }
+    if (n >= 3 && !soruGosterildi && !(location.hash && location.hash !== "#/")) bildirimTeklif();
+  }, 12000);
   // ---------- 10 Kasım anma bildirimi: saat 09.05'te, saygı duruşu anında (telefonda kurulur, hiçbir bilgi bize gelmez) ----------
   const ANMA = "gezi-anma", ANMA_SORU = "gezi-anma-soru", ANMA_ID = 7100;
   const anmaAcik = () => { try { return localStorage.getItem(ANMA) !== "0"; } catch (e) { return true; } };
@@ -3401,6 +4842,7 @@
     try { if ((await LN.checkPermissions()).display === "granted") return; } catch (e) { return; }
     if (document.querySelector(".tanit") || (location.hash && location.hash !== "#/")) return;
     try { localStorage.setItem(ANMA_SORU, "1"); } catch (e) {}
+    soruGosterildi = true;
     const d = document.createElement("div"); d.className = "tanit";
     d.innerHTML = `<div class="tkart"><div class="temo">${ik("bell", 36)}</div><h2>${TL("10 Kasım'da hatırlatalım mı?", "Remind you on 10 November?")}</h2><p>${TL("Atatürk'ü anmak için 10 Kasım sabahı saat 09.05'te, saygı duruşu anında telefonuna bir bildirim gelsin. Bildirim telefonunda kurulur, hiçbir bilgi bize gelmez.", "Get a notification at 9:05 am on 10 November, the minute of silence for Atatürk. It's set up on your phone and nothing is sent to us.")}</p><div class="tbtn"><button class="linkbtn" data-k="sonra">${TL("Şimdi değil", "Not now")}</button><button class="btn primary" data-k="evet">${TL("Evet, hatırlat", "Yes, remind me")}</button></div></div>`;
     const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };

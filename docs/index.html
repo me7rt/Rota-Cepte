@@ -21,7 +21,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="vendor/leaflet.css">
 <link rel="preload" href="vendor/font/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=6.5.1">
+<link rel="stylesheet" href="style.css?v=6.6">
 <style>
 /* Açılış ekranı v6.2: koyu lacivert zemin + yavaş kayan ışık bulutları, Türkiye nokta haritası,
    ışıklı rota ve iğne, uygulama simgesi + yazı, sayan rakamlar, alt kısımda yükleme çizgisi */
@@ -118,62 +118,66 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
     <h1 id="title">Rotan nereye?</h1>
   </div>
   <button class="kure" id="dilHizli" aria-label="Dil / Language"><svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><defs><radialGradient id="kuG" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#5cc4f2"/><stop offset=".55" stop-color="#1f74c4"/><stop offset="1" stop-color="#0c2f73"/></radialGradient><radialGradient id="kuK" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#a8d86a"/><stop offset=".5" stop-color="#5a9a3c"/><stop offset="1" stop-color="#2f5a24"/></radialGradient><radialGradient id="kuS" cx="30%" cy="26%" r="85%"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#020a24" stop-opacity=".55"/></radialGradient><radialGradient id="kuP" cx="33%" cy="27%" r="28%"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><clipPath id="kuC"><circle cx="16" cy="16" r="14"/></clipPath></defs><circle cx="16" cy="16" r="14" fill="url(#kuG)"/><g clip-path="url(#kuC)" fill="url(#kuK)"><path d="M9.5 13C9.8 11 11 9.4 12.6 8.6C14 8 15.5 8.4 16.5 7.6C18 7 20 7.4 21.5 8.2C22.6 9 22.4 10.4 21.4 11C20 11.6 18.6 11.2 17.6 12L16.2 13.6C15 13 13.6 12.8 12.6 13.6C11.6 14 10.2 13.8 9.5 13Z"/><path d="M17.4 13.2C18.6 12.6 20.4 12.6 21.6 13C21.8 13.8 21 14.4 19.8 14.4C18.8 14.4 17.8 14.2 17.4 13.2Z"/><path d="M9 15.5C11 14.8 14 15 16 15.6C17.2 16.4 18.5 16.8 19.6 17.6C19.8 19 19 20.5 18 21.8C17.2 23.5 16.6 25.5 15.4 27C14.6 27.6 13.8 27.2 13.5 26C13 24 12.6 22 11.6 20.8C10.2 20.3 8.8 19.5 8.4 18C8.2 16.8 8.4 16 9 15.5Z"/><path d="M20.4 16.4C22 16 23.6 16.8 24.4 18.2C24.6 19.6 23.6 20.8 22.4 21.4C21.4 20.4 20.6 18.4 20.4 16.4Z"/><path d="M19.6 23.6C20.1 23.3 20.5 23.8 20.3 24.5C20.1 25.3 19.6 25.8 19.3 25.3C19.2 24.7 19.3 24 19.6 23.6Z"/></g><circle cx="16" cy="16" r="14" fill="url(#kuS)"/><circle cx="16" cy="16" r="14" fill="url(#kuP)"/><circle cx="16" cy="16" r="13.7" fill="none" stroke="#9fdcff" stroke-opacity=".5" stroke-width=".7"/></svg><span class="dilkod" aria-hidden="true">TR</span></button>
-  <button class="loc" id="locBtn" aria-label="Konumumu kullan"><i class="locik"></i><span id="locText">Konum kapalı</span></button>
+  <button class="loc" id="locBtn" aria-label="Konumumu kullan"><i class="locik"></i><span id="locText">Konumu aç</span></button>
 </header>
 
 <main id="home" class="view">
-  <div class="arakutu"><i class="araik" data-ik="search"></i><input id="search" type="search" placeholder="İl, ilçe ya da yer ara… (ör. Uşak)" aria-label="Ara" autocomplete="off" enterkeyhint="search"><button class="arasil" id="araSil" aria-label="Aramayı temizle" hidden><i data-ik="x" data-boy="18"></i></button></div>
+  <div class="arakutu"><i class="araik" data-ik="search"></i><input id="search" type="search" placeholder="İl, ilçe ya da yer ara: Efes, Nemrut…" aria-label="Ara" autocomplete="off" enterkeyhint="search"><button class="arasil" id="araSil" aria-label="Aramayı temizle" hidden><i data-ik="x" data-boy="18"></i></button></div>
   <ul class="list" id="results" hidden></ul>
   <div id="homeMain">
+    <div class="parkev" id="parkHome"></div>
+    <div id="gmKart"></div>
     <div class="ozelgun" id="ozelGun" hidden></div>
-    <button class="near" id="nearBtn">
+    <button class="near" id="nearBtn" hidden>
       <span class="nearik"><i data-ik="navigation" data-boy="22"></i></span>
       <span class="neartxt"><b>Yakınımdaki yerler</b>
       <small id="nearSub">Konumunu aç, sana en yakın gezilecek yerleri sıralayalım</small></span>
       <i class="nearok" data-ik="chevron-right"></i>
     </button>
-    <button class="near yolbtn" id="yolBtn">
-      <span class="nearik"><i data-ik="car-front" data-boy="22"></i></span>
-      <span class="neartxt"><b>Yol üstü keşif</b>
-      <small>Yola mı çıkıyorsun? İki il seç, yol boyunca mola yerlerini bulalım</small></span>
-      <i class="nearok" data-ik="chevron-right"></i>
-    </button>
-    <div class="ikili">
-      <button class="mini" id="kartBtn"><span class="miniik"><i data-ik="shuffle" data-boy="22"></i></span><b>Nereye gitsem?</b><small>Kartları kaydır, beğendiğini listene at</small></button>
-      <button class="mini" id="kacBtn"><span class="miniik"><i data-ik="calendar-days" data-boy="22"></i></span><b>Hafta sonu kaçamağı</b><small>Arabayla birkaç saatlik iller</small></button>
+    <div class="ikili arac">
+      <button class="mini" id="yolBtn"><span class="miniik"><i data-ik="car-front" data-boy="22"></i></span><b>Yol üstü keşif</b></button>
+      <button class="mini" id="planBtn"><span class="miniik"><i data-ik="calendar-plus" data-boy="22"></i></span><b>Tatilini planla</b><small id="planSub"></small></button>
+      <button class="mini" id="kartBtn"><span class="miniik"><i data-ik="shuffle" data-boy="22"></i></span><b>Nereye gitsem?</b></button>
+      <button class="mini" id="kacBtn"><span class="miniik"><i data-ik="calendar-days" data-boy="22"></i></span><b>Hafta sonu kaçamağı</b></button>
     </div>
-    <button class="near yolbtn oyunbtn" id="oyunBtn">
-      <span class="nearik"><i data-ik="binoculars" data-boy="22"></i></span>
-      <span class="neartxt"><b>Hangi ilde?</b>
-      <small id="oyunSub">Fotoğrafa bak, ili tahmin et</small></span>
-      <i class="nearok" data-ik="chevron-right"></i>
-    </button>
+    <section class="tarzsec"><h2 class="sec">Nasıl bir gezi istiyorsun?</h2><div class="tarzlar" id="tarzlar"></div></section>
+    <button class="mkbox" id="mkBtn" hidden><span class="mkcoin" id="mkCoin"></span><span class="mktxt"><b>MüzeKart</b><small id="mkSub"></small><i class="mkbar"><i id="mkBar"></i></i></span><i data-ik="chevron-right"></i></button>
     <div id="gunun"></div>
-    <section class="ozel" id="ozelSec" hidden><div class="ozbas"><span class="ozik"><i data-ik="sparkles" data-boy="20"></i></span><span class="oztxt"><b>Sana özel</b><small id="ozelNeden"></small></span></div><div class="ozkartlar" id="ozelKart"></div></section>
+    <section class="ozel" id="ozelSec" hidden><div class="ozbas"><span class="ozik"><i data-ik="sparkles" data-boy="20"></i></span><span class="oztxt"><b>Sana özel</b><small id="ozelNeden"></small></span></div><div class="ozkartlar" id="ozelKart"></div><button class="linkbtn ozneden" id="ozelNedenBtn"><i data-ik="info" data-boy="16"></i> Neden bunlar?</button></section>
     <div id="pasOzet" hidden></div>
     <section class="kesfet"><h2 class="sec">Keşfet</h2><div class="mevsim" id="mevsim"></div><div class="tchips" id="temaChips"></div></section>
     <section id="rotaSec" hidden><h2 class="sec">Hazır rotalar</h2><div class="rkartlar" id="rotaKart"></div></section>
-    <h2 class="sec">81 il</h2>
-    <ul class="ils" id="ilGrid"><li class="empty">Yükleniyor…</li></ul>
+    <h2 class="sec" id="ilBaslik">Öne çıkan iller</h2>
+    <div class="ilsira" id="ilSira" hidden><button class="chip on" data-sira="az">A–Z</button><button class="chip" data-sira="plaka">Plaka</button></div>
+    <div class="ilsira ilbolge" id="ilBolge" role="group" aria-label="Bölge" hidden></div>
+    <ul class="ils yatay" id="ilGrid"><li class="empty">Yükleniyor…</li></ul>
+    <button class="tumil" id="tumIlBtn">Tüm iller (81)</button>
   </div>
   <div class="grup">
     <button class="grow onerbtn"><i data-ik="map-pin-plus"></i><span>Burada olmayan bir yer mi biliyorsun? <b>Öner</b></span></button>
+    <button class="grow" id="kocEn" data-go="#/kultur" hidden><i data-ik="sparkles"></i><span><b>Culture coach</b><small>Mosques, tea, tipping, bargaining, Ramadan</small></span></button>
     <button class="grow" id="paylasBtn"><i data-ik="share-2"></i><span>Rota Cepte'yi arkadaşlarına öner</span></button>
+    <details class="ayarlar"><summary class="grow"><i data-ik="settings"></i><span><b>Ayarlar ve hakkında</b><small>Dil, tema, sürüm, gizlilik, lisanslar</small></span></summary>
+    <button class="grow" data-go="#/acil"><i data-ik="shield-plus"></i><span><b>Acil yardım</b><small>112, konumum, en yakın hastane ve eczane</small></span></button>
+    <button class="grow" data-go="#/kultur"><i data-ik="sparkles"></i><span><b>Kültür koçu</b><small>Cami, çay, bahşiş, pazarlık, Ramazan</small></span></button>
+    <button class="grow" id="ilgiSil"><i data-ik="refresh-cw"></i><span><b>Sana özel önerileri sıfırla</b><small>Baktığın yerlerden öğrendiklerini siler. Listen, gezdiklerin ve planların kalır.</small></span></button>
     <button class="grow" id="yeniBtn"><i data-ik="sparkles"></i><span>Bu sürümde neler yeni?</span></button>
     <button class="grow" id="dilBtn"><i data-ik="languages"></i><span id="dilYazi"></span></button>
+    <button class="grow" id="sesBtn"><i data-ik="headphones"></i><span>Sesli rehber</span></button>
     <button class="grow" id="temaBtn"><i data-ik="palette"></i><span id="temaYazi"></span></button>
     <button class="grow" id="bildirimBtn" hidden><i data-ik="bell"></i><span id="bildirimYazi"></span></button>
     <button class="grow" id="anmaBtn" hidden><i data-ik="bell"></i><span id="anmaYazi"></span></button>
     <a class="grow" href="gizlilik.html"><i data-ik="shield-check"></i><span>Gizlilik</span></a>
     <a class="grow" href="lisanslar.html"><i data-ik="copyright"></i><span>Kaynaklar ve lisanslar</span></a>
     <a class="grow" href="kosullar.html"><i data-ik="scale"></i><span>Kullanım koşulları</span></a>
+    </details>
   </div>
   <p class="credit" id="ver"></p>
   <p class="credit">Hazırlayan: <b>Mert Turanlıoğlu</b><br>© 2026 Mert Turanlıoğlu · Tüm hakları saklıdır<br>Fotoğraflar ve Vikipedi metinleri kendi lisanslarıyla kullanılır.</p>
 </main>
 
 <main id="listem" class="view" hidden>
-  <section id="favSec"><ul class="list" id="favList"></ul><a class="btn primary rotaac favrota" id="favRota" target="_blank" rel="noopener" hidden></a><button class="btn favpay" id="favPay"><i data-ik="share-2" data-boy="18"></i> <span>Listeyi linkle paylaş</span></button></section>
+  <section id="favSec"><button class="favsira" id="favSirala" hidden></button><ul class="list" id="favList"></ul><a class="btn primary rotaac favrota" id="favRota" target="_blank" rel="noopener" hidden></a><button class="btn favpay" id="favPay"><i data-ik="share-2" data-boy="18"></i> <span>Listeyi linkle paylaş</span></button></section>
   <div class="bos" id="favBos" hidden><span class="bosik"><i data-ik="heart" data-boy="30"></i></span><b>Listen henüz boş</b><p>Bir yerin sayfasında kalbe dokun, gitmek istediğin yerler burada toplansın. 2 yer ekleyince senin için rota da çizeriz.</p><a class="btn primary" href="#/">Yerleri keşfet</a></div>
 </main>
 
@@ -222,10 +226,18 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
 </main>
 
 <main id="tema" class="view" hidden>
+  <div class="chips tarzchips" id="tarzChips" role="group" aria-label="Gezi türü" hidden></div>
   <button class="loc tkonum" id="temaLoc"><i data-ik="locate-fixed" data-boy="18"></i> Yakından uzağa sırala</button>
   <p class="tsay" id="temaSay"></p>
   <ul class="list" id="temaList"></ul>
+  <button class="morebtn" id="temaMore" hidden>Daha fazla göster</button>
 </main>
+
+<main id="planlar" class="view" hidden></main>
+<main id="muzekart" class="view mkview" hidden></main>
+<main id="acil" class="view acilv" hidden></main>
+<main id="kultur" class="view acilv" hidden></main>
+<main id="festival" class="view acilv" hidden></main>
 
 <main id="rota" class="view" hidden>
   <p class="rnot" id="rotaNot"></p>
@@ -253,7 +265,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
 </main>
 
 <main id="rozet" class="view" hidden>
-  <section id="gezSec" class="gez" hidden><div class="harita" id="gezHarita"></div><button class="gezbtn" id="gezBtn"><span class="gezust"><b id="gezSay"></b><small id="gezAlt"></small></span><span class="bar"><i id="gezBar"></i></span></button><ul class="list" id="gezList" hidden></ul><button class="btn primary karnebtn" id="karneBtn" hidden><i data-ik="camera" data-boy="18"></i> Gezi karnemi paylaş</button><button class="btn karnebtn ozetbtn" id="ozetBtn" hidden><i data-ik="sparkles" data-boy="18"></i> <span></span></button></section>
+  <section id="gezSec" class="gez" hidden><div id="isaretSor"></div><div class="harita" id="gezHarita"></div><button class="isaretbtn" id="isaretBtn"><i data-ik="map-pin-plus" data-boy="18"></i> <span>Daha önce gittiğin yerleri işaretle</span></button><button class="gezbtn" id="gezBtn"><span class="gezust"><b id="gezSay"></b><small id="gezAlt"></small></span><span class="bar"><i id="gezBar"></i></span></button><ul class="list" id="gezList" hidden></ul><button class="btn primary karnebtn" id="karneBtn" hidden><i data-ik="camera" data-boy="18"></i> Gezi karnemi paylaş</button><button class="btn karnebtn ozetbtn" id="ozetBtn" hidden><i data-ik="sparkles" data-boy="18"></i> <span></span></button></section>
   <section class="sevsec" id="sevSec" hidden><span class="hbas" id="sevBas"><i data-ik="star" data-boy="20"></i> En sevdiğin yerler</span><ul class="list sevlist" id="sevList"></ul><p class="sevipucu" id="sevIpucu" hidden><i data-ik="star" data-boy="16"></i> Gittiğin yerlere yıldız ver, en sevdiklerin burada toplansın.</p></section>
   <section class="hedef" id="hedefSec" aria-live="polite"></section>
   <section class="pasaport" id="pasSec">
@@ -263,6 +275,12 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
     <div id="pasSira"></div>
     <button class="btn primary ppay" id="pasPay" hidden><i data-ik="share-2" data-boy="18"></i> Pasaportumu paylaş</button>
   </section>
+  <button class="near yolbtn oyunbtn" id="oyunBtn">
+    <span class="nearik"><i data-ik="binoculars" data-boy="22"></i></span>
+    <span class="neartxt"><b>Hangi ilde?</b>
+    <small id="oyunSub">Fotoğrafa bak, ili tahmin et</small></span>
+    <i class="nearok" data-ik="chevron-right"></i>
+  </button>
   <h2 class="sec">Rozetler</h2>
   <p class="tsay">Kazandığın rozetler: <b id="rozetSay"></b>. Bir yerin sayfasında "Buraya gittim" dedikçe yenileri açılır.</p>
   <button class="gezbtn rozetbtn" id="rozetBtn" hidden></button>
@@ -280,6 +298,7 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
     <small class="lisans" id="heroLis" hidden></small>
     <div class="hava" id="hava" hidden></div>
     <section class="yemek" id="yemek" hidden></section>
+    <section class="yemek ilfest" id="ilFest" hidden></section>
     <button class="ildamga" id="ilDamga" hidden></button>
   </section>
   <section class="plan" id="plan" hidden></section>
@@ -288,7 +307,8 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
     <button role="tab" data-tab="ilce" id="tabBtnIlce">İlçeler</button>
   </div>
   <div id="tabYer">
-    <div id="map" class="map"></div>
+    <button class="acilpill" id="acilPill" data-go="#/acil" hidden><i data-ik="shield-plus" data-boy="16"></i> Acil yardım</button>
+    <div class="mapkap"><div id="map" class="map"></div><div class="parkbar" id="parkBar"></div></div>
     <div class="chips" id="chips" role="group" aria-label="Kategori"></div>
     <div class="arakutu ilarakutu"><i class="araik" data-ik="search"></i><input id="ilAra" type="search" placeholder="Bu ilde yer ara… (ör. kale, şelale)" aria-label="Bu ilde yer ara" autocomplete="off" enterkeyhint="search"><button id="ilAraSil" class="arasil" aria-label="Aramayı temizle" hidden><i data-ik="x" data-boy="18"></i></button></div>
     <div class="sort"><span id="count"></span><span class="seg" id="sortSeg"></span></div>
@@ -330,10 +350,12 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
       </div>
       <div class="eylem">
         <button class="ey gittim" id="dGit"><i data-ik="circle-check" data-boy="22"></i><span>Buraya gittim</span></button>
+        <button class="ey" id="dPlan"><i data-ik="calendar-plus" data-boy="22"></i><span>Plana ekle</span></button>
         <button class="ey" id="dDinle"><i data-ik="volume-2" data-boy="22"></i><span>Dinle</span></button>
         <button class="ey share" id="dShare"><i data-ik="share-2" data-boy="22"></i><span>Gönder</span></button>
       </div>
       <div class="gnot" id="dNot" hidden></div>
+      <div id="dKoc" hidden></div>
       <div class="tip" id="dTip" hidden></div>
       <p id="dText" class="text"></p>
       <a class="more" id="dWiki" target="_blank" rel="noopener">Vikipedi'de devamını oku</a>
@@ -348,9 +370,9 @@ html.sp-hizli .splash *{animation:none!important;opacity:1!important;stroke-dash
 </div>
 
 <script src="vendor/leaflet.js"></script>
-<script src="vendor/lucide.js?v=6.5.1"></script>
-<script src="i18n.js?v=6.5.1"></script>
-<script src="app.js?v=6.5.1"></script>
+<script src="vendor/lucide.js?v=6.6"></script>
+<script src="i18n.js?v=6.6"></script>
+<script src="app.js?v=6.6"></script>
 <script>
 /* Açılış ekranı ve kopya uyarısı · © 2026 Mert Turanlıoğlu */
 (function () {

@@ -6,6 +6,10 @@
   try { dil = localStorage.getItem("gezi-dil") || ""; } catch (e) {}
   if (dil !== "tr" && dil !== "en") dil = /^tr/i.test(navigator.language || "tr") ? "tr" : "en";
   const EN = {
+    // v6.6
+    "Tatilini planla": "Plan your holiday", "Gün gün kendi rotanı yap, gideceğin yerleri sen seç": "Build your own day-by-day route and pick the places yourself",
+    "Nasıl bir gezi istiyorsun?": "What kind of trip?", "Gezi türü": "Trip type",
+    "Daha önce gittiğin yerleri işaretle": "Mark places you've been before", "Plana ekle": "Add to plan", "Tatil planı": "Holiday plan", "Tatil planlarım": "My holiday plans",
     // v6.5
     "Sana özel": "Picked for you", "En sevdiğin yerler": "Your favourite places",
     "Gittiğin yerlere yıldız ver, en sevdiklerin burada toplansın.": "Rate the places you've visited and your favourites will gather here.",
@@ -42,9 +46,13 @@
     "© 2026 Mert Turanlıoğlu · Tüm hakları saklıdır": "© 2026 Mert Turanlıoğlu · All rights reserved",
     "Fotoğraflar ve Vikipedi metinleri kendi lisanslarıyla kullanılır.": "Photos and Wikipedia texts are used under their own licenses.",
     "Geri": "Back", "Rotan nereye?": "Where to?",
-    "Konumumu kullan": "Use my location", "Konum kapalı": "Location off", "Konum açık": "Location on", "Konum aranıyor…": "Finding location…",
+    "Konumumu kullan": "Use my location", "Konum kapalı": "Location off", "Konumu aç": "Turn on location", "Konum açık": "Location on", "Konum aranıyor…": "Finding location…",
     // ana sayfa
     "İl, ilçe ya da yer ara… (ör. Uşak)": "Search a province, district or place… (e.g. Cappadocia)",
+    "Şehir, müze, plaj, antik kent ara…": "Search a city, museum, beach, ancient site…",
+    "İl, ilçe ya da yer ara: Efes, Nemrut…": "Search a province, town or place: Ephesus, Nemrut…", "Bölge": "Region", "Tümü": "All", "Acil yardım": "Emergency help", "Kültür koçu": "Culture coach", "Neden bunlar?": "Why these?", "Sana özel önerileri sıfırla": "Reset your picks", "Baktığın yerlerden öğrendiklerini siler. Listen, gezdiklerin ve planların kalır.": "Clears what the app learned from the places you viewed. Your list, visits and plans stay.", "Cami, çay, bahşiş, pazarlık, Ramazan": "Mosques, tea, tipping, bargaining, Ramadan", "112, konumum, en yakın hastane ve eczane": "112, my location, nearest hospital and pharmacy",
+    "Öne çıkan iller": "Featured provinces", "Tüm iller (81)": "All provinces (81)", "Tüm iller": "All provinces", "Daha az göster": "Show less", "Plaka": "Plate no.",
+    "Ayarlar ve hakkında": "Settings and about", "Sesli rehber": "Audio guide", "Dil, tema, sürüm, gizlilik, lisanslar": "Language, theme, version, privacy, licences",
     "Aramayı temizle": "Clear search",
     "Yakınımdaki yerler": "Places near me",
     "Konumunu aç, sana en yakın gezilecek yerleri sıralayalım": "Turn on location to see the nearest places to visit",
