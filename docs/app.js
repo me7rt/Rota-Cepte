@@ -216,6 +216,7 @@
       if (view && view.mode === "kacamak") renderKacamak();
       if (!$("listem").hidden) renderFav();
       if (!$("home").hidden && $("search").value.trim().length >= 2) renderHome();
+      if (DIL === "en" && !$("home").hidden) gmKart();
     }).catch(() => { araSoz = null; });
     return araSoz;
   }
@@ -380,6 +381,12 @@
     }
   }
   const git = (h) => { if (location.hash === h) route(); else location.hash = h; };
+  async function yerUstte(s, q, h) {
+    try {
+      const d = await loadIl(s), p = d.yerler.find((y) => y.q === q);
+      if (p) openDetail(p); else git(h);
+    } catch (e) { git(h); }
+  }
 
   // ---------- ana sayfa ----------
   function showHome() {
@@ -3091,6 +3098,8 @@
       el.innerHTML = `<button class="ea" data-gm="etraf"><span class="halka"></span><span class="eq">${[14, 26, 36, 22, 30, 16].map((h) => `<i style="height:${h}px"></i>`).join("")}</span><span class="eat"><b>${TL("Etrafımı anlat", "Tell me what's around")}</b><small>${TL("Yürü, yaklaştığın yerleri sesli anlatsın", "Walk, and hear about places as you get near")}</small></span><span class="eabas">${TL("Başlat", "Start")}</span></button>`;
       return;
     }
+    // İngilizce adlar arama listesinden gelir; liste henüz yüklenmediyse yüklenince kart yeniden çizilir
+    if (DIL === "en" && !ARA && IDX) loadAra();
     const x = e.g[e.sira], kon = (e.p.kon || [])[e.gi], src = foto(x.f, 960), mes = me ? km(me, x) : null;
     const yuru = mes != null && mes < 5 ? ` · ${Math.max(1, Math.round((mes * 1000) / 80))} ${TL("dk yürüme", "min walk")}` : "";
     const nok = e.g.map((y, i) => (i ? `<s class="${i <= e.gez ? "ok" : ""}"></s>` : "") + `<i class="${i < e.sira || gittiklerim().some((z) => z.q === y.q) ? "ok" : i === e.sira ? "su" : ""}"></i>`).join("");
@@ -3859,7 +3868,9 @@
     $("dText").textContent = txt;
     const q = `${p.lat},${p.lng}`;
     const hedef = p.gq ? encodeURIComponent(p.gq) : q;
-    $("dMap").href = `https://www.google.com/maps/search/?api=1&query=${hedef}`;
+    // Haritada aç: iğne her zaman koordinatta; Android'de yer adı iğnenin etiketi olur
+    const etiket = adi(p).replace(/[()]/g, " ").replace(/\s+/g, " ").trim();
+    $("dMap").href = ANDROID ? `geo:${q}?q=${q}(${encodeURIComponent(etiket)})` : `https://www.google.com/maps/search/?api=1&query=${q}`;
     $("dDir").href = `https://www.google.com/maps/dir/?api=1&destination=${hedef}`;
     // Müze ve tarihi yerlerde güncel ziyaret saatleri ve giriş ücreti (bilgiyi biz tutmuyoruz, her zaman güncel kaynağa gider)
     const saat = p.k === "m" || p.k === "t" ? `<a class="ykn" target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent(`${p.ad} ${p.il} ${TL("ziyaret saatleri giriş ücreti", "opening hours ticket price")}`)}">${ik("clock", 16)} ${TL("Saatler ve giriş ücreti", "Hours & tickets")}</a>` : "";
@@ -4420,7 +4431,13 @@
   $("search").addEventListener("focus", () => { if (IDX) loadAra(); });
   document.addEventListener("click", (e) => {
     const b = e.target.closest("[data-go]");
-    if (b) { git(b.dataset.go); return; }
+    if (b) {
+      // Listeden bir yere girince sayfa değişmez: yer penceresi listenin üstünde açılır,
+      // kapatınca liste kaldığı kaydırma konumunda ve aynı filtrelerle durur.
+      const m = /^#\/il\/([^/]+)\/yer\/([^/]+)$/.exec(b.dataset.go);
+      if (m && view && IDX && IDX.ilBy.has(m[1])) { yerUstte(m[1], decodeURIComponent(m[2]), b.dataset.go); return; }
+      git(b.dataset.go); return;
+    }
     const y = e.target.closest("[data-yer]");
     if (y) { const [s, j] = y.dataset.yer.split("|"); bekleyenYer = { s, j: +j }; git(`#/il/${s}`); }
   });
