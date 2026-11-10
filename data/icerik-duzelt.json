@@ -7,7 +7,10 @@
   "il": "Wikidata no -> doğru il (slug), Wikidata'daki il yanlışsa",
   "en": "Wikidata no -> İngilizce Vikipedi metni olmayan yerin Türkçe Vikipedi özetinin İngilizce çevirisi (kısaltılmış; uygulamada 'Text: translated from Turkish Wikipedia' yazar)",
   "ilce": "Wikidata no -> resmî ilçe adı (yerin koordinatı geoBoundaries ilçe sınırı ve OpenStreetMap ile doğrulandı, 2026-11-04)",
-  "ilce_koor": "\"İl/İlçe\" -> [enlem, boylam] ilçe merkezi; Wikidata koordinatı ilçe sınırı dışında kalanlar için OpenStreetMap ilçe merkezi, geoBoundaries sınırıyla doğrulandı (2026-11-04)"
+  "ilce_koor": "\"İl/İlçe\" -> [enlem, boylam] ilçe merkezi; Wikidata koordinatı ilçe sınırı dışında kalanlar için OpenStreetMap ilçe merkezi, geoBoundaries sınırıyla doğrulandı (2026-11-04)",
+  "kategori": "Wikidata no -> doğru kategori harfi (t tarihi, d doğa, m müze, ...)",
+  "yil": "Wikidata no -> doğru yapım yılı (Wikidata'daki yıl yanlış ya da eski bir yapıya aitse)",
+  "il_alan": "il slug -> yüzölçümü km² (Harita Genel Müdürlüğü, İl ve İlçe Yüzölçümleri)"
  },
  "ad": {
   "Q126863504": "Beylerbeyi Sarayı Deniz Köşkü",
@@ -1856,5 +1859,14 @@
    40.43017,
    29.15707
   ]
+ },
+ "kategori": {
+  "Q91274": "t"
+ },
+ "yil": {
+  "Q12506": "537"
+ },
+ "il_alan": {
+  "mugla": 12654
  }
 }
