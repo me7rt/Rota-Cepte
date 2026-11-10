@@ -1536,3 +1536,10 @@ html.gm-acik,html.gm-acik body{overflow:hidden}
 .tumtur svg{transition:transform .2s}
 .tumtur[aria-expanded="true"] svg{transform:rotate(180deg)}
 .ozelgun .ogzil{white-space:nowrap}
+/* Nasıl bir gezi: dört gruba girmeyen türler için ince kutular */
+.tarzince{grid-column:span 1;display:flex;align-items:center;gap:10px;min-height:52px;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-l);background:var(--surface);color:var(--fg);font:inherit;text-align:left;cursor:pointer;transition:transform .15s}
+.tarzince:active{transform:scale(.97)}
+.tarzince .tarzik{width:32px;height:32px;border-radius:10px;background:var(--pri-soft);color:var(--pri-ink);grid-row:auto}
+.tarzince b{flex:1;min-width:0;font-size:14px;line-height:1.25}
+.tarzince > svg{flex:none;color:var(--muted)}
+.plyol{margin-top:4px}

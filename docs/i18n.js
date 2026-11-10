@@ -7,7 +7,7 @@
   if (dil !== "tr" && dil !== "en") dil = /^tr/i.test(navigator.language || "tr") ? "tr" : "en";
   const EN = {
     // v6.6.1
-    "MüzeKart": "Museum Pass", "Ayarlar": "Settings", "Güvenlik": "Safety", "Dinleme": "Listening", "Ses seçimi, Etrafımı anlat": "Voice, Tell me what's around",
+    "MüzeKart": "Museum Pass", "Festivaller": "Festivals", "Ayarlar": "Settings", "Güvenlik": "Safety", "Dinleme": "Listening", "Ses seçimi, Etrafımı anlat": "Voice, Tell me what's around",
     "Görünüm ve dil": "Look and language", "Bildirimler": "Notifications", "Tüm bildirimler": "All notifications", "Tek dokunuşla hepsini aç ya da kapat": "Turn them all on or off in one tap",
     "Hafta sonu önerisi": "Weekend ideas", "Anma ve bayram bildirimleri": "Holiday and commemoration alerts", "Önerileri sıfırla": "Reset suggestions",
     "Paylaş ve destek": "Share and support", "Arkadaşına öner": "Recommend to a friend", "Rota Cepte'yi paylaş": "Share Rota Cepte",
