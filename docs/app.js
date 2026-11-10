@@ -1441,10 +1441,10 @@
   const kucuk = (t) => " " + t.toLocaleLowerCase("tr") + " ";
   const denizMi = (x) => KIYI.has(x[2]) && x[6] !== "m" && !DENIZ_DEGIL.test(kucuk(x[1])) && DENIZ_K.some((w) => kucuk(x[1]).includes(w));
   const TARZ = {
-    deniz: { ad: TL("Deniz & sahil", "Sea & beaches"), alt: TL("Plaj, koy, ada", "Beaches, coves, islands"), e: "tree-palm", renk: "#0b84a5", f: denizMi, alts: ["ada"] },
-    tarih: { ad: TL("Tarih", "History"), alt: TL("Antik kent, kale, cami, han, Atatürk'ün izinde", "Ruins, castles, mosques, bazaars, Atatürk"), e: "castle", renk: "var(--k-t)", f: (x) => x[6] === "t", alts: ["antik", "kale", "cami", "han", "ataturk"] },
-    doga: { ad: TL("Doğa & manzara", "Nature & views"), alt: TL("Şelale, göl, dağ, mağara, milli park", "Waterfalls, lakes, mountains, caves, parks"), e: "mountain", renk: "var(--k-d)", f: (x) => x[6] === "d" && !denizMi(x), alts: ["selale", "gol", "dag", "magara", "park"] },
-    muze: { ad: TL("Müze", "Museums"), alt: TL("Arkeoloji, kent, sanat", "Archaeology, city, art"), e: "landmark", renk: "var(--k-m)", f: (x) => x[6] === "m", alts: ["muze"] }
+    deniz: { ad: TL("Deniz ve sahil", "Sea & beaches"), alt: TL("Plaj, koy, ada", "Beaches, coves, islands"), e: "tree-palm", renk: "#0b84a5", f: denizMi, alts: ["ada"] },
+    tarih: { ad: TL("Tarih", "History"), alt: TL("Antik kent, kale, cami", "Ruins, castles, mosques"), e: "castle", renk: "var(--k-t)", f: (x) => x[6] === "t", alts: ["antik", "kale", "cami", "han", "ataturk"] },
+    doga: { ad: TL("Doğa ve manzara", "Nature & views"), alt: TL("Şelale, göl, dağ", "Waterfalls, lakes, peaks"), e: "mountain", renk: "var(--k-d)", f: (x) => x[6] === "d" && !denizMi(x), alts: ["selale", "gol", "dag", "magara", "park"] },
+    muze: { ad: TL("Müze", "Museums"), alt: TL("Arkeoloji, sanat", "Archaeology, art"), e: "landmark", renk: "var(--k-m)", f: (x) => x[6] === "m", alts: ["muze"] }
   };
   // Büyük kutunun bütün yerleri: kendi türü ya da alt türlerinden birine uyan yerler
   const tarzUyar = (z, x) => z.f(x) || z.alts.some((k) => TEMA[k] && temaUyar(TEMA[k], x));
