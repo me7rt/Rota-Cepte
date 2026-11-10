@@ -3,7 +3,7 @@
    Veri docs/data altında; GitHub Actions'ta Wikidata, Vikipedi ve Commons'tan hazırlanır (scripts/uret.mjs). */
 (function () {
   "use strict";
-  const SURUM = "6.6";
+  const SURUM = "6.6.1";
   // "6.5.1'de", "6.5'te", "6.6'da": sürüm numarasına Türkçe bulunma eki
   const surumEk = (v) => ({ 0: "da", 1: "de", 2: "de", 3: "te", 4: "te", 5: "te", 6: "da", 7: "de", 8: "de", 9: "da" })[String(v).slice(-1)] || "de";
   if (window.ikDoldur) ikDoldur();
@@ -230,7 +230,8 @@
 
   // ---------- konum ----------
   document.querySelector("#locBtn .locik").innerHTML = ik("locate-fixed", 16);
-  $("kocEn").hidden = DIL !== "en"; // turist için kültür koçu ana sayfada da görünür
+  // Turist için Kültür koçu planlama araçlarında ilk kutu olur
+  if (DIL === "en") $("araclar").prepend($("kocBtn"));
   function stopLocation() {
     if (watchId !== null) navigator.geolocation.clearWatch(watchId);
     watchId = null; me = null; homeMe = null; konumBekleyen = [];
@@ -309,14 +310,14 @@
     $("tema").hidden = v !== "tema";
     $("rota").hidden = v !== "rota";
     $("yol").hidden = v !== "yol";
-    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark", "planlar", "muzekart", "acil", "kultur", "festival"]) $(x).hidden = v !== x;
+    for (const x of ["plist", "kacamak", "kartlar", "oyun", "cark", "planlar", "muzekart", "acil", "kultur", "festival", "ayarlar"]) $(x).hidden = v !== x;
     $("ataturk").hidden = v !== "ataturk";
     $("rozet").hidden = v !== "rozet";
     $("listem").hidden = v !== "listem";
     $("city").hidden = v !== "city";
     $("indirSec").hidden = true;
     $("plan").hidden = true;
-    $("back").hidden = v === "home" || v === "listem" || v === "rozet" || (view && view.mode === "near");
+    $("back").hidden = v === "home" || v === "listem" || v === "rozet" || v === "ayarlar" || (view && view.mode === "near");
     $("dilHizli").hidden = v !== "home";
     $("acilPill").hidden = !(view && view.mode === "near");
     if (degisti || v === "city") window.scrollTo(0, 0);
@@ -324,7 +325,7 @@
   }
   // Alt menü: hangi sekmedeyiz
   function navAktif() {
-    const m = view && view.mode, k = m === "home" ? "home" : m === "near" ? "near" : m === "listem" ? "listem" : m === "rozet" ? "rozet" : "";
+    const m = view && view.mode, k = m === "home" ? "home" : m === "near" ? "near" : m === "listem" ? "listem" : m === "rozet" ? "rozet" : m === "ayar" ? "ayar" : "";
     for (const a of document.querySelectorAll("#tabbar a")) { const on = a.dataset.nav === k; a.classList.toggle("on", on); if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); }
   }
   async function route() {
@@ -370,6 +371,7 @@
       if (h[0] === "festival") return showFestival(h[1]);
       if (h[0] === "ozet") { history.replaceState(null, "", "#/rozetler"); route(); setTimeout(() => yilOzeti(+h[1] || 0), 600); return; }
       if (h[0] === "rozetler") { view = { mode: "rozet" }; show("rozet"); $("eyebrow").textContent = T("Gezi haritan ve rozetler"); $("title").textContent = T("Gezilerim"); renderGez(); return; }
+      if (h[0] === "ayarlar") { view = { mode: "ayar" }; show("ayarlar"); $("eyebrow").textContent = "Rota Cepte"; $("title").textContent = T("Ayarlar"); bildirimYazi(); anmaYazi(); return; }
       if (h[0] === "listem") { view = { mode: "listem" }; show("listem"); $("eyebrow").textContent = "Rota Cepte"; $("title").textContent = T("Gideceğim yerler"); renderFav(); return; }
       showHome();
     } catch (e) {
@@ -401,11 +403,10 @@
   const ayni = (x, p) => x.q === p.q && x.s === p.ilS;
   const favMi = (p) => favs().some((x) => ayni(x, p));
   function favDegis(p) {
-    let a = favs(), eklendi = false;
+    let a = favs();
     if (favMi(p)) a = a.filter((x) => !ayni(x, p));
-    else { a.unshift({ q: p.q, s: p.ilS, ad: p.ad, il: [...new Set([p.ilce, p.il].filter(Boolean))].join(", "), k: p.k, f: p.f, lat: p.lat, lng: p.lng }); eklendi = true; }
+    else { a.unshift({ q: p.q, s: p.ilS, ad: p.ad, il: [...new Set([p.ilce, p.il].filter(Boolean))].join(", "), k: p.k, f: p.f, lat: p.lat, lng: p.lng }); }
     favYaz(a); favBtn(p); renderFav();
-    if (eklendi) setTimeout(bildirimTeklif, 700);
   }
   function favBtn(p) {
     const on = favMi(p), b = $("dFav");
@@ -796,14 +797,6 @@
       // seçili sekme görünür kalsın
       if (+b.dataset.sayfa === i) { const t = b.parentElement, x = b.offsetLeft - t.offsetLeft; if (x < t.scrollLeft + 16 || x + b.offsetWidth > t.scrollLeft + t.clientWidth - 16) t.scrollTo({ left: x - 16, behavior: "smooth" }); }
     });
-  }
-  // Ana sayfada küçük pasaport özeti (en az bir damga varsa)
-  function renderPasOzet() {
-    const k = $("pasOzet"); if (!k || !IDX) return;
-    const D = damgalar(); if (!D.size) { k.hidden = true; return; }
-    const u = unvanBul(D.size), sr = siradaki(D);
-    k.innerHTML = `<button class="pozet" data-go="#/rozetler"><span class="pozik">${ik("stamp", 22)}</span><span class="rt"><small>${TL("Gezi pasaportun", "Your travel passport")} · ${esc(u.ad)}</small><b>${TL(`${D.size} / 81 il damgası`, `${D.size} / 81 province stamps`)}</b>${sr ? `<span>${esc(TL(`Sıradaki: ${sr.il.ad}`, `Next: ${sr.il.ad}`))} · ${esc(sr.neden)}</span>` : ""}</span>${ik("chevron-right", 18)}</button>`;
-    k.hidden = false;
   }
   // İl sayfasında bu ilin damgası
   function ilDamga(d) {
@@ -1339,6 +1332,7 @@
     const n = new Date(), ay = n.getMonth(), m = ayTema(ay), el = $("mevsim");
     if (el.dataset.ay !== String(ay)) {
       el.dataset.ay = ay; ayAnahtar = "";
+      $("ayBaslik").textContent = TL(AYLAR[ay].ad.replace(" nereye?", ""), "In " + n.toLocaleString("en-GB", { month: "long" }));
       const chip = (go, e, ad, cls) => `<button class="tchip${cls || ""}" data-go="${go}"><i>${ik(e, 20)}</i><span>${esc(ad)}</span></button>`;
       // Çok dar ekranda uzun kelimeli tema adı ("kervansaraylar") varsa çipler tek sütun olur
       const uzun = m.t.some((k) => TEMA[k].ad.split(" ").some((w) => w.length > 11));
@@ -1384,11 +1378,8 @@
   }
   function temaChips() {
     ayKart();
-    // Kasım kartında zaten Atatürk çipi varsa aşağıda tekrar gösterme
-    const ataAy = (AYLAR[new Date().getMonth()] || {}).ata;
-    // Bu ayın kutusunda olan tür aşağıda tekrar çıkmasın
-    const ayT = new Set(ayTema(new Date().getMonth()).t);
-    $("temaChips").innerHTML = (ataAy ? "" : `<button class="tchip tata" data-go="#/ataturk"><i>${ik("footprints", 20)}</i><span>${TL("Atatürk'ün izinde", "In Atatürk's footsteps")}</span></button>`) + Object.entries(TEMA).filter(([k, t]) => !t.gizli && !ayT.has(k)).map(([k, t]) =>
+    // "Nasıl bir gezi istiyorsun?": büyük 4 kutunun altında diğer bütün türler küçük düğme (alt alta sarar, sağdan taşmaz)
+    $("temaChips").innerHTML = `<button class="tchip tata" data-go="#/ataturk"><i>${ik("footprints", 20)}</i><span>${TL("Atatürk'ün izinde", "In Atatürk's footsteps")}</span></button>` + Object.entries(TEMA).filter(([k, t]) => !t.gizli).map(([k, t]) =>
       `<button class="tchip" data-go="#/tema/${k}"><i>${ik(t.e, 20)}</i><span>${esc(t.ad)}</span></button>`).join("");
   }
   function showTema(k) {
@@ -2054,15 +2045,6 @@
   // Gezdim: MüzeKart ekranında işaretlenen ya da aynı yeri uygulamada "Gittim" yaptıysan
   function mkGezdi(m, G, gq) { return G.has(m.i) || (m.q && gq.has(m.s + "|" + m.q)); }
   const mkGitQ = () => new Set(gittiklerim().map((x) => x.s + "|" + x.q));
-  async function mkKutu() {
-    const j = await mkYukle(), b = $("mkBtn"); if (!b) return;
-    if (!j) { b.hidden = true; return; }
-    if (!$("mkCoin").firstChild) $("mkCoin").innerHTML = mkSikke(52);
-    const G = mkOku(MK_G), gq = mkGitQ(), g = j.hepsi.filter((m) => mkGezdi(m, G, gq)).length;
-    $("mkSub").textContent = TL(`${j.hepsi.length} yerde geçerli${g ? ` · ${g}'i gezildi` : ""}`, `Museum Pass · ${j.hepsi.length} sites${g ? ` · ${g} visited` : ""}`);
-    $("mkBar").style.width = Math.max(g ? 3 : 0, Math.round(g / j.hepsi.length * 100)) + "%";
-    b.hidden = false;
-  }
   async function showMuzeKart(s) {
     view = { mode: "muzekart", s: s || "", f: (view && view.mode === "muzekart" && view.f) || "hepsi" }; show("muzekart");
     const j = await mkYukle();
@@ -2109,7 +2091,7 @@
     const b = e.target.closest("[data-mk]"); if (!b) return;
     const k = b.dataset.mk === "liste" ? MK_L : MK_G, set = mkOku(k), i = b.dataset.i;
     if (set.has(i)) set.delete(i); else set.add(i);
-    mkYaz(k, set); mkCiz(); mkKutu();
+    mkYaz(k, set); mkCiz();
   });
   $("mkBtn").addEventListener("click", () => git("#/muzekart"));
 
@@ -2422,7 +2404,18 @@
     }
     let son = "istanbul"; try { son = localStorage.getItem("gezi-son-il") || son; } catch (e) {}
     // Bu sürümde yeni: her sürümde güncellenir (yeni, iyileşen, çıkarılan)
+    const ayBas = TL(AYLAR[new Date().getMonth()].ad.replace(" nereye?", ""), "In " + new Date().toLocaleString("en-GB", { month: "long" }));
     const yeni = [
+      ["settings", TL("Yeni Ayarlar sekmesi", "New Settings tab"), TL("Alt menünün sağında Ayarlar: acil yardım, sesli rehber, dil ve tema, bildirimler, paylaşma ve bize yazma tek yerde.", "Settings now has its own tab: emergency help, audio guide, language and theme, notifications, sharing and feedback in one place."), "#/ayarlar"],
+      ["compass", TL("Keşfet ortada, daha sade", "Explore in the middle, tidier"), TL(`Keşfet alt menünün ortasında. Planlama araçları altı eşit kutuda; gezi türleri tek bölümde; ayın önerileri “${ayBas}” başlığında.`, `Explore sits in the middle of the menu. Planning tools are six equal tiles, trip types are in one section, and this month's picks are under “${ayBas}”.`), ""],
+      ["phone", TL("112 için onay", "112 confirmation"), TL("Yanlışlıkla aramayı önlemek için 112'ye basınca önce “112'yi aramak istiyor musun?” diye soruyoruz.", "To avoid calling by mistake, we now ask “Call 112?” before dialling."), ""],
+      ["bell", TL("Anma ve bayram bildirimleri", "Holiday and commemoration alerts"), TL("Özel gün kartındaki zile dokun: millî bayramlarda, anmalarda, dini bayramlarda ve kandillerde haber verelim. Ayarlar'da “Tüm bildirimler” anahtarıyla hepsini tek dokunuşla aç ya da kapat. İzin artık yalnızca sen istediğinde sorulur.", "Tap the bell on a special-day card and we'll let you know on national and religious holidays and commemorations. Turn everything on or off with “All notifications” in Settings. We only ask for permission when you choose to."), ""],
+      ["send", TL("Öneri gönder", "Send feedback"), TL("Fikrini ya da bulduğun bir hatayı Ayarlar'dan tek dokunuşla bize yaz.", "Send us an idea or a bug from Settings in one tap."), ""],
+      ["map", TL("Haritada yer adı", "Place names on the map"), TL("“Haritada aç”ta iğne tam yerinde, üstünde yerin adı yazıyor. Listeden bir yere bakıp dönünce kaldığın yerden devam edersin.", "“Open in map” puts the pin on the exact spot with the place's name. Look at a place from a list and you'll come back to where you were."), ""],
+      ["map-pin", TL("Bilgi düzeltmeleri", "Corrections"), TL("Galata Kulesi artık tarihî yerler arasında, Ayasofya'nın yapım yılı 537, Muğla'nın yüzölçümü 12.654 km² (Harita Genel Müdürlüğü). İngilizcede “Bugünkü rotan” kartında yer adları İngilizce.", "Galata Tower is now listed as a historic site, Hagia Sophia was built in 537, and Muğla covers 12,654 km² (General Directorate of Mapping). Place names on the “Today's route” card are now in English."), ""],
+      ["circle-minus", TL("Çıkanlar", "Removed"), TL("Ana sayfadaki büyük MüzeKart kutusu ve pasaport özeti kalktı: MüzeKart artık planlama araçlarında, pasaportun Gezilerim'de.", "The big Museum Pass box and passport summary left the home screen: Museum Pass is now a planning tile and your passport is in My trips."), ""]
+    ];
+    const s66 = [
       ["car-front", TL("Arabamı, otelimi kaydet", "Save my car or hotel"), TL("Ana sayfadaki “Arabamı / otelimi kaydet” düğmesine bas, durduğun yer kaydedilsin. Dönerken “Arabama dön”e bas, Google Haritalar seni doğrudan oraya götürsün.", "Tap “Save my car / hotel” on the home screen to save where you are. On the way back, tap “Back to car” and Google Maps takes you straight there."), ""],
       ["shield-plus", TL("Acil yardım", "Emergency help"), TL("Tek dokunuşla 112, internetsiz konumun, en yakın hastane, karakol ve nöbetçi eczane. Yakınımda sekmesinde ve Ayarlar'da.", "Call 112 in one tap, see your location offline, find the nearest hospital, police and pharmacy on duty. In Nearby and Settings."), "#/acil"],
       ["users", TL("Ortak plan", "Shared plan"), TL("Tatil planını linkle gönder; arkadaşın açıp düzenlesin, geri göndersin. Ne eklendi, ne çıkarıldı tek tek görürsün, istersen planını güncellersin.", "Send your holiday plan as a link; your friend edits it and sends it back. See what was added or removed, then update your plan if you like."), "#/plan"],
@@ -2460,14 +2453,15 @@
       ["share-2", TL("Listeni linkle paylaş", "Share your list"), TL("Listem sekmesinde \"Listeyi linkle paylaş\": arkadaşın tek dokunuşla kendi listesine ekler.", "In My list, tap \"Share list as a link\": friends add it to theirs in one tap."), "#/listem"],
       ["mountain", TL("Daha güzel fotoğraflar", "Better photos"), TL("İl kapakları yenilendi; yanlış fotoğraflar ve gezilecek bir şeyi olmayan yerler çıkarıldı.", "New province covers; wrong photos and places with nothing to see were removed."), ""],
     ];
-    const s = gordu.startsWith("6.5") && !zorla ? yeni : [...yeni, ["", TL("Sürüm 6.5 ile gelenler", "Added in version 6.5")], ...s65];
+    // 6.6'yı görmüş olana yalnızca 6.6.1; görmemiş olana 6.6'nın yenilikleri de (6.5'i de görmediyse onunkiler de)
+    const s = gordu === "6.6" && !zorla ? yeni : gordu.startsWith("6.5") || zorla ? [...yeni, ["", TL("Sürüm 6.6 ile gelenler", "Added in version 6.6")], ...s66] : [...yeni, ["", TL("Sürüm 6.6 ile gelenler", "Added in version 6.6")], ...s66, ["", TL("Sürüm 6.5 ile gelenler", "Added in version 6.5")], ...s65];
     const d = document.createElement("div"); d.className = "tanit";
-    d.innerHTML = `<div class="tkart yenilik"><div class="temo altin">${ik("sparkles", 36)}</div><h2>${TL(`Sürüm ${SURUM}'${surumEk(SURUM)} yeni`, `New in version ${SURUM}`)}</h2>${s.some((x) => x[3]) ? `<p class="yalt">${TL("Denemek için birine dokun.", "Tap one to try it.")}</p>` : ""}<ul class="ylist">${s.map((x) => !x[0] ? `<li class="yara">${x[1]}</li>` : x[3] ? `<li><button class="ybtn" data-r="${x[3]}"><i>${ik(x[0], 22)}</i><span><b>${x[1]}</b><small>${x[2]}</small></span>${ik("chevron-right", 18)}</button></li>` : `<li><i>${ik(x[0], 22)}</i><span><b>${x[1]}</b><small>${x[2]}</small></span></li>`).join("")}</ul><div class="tbtn">${s.some((x) => x[3]) ? `<button class="linkbtn" data-k="kapat">${T("Kapat")}</button><button class="btn primary" data-k="dene">${ik("car-front", 18)} ${TL("Yol üstü keşfi dene", "Try Along the way")}</button>` : `<button class="btn primary" data-k="kapat" style="margin-inline:auto">${TL("Tamam", "OK")}</button>`}</div></div>`;
+    d.innerHTML = `<div class="tkart yenilik"><div class="temo altin">${ik("sparkles", 36)}</div><h2>${TL(`Sürüm ${SURUM}'${surumEk(SURUM)} yeni`, `New in version ${SURUM}`)}</h2>${s.some((x) => x[3]) ? `<p class="yalt">${TL("Denemek için birine dokun.", "Tap one to try it.")}</p>` : ""}<ul class="ylist">${s.map((x) => !x[0] ? `<li class="yara">${x[1]}</li>` : x[3] ? `<li><button class="ybtn" data-r="${x[3]}"><i>${ik(x[0], 22)}</i><span><b>${x[1]}</b><small>${x[2]}</small></span>${ik("chevron-right", 18)}</button></li>` : `<li><i>${ik(x[0], 22)}</i><span><b>${x[1]}</b><small>${x[2]}</small></span></li>`).join("")}</ul><div class="tbtn">${s.some((x) => x[3]) ? `<button class="linkbtn" data-k="kapat">${T("Kapat")}</button><button class="btn primary" data-k="dene">${ik("settings", 18)} ${TL("Ayarlar'ı aç", "Open Settings")}</button>` : `<button class="btn primary" data-k="kapat" style="margin-inline:auto">${TL("Tamam", "OK")}</button>`}</div></div>`;
     const kapat = () => { try { localStorage.setItem("gezi-yenilik", SURUM); } catch (e) {} d.classList.add("out"); setTimeout(() => d.remove(), 300); };
     d.addEventListener("click", (e) => {
       const k = e.target.closest("[data-k]"), r = e.target.closest("[data-r]"); if (e.target !== d && !k && !r) return;
       if (r) { kapat(); git(r.dataset.r); return; }
-      kapat(); if (k && k.dataset.k === "dene") git("#/yol");
+      kapat(); if (k && k.dataset.k === "dene") git("#/ayarlar");
     });
     document.body.appendChild(d);
   }
@@ -2877,12 +2871,17 @@
     document.body.appendChild(d);
   }
   // Özel gün şeridine "Kartı paylaş" düğmesi. 6 Şubat gibi afet anma günlerinde paylaşım kartı yok (yalnızca şerit)
+  // Özel gün kartının altında "Kartı paylaş" ve zil ("Anmalarda ve bayramlarda haber ver") yan yana
   function ozelKartDugme(b, og, n, msj) {
-    if (og.yas && !og.saygi) return;
-    const d = document.createElement("button"); d.type = "button"; d.className = "ogpay";
-    d.innerHTML = `${ik("share-2", 15)}<span>${TL("Kartı paylaş", "Share card")}</span>`;
-    d.addEventListener("click", (e) => { e.stopPropagation(); ozelKart(og, n, msj, d); });
-    b.querySelector("span").appendChild(d);
+    const sat = document.createElement("div"); sat.className = "ogdug";
+    if (!og.yas || og.saygi) {
+      const d = document.createElement("button"); d.type = "button"; d.className = "ogpay";
+      d.innerHTML = `${ik("share-2", 15)}<span>${TL("Kartı paylaş", "Share card")}</span>`;
+      d.addEventListener("click", (e) => { e.stopPropagation(); ozelKart(og, n, msj, d); });
+      sat.appendChild(d);
+    }
+    const z = ozelZil(); if (z) sat.appendChild(z);
+    if (sat.children.length) b.querySelector("span").appendChild(sat);
   }
   // Günlere özel çizimler kartlar.js'te: yalnızca "Kartı paylaş"a basılınca yüklenir
   let kartJS = null;
@@ -3285,10 +3284,10 @@
   });
   function renderHome() {
     if (!IDX) return;
-    mkKutu(); gmKart();
+    gmKart();
     const q = $("search").value.trim();
     if (q.length >= 2) return renderSearch(q);
-    gununKesfi(); sanaOzel(); ayKart(); renderPasOzet(); renderTarzlar(); planAlt();
+    gununKesfi(); sanaOzel(); ayKart(); renderTarzlar();
     $("results").hidden = true; $("homeMain").hidden = false;
     let iller = IDX.iller.slice();
     $("ilGrid").classList.toggle("yatay", !tumIl); $("ilGrid").classList.toggle("satir", tumIl); $("ilSira").hidden = !tumIl; $("ilBolge").hidden = !tumIl;
@@ -3571,7 +3570,7 @@
     const ara = (q) => me ? `https://www.google.com/maps/search/${encodeURIComponent(q)}/@${me.lat},${me.lng},14z` : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
     const satir = (ikon, ad, alt, href) => `<a class="acsatir" href="${href}" target="_blank" rel="noopener"><span class="aci">${ik(ikon, 20)}</span><span class="rt"><b>${ad}</b><small>${alt}</small></span><span class="acet">${TL("internet", "online")}</span></a>`;
     $("acil").innerHTML = `
-      <a class="acara" href="tel:112">${ik("phone", 30)}<span>${TL("112'yi ara", "Call 112")}<small>${TL("Polis · Ambulans · İtfaiye", "Police · Ambulance · Fire")}</small></span></a>
+      <a class="acara" href="tel:112" data-112="1">${ik("phone", 30)}<span>${TL("112'yi ara", "Call 112")}<small>${TL("Polis · Ambulans · İtfaiye", "Police · Ambulance · Fire")}</small></span></a>
       <p class="acnot">${TL("Telefonun arama ekranı açılır, aramayı sen başlatırsın. 112 ücretsizdir.", "Your phone's dialer opens and you start the call. 112 is free. If you don't speak Turkish, say \"English, please\" and stay on the line.")}</p>
       <section class="ackart">
         <h3>${ik("locate-fixed", 18)} ${TL("Konumum", "My location")} <span class="acet ok">${TL("internetsiz", "offline")}</span></h3>
@@ -3594,6 +3593,21 @@
       </section>` : ""}`;
     if (me && !acilYer) acilYerBul();
   }
+  // 112: yanlışlıkla aramayı önlemek için önce sorulur (Acil yardım sayfası; Yakınımda ve Ayarlar'dan da buraya gelinir)
+  function onay112() {
+    if (document.querySelector(".tanit.o112")) return;
+    const d = document.createElement("div"); d.className = "tanit o112";
+    d.innerHTML = `<div class="tkart"><div class="temo acilik">${ik("phone", 34)}</div><h2>${TL("112'yi aramak istiyor musun?", "Call 112?")}</h2><p>${TL("Polis, ambulans ve itfaiye için tek numara. Arama ücretsizdir.", "One number for police, ambulance and fire. The call is free.")}</p><div class="tbtn ikiesit"><button class="btn" data-k="iptal">${TL("Vazgeç", "Cancel")}</button><button class="btn primary ara112" data-k="ara">${ik("phone", 18)} ${TL("Ara", "Call")}</button></div></div>`;
+    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
+    d.addEventListener("click", (e) => {
+      const k = e.target.closest("[data-k]");
+      if (e.target === d || (k && k.dataset.k === "iptal")) kapat();
+      else if (k && k.dataset.k === "ara") { kapat(); location.href = "tel:112"; }
+    });
+    document.body.appendChild(d);
+    setTimeout(() => { const v = d.querySelector('[data-k="iptal"]'); if (v) v.focus(); }, 60);
+  }
+  document.addEventListener("click", (e) => { if (e.target.closest("[data-112]")) { e.preventDefault(); onay112(); } });
   document.addEventListener("click", async (e) => {
     const b = e.target.closest("[data-acil]"); if (!b) return;
     const a = b.dataset.acil;
@@ -3978,10 +3992,6 @@
     document.body.appendChild(d);
     yaz(); if (araSoz) araSoz.then(() => { if (d.isConnected && d.querySelector("#knAra").value.trim().length >= 2) yaz(); });
     setTimeout(() => d.querySelector("#knAra").focus(), 80);
-  }
-  function planAlt() {
-    const a = planlar(); if (!a.length) { $("planSub").textContent = T("Gün gün kendi rotanı yap, gideceğin yerleri sen seç"); return; }
-    const p = a[0]; $("planSub").textContent = TL(`${p.ad} · ${p.g.length} gün · ${planSay(p)} yer`, `${p.ad} · ${p.g.length} day${p.g.length === 1 ? "" : "s"} · ${planSay(p)} place${planSay(p) === 1 ? "" : "s"}`);
   }
   async function showPlan(id) {
     const p = id && planlar().find((x) => x.id === id);
@@ -4682,6 +4692,7 @@
     const d = IL.get(b.dataset.s); if (d) openDetail(d.yerler[+b.dataset.j]);
   });
   $("paylasBtn").addEventListener("click", uygulamaPaylas);
+  $("oneriBtn").addEventListener("click", () => { location.href = `mailto:${ILETISIM}?subject=${encodeURIComponent(TL("Rota Cepte öneri", "Rota Cepte feedback"))}&body=${encodeURIComponent("\n\n(" + TL("Sürüm", "Version") + " " + SURUM + ")")}`; });
   puanSor();
   $("indirSil").addEventListener("click", ilIndirSil);
   document.addEventListener("keydown", (e) => {
@@ -4734,7 +4745,7 @@
   }
   // ---------- hafta sonu önerisi: her Cuma 18:00'de telefonda hazırlanan yerel bildirim (yalnızca uygulamada) ----------
   const LN = window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() !== "web" && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications;
-  const BILDIRIM = "gezi-bildirim", HS_ID = 7001;
+  const BILDIRIM = "gezi-bildirim", HS_ID = 7001, ANMA = "gezi-anma";
   const bildirimAcik = () => { try { return localStorage.getItem(BILDIRIM) === "1"; } catch (e) { return false; } };
   // Her açılışta yeniden kurulur: öneriler o anki konuma ya da son bakılan ile göre, gidilmemiş ve fotoğraflı 3 yer
   async function haftaSonuKur() {
@@ -4768,119 +4779,103 @@
       }] });
     } catch (e) {}
   }
-  function bildirimYazi() {
-    const b = $("bildirimBtn"); if (!b) return;
-    b.hidden = !LN;
-    $("bildirimYazi").textContent = bildirimAcik() ? TL("Hafta sonu önerisi: Açık (Cuma 18:00)", "Weekend ideas: On (Fridays 6 pm)") : TL("Hafta sonu önerisi: Kapalı", "Weekend ideas: Off");
+  // ---------- bildirim ayarları: izin yalnızca kullanıcı bir anahtara ya da zile basınca sorulur ----------
+  let izinVar = false;
+  const anmaAcik = () => { try { return localStorage.getItem(ANMA) !== "0"; } catch (e) { return true; } };
+  async function izinIste() {
+    let iz = "denied";
+    try { iz = (await LN.requestPermissions()).display; } catch (e) {}
+    izinVar = iz === "granted";
+    if (!izinVar) toast(TL("Bildirim izni verilmedi. Telefonunun ayarlarından açabilirsin.", "Notifications aren't allowed. You can turn them on in your phone settings."));
+    return izinVar;
   }
+  function anahtarYaz(id, on) { const b = $(id); if (!b) return; b.setAttribute("aria-checked", on ? "true" : "false"); b.classList.toggle("on", on); }
+  function bildirimYazi() {
+    if (!$("bildGrup")) return;
+    $("bildGrup").hidden = $("bildBas").hidden = !LN;
+    if (!LN) return;
+    const h = izinVar && bildirimAcik(), a = izinVar && anmaAcik();
+    anahtarYaz("bildirimBtn", h); anahtarYaz("anmaBtn", a); anahtarYaz("tumBildBtn", h && a);
+    $("bildirimYazi").textContent = TL("Her Cuma 18:00'de sana yakın 3 yer", "3 places near you every Friday at 6 pm");
+    $("anmaYazi").textContent = TL("Millî bayramlar, anma günleri, dini bayramlar ve kandiller", "National holidays, commemorations and religious holidays");
+    document.querySelectorAll(".ogzil").forEach(zilYaz);
+  }
+  const anmaYazi = bildirimYazi;
   async function bildirimAc(ac) {
     if (!LN) return;
-    if (ac) {
-      let izin = "denied";
-      try { izin = (await LN.requestPermissions()).display; } catch (e) {}
-      if (izin !== "granted") {
-        try { localStorage.setItem(BILDIRIM, "0"); } catch (e) {}
-        bildirimYazi(); toast(TL("Bildirim izni verilmedi. Telefonunun ayarlarından açabilirsin.", "Notifications aren't allowed. You can turn them on in your phone settings."));
-        return;
-      }
-    }
+    if (ac && !(await izinIste())) { bildirimYazi(); return; }
     try { localStorage.setItem(BILDIRIM, ac ? "1" : "0"); } catch (e) {}
     bildirimYazi(); await haftaSonuKur();
     toast(ac ? TL("Tamam! Her Cuma 18:00'de hafta sonu için 3 öneri gelecek.", "Done! Every Friday at 6 pm you'll get 3 weekend ideas.") : TL("Hafta sonu önerisi kapatıldı.", "Weekend ideas turned off."));
   }
-  // Listeye ilk yer eklendiğinde ya da uygulamanın 3. açılışında bir kez sorulur; "Şimdi değil" denirse bir daha sorulmaz (ayarlardan açılabilir)
-  let soruGosterildi = false;
-  function bildirimTeklif() {
-    if (!LN || document.querySelector(".tanit")) return;
-    try { if (localStorage.getItem(BILDIRIM) != null) return; } catch (e) { return; }
-    const d = document.createElement("div"); d.className = "tanit";
-    d.innerHTML = `<div class="tkart"><div class="temo">${ik("bell", 36)}</div><h2>${TL("Hafta sonu önerisi ister misin?", "Want weekend ideas?")}</h2><p>${TL("Her Cuma akşamı sana yakın 3 gezilecek yer önerelim. Öneri telefonunda hazırlanır, hiçbir bilgi bize gelmez. İstediğin zaman kapatabilirsin.", "Every Friday evening we'll suggest 3 places near you. It's prepared on your phone and nothing is sent to us. You can turn it off anytime.")}</p><div class="tbtn"><button class="linkbtn" data-k="sonra">${TL("Şimdi değil", "Not now")}</button><button class="btn primary" data-k="evet">${TL("Evet, gönder", "Yes, please")}</button></div></div>`;
-    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
-    d.addEventListener("click", (e) => {
-      const b = e.target.closest("[data-k]");
-      if (e.target === d || (b && b.dataset.k === "sonra")) { try { localStorage.setItem(BILDIRIM, "0"); } catch (err) {} bildirimYazi(); kapat(); }
-      else if (b && b.dataset.k === "evet") { kapat(); bildirimAc(true); }
-    });
-    document.body.appendChild(d);
+  async function anmaAc(ac) {
+    if (!LN) return;
+    if (ac && !(await izinIste())) { bildirimYazi(); return; }
+    try { localStorage.setItem(ANMA, ac ? "1" : "0"); } catch (e) {}
+    bildirimYazi(); await anmaKur();
+    toast(ac ? TL("Tamam. Anmalarda ve bayramlarda sabah 09.00'da haber vereceğiz (10 Kasım'da 09.05'te).", "Done. We'll let you know at 9 am on commemorations and holidays (9:05 am on 10 November).") : TL("Anma ve bayram bildirimleri kapatıldı.", "Commemoration and holiday alerts turned off."));
   }
-  // Listeye hiç yer eklemeyenler de haftalık öneriyi duysun: 3. açılıştan itibaren, ana sayfadayken ve o açılışta başka bir soru sorulmadıysa
-  setTimeout(() => {
-    let n = 0; try { n = (JSON.parse(localStorage.getItem("gezi-puan")) || {}).n || 0; } catch (e) { return; }
-    if (n >= 3 && !soruGosterildi && !(location.hash && location.hash !== "#/")) bildirimTeklif();
-  }, 12000);
-  // ---------- 10 Kasım anma bildirimi: saat 09.05'te, saygı duruşu anında (telefonda kurulur, hiçbir bilgi bize gelmez) ----------
-  const ANMA = "gezi-anma", ANMA_SORU = "gezi-anma-soru", ANMA_ID = 7100;
-  const anmaAcik = () => { try { return localStorage.getItem(ANMA) !== "0"; } catch (e) { return true; } };
+  async function tumBildirim() {
+    if (!LN) return;
+    const ac = !(izinVar && bildirimAcik() && anmaAcik());
+    if (ac && !(await izinIste())) { bildirimYazi(); return; }
+    try { localStorage.setItem(BILDIRIM, ac ? "1" : "0"); localStorage.setItem(ANMA, ac ? "1" : "0"); } catch (e) {}
+    bildirimYazi(); await haftaSonuKur(); await anmaKur();
+    toast(ac ? TL("Bütün bildirimler açıldı.", "All notifications are on.") : TL("Bütün bildirimler kapatıldı.", "All notifications are off."));
+  }
+  // Özel gün kartındaki zil: "Anmalarda ve bayramlarda haber ver"
+  function zilYaz(z) {
+    const on = izinVar && anmaAcik();
+    z.classList.toggle("on", on); z.setAttribute("aria-pressed", on ? "true" : "false");
+    z.innerHTML = `${ik(on ? "bell-ring" : "bell", 15)}<span>${on ? TL("Haber vereceğiz", "We'll let you know") : TL("Anmalarda ve bayramlarda haber ver", "Notify me on holidays")}</span>`;
+  }
+  function ozelZil() {
+    if (!LN) return null;
+    const z = document.createElement("button"); z.type = "button"; z.className = "ogpay ogzil";
+    z.addEventListener("click", (e) => { e.stopPropagation(); anmaAc(!(izinVar && anmaAcik())); });
+    zilYaz(z); return z;
+  }
+  // ---------- anma ve bayram bildirimleri: önümüzdeki bir yılın özel günleri, sabah 09.00 (10 Kasım 09.05, saygı duruşu anı) ----------
+  const ANMA_ID = 7100, ANMA_EN_COK = 40;
   const siraEn = (n) => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th");
-  // Önümüzdeki üç 10 Kasım için tek seferlik bildirimler; her açılışta yeniden kurulur
   async function anmaKur() {
     if (!LN) return;
     try {
-      await LN.cancel({ notifications: [0, 1, 2].map((i) => ({ id: ANMA_ID + i })) });
+      await LN.cancel({ notifications: Array.from({ length: ANMA_EN_COK }, (_, i) => ({ id: ANMA_ID + i })) });
       if (!anmaAcik() || (await LN.checkPermissions()).display !== "granted") return;
-      const simdi = new Date(), n = [];
-      for (let y = simdi.getFullYear(); n.length < 3; y++) {
-        const t = new Date(y, 10, 10, 9, 5, 0);
-        if (t <= simdi) continue;
-        const yil = y - 1938;
-        const metin = TL(`10 Kasım, saat 09.05. Gazi Mustafa Kemal Atatürk'ü ebediyete intikalinin ${yil}. yılında saygı, sevgi ve özlemle anıyoruz.`, `10 November, 9:05 am. We remember Mustafa Kemal Atatürk, founder of the Republic of Türkiye, on the ${siraEn(yil)} anniversary of his passing.`);
-        n.push({
-          id: ANMA_ID + n.length,
-          title: TL("Saygıyla ve özlemle ∞", "With respect and longing ∞"),
-          body: metin, largeBody: metin,
-          schedule: { at: t, allowWhileIdle: true },
-          extra: { git: "#/ataturk" }
-        });
+      const o = await getJSON(`ozel-gunler.json?v=${SURUM}`), simdi = new Date(), iki = (x) => String(x).padStart(2, "0"), n = [];
+      for (let i = 0; i <= 366 && n.length < ANMA_EN_COK; i++) {
+        const g = new Date(simdi.getFullYear(), simdi.getMonth(), simdi.getDate() + i), y = g.getFullYear();
+        const ag = `${iki(g.getMonth() + 1)}-${iki(g.getDate())}`, tam = `${y}-${ag}`;
+        const liste = [o.sabit[ag], ...(o.degisken || []).filter((x) => x.bas === tam)].filter(Boolean);
+        for (const x of liste) {
+          const t = new Date(y, g.getMonth(), g.getDate(), 9, x.saygi ? 5 : 0, 0);
+          if (t <= simdi || n.length >= ANMA_EN_COK) continue;
+          const yil = x.yil ? y - x.yil : 0;
+          const metin = x.saygi
+            ? TL(`10 Kasım, saat 09.05. Gazi Mustafa Kemal Atatürk'ü ebediyete intikalinin ${yil}. yılında saygı, sevgi ve özlemle anıyoruz.`, `10 November, 9:05 am. We remember Mustafa Kemal Atatürk, founder of the Republic of Türkiye, on the ${siraEn(yil)} anniversary of his passing.`)
+            : TL(x.tr, x.en || x.tr).replace("{n}", yil || "");
+          n.push({
+            id: ANMA_ID + n.length,
+            title: x.saygi ? TL("Saygıyla ve özlemle ∞", "With respect and longing ∞") : `${x.e} Rota Cepte`,
+            body: metin, largeBody: metin,
+            schedule: { at: t, allowWhileIdle: true },
+            extra: { git: x.git || "#/" }
+          });
+        }
       }
-      await LN.schedule({ notifications: n });
+      if (n.length) await LN.schedule({ notifications: n });
     } catch (e) {}
   }
-  function anmaYazi() {
-    const b = $("anmaBtn"); if (!b) return;
-    b.hidden = !LN;
-    $("anmaYazi").textContent = anmaAcik() ? TL("10 Kasım 09.05 anma bildirimi: Açık", "10 November 9:05 am remembrance: On") : TL("10 Kasım 09.05 anma bildirimi: Kapalı", "10 November 9:05 am remembrance: Off");
-  }
-  async function anmaAc(ac) {
-    if (!LN) return;
-    if (ac) {
-      let izin = "denied";
-      try { izin = (await LN.requestPermissions()).display; } catch (e) {}
-      if (izin !== "granted") { toast(TL("Bildirim izni verilmedi. Telefonunun ayarlarından açabilirsin.", "Notifications aren't allowed. You can turn them on in your phone settings.")); return; }
-    }
-    try { localStorage.setItem(ANMA, ac ? "1" : "0"); } catch (e) {}
-    anmaYazi(); await anmaKur();
-    toast(ac ? TL("Tamam. 10 Kasım'da saat 09.05'te hatırlatacağız.", "Done. We'll remind you on 10 November at 9:05 am.") : TL("Anma bildirimi kapatıldı.", "Remembrance notification turned off."));
-  }
-  // 1-9 Kasım arasında, bildirim izni yoksa bir kez sorulur
-  async function anmaTeklif() {
-    if (!LN || !anmaAcik()) return;
-    const g = new Date(); if (g.getMonth() !== 10 || g.getDate() > 9) return;
-    try { if (localStorage.getItem(ANMA_SORU)) return; } catch (e) { return; }
-    try { if ((await LN.checkPermissions()).display === "granted") return; } catch (e) { return; }
-    if (document.querySelector(".tanit") || (location.hash && location.hash !== "#/")) return;
-    try { localStorage.setItem(ANMA_SORU, "1"); } catch (e) {}
-    soruGosterildi = true;
-    const d = document.createElement("div"); d.className = "tanit";
-    d.innerHTML = `<div class="tkart"><div class="temo">${ik("bell", 36)}</div><h2>${TL("10 Kasım'da hatırlatalım mı?", "Remind you on 10 November?")}</h2><p>${TL("Atatürk'ü anmak için 10 Kasım sabahı saat 09.05'te, saygı duruşu anında telefonuna bir bildirim gelsin. Bildirim telefonunda kurulur, hiçbir bilgi bize gelmez.", "Get a notification at 9:05 am on 10 November, the minute of silence for Atatürk. It's set up on your phone and nothing is sent to us.")}</p><div class="tbtn"><button class="linkbtn" data-k="sonra">${TL("Şimdi değil", "Not now")}</button><button class="btn primary" data-k="evet">${TL("Evet, hatırlat", "Yes, remind me")}</button></div></div>`;
-    const kapat = () => { d.classList.add("out"); setTimeout(() => d.remove(), 300); };
-    d.addEventListener("click", (e) => {
-      const b = e.target.closest("[data-k]");
-      if (e.target === d || (b && b.dataset.k === "sonra")) kapat();
-      else if (b && b.dataset.k === "evet") { kapat(); anmaAc(true); }
-    });
-    document.body.appendChild(d);
-  }
   if (LN) {
-    $("anmaBtn").addEventListener("click", () => anmaAc(!anmaAcik()));
-    anmaYazi();
-    setTimeout(anmaKur, 4500);
-    setTimeout(anmaTeklif, 7000);
-  }
-  if (LN) {
-    $("bildirimBtn").addEventListener("click", () => bildirimAc(!bildirimAcik()));
+    $("tumBildBtn").addEventListener("click", tumBildirim);
+    $("anmaBtn").addEventListener("click", () => anmaAc(!(izinVar && anmaAcik())));
+    $("bildirimBtn").addEventListener("click", () => bildirimAc(!(izinVar && bildirimAcik())));
     if (LN.addListener) LN.addListener("localNotificationActionPerformed", (a) => { const g = a && a.notification && a.notification.extra && a.notification.extra.git; if (g) git(g); });
+    LN.checkPermissions().then((r) => { izinVar = r.display === "granted"; bildirimYazi(); }).catch(() => {});
     bildirimYazi();
     setTimeout(haftaSonuKur, 4000);
+    setTimeout(anmaKur, 4500);
   }
   // ---------- yeni sürüm: Google Play'de güncelleme varsa uygulama içinde sorulur (yalnızca Play'den kurulan Android uygulaması) ----------
   const AU = ANDROID && window.Capacitor.Plugins && window.Capacitor.Plugins.AppUpdate;
