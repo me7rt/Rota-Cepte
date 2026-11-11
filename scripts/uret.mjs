@@ -1002,7 +1002,13 @@ rapor("Türkçe metin:", trM.size, "| İngilizce metin:", enM.size);
 
 // ---------- 9. Yazma ----------
 const fotoCikti = (a) => { const f = a && FOTO.get(a); return f ? { p: f.p, w: f.w, a: f.a } : null; };
+// Elle eklenen veri dosyaları bu betikle üretilmez: silmeden önce okunur, sonra aynen geri yazılır.
+const KORUNAN = ["muzekart.json"];
+const korunan = new Map(KORUNAN.filter((f) => fs.existsSync(`${OUT}/${f}`)).map((f) => [f, fs.readFileSync(`${OUT}/${f}`)]));
 fs.rmSync(OUT, { recursive: true, force: true });
+fs.mkdirSync(OUT, { recursive: true });
+for (const [f, icerik] of korunan) fs.writeFileSync(`${OUT}/${f}`, icerik);
+for (const f of KORUNAN) if (!korunan.has(f)) rapor("UYARI: korunan dosya bulunamadı:", f);
 fs.mkdirSync(OUT + "/il", { recursive: true });
 fs.mkdirSync(OUT + "/en", { recursive: true });
 fs.mkdirSync(KONTROL, { recursive: true });
