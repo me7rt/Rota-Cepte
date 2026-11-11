@@ -52,6 +52,13 @@ tara(yeni, "index");
 for (const f of fs.readdirSync("docs/data/il")) if (f.endsWith(".json")) tara(JSON.parse(fs.readFileSync(`docs/data/il/${f}`, "utf8")), f);
 if (kirli.length) hatalar.push(`${kirli.length} metinde "<" veya "{{" kaldı, ilk örnekler:\n   ${kirli.slice(0, 5).join("\n   ")}`);
 
+// Elle eklenen MüzeKart verisi silinmemiş ve açılabiliyor olmalı (uygulamada MüzeKart sayfası bunu okur)
+try {
+  const mk = JSON.parse(fs.readFileSync("docs/data/muzekart.json", "utf8"));
+  if (!mk || !mk.il || !Object.keys(mk.il).length) hatalar.push("docs/data/muzekart.json boş ya da bozuk.");
+} catch (e) {
+  hatalar.push("docs/data/muzekart.json yok ya da açılamıyor: " + e.message);
+}
 console.log(`Toplam yer: ${te} → ${ty} (${ty - te >= 0 ? "+" : ""}${ty - te})`);
 if (hatalar.length) {
   console.log("VERİ KAPISI: yeni veride sorun var, main'e yazılmadı.");

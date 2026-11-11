@@ -5,9 +5,6 @@ on:
       gorev:
         description: "teshis, uret, dene (main yerine veri-deneme dalina yazar) veya zorla (veri kapisini atlar)"
         default: "uret"
-  push:
-    branches: [main]
-    paths: ["scripts/**", "data/**", ".github/workflows/veri.yml"]
 permissions:
   contents: write
 concurrency: { group: veri, cancel-in-progress: true }
@@ -28,6 +25,9 @@ jobs:
       - name: Veri kapisi (yer sayisi belirgin azaldiysa durdur)
         if: ${{ github.event.inputs.gorev != 'teshis' && github.event.inputs.gorev != 'dene' && github.event.inputs.gorev != 'zorla' }}
         run: node scripts/veri-kapi.mjs
+      - name: MuzeKart verisi duruyor mu (zorla dahil her uretimde)
+        if: ${{ github.event.inputs.gorev != 'teshis' }}
+        run: node -e 'const d=JSON.parse(require("fs").readFileSync("docs/data/muzekart.json","utf8")); if(!d.il||!Object.keys(d.il).length) throw new Error("muzekart.json bos"); console.log("muzekart.json tamam:", Object.keys(d.il).length, "il")'
       - name: Deneme verisini veri-deneme dalina yukle
         if: ${{ github.event.inputs.gorev == 'dene' }}
         env:
